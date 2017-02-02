@@ -10,6 +10,7 @@ public class Main {
                     "a"     "n"
          */
 
+        // Assignment 2+3
         BinaryNode head =
                 new BinaryNode("Times",
                         new BinaryNode("Plus",
@@ -39,7 +40,7 @@ public class Main {
         System.out.println();
 
 
-
+        // Assignment 4
         String operators = "a + n = 1";
         Object[] objects = operators.split(" ");
 
