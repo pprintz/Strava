@@ -25,24 +25,24 @@ int main(){
     printf("---------------------------------------\n");
     
     /* This is the none struct part */
-    char nameArray[10], gradeArray[10];
+    char* nameArray[10], gradeArray[10];
     int ageArray[4];
     float GPAArray[2];
     
     makeDBArray(nameArray, gradeArray, ageArray, GPAArray, "CasperT", "Semester 4", 20, 0.0f);
     
     for(int i = 0; i < 9; i++){
-        printf("Name: %c  | Grade: %c   | Age: %i   |  GPA: %f \n", nameArray[i], gradeArray[i], ageArray[i], GPAArray[i]);
+        printf("Name: %s  | Grade: %s   | Age: %i   |  GPA: %f \n", nameArray[i], gradeArray[i], ageArray[i], GPAArray[i]);
     }
     
     
     return 1;
 }
 
-void makeDBArray(char nameArray[], char gradeArray[], int ageArray[], float GPAArray[], char name[], char grade[], int age, float gpa){
+void makeDBArray(char* nameArray[], char* gradeArray[], int ageArray[], float GPAArray[], char name[], char grade[], int age, float gpa){
     for(int i = 0; i < 9; i++){
-        strcpy(&nameArray[i], name);
-        strcpy(&gradeArray[i], grade);
+        strcpy(     nameArray[i], name);
+        strcpy(gradeArray[i], grade);
         ageArray[i] = age;
         GPAArray[i] = gpa;
     }
