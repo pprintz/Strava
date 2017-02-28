@@ -1,0 +1,9 @@
+Colon=1
+Semicolon=2
+Newline=3
+Identifier=4
+Assign=5
+Var=6
+LParenthesis=7
+RParenthesis=8
+Comma=9

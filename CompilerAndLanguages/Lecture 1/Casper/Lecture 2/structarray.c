@@ -25,7 +25,8 @@ int main(){
     printf("---------------------------------------\n");
     
     /* This is the none struct part */
-    char* nameArray[10], gradeArray[10];
+    char* nameArray[10];
+    char* gradeArray[10];
     int ageArray[4];
     float GPAArray[2];
     
@@ -39,10 +40,10 @@ int main(){
     return 1;
 }
 
-void makeDBArray(char* nameArray[], char* gradeArray[], int ageArray[], float GPAArray[], char name[], char grade[], int age, float gpa){
+void makeDBArray(char* nameArray[], char* gradeArray[], int ageArray[], float GPAArray[], char* name, char* grade, int age, float gpa){
     for(int i = 0; i < 9; i++){
-        strcpy(     nameArray[i], name);
-        strcpy(gradeArray[i], grade);
+        nameArray[i] = name;
+        gradeArray[i] = grade;
         ageArray[i] = age;
         GPAArray[i] = gpa;
     }
