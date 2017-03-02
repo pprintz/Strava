@@ -1,4 +1,4 @@
-// Generated from /Users/Casper/Downloads/Studio_Code/P4/parse.g4 by ANTLR 4.6
+// Generated from /Users/Casper/P4-AAU-Kursusopgaver/Projekt/Antlr/P4/parse.g4 by ANTLR 4.6
 import org.antlr.v4.runtime.tree.ParseTreeVisitor;
 
 /**
@@ -64,23 +64,41 @@ public interface parseVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitParams(parse.ParamsContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link parse#param}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitParam(parse.ParamContext ctx);
-	/**
 	 * Visit a parse tree produced by {@link parse#controlStructure}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitControlStructure(parse.ControlStructureContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link parse#returnExpression}.
+	 * Visit a parse tree produced by {@link parse#ifStatement}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitReturnExpression(parse.ReturnExpressionContext ctx);
+	T visitIfStatement(parse.IfStatementContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link parse#expression}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitExpression(parse.ExpressionContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link parse#factor}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitFactor(parse.FactorContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link parse#binaryOperation}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitBinaryOperation(parse.BinaryOperationContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link parse#returnStatement}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitReturnStatement(parse.ReturnStatementContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link parse#run}.
 	 * @param ctx the parse tree
@@ -94,15 +112,27 @@ public interface parseVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitFunctions(parse.FunctionsContext ctx);
 	/**
+	 * Visit a parse tree produced by {@link parse#defineFunction}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitDefineFunction(parse.DefineFunctionContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link parse#behaviorFunction}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitBehaviorFunction(parse.BehaviorFunctionContext ctx);
+	/**
 	 * Visit a parse tree produced by {@link parse#setupHeader}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitSetupHeader(parse.SetupHeaderContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link parse#expression}.
+	 * Visit a parse tree produced by {@link parse#runHeader}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitExpression(parse.ExpressionContext ctx);
+	T visitRunHeader(parse.RunHeaderContext ctx);
 }

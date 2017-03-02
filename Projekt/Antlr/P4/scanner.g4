@@ -24,6 +24,9 @@ Double: Digit+ '.' Digit+;
 Int: Digit+;
 String: Quote .* Quote;
 
+SetupIdentifier: 'onSetup';
+RunIdentifier: 'onRun';
+
 If: 'if';
 Else: 'else';
 Loop: 'loop';
@@ -35,13 +38,6 @@ Semicolon: ';';
 Quote: '"';
 LParenthesis: '(';
 RParenthesis: ')';
-
-BooleanOperator: Equal
-        | LessEqual
-        | GreaterEqual
-        | NotEqual
-        | And
-        | Or;
 
 Comment: '\\' .* Newline -> skip;
 Plus: '+';
