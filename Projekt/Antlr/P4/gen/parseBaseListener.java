@@ -15,253 +15,265 @@ public class parseBaseListener implements parseListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterProg(parse.ProgContext ctx) { }
+	@Override public void enterProg(parseParser.ProgContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitProg(parse.ProgContext ctx) { }
+	@Override public void exitProg(parseParser.ProgContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterSetup(parse.SetupContext ctx) { }
+	@Override public void enterSetup(parseParser.SetupContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitSetup(parse.SetupContext ctx) { }
+	@Override public void exitSetup(parseParser.SetupContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterBlock(parse.BlockContext ctx) { }
+	@Override public void enterBlock(parseParser.BlockContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitBlock(parse.BlockContext ctx) { }
+	@Override public void exitBlock(parseParser.BlockContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterStatements(parse.StatementsContext ctx) { }
+	@Override public void enterStatements(parseParser.StatementsContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitStatements(parse.StatementsContext ctx) { }
+	@Override public void exitStatements(parseParser.StatementsContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterStatement(parse.StatementContext ctx) { }
+	@Override public void enterStatement(parseParser.StatementContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitStatement(parse.StatementContext ctx) { }
+	@Override public void exitStatement(parseParser.StatementContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterAssignment(parse.AssignmentContext ctx) { }
+	@Override public void enterAssignment(parseParser.AssignmentContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitAssignment(parse.AssignmentContext ctx) { }
+	@Override public void exitAssignment(parseParser.AssignmentContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterDeclaration(parse.DeclarationContext ctx) { }
+	@Override public void enterDeclaration(parseParser.DeclarationContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitDeclaration(parse.DeclarationContext ctx) { }
+	@Override public void exitDeclaration(parseParser.DeclarationContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterFunctionCall(parse.FunctionCallContext ctx) { }
+	@Override public void enterFunctionCall(parseParser.FunctionCallContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitFunctionCall(parse.FunctionCallContext ctx) { }
+	@Override public void exitFunctionCall(parseParser.FunctionCallContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterParams(parse.ParamsContext ctx) { }
+	@Override public void enterParams(parseParser.ParamsContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitParams(parse.ParamsContext ctx) { }
+	@Override public void exitParams(parseParser.ParamsContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterControlStructure(parse.ControlStructureContext ctx) { }
+	@Override public void enterControlStructure(parseParser.ControlStructureContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitControlStructure(parse.ControlStructureContext ctx) { }
+	@Override public void exitControlStructure(parseParser.ControlStructureContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterIfStatement(parse.IfStatementContext ctx) { }
+	@Override public void enterIfStatement(parseParser.IfStatementContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitIfStatement(parse.IfStatementContext ctx) { }
+	@Override public void exitIfStatement(parseParser.IfStatementContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterExpression(parse.ExpressionContext ctx) { }
+	@Override public void enterExpression(parseParser.ExpressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitExpression(parse.ExpressionContext ctx) { }
+	@Override public void exitExpression(parseParser.ExpressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterFactor(parse.FactorContext ctx) { }
+	@Override public void enterFactor(parseParser.FactorContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitFactor(parse.FactorContext ctx) { }
+	@Override public void exitFactor(parseParser.FactorContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterBinaryOperation(parse.BinaryOperationContext ctx) { }
+	@Override public void enterBinaryOperation(parseParser.BinaryOperationContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitBinaryOperation(parse.BinaryOperationContext ctx) { }
+	@Override public void exitBinaryOperation(parseParser.BinaryOperationContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterReturnStatement(parse.ReturnStatementContext ctx) { }
+	@Override public void enterReturnStatement(parseParser.ReturnStatementContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitReturnStatement(parse.ReturnStatementContext ctx) { }
+	@Override public void exitReturnStatement(parseParser.ReturnStatementContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterRun(parse.RunContext ctx) { }
+	@Override public void enterRun(parseParser.RunContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitRun(parse.RunContext ctx) { }
+	@Override public void exitRun(parseParser.RunContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterFunctions(parse.FunctionsContext ctx) { }
+	@Override public void enterFunctions(parseParser.FunctionsContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitFunctions(parse.FunctionsContext ctx) { }
+	@Override public void exitFunctions(parseParser.FunctionsContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterDefineFunction(parse.DefineFunctionContext ctx) { }
+	@Override public void enterDefineFunction(parseParser.DefineFunctionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitDefineFunction(parse.DefineFunctionContext ctx) { }
+	@Override public void exitDefineFunction(parseParser.DefineFunctionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterBehaviorFunction(parse.BehaviorFunctionContext ctx) { }
+	@Override public void enterBehaviorFunction(parseParser.BehaviorFunctionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitBehaviorFunction(parse.BehaviorFunctionContext ctx) { }
+	@Override public void exitBehaviorFunction(parseParser.BehaviorFunctionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterSetupHeader(parse.SetupHeaderContext ctx) { }
+	@Override public void enterSetupHeader(parseParser.SetupHeaderContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitSetupHeader(parse.SetupHeaderContext ctx) { }
+	@Override public void exitSetupHeader(parseParser.SetupHeaderContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterRunHeader(parse.RunHeaderContext ctx) { }
+	@Override public void enterRunHeader(parseParser.RunHeaderContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitRunHeader(parse.RunHeaderContext ctx) { }
+	@Override public void exitRunHeader(parseParser.RunHeaderContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterTest(parseParser.TestContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitTest(parseParser.TestContext ctx) { }
 
 	/**
 	 * {@inheritDoc}

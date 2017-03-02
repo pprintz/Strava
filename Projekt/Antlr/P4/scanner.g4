@@ -8,6 +8,9 @@ Keyword: ('define'
   | 'else'
   | 'var');
 
+Define: 'define';
+Behavior: 'behavior';
+
 Noiseword: ('Teitur') -> skip;
 
 Newline: ('\r'? '\n');

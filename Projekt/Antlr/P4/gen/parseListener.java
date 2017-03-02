@@ -3,217 +3,227 @@ import org.antlr.v4.runtime.tree.ParseTreeListener;
 
 /**
  * This interface defines a complete listener for a parse tree produced by
- * {@link parse}.
+ * {@link parseParser}.
  */
 public interface parseListener extends ParseTreeListener {
 	/**
-	 * Enter a parse tree produced by {@link parse#prog}.
+	 * Enter a parse tree produced by {@link parseParser#prog}.
 	 * @param ctx the parse tree
 	 */
-	void enterProg(parse.ProgContext ctx);
+	void enterProg(parseParser.ProgContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link parse#prog}.
+	 * Exit a parse tree produced by {@link parseParser#prog}.
 	 * @param ctx the parse tree
 	 */
-	void exitProg(parse.ProgContext ctx);
+	void exitProg(parseParser.ProgContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link parse#setup}.
+	 * Enter a parse tree produced by {@link parseParser#setup}.
 	 * @param ctx the parse tree
 	 */
-	void enterSetup(parse.SetupContext ctx);
+	void enterSetup(parseParser.SetupContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link parse#setup}.
+	 * Exit a parse tree produced by {@link parseParser#setup}.
 	 * @param ctx the parse tree
 	 */
-	void exitSetup(parse.SetupContext ctx);
+	void exitSetup(parseParser.SetupContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link parse#block}.
+	 * Enter a parse tree produced by {@link parseParser#block}.
 	 * @param ctx the parse tree
 	 */
-	void enterBlock(parse.BlockContext ctx);
+	void enterBlock(parseParser.BlockContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link parse#block}.
+	 * Exit a parse tree produced by {@link parseParser#block}.
 	 * @param ctx the parse tree
 	 */
-	void exitBlock(parse.BlockContext ctx);
+	void exitBlock(parseParser.BlockContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link parse#statements}.
+	 * Enter a parse tree produced by {@link parseParser#statements}.
 	 * @param ctx the parse tree
 	 */
-	void enterStatements(parse.StatementsContext ctx);
+	void enterStatements(parseParser.StatementsContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link parse#statements}.
+	 * Exit a parse tree produced by {@link parseParser#statements}.
 	 * @param ctx the parse tree
 	 */
-	void exitStatements(parse.StatementsContext ctx);
+	void exitStatements(parseParser.StatementsContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link parse#statement}.
+	 * Enter a parse tree produced by {@link parseParser#statement}.
 	 * @param ctx the parse tree
 	 */
-	void enterStatement(parse.StatementContext ctx);
+	void enterStatement(parseParser.StatementContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link parse#statement}.
+	 * Exit a parse tree produced by {@link parseParser#statement}.
 	 * @param ctx the parse tree
 	 */
-	void exitStatement(parse.StatementContext ctx);
+	void exitStatement(parseParser.StatementContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link parse#assignment}.
+	 * Enter a parse tree produced by {@link parseParser#assignment}.
 	 * @param ctx the parse tree
 	 */
-	void enterAssignment(parse.AssignmentContext ctx);
+	void enterAssignment(parseParser.AssignmentContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link parse#assignment}.
+	 * Exit a parse tree produced by {@link parseParser#assignment}.
 	 * @param ctx the parse tree
 	 */
-	void exitAssignment(parse.AssignmentContext ctx);
+	void exitAssignment(parseParser.AssignmentContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link parse#declaration}.
+	 * Enter a parse tree produced by {@link parseParser#declaration}.
 	 * @param ctx the parse tree
 	 */
-	void enterDeclaration(parse.DeclarationContext ctx);
+	void enterDeclaration(parseParser.DeclarationContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link parse#declaration}.
+	 * Exit a parse tree produced by {@link parseParser#declaration}.
 	 * @param ctx the parse tree
 	 */
-	void exitDeclaration(parse.DeclarationContext ctx);
+	void exitDeclaration(parseParser.DeclarationContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link parse#functionCall}.
+	 * Enter a parse tree produced by {@link parseParser#functionCall}.
 	 * @param ctx the parse tree
 	 */
-	void enterFunctionCall(parse.FunctionCallContext ctx);
+	void enterFunctionCall(parseParser.FunctionCallContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link parse#functionCall}.
+	 * Exit a parse tree produced by {@link parseParser#functionCall}.
 	 * @param ctx the parse tree
 	 */
-	void exitFunctionCall(parse.FunctionCallContext ctx);
+	void exitFunctionCall(parseParser.FunctionCallContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link parse#params}.
+	 * Enter a parse tree produced by {@link parseParser#params}.
 	 * @param ctx the parse tree
 	 */
-	void enterParams(parse.ParamsContext ctx);
+	void enterParams(parseParser.ParamsContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link parse#params}.
+	 * Exit a parse tree produced by {@link parseParser#params}.
 	 * @param ctx the parse tree
 	 */
-	void exitParams(parse.ParamsContext ctx);
+	void exitParams(parseParser.ParamsContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link parse#controlStructure}.
+	 * Enter a parse tree produced by {@link parseParser#controlStructure}.
 	 * @param ctx the parse tree
 	 */
-	void enterControlStructure(parse.ControlStructureContext ctx);
+	void enterControlStructure(parseParser.ControlStructureContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link parse#controlStructure}.
+	 * Exit a parse tree produced by {@link parseParser#controlStructure}.
 	 * @param ctx the parse tree
 	 */
-	void exitControlStructure(parse.ControlStructureContext ctx);
+	void exitControlStructure(parseParser.ControlStructureContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link parse#ifStatement}.
+	 * Enter a parse tree produced by {@link parseParser#ifStatement}.
 	 * @param ctx the parse tree
 	 */
-	void enterIfStatement(parse.IfStatementContext ctx);
+	void enterIfStatement(parseParser.IfStatementContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link parse#ifStatement}.
+	 * Exit a parse tree produced by {@link parseParser#ifStatement}.
 	 * @param ctx the parse tree
 	 */
-	void exitIfStatement(parse.IfStatementContext ctx);
+	void exitIfStatement(parseParser.IfStatementContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link parse#expression}.
+	 * Enter a parse tree produced by {@link parseParser#expression}.
 	 * @param ctx the parse tree
 	 */
-	void enterExpression(parse.ExpressionContext ctx);
+	void enterExpression(parseParser.ExpressionContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link parse#expression}.
+	 * Exit a parse tree produced by {@link parseParser#expression}.
 	 * @param ctx the parse tree
 	 */
-	void exitExpression(parse.ExpressionContext ctx);
+	void exitExpression(parseParser.ExpressionContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link parse#factor}.
+	 * Enter a parse tree produced by {@link parseParser#factor}.
 	 * @param ctx the parse tree
 	 */
-	void enterFactor(parse.FactorContext ctx);
+	void enterFactor(parseParser.FactorContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link parse#factor}.
+	 * Exit a parse tree produced by {@link parseParser#factor}.
 	 * @param ctx the parse tree
 	 */
-	void exitFactor(parse.FactorContext ctx);
+	void exitFactor(parseParser.FactorContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link parse#binaryOperation}.
+	 * Enter a parse tree produced by {@link parseParser#binaryOperation}.
 	 * @param ctx the parse tree
 	 */
-	void enterBinaryOperation(parse.BinaryOperationContext ctx);
+	void enterBinaryOperation(parseParser.BinaryOperationContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link parse#binaryOperation}.
+	 * Exit a parse tree produced by {@link parseParser#binaryOperation}.
 	 * @param ctx the parse tree
 	 */
-	void exitBinaryOperation(parse.BinaryOperationContext ctx);
+	void exitBinaryOperation(parseParser.BinaryOperationContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link parse#returnStatement}.
+	 * Enter a parse tree produced by {@link parseParser#returnStatement}.
 	 * @param ctx the parse tree
 	 */
-	void enterReturnStatement(parse.ReturnStatementContext ctx);
+	void enterReturnStatement(parseParser.ReturnStatementContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link parse#returnStatement}.
+	 * Exit a parse tree produced by {@link parseParser#returnStatement}.
 	 * @param ctx the parse tree
 	 */
-	void exitReturnStatement(parse.ReturnStatementContext ctx);
+	void exitReturnStatement(parseParser.ReturnStatementContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link parse#run}.
+	 * Enter a parse tree produced by {@link parseParser#run}.
 	 * @param ctx the parse tree
 	 */
-	void enterRun(parse.RunContext ctx);
+	void enterRun(parseParser.RunContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link parse#run}.
+	 * Exit a parse tree produced by {@link parseParser#run}.
 	 * @param ctx the parse tree
 	 */
-	void exitRun(parse.RunContext ctx);
+	void exitRun(parseParser.RunContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link parse#functions}.
+	 * Enter a parse tree produced by {@link parseParser#functions}.
 	 * @param ctx the parse tree
 	 */
-	void enterFunctions(parse.FunctionsContext ctx);
+	void enterFunctions(parseParser.FunctionsContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link parse#functions}.
+	 * Exit a parse tree produced by {@link parseParser#functions}.
 	 * @param ctx the parse tree
 	 */
-	void exitFunctions(parse.FunctionsContext ctx);
+	void exitFunctions(parseParser.FunctionsContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link parse#defineFunction}.
+	 * Enter a parse tree produced by {@link parseParser#defineFunction}.
 	 * @param ctx the parse tree
 	 */
-	void enterDefineFunction(parse.DefineFunctionContext ctx);
+	void enterDefineFunction(parseParser.DefineFunctionContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link parse#defineFunction}.
+	 * Exit a parse tree produced by {@link parseParser#defineFunction}.
 	 * @param ctx the parse tree
 	 */
-	void exitDefineFunction(parse.DefineFunctionContext ctx);
+	void exitDefineFunction(parseParser.DefineFunctionContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link parse#behaviorFunction}.
+	 * Enter a parse tree produced by {@link parseParser#behaviorFunction}.
 	 * @param ctx the parse tree
 	 */
-	void enterBehaviorFunction(parse.BehaviorFunctionContext ctx);
+	void enterBehaviorFunction(parseParser.BehaviorFunctionContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link parse#behaviorFunction}.
+	 * Exit a parse tree produced by {@link parseParser#behaviorFunction}.
 	 * @param ctx the parse tree
 	 */
-	void exitBehaviorFunction(parse.BehaviorFunctionContext ctx);
+	void exitBehaviorFunction(parseParser.BehaviorFunctionContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link parse#setupHeader}.
+	 * Enter a parse tree produced by {@link parseParser#setupHeader}.
 	 * @param ctx the parse tree
 	 */
-	void enterSetupHeader(parse.SetupHeaderContext ctx);
+	void enterSetupHeader(parseParser.SetupHeaderContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link parse#setupHeader}.
+	 * Exit a parse tree produced by {@link parseParser#setupHeader}.
 	 * @param ctx the parse tree
 	 */
-	void exitSetupHeader(parse.SetupHeaderContext ctx);
+	void exitSetupHeader(parseParser.SetupHeaderContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link parse#runHeader}.
+	 * Enter a parse tree produced by {@link parseParser#runHeader}.
 	 * @param ctx the parse tree
 	 */
-	void enterRunHeader(parse.RunHeaderContext ctx);
+	void enterRunHeader(parseParser.RunHeaderContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link parse#runHeader}.
+	 * Exit a parse tree produced by {@link parseParser#runHeader}.
 	 * @param ctx the parse tree
 	 */
-	void exitRunHeader(parse.RunHeaderContext ctx);
+	void exitRunHeader(parseParser.RunHeaderContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link parseParser#test}.
+	 * @param ctx the parse tree
+	 */
+	void enterTest(parseParser.TestContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link parseParser#test}.
+	 * @param ctx the parse tree
+	 */
+	void exitTest(parseParser.TestContext ctx);
 }

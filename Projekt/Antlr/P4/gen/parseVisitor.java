@@ -3,136 +3,142 @@ import org.antlr.v4.runtime.tree.ParseTreeVisitor;
 
 /**
  * This interface defines a complete generic visitor for a parse tree produced
- * by {@link parse}.
+ * by {@link parseParser}.
  *
  * @param <T> The return type of the visit operation. Use {@link Void} for
  * operations with no return type.
  */
 public interface parseVisitor<T> extends ParseTreeVisitor<T> {
 	/**
-	 * Visit a parse tree produced by {@link parse#prog}.
+	 * Visit a parse tree produced by {@link parseParser#prog}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitProg(parse.ProgContext ctx);
+	T visitProg(parseParser.ProgContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link parse#setup}.
+	 * Visit a parse tree produced by {@link parseParser#setup}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitSetup(parse.SetupContext ctx);
+	T visitSetup(parseParser.SetupContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link parse#block}.
+	 * Visit a parse tree produced by {@link parseParser#block}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitBlock(parse.BlockContext ctx);
+	T visitBlock(parseParser.BlockContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link parse#statements}.
+	 * Visit a parse tree produced by {@link parseParser#statements}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitStatements(parse.StatementsContext ctx);
+	T visitStatements(parseParser.StatementsContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link parse#statement}.
+	 * Visit a parse tree produced by {@link parseParser#statement}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitStatement(parse.StatementContext ctx);
+	T visitStatement(parseParser.StatementContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link parse#assignment}.
+	 * Visit a parse tree produced by {@link parseParser#assignment}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitAssignment(parse.AssignmentContext ctx);
+	T visitAssignment(parseParser.AssignmentContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link parse#declaration}.
+	 * Visit a parse tree produced by {@link parseParser#declaration}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitDeclaration(parse.DeclarationContext ctx);
+	T visitDeclaration(parseParser.DeclarationContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link parse#functionCall}.
+	 * Visit a parse tree produced by {@link parseParser#functionCall}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitFunctionCall(parse.FunctionCallContext ctx);
+	T visitFunctionCall(parseParser.FunctionCallContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link parse#params}.
+	 * Visit a parse tree produced by {@link parseParser#params}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitParams(parse.ParamsContext ctx);
+	T visitParams(parseParser.ParamsContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link parse#controlStructure}.
+	 * Visit a parse tree produced by {@link parseParser#controlStructure}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitControlStructure(parse.ControlStructureContext ctx);
+	T visitControlStructure(parseParser.ControlStructureContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link parse#ifStatement}.
+	 * Visit a parse tree produced by {@link parseParser#ifStatement}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitIfStatement(parse.IfStatementContext ctx);
+	T visitIfStatement(parseParser.IfStatementContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link parse#expression}.
+	 * Visit a parse tree produced by {@link parseParser#expression}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitExpression(parse.ExpressionContext ctx);
+	T visitExpression(parseParser.ExpressionContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link parse#factor}.
+	 * Visit a parse tree produced by {@link parseParser#factor}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitFactor(parse.FactorContext ctx);
+	T visitFactor(parseParser.FactorContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link parse#binaryOperation}.
+	 * Visit a parse tree produced by {@link parseParser#binaryOperation}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitBinaryOperation(parse.BinaryOperationContext ctx);
+	T visitBinaryOperation(parseParser.BinaryOperationContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link parse#returnStatement}.
+	 * Visit a parse tree produced by {@link parseParser#returnStatement}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitReturnStatement(parse.ReturnStatementContext ctx);
+	T visitReturnStatement(parseParser.ReturnStatementContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link parse#run}.
+	 * Visit a parse tree produced by {@link parseParser#run}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitRun(parse.RunContext ctx);
+	T visitRun(parseParser.RunContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link parse#functions}.
+	 * Visit a parse tree produced by {@link parseParser#functions}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitFunctions(parse.FunctionsContext ctx);
+	T visitFunctions(parseParser.FunctionsContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link parse#defineFunction}.
+	 * Visit a parse tree produced by {@link parseParser#defineFunction}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitDefineFunction(parse.DefineFunctionContext ctx);
+	T visitDefineFunction(parseParser.DefineFunctionContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link parse#behaviorFunction}.
+	 * Visit a parse tree produced by {@link parseParser#behaviorFunction}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitBehaviorFunction(parse.BehaviorFunctionContext ctx);
+	T visitBehaviorFunction(parseParser.BehaviorFunctionContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link parse#setupHeader}.
+	 * Visit a parse tree produced by {@link parseParser#setupHeader}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitSetupHeader(parse.SetupHeaderContext ctx);
+	T visitSetupHeader(parseParser.SetupHeaderContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link parse#runHeader}.
+	 * Visit a parse tree produced by {@link parseParser#runHeader}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitRunHeader(parse.RunHeaderContext ctx);
+	T visitRunHeader(parseParser.RunHeaderContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link parseParser#test}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitTest(parseParser.TestContext ctx);
 }
