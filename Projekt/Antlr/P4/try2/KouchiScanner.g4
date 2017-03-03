@@ -1,4 +1,5 @@
-lexer grammar scanner;
+lexer grammar KouchiScanner;
+
 Keyword: ('define'
   | 'behavior'
   | 'loop'
@@ -10,6 +11,8 @@ Keyword: ('define'
 
 Define: 'define';
 Behavior: 'behavior';
+While: 'while';
+Return: 'return';
 
 Noiseword: ('Teitur') -> skip;
 
@@ -17,7 +20,10 @@ Newline: ('\r'? '\n');
 
 Whitespace: [ \t] -> skip;
 
-Identifier: (Letter ('_'? (Letter|Digit))*)|('_' ((Letter|Digit)'_'?)*);
+SetupIdentifier: 'onSetup';
+RunIdentifier: 'onRun';
+
+
 
 Reserved: (Keyword
         | And
@@ -25,10 +31,7 @@ Reserved: (Keyword
 
 Double: Digit+ '.' Digit+;
 Int: Digit+;
-String: Quote .* Quote;
-
-SetupIdentifier: 'onSetup';
-RunIdentifier: 'onRun';
+String: Quote (Letter|Digit)* Quote;
 
 If: 'if';
 Else: 'else';
@@ -42,7 +45,7 @@ Quote: '"';
 LParenthesis: '(';
 RParenthesis: ')';
 
-Comment: '\\' .* Newline -> skip;
+Comment: '\\' (Letter|Digit)* Newline -> skip;
 Plus: '+';
 Minus: '-';
 Multiply: '*';
@@ -55,8 +58,12 @@ GreaterEqual: '>=';
 NotEqual: '!=';
 And: 'and';
 Or: 'or';
+Not: 'not';
 
-Letter: ('[a-zA-Z]');
-Digit: ('[0-9]');
+Letter: [a-zA-Z];
+Digit: [0-9];
 Number: Double
     |   Int;
+
+
+Identifier: Letter (Letter | Digit)*; // (Letter ('_'? (Letter|Digit))*)|('_' ((Letter|Digit)'_'?)*);

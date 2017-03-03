@@ -1,4 +1,4 @@
-// Generated from /Users/Casper/P4-AAU-Kursusopgaver/Projekt/Antlr/P4/parse.g4 by ANTLR 4.6
+// Generated from /Users/Kasper/P4-AAU-Kursusopgaver/Projekt/Antlr/P4/parse.g4 by ANTLR 4.6
 import org.antlr.v4.runtime.tree.ParseTreeVisitor;
 
 /**
@@ -9,6 +9,12 @@ import org.antlr.v4.runtime.tree.ParseTreeVisitor;
  * operations with no return type.
  */
 public interface parseVisitor<T> extends ParseTreeVisitor<T> {
+	/**
+	 * Visit a parse tree produced by {@link parseParser#file}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitFile(parseParser.FileContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link parseParser#prog}.
 	 * @param ctx the parse tree
@@ -135,10 +141,4 @@ public interface parseVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitRunHeader(parseParser.RunHeaderContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link parseParser#test}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitTest(parseParser.TestContext ctx);
 }

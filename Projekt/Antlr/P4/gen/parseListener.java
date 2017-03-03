@@ -1,4 +1,4 @@
-// Generated from /Users/Casper/P4-AAU-Kursusopgaver/Projekt/Antlr/P4/parse.g4 by ANTLR 4.6
+// Generated from /Users/Kasper/P4-AAU-Kursusopgaver/Projekt/Antlr/P4/parse.g4 by ANTLR 4.6
 import org.antlr.v4.runtime.tree.ParseTreeListener;
 
 /**
@@ -6,6 +6,16 @@ import org.antlr.v4.runtime.tree.ParseTreeListener;
  * {@link parseParser}.
  */
 public interface parseListener extends ParseTreeListener {
+	/**
+	 * Enter a parse tree produced by {@link parseParser#file}.
+	 * @param ctx the parse tree
+	 */
+	void enterFile(parseParser.FileContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link parseParser#file}.
+	 * @param ctx the parse tree
+	 */
+	void exitFile(parseParser.FileContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link parseParser#prog}.
 	 * @param ctx the parse tree
@@ -216,14 +226,4 @@ public interface parseListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitRunHeader(parseParser.RunHeaderContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link parseParser#test}.
-	 * @param ctx the parse tree
-	 */
-	void enterTest(parseParser.TestContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link parseParser#test}.
-	 * @param ctx the parse tree
-	 */
-	void exitTest(parseParser.TestContext ctx);
 }
