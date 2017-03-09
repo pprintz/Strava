@@ -187,33 +187,13 @@ public interface SimpleParserListener extends ParseTreeListener {
 	 */
 	void exitSetup(SimpleParserParser.SetupContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link SimpleParserParser#dotField}.
+	 * Enter a parse tree produced by {@link SimpleParserParser#fieldId}.
 	 * @param ctx the parse tree
 	 */
-	void enterDotField(SimpleParserParser.DotFieldContext ctx);
+	void enterFieldId(SimpleParserParser.FieldIdContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link SimpleParserParser#dotField}.
+	 * Exit a parse tree produced by {@link SimpleParserParser#fieldId}.
 	 * @param ctx the parse tree
 	 */
-	void exitDotField(SimpleParserParser.DotFieldContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link SimpleParserParser#dotCall}.
-	 * @param ctx the parse tree
-	 */
-	void enterDotCall(SimpleParserParser.DotCallContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link SimpleParserParser#dotCall}.
-	 * @param ctx the parse tree
-	 */
-	void exitDotCall(SimpleParserParser.DotCallContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link SimpleParserParser#dotAssigment}.
-	 * @param ctx the parse tree
-	 */
-	void enterDotAssigment(SimpleParserParser.DotAssigmentContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link SimpleParserParser#dotAssigment}.
-	 * @param ctx the parse tree
-	 */
-	void exitDotAssigment(SimpleParserParser.DotAssigmentContext ctx);
+	void exitFieldId(SimpleParserParser.FieldIdContext ctx);
 }

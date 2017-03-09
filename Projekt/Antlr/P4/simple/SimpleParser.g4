@@ -1,6 +1,6 @@
 grammar SimpleParser ;
 
-prog : setup? run functions? EOF ;
+prog : NEWLINE* setup? run functions? EOF ;
 block : ':' stmt* ';' NEWLINE* ;
 stmt : NEWLINE+ (defineFunction
     | behaviorFunction
@@ -9,9 +9,7 @@ stmt : NEWLINE+ (defineFunction
     | ifStatement
     | declaration
     | loop
-    | dotAssigment
     | newDeclaration
-    | dotCall
     | returnStatement)? NEWLINE*;
 
 functions : (defineFunction | behaviorFunction)+ ;
@@ -19,8 +17,14 @@ defineFunction : 'define' ID '(' formalParams? ')' block;
 behaviorFunction : 'behavior' ID '(' ID ')' block;
 actualParams: expr (',' expr)* ;
 formalParams: ID (',' ID)* ;
-functionCall: ID '(' actualParams? ')' ;
-expr :  '(' expr ')'
+functionCall: fieldId '(' actualParams? ')' ;
+expr :      ('false' | 'true')
+           | functionCall
+           | fieldId
+           | ID
+           | NUM
+           | STRING
+           |'(' expr ')'
            | 'not' expr
            | '(' '-' expr ')'
            | <assoc=right> expr '^' expr
@@ -30,30 +34,22 @@ expr :  '(' expr ')'
            | expr ('!='|'=') expr
            | expr 'and' expr
            | expr 'or' expr
-           | ('false' | 'true')
-           | functionCall
-           | ID
-           | NUM
-           | dotField
-           | dotCall
-           | STRING
+
            ;
 ifStatement: 'if' expr block ('else if' expr block)* ('else' block)? ;
-assignment : ID ':=' expr ;
+assignment : fieldId ':=' expr ;
 declaration: 'var' (assignment | ID) ;
 newDeclaration : 'new' (assignment | ID) ;
 loop: 'loop' ('while' expr)? block ;
 returnStatement : 'return' expr ;
 run: 'behavior' 'onRun' '('')' block;
 setup: 'behavior' 'onSetup' '('')' block;
-dotField: ID ('.' (ID))+ ;
-dotCall: ID ('.' (ID))* ('.' functionCall);
-dotAssigment: dotField ':=' expr ;
+fieldId : ID ('.' ID)* ;
 
 
 // LEXER PART
 
-ID : [a-zA-Z]+ ;
+ID : LETTER (LETTER | DIGIT)* ;
 NUM : INT | FLOAT ;
 INT : DIGIT+ ;
 FLOAT : DIGIT+ '.' DIGIT+ ;
@@ -66,6 +62,7 @@ NEWLINE : '\r'? '\n' ;
 
 fragment
 DIGIT : [0-9] ;
+LETTER : [a-zA-Z] ;
 ESC : '\\' [btnr"\\] ;
 
 

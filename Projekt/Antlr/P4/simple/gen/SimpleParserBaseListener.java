@@ -231,37 +231,13 @@ public class SimpleParserBaseListener implements SimpleParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterDotField(SimpleParserParser.DotFieldContext ctx) { }
+	@Override public void enterFieldId(SimpleParserParser.FieldIdContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitDotField(SimpleParserParser.DotFieldContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterDotCall(SimpleParserParser.DotCallContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitDotCall(SimpleParserParser.DotCallContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterDotAssigment(SimpleParserParser.DotAssigmentContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitDotAssigment(SimpleParserParser.DotAssigmentContext ctx) { }
+	@Override public void exitFieldId(SimpleParserParser.FieldIdContext ctx) { }
 
 	/**
 	 * {@inheritDoc}
