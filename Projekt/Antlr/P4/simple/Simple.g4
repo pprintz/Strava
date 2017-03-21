@@ -35,7 +35,7 @@ newDeclaration : 'new' ID (':=' expr)? ;
 newEvent : 'new' 'behavior' ID block ;
 fieldAssignment : fieldId ':=' expr ;
 assignment : ID ':=' expr ;
-changeStrategy : 'strategy' '->' ID ;
+changeStrategy : 'changeStrategy' '('ID')' ;
 
 ifStatement: 'if' expr block ('else if' expr block)* ('else' block)? ;
 functionCall: (fieldId | ID) '(' actualParams? ')' ;
