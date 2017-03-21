@@ -1,4 +1,4 @@
-// Generated from /Users/Kasper/P4-AAU-Kursusopgaver/Projekt/Antlr/P4/simple/Simple.g4 by ANTLR 4.6
+// Generated from /home/pprintz/stuff/P4-AAU-Kursusopgaver/Projekt/Antlr/P4/simple/Simple.g4 by ANTLR 4.6
 import org.antlr.v4.runtime.tree.ParseTreeVisitor;
 
 /**
@@ -33,6 +33,24 @@ public interface SimpleVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitFunctions(SimpleParser.FunctionsContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link SimpleParser#strategy}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitStrategy(SimpleParser.StrategyContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link SimpleParser#defaultStrategy}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitDefaultStrategy(SimpleParser.DefaultStrategyContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link SimpleParser#strategyDefinition}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitStrategyDefinition(SimpleParser.StrategyDefinitionContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link SimpleParser#block}.
 	 * @param ctx the parse tree
@@ -76,6 +94,12 @@ public interface SimpleVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitNewDeclaration(SimpleParser.NewDeclarationContext ctx);
 	/**
+	 * Visit a parse tree produced by {@link SimpleParser#newEvent}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitNewEvent(SimpleParser.NewEventContext ctx);
+	/**
 	 * Visit a parse tree produced by {@link SimpleParser#fieldAssignment}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
@@ -87,6 +111,12 @@ public interface SimpleVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitAssignment(SimpleParser.AssignmentContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link SimpleParser#changeStrategy}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitChangeStrategy(SimpleParser.ChangeStrategyContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link SimpleParser#ifStatement}.
 	 * @param ctx the parse tree

@@ -1,13 +1,15 @@
 grammar Simple ;
 
-prog : NEWLINE* setup? run functions? EOF ;
+prog : NEWLINE* setup? defaultStrategy NEWLINE* (strategy | defineFunction)*  EOF ;
 
 setup: 'behavior' 'onSetup' '('')' block;
 run: 'behavior' 'onRun' '('')' block;
-functions : (defineFunction | behaviorFunction | strategyFunction)+ ;
+functions : (defineFunction | behaviorFunction)* ;
+strategy : 'strategy' ID strategyDefinition;
+defaultStrategy : 'strategy' 'default' strategyDefinition;
+strategyDefinition : ':' NEWLINE* run? functions? ';';
 
 block : ':' (stmt)* ';' NEWLINE* ;
-
 
 stmt : NEWLINE+ (  declaration
                  | structDeclaration
@@ -19,14 +21,13 @@ stmt : NEWLINE+ (  declaration
                  | structDeclaration
                  | newDeclaration
                  | newEvent
-                 | behaviorFunction
                  | changeStrategy
                  | returnStatement )? NEWLINE*
                  ;
 
 defineFunction : 'define' ID '(' formalParams? ')' block;
 behaviorFunction : 'behavior' ID '(' ID ')' block;
-strategyFunction : 'strategy' ID block;
+
 
 structDeclaration : ID '{' (ID | assignment) (',' (ID | assignment))* '}' ;
 
@@ -45,6 +46,7 @@ returnStatement : 'return' expr ;
 
 formalParams: ID (',' ID)* ;
 actualParams: expr (',' expr)* ;
+
 
 expr :     ('true' | 'false')               # literal
           | ID                              # literal
@@ -86,8 +88,4 @@ fragment
 DIGIT : [0-9] ;
 LETTER : [a-zA-Z] ;
 ESC : '\\' [btnr"\\] ;
-
-
-
-
 

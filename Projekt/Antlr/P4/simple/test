@@ -1,0 +1,3 @@
+behavior onRun():
+a = 2;
+
