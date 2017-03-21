@@ -2,30 +2,86 @@
  * Created by Kasper Dissing Bargsteen on 21/03/2017.
  */
 public class PrettyPrinter extends RobocommandeBaseVisitor<String> {
+
+
     @Override
     public String visitProg(RobocommandeParser.ProgContext ctx) {
-        System.out.println(ctx.)
-        return super.visitProg(ctx);
+        String AST = "";
+        AST += visit(ctx.setup());
+        AST += visit(ctx.defaultStrategy());
+
+        for(RobocommandeParser.StrategyContext strategy : ctx.strategy()){
+            AST += visit(strategy);
+        }
+
+        for(RobocommandeParser.DefineFunctionContext defFunc : ctx.defineFunction()){
+            AST += visit(defFunc);
+        }
+        return AST;
     }
 
     @Override
     public String visitSetup(RobocommandeParser.SetupContext ctx) {
-        return super.visitSetup(ctx);
+        return "SETUP\n" + visit(ctx.setupBlock());
     }
 
     @Override
     public String visitRun(RobocommandeParser.RunContext ctx) {
-        return super.visitRun(ctx);
+        return "RUN\n" + visit(ctx.block());
     }
 
     @Override
     public String visitFunctions(RobocommandeParser.FunctionsContext ctx) {
-        return super.visitFunctions(ctx);
+        String AST = "";
+        for(RobocommandeParser.BehaviorFunctionContext behaFunc : ctx.behaviorFunction()){
+            AST += visit(behaFunc);
+        }
+        for(RobocommandeParser.DefineFunctionContext defFunc : ctx.defineFunction()){
+            AST += visit(defFunc);
+        }
+        return AST;
+    }
+
+    @Override
+    public String visitStrategy(RobocommandeParser.StrategyContext ctx) {
+        return "STRATEGY\n" + visit(ctx.strategyDefinition());
+    }
+
+    @Override
+    public String visitDefaultStrategy(RobocommandeParser.DefaultStrategyContext ctx) {
+        return "DEFAULT\n" + visit(ctx.strategyDefinition());
+    }
+
+    @Override
+    public String visitStrategyDefinition(RobocommandeParser.StrategyDefinitionContext ctx) {
+        return "";
+    }
+
+    @Override
+    public String visitSetupBlock(RobocommandeParser.SetupBlockContext ctx) {
+        String AST = "";
+
+        for(RobocommandeParser.SetupStmtContext setupStmt : ctx.setupStmt()){
+            AST += visit(setupStmt);
+        }
+
+        return AST;
     }
 
     @Override
     public String visitBlock(RobocommandeParser.BlockContext ctx) {
-        return super.visitBlock(ctx);
+        String AST = "";
+
+        for(RobocommandeParser.StmtContext stmt : ctx.stmt()){
+            AST += visit(stmt);
+        }
+
+        return AST;
+    }
+
+    @Override
+    public String visitSetupStmt(RobocommandeParser.SetupStmtContext ctx) {
+        return "\n>> " + visit(ctx.getChild(1)) + "<<\n";
     }
 
     @Override
@@ -44,18 +100,13 @@ public class PrettyPrinter extends RobocommandeBaseVisitor<String> {
     }
 
     @Override
-    public String visitStrategyFunction(RobocommandeParser.StrategyFunctionContext ctx) {
-        return super.visitStrategyFunction(ctx);
-    }
-
-    @Override
     public String visitStructDeclaration(RobocommandeParser.StructDeclarationContext ctx) {
         return super.visitStructDeclaration(ctx);
     }
 
     @Override
     public String visitDeclaration(RobocommandeParser.DeclarationContext ctx) {
-        return super.visitDeclaration(ctx);
+        return "DECLARATION :: " + ctx.ID().getText() + " := " + visit(ctx.expr());
     }
 
     @Override
@@ -75,7 +126,7 @@ public class PrettyPrinter extends RobocommandeBaseVisitor<String> {
 
     @Override
     public String visitAssignment(RobocommandeParser.AssignmentContext ctx) {
-        return super.visitAssignment(ctx);
+        return "ASSIGN " + ctx.ID().getText() + " := " + visit(ctx.expr());
     }
 
     @Override
@@ -141,11 +192,6 @@ public class PrettyPrinter extends RobocommandeBaseVisitor<String> {
     @Override
     public String visitNegateBool(RobocommandeParser.NegateBoolContext ctx) {
         return super.visitNegateBool(ctx);
-    }
-
-    @Override
-    public String visitList(RobocommandeParser.ListContext ctx) {
-        return super.visitList(ctx);
     }
 
     @Override
