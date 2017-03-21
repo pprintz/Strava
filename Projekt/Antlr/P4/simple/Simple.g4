@@ -1,16 +1,28 @@
 grammar Simple ;
 
-prog : NEWLINE* setup? defaultStrategy NEWLINE* (strategy | defineFunction)*  EOF ;
+prog : NEWLINE* setup? defaultStrategy (strategy | defineFunction)* EOF ;
 
-setup: 'behavior' 'onSetup' '('')' block;
+setup: 'behavior' 'onSetup' '('')' setupBlock;
 run: 'behavior' 'onRun' '('')' block;
 functions : (defineFunction | behaviorFunction)* ;
 strategy : 'strategy' ID strategyDefinition;
 defaultStrategy : 'strategy' 'default' strategyDefinition;
-strategyDefinition : ':' NEWLINE* run? functions? ';';
+strategyDefinition : ':' NEWLINE* run? functions? ';' NEWLINE*;
 
+setupBlock : ':' (setupStmt)* ';' NEWLINE* ;
 block : ':' (stmt)* ';' NEWLINE* ;
 
+setupStmt : NEWLINE+ (  declaration
+                 | structDeclaration
+                 | assignment
+                 | fieldAssignment
+                 | ifStatement
+                 | functionCall
+                 | loop
+                 | structDeclaration
+                 | newEvent
+                 | changeStrategy )? NEWLINE*
+                 ;
 stmt : NEWLINE+ (  declaration
                  | structDeclaration
                  | assignment
@@ -20,7 +32,6 @@ stmt : NEWLINE+ (  declaration
                  | loop
                  | structDeclaration
                  | newDeclaration
-                 | newEvent
                  | changeStrategy
                  | returnStatement )? NEWLINE*
                  ;
@@ -59,7 +70,6 @@ expr :     ('true' | 'false')               # literal
           | 'not' expr                      # negateBool
           | '-' expr                        # negateNum
           | <assoc=right> expr '^' expr     # power
-          | '[' expr? (',' expr)* ']'       # list
           | expr ('*'|'/'|'%') expr         # multDivMod
           | expr ('+'|'-') expr             # plusOrMinus
           | expr ('<='|'>='|'<'|'>') expr   # comparison

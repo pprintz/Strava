@@ -52,11 +52,23 @@ public interface SimpleVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitStrategyDefinition(SimpleParser.StrategyDefinitionContext ctx);
 	/**
+	 * Visit a parse tree produced by {@link SimpleParser#setupBlock}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitSetupBlock(SimpleParser.SetupBlockContext ctx);
+	/**
 	 * Visit a parse tree produced by {@link SimpleParser#block}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitBlock(SimpleParser.BlockContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link SimpleParser#setupStmt}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitSetupStmt(SimpleParser.SetupStmtContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link SimpleParser#stmt}.
 	 * @param ctx the parse tree
@@ -194,13 +206,6 @@ public interface SimpleVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitNegateBool(SimpleParser.NegateBoolContext ctx);
-	/**
-	 * Visit a parse tree produced by the {@code list}
-	 * labeled alternative in {@link SimpleParser#expr}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitList(SimpleParser.ListContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code literal}
 	 * labeled alternative in {@link SimpleParser#expr}.

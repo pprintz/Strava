@@ -2,22 +2,24 @@ behavior onSetup():
     var a
     a := 1337
     b := "asd"
+    new behavior OnTeitursMom : 
+        return true
+    ;
 ;
+
+
+
 strategy default:
     behavior onRun():
-    ;
-    define runMethod():
-    ;
-    behavior onScannedEvent(eee):
     ;
 ;
 strategy aggressive:
     behavior onRun():
+
     ;
-    define runMethod():
-    ;
-    behavior onScannedEvent(eee):
-    ;
+
+
+
 ;
 define foo(a,b,c):
 ;
