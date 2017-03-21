@@ -4,9 +4,10 @@ prog : NEWLINE* setup? run functions? EOF ;
 
 setup: 'behavior' 'onSetup' '('')' block;
 run: 'behavior' 'onRun' '('')' block;
-functions : (defineFunction | behaviorFunction)+ ;
+functions : (defineFunction | behaviorFunction | strategyFunction)+ ;
 
 block : ':' (stmt)* ';' NEWLINE* ;
+
 
 stmt : NEWLINE+ (  declaration
                  | structDeclaration
@@ -17,18 +18,24 @@ stmt : NEWLINE+ (  declaration
                  | loop
                  | structDeclaration
                  | newDeclaration
+                 | newEvent
+                 | behaviorFunction
+                 | changeStrategy
                  | returnStatement )? NEWLINE*
                  ;
 
 defineFunction : 'define' ID '(' formalParams? ')' block;
 behaviorFunction : 'behavior' ID '(' ID ')' block;
+strategyFunction : 'strategy' ID block;
 
 structDeclaration : ID '{' (ID | assignment) (',' (ID | assignment))* '}' ;
 
 declaration: 'var' ID (':=' expr)? ;
 newDeclaration : 'new' ID (':=' expr)? ;
+newEvent : 'new' 'behavior' ID block ;
 fieldAssignment : fieldId ':=' expr ;
 assignment : ID ':=' expr ;
+changeStrategy : 'strategy' '->' ID ;
 
 ifStatement: 'if' expr block ('else if' expr block)* ('else' block)? ;
 functionCall: (fieldId | ID) '(' actualParams? ')' ;
