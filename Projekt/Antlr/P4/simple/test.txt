@@ -2,7 +2,15 @@
 // This robot is a sure winner
 
 behavior onSetup():
-	new hasSeenEnemy := false // Global variable, because it’s declared in onSetup()
+
+    strategies { dodge := dodgy(), shoot, enemies := [] }
+
+    myStrategy := strategies(shoot := shootEverywhere)
+
+    a := myStrategy.shoot()
+
+	hasSeenEnemy := false // Global variable, because it’s declared in onSetup()
+
     myRobot.body.color := color.red
 	myRobot.gun.color := color.black
 	myRobot.radar.color := color.yellow
@@ -55,6 +63,9 @@ behavior onHitWall(hitWallEvent):
 		myRobot.robot.rotate(direction.right, degreesTurned)
 	;
 	print("I hit a wall. Turned [degressTurned] degrees.")
+
+	f(struuuct(a := 2))
+
 ;
 
 define getAngleToEnemy(scannedEvent):
