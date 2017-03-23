@@ -1,6 +1,34 @@
 behavior onSetup():
 
     a := 2
+    var b
+    c := 3
+    var d := 5
+
+    myStrikingHeartStruct { a, b, c, d := 2 }
+
+    myRobot.color := RED
+    
+
+    if 2:
+        exxxx := 3
+    ;
+    else if 3:
+        elifelif := 4444
+    ;
+    else if 3:
+            elifelif := 4444
+        ;
+    else if 3:
+            elifelif := 4444
+        ;
+    else if 3:
+            lool(a, b, c)
+            lolo()
+        ;
+    else:
+        elelelele := 4
+    ;
 ;
 
 

@@ -124,12 +124,6 @@ public interface RobocommandeVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitAssignment(RobocommandeParser.AssignmentContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link RobocommandeParser#changeStrategy}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitChangeStrategy(RobocommandeParser.ChangeStrategyContext ctx);
-	/**
 	 * Visit a parse tree produced by {@link RobocommandeParser#ifStatement}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
@@ -221,6 +215,13 @@ public interface RobocommandeVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitGroupedExpression(RobocommandeParser.GroupedExpressionContext ctx);
 	/**
+	 * Visit a parse tree produced by the {@code structInit}
+	 * labeled alternative in {@link RobocommandeParser#expr}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitStructInit(RobocommandeParser.StructInitContext ctx);
+	/**
 	 * Visit a parse tree produced by the {@code fieldIdentifier}
 	 * labeled alternative in {@link RobocommandeParser#expr}.
 	 * @param ctx the parse tree
@@ -249,19 +250,12 @@ public interface RobocommandeVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitPower(RobocommandeParser.PowerContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code structInitializator}
+	 * Visit a parse tree produced by the {@code negateExpression}
 	 * labeled alternative in {@link RobocommandeParser#expr}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitStructInitializator(RobocommandeParser.StructInitializatorContext ctx);
-	/**
-	 * Visit a parse tree produced by the {@code negateNum}
-	 * labeled alternative in {@link RobocommandeParser#expr}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitNegateNum(RobocommandeParser.NegateNumContext ctx);
+	T visitNegateExpression(RobocommandeParser.NegateExpressionContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code equality}
 	 * labeled alternative in {@link RobocommandeParser#expr}.
@@ -275,4 +269,10 @@ public interface RobocommandeVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitFieldId(RobocommandeParser.FieldIdContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link RobocommandeParser#id}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitId(RobocommandeParser.IdContext ctx);
 }

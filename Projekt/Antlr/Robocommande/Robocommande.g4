@@ -5,7 +5,7 @@ prog : NEWLINE* setup? defaultStrategy (strategy | defineFunction)* EOF ;
 setup: 'behavior' 'onSetup' '('')' setupBlock;
 run: 'behavior' 'onRun' '('')' block;
 functions : (defineFunction | behaviorFunction)* ;
-strategy : 'strategy' ID strategyDefinition;
+strategy : 'strategy' id strategyDefinition;
 defaultStrategy : 'strategy' 'default' strategyDefinition;
 strategyDefinition : ':' NEWLINE* run? functions? ';' NEWLINE*;
 
@@ -19,9 +19,7 @@ setupStmt : NEWLINE+ (  declaration
                  | ifStatement
                  | functionCall
                  | loop
-                 | structDeclaration
-                 | newEvent
-                 | changeStrategy )? NEWLINE*
+                 | newEvent )? NEWLINE*
                  ;
 stmt : NEWLINE+ (  declaration
                  | structDeclaration
@@ -30,45 +28,42 @@ stmt : NEWLINE+ (  declaration
                  | ifStatement
                  | functionCall
                  | loop
-                 | structDeclaration
                  | newDeclaration
-                 | changeStrategy
                  | returnStatement )? NEWLINE*
                  ;
 
-defineFunction : 'define' ID '(' formalParams? ')' block;
-behaviorFunction : 'behavior' ID '(' ID ')' block;
+defineFunction : 'define' id '(' formalParams? ')' block;
+behaviorFunction : 'behavior' id '(' id ')' block;
 
 
-structDeclaration : ID '{' (ID | assignment) (',' (ID | assignment))* '}' ;
+structDeclaration : id '{' (id | assignment) (',' (id | assignment))* '}' ;
 
-declaration: 'var' ID (':=' expr)? ;
-newDeclaration : 'new' ID (':=' expr)? ;
-newEvent : 'new' 'behavior' ID block ;
+declaration: 'var' id (':=' expr)? ;
+newDeclaration : 'new' id (':=' expr)? ;
+newEvent : 'new' 'behavior' id block ;
 fieldAssignment : fieldId ':=' expr ;
-assignment : ID ':=' expr ;
-changeStrategy : 'changeStrategy' '('ID')' ;
+assignment : id ':=' expr ;
 
 ifStatement: 'if' expr block ('else if' expr block)* ('else' block)? ;
-functionCall: (fieldId | ID) '(' actualParams? ')' ;
-structInitialization: ID '(' assignment* ')' ;
+functionCall: (fieldId | id) '(' actualParams? ')' ;
+structInitialization: id '(' assignment* ')' ;
 loop: 'loop' ('while' expr)? block ;
 returnStatement : 'return' expr ;
 
-formalParams: ID (',' ID)* ;
+formalParams: id (',' id)* ;
 actualParams: expr (',' expr)* ;
 
 
 expr :     ('true' | 'false')               # literal
-          | ID                              # literal
+          | id                              # literal
           | NUM                             # literal
           | STRING                          # literal
           | fieldId                         # fieldIdentifier
           | functionCall                    # fCall
-          | structInitialization            # structInitializator
+          | structInitialization            # structInit
           |'(' expr ')'                     # groupedExpression
           | 'not' expr                      # negateBool
-          | '-' expr                        # negateNum
+          | '-' expr                        # negateExpression
           | <assoc=right> expr '^' expr     # power
           | expr ('*'|'/'|'%') expr         # multDivMod
           | expr ('+'|'-') expr             # plusOrMinus
@@ -78,8 +73,8 @@ expr :     ('true' | 'false')               # literal
           | expr 'or' expr                  # or
           ;
 
-fieldId : ID ('.' ID)+ ;
-
+fieldId : id ('.' id)+ ;
+id : ID;
 
 // LEXER PART
 
