@@ -1,16 +1,29 @@
 behavior onSetup():
 
+    new event KASPERWINS:
+        loop while 2 <= 3:
+            doThis()
+        ;
+        return doThat()
+    ;
+
+
     a := 2
     var b
     c := 3
     var d := 5
 
-    myStrikingHeartStruct { a, b, c, d := 2 }
+    myStruct { a, b, c, d := 2 + 2 + 3 - 4 }
 
     myRobot.color := RED
+    var mmmmm := myStruct()
+
+    nnnnn := myNewStruct(q := 3, s := 4)
 
 
-    if 2:
+
+
+    if 2 = 3:
         exxxx := 3
     ;
     else if 3:
@@ -20,7 +33,7 @@ behavior onSetup():
             elifelif := 4444
         ;
     else if 3:
-            elifelif := 4444
+            elifelif := 4444 % 3 = (2 * 3)
         ;
     else if 3:
             lool(a, b, c)
@@ -34,4 +47,23 @@ behavior onSetup():
 
 
 strategy default:
+    behavior onRun():
+       a := 2
+       new b := 3
+    ;
+
+    define myfunction(a, b, c):
+        return a + b - c
+    ;
+
+    define lol(a):
+        return 0
+    ;
+;
+
+
+strategy theWinningOne:
+    behavior onHitBySkank(ev):
+        hitBack()
+    ;
 ;

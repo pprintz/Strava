@@ -40,13 +40,13 @@ structDeclaration : id '{' (id | assignment) (',' (id | assignment))* '}' ;
 
 declaration: 'var' id (':=' expr)? ;
 newDeclaration : 'new' id (':=' expr)? ;
-newEvent : 'new' 'behavior' id block ;
+newEvent : 'new' 'event' id block ;
 fieldAssignment : fieldId ':=' expr ;
 assignment : id ':=' expr ;
 
 ifStatement: 'if' expr block ('else if' expr block)* ('else' block)? ;
 functionCall: (fieldId | id) '(' actualParams? ')' ;
-structInitialization: id '(' assignment* ')' ;
+structInitialization: id '(' assignment? (',' assignment)* ')' ;
 loop: 'loop' ('while' expr)? block ;
 returnStatement : 'return' expr ;
 
