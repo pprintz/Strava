@@ -4,7 +4,13 @@ prog : NEWLINE* setup? defaultStrategy (strategy | defineFunction)* EOF ;
 
 setup: 'behavior' 'onSetup' '('')' setupBlock;
 run: 'behavior' 'onRun' '('')' block;
+
 functions : (defineFunction | behaviorFunction)* ;
+defineFunction : 'define' id '(' formalParams? ')' block;
+behaviorFunction : 'behavior' id '(' id ')' block;
+formalParams: id (',' id)* ;
+actualParams: expr (',' expr)* ;
+
 strategy : 'strategy' id strategyDefinition;
 defaultStrategy : 'strategy' 'default' strategyDefinition;
 strategyDefinition : ':' NEWLINE* run? functions? ';' NEWLINE*;
@@ -32,27 +38,17 @@ stmt : NEWLINE+ (  declaration
                  | returnStatement )? NEWLINE*
                  ;
 
-defineFunction : 'define' id '(' formalParams? ')' block;
-behaviorFunction : 'behavior' id '(' id ')' block;
-
-
 structDeclaration : id '{' (id | assignment) (',' (id | assignment))* '}' ;
-
 declaration: 'var' id (':=' expr)? ;
 newDeclaration : 'new' id (':=' expr)? ;
 newEvent : 'new' 'event' id block ;
 fieldAssignment : fieldId ':=' expr ;
 assignment : id ':=' expr ;
-
 ifStatement: 'if' expr block ('else if' expr block)* ('else' block)? ;
 functionCall: (fieldId | id) '(' actualParams? ')' ;
 structInitialization: id '(' assignment? (',' assignment)* ')' ;
 loop: 'loop' ('while' expr)? block ;
 returnStatement : 'return' expr ;
-
-formalParams: id (',' id)* ;
-actualParams: expr (',' expr)* ;
-
 
 expr :     ('true' | 'false')               # literal
           | id                              # literal
@@ -75,6 +71,7 @@ expr :     ('true' | 'false')               # literal
 
 fieldId : id ('.' id)+ ;
 id : ID;
+
 
 // LEXER PART
 

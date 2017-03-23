@@ -52,6 +52,47 @@ public class PrettyPrinter extends RobocommandeBaseVisitor<String> {
     }
 
     @Override
+    public String visitDefineFunction(RobocommandeParser.DefineFunctionContext ctx) {
+        return "DEFINE " + visit(ctx.id()) + "(" + visit(ctx.formalParams()) + ")\n" + visit(ctx.block());
+    }
+
+    @Override
+    public String visitBehaviorFunction(RobocommandeParser.BehaviorFunctionContext ctx) {
+        return "BEHAVIOR " + visit(ctx.id(0)) + "(" + visit(ctx.id(1)) + ")\n" + visit(ctx.block());
+    }
+
+    @Override
+    public String visitFormalParams(RobocommandeParser.FormalParamsContext ctx) {
+        String AST = "";
+        int size = ctx.id().size() - 1;
+        for(int i = 0; i <= size; i++){
+            if(i == size){
+                AST += visit(ctx.id(i));
+            }
+            else{
+                AST += visit(ctx.id(i)) + ", ";
+            }
+        }
+
+        return AST;
+    }
+
+    @Override
+    public String visitActualParams(RobocommandeParser.ActualParamsContext ctx) {
+        String AST = "";
+        int size = ctx.expr().size() - 1;
+        for(int i = 0; i <= size; i++){
+            if(i == size){
+                AST += visit(ctx.expr(i));
+            }
+            else{
+                AST += visit(ctx.expr(i)) + ", ";
+            }
+        }
+        return AST;
+    }
+
+    @Override
     public String visitStrategy(RobocommandeParser.StrategyContext ctx) {
         return "STRATEGY " + visit(ctx.id()) + "\n" + visit(ctx.strategyDefinition());
     }
@@ -129,15 +170,6 @@ public class PrettyPrinter extends RobocommandeBaseVisitor<String> {
         return  AST + "\n";
     }
 
-    @Override
-    public String visitDefineFunction(RobocommandeParser.DefineFunctionContext ctx) {
-        return "DEFINE " + visit(ctx.id()) + "(" + visit(ctx.formalParams()) + ")\n" + visit(ctx.block());
-    }
-
-    @Override
-    public String visitBehaviorFunction(RobocommandeParser.BehaviorFunctionContext ctx) {
-        return "BEHAVIOR " + visit(ctx.id(0)) + "(" + visit(ctx.id(1)) + ")\n" + visit(ctx.block());
-    }
 
     @Override
     public String visitStructDeclaration(RobocommandeParser.StructDeclarationContext ctx) {
@@ -250,48 +282,51 @@ public class PrettyPrinter extends RobocommandeBaseVisitor<String> {
         return "RETURN " + visit(ctx.expr());
     }
 
-    @Override
-    public String visitFormalParams(RobocommandeParser.FormalParamsContext ctx) {
-        String AST = "";
-        int size = ctx.id().size() - 1;
-        for(int i = 0; i <= size; i++){
-            if(i == size){
-                AST += visit(ctx.id(i));
-            }
-            else{
-                AST += visit(ctx.id(i)) + ", ";
-            }
-        }
 
-        return AST;
+
+
+
+
+    @Override
+    public String visitLiteral(RobocommandeParser.LiteralContext ctx) {
+        return ctx.getText();
     }
 
     @Override
-    public String visitActualParams(RobocommandeParser.ActualParamsContext ctx) {
-        String AST = "";
-        int size = ctx.expr().size() - 1;
-        for(int i = 0; i <= size; i++){
-            if(i == size){
-                AST += visit(ctx.expr(i));
-            }
-            else{
-                AST += visit(ctx.expr(i)) + ", ";
-            }
-        }
-        return AST;
+    public String visitFieldIdentifier(RobocommandeParser.FieldIdentifierContext ctx) {
+        return visit(ctx.fieldId());
     }
 
     @Override
-    public String visitComparison(RobocommandeParser.ComparisonContext ctx) {
-        return visit(ctx.expr(0))
-                + getOperatorSymbol(ctx.children, "<=", ">=", "<", ">")
-                + visit(ctx.expr(1));
+    public String visitFCall(RobocommandeParser.FCallContext ctx) {
+        return visit(ctx.functionCall());
     }
 
     @Override
-    public String visitOr(RobocommandeParser.OrContext ctx) {
-        return visit(ctx.expr(0)) + " OR " + visit(ctx.expr(1));
+    public String visitStructInit(RobocommandeParser.StructInitContext ctx) {
+        return visit(ctx.structInitialization());
     }
+
+    @Override
+    public String visitGroupedExpression(RobocommandeParser.GroupedExpressionContext ctx) {
+        return "( " + visit(ctx.expr()) + " )";
+    }
+
+    @Override
+    public String visitNegateBool(RobocommandeParser.NegateBoolContext ctx) {
+        return "NOT " + visit(ctx.expr());
+    }
+
+    @Override
+    public String visitNegateExpression(RobocommandeParser.NegateExpressionContext ctx) {
+        return "- " + visit(ctx.expr());
+    }
+
+    @Override
+    public String visitPower(RobocommandeParser.PowerContext ctx) {
+       return visit(ctx.expr(0)) + " ^ " + visit(ctx.expr(1));
+    }
+
 
     @Override
     public String visitMultDivMod(RobocommandeParser.MultDivModContext ctx) {
@@ -309,49 +344,12 @@ public class PrettyPrinter extends RobocommandeBaseVisitor<String> {
                 + visit(ctx.expr(1));
     }
 
-    @Override
-    public String visitNegateBool(RobocommandeParser.NegateBoolContext ctx) {
-        return "NOT " + visit(ctx.expr());
-    }
 
     @Override
-    public String visitLiteral(RobocommandeParser.LiteralContext ctx) {
-        return ctx.getText();
-    }
-
-    @Override
-    public String visitGroupedExpression(RobocommandeParser.GroupedExpressionContext ctx) {
-        return "( " + visit(ctx.expr()) + " )";
-    }
-
-    @Override
-    public String visitFieldIdentifier(RobocommandeParser.FieldIdentifierContext ctx) {
-        return visit(ctx.fieldId());
-    }
-
-    @Override
-    public String visitAnd(RobocommandeParser.AndContext ctx) {
-        return visit(ctx.expr(0)) + " AND " + visit(ctx.expr(1));
-    }
-
-    @Override
-    public String visitFCall(RobocommandeParser.FCallContext ctx) {
-        return visit(ctx.functionCall());
-    }
-
-    @Override
-    public String visitPower(RobocommandeParser.PowerContext ctx) {
-        return visit(ctx.expr(0)) + " ^ " + visit(ctx.expr(1));
-    }
-
-    @Override
-    public String visitStructInit(RobocommandeParser.StructInitContext ctx) {
-        return visit(ctx.structInitialization());
-    }
-
-    @Override
-    public String visitNegateExpression(RobocommandeParser.NegateExpressionContext ctx) {
-        return "- " + visit(ctx.expr());
+    public String visitComparison(RobocommandeParser.ComparisonContext ctx) {
+        return visit(ctx.expr(0))
+                + getOperatorSymbol(ctx.children, "<=", ">=", "<", ">")
+                + visit(ctx.expr(1));
     }
 
     @Override
@@ -359,6 +357,15 @@ public class PrettyPrinter extends RobocommandeBaseVisitor<String> {
         return visit(ctx.expr(0))
                 + getOperatorSymbol(ctx.children, "=", "!=")
                 + visit(ctx.expr(1));
+    }
+
+    @Override
+    public String visitAnd(RobocommandeParser.AndContext ctx) {
+       return visit(ctx.expr(0)) + " AND " + visit(ctx.expr(1));
+    }
+    @Override
+    public String visitOr(RobocommandeParser.OrContext ctx) {
+        return visit(ctx.expr(0)) + " OR " + visit(ctx.expr(1));
     }
 
     @Override
