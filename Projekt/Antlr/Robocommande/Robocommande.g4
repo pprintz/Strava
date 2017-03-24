@@ -18,7 +18,7 @@ strategyDefinition : ':' NEWLINE* run? functions? ';' NEWLINE*;
 setupBlock : ':' (setupStmt)* ';' NEWLINE* ;
 block : ':' (stmt)* ';' NEWLINE* ;
 
-setupStmt : NEWLINE+ (  declaration
+setupStmt : NEWLINE+ ( declaration
                  | structDeclaration
                  | assignment
                  | fieldAssignment
