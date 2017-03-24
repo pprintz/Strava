@@ -1,3 +1,4 @@
+import jdk.nashorn.internal.ir.Block;
 import org.antlr.v4.runtime.tree.ParseTree;
 
 import java.util.ArrayList;
@@ -124,177 +125,151 @@ public class ASTBuilder extends RobocommandeBaseVisitor<ASTNode> {
 
     @Override
     public ASTNode visitBlock(RobocommandeParser.BlockContext ctx) {
-        indentationLevel++;
-        String AST = "";
 
+        List<FunctionStmtNode> functionStmtNodes = new ArrayList<>();
         for(RobocommandeParser.StmtContext stmt : ctx.stmt()){
-            AST += visit(stmt);
+            functionStmtNodes.add((FunctionStmtNode)visit(stmt));
         }
-        indentationLevel--;
-        return AST;
+        return new BlockNode(functionStmtNodes);
     }
 
     @Override
     public ASTNode visitSetupStmt(RobocommandeParser.SetupStmtContext ctx) {
-        String AST = indent();
-        if(ctx.declaration() != null){ AST += visit(ctx.declaration()); }
-        else if(ctx.structDeclaration() != null){ AST += visit(ctx.structDeclaration()); }
-        else if(ctx.assignment() != null){ AST += visit(ctx.assignment()); }
-        else if(ctx.fieldAssignment() != null){ AST += visit(ctx.fieldAssignment()); }
-        else if(ctx.ifStatement() != null){ AST += visit(ctx.ifStatement()); }
-        else if(ctx.functionCall() != null){ AST += visit(ctx.functionCall()); }
-        else if(ctx.loop() != null){ AST += visit(ctx.loop()); }
-        else if(ctx.newEvent() != null){ AST += visit(ctx.newEvent()); }
+        if(ctx.declaration() != null){ return visit(ctx.declaration()); }
+        else if(ctx.structDeclaration() != null){ return visit(ctx.structDeclaration()); }
+        else if(ctx.assignment() != null){ return visit(ctx.assignment()); }
+        else if(ctx.fieldAssignment() != null){ return visit(ctx.fieldAssignment()); }
+        else if(ctx.ifStatement() != null){ return visit(ctx.ifStatement()); }
+        else if(ctx.functionCall() != null){ return visit(ctx.functionCall()); }
+        else if(ctx.loop() != null){ return visit(ctx.loop()); }
+        else if(ctx.newEvent() != null){ return visit(ctx.newEvent()); }
 
-        return  AST + "\n";
+        return  null;
     }
 
     @Override
     public ASTNode visitStmt(RobocommandeParser.StmtContext ctx) {
-        String AST = indent();
-        if(ctx.declaration() != null){ AST += visit(ctx.declaration()); }
-        else if(ctx.structDeclaration() != null){ AST += visit(ctx.structDeclaration()); }
-        else if(ctx.assignment() != null){ AST += visit(ctx.assignment()); }
-        else if(ctx.fieldAssignment() != null){ AST += visit(ctx.fieldAssignment()); }
-        else if(ctx.ifStatement() != null){ AST += visit(ctx.ifStatement()); }
-        else if(ctx.functionCall() != null){ AST += visit(ctx.functionCall()); }
-        else if(ctx.loop() != null){ AST += visit(ctx.loop()); }
-        else if(ctx.newDeclaration() != null){ AST += visit(ctx.newDeclaration()); }
-        else if(ctx.returnStatement() != null){ AST += visit(ctx.returnStatement()); }
+        if(ctx.declaration() != null){ return visit(ctx.declaration()); }
+        else if(ctx.structDeclaration() != null){ return visit(ctx.structDeclaration()); }
+        else if(ctx.assignment() != null){ return visit(ctx.assignment()); }
+        else if(ctx.fieldAssignment() != null){ return visit(ctx.fieldAssignment()); }
+        else if(ctx.ifStatement() != null){ return visit(ctx.ifStatement()); }
+        else if(ctx.functionCall() != null){ return visit(ctx.functionCall()); }
+        else if(ctx.loop() != null){ return visit(ctx.loop()); }
+        else if(ctx.newDeclaration() != null){ return visit(ctx.newDeclaration()); }
+        else if(ctx.returnStatement() != null){ return visit(ctx.returnStatement()); }
 
-        return  AST + "\n";
+        return null;
     }
-
 
     @Override
     public ASTNode visitStructDeclaration(RobocommandeParser.StructDeclarationContext ctx) {
-        String AST = "STRUCT " + visit(ctx.id(0)) + " {\n";
-        indentationLevel++;
+        IdNode name = (IdNode)visit(ctx.id(0));
+        List<IdNode> idNodes = new ArrayList<>();
+        List<AssignmentNode> assignments = new ArrayList<>();
+
         int childrenCount = ctx.children.size();
         for(int i = 1 ; i < childrenCount ; i++){
             ParseTree field = ctx.children.get(i);
             if(field instanceof RobocommandeParser.AssignmentContext){
-                AST += indent() + visit(field) + "\n";
+                assignments.add((AssignmentNode)visit(field));
             } else if(field instanceof RobocommandeParser.IdContext){
-                AST += indent() + visit(field) + "\n";
+                idNodes.add((IdNode)visit(field));
             }
         }
-
-        indentationLevel--;
-
-        AST += indent() + "}";
-
-        return AST;
+        return new StructDeclarationNode(name, idNodes, assignments);
     }
 
     @Override
     public ASTNode visitDeclaration(RobocommandeParser.DeclarationContext ctx) {
-        String AST = "DECLARATION " + visit(ctx.id());
-        if(ctx.expr() != null){
-            AST += " := " + visit(ctx.expr());
-        }
-        return AST;
+        return new DeclarationNode((IdNode)visit(ctx.id()), (ExprNode)visit(ctx.expr()));
     }
 
     @Override
     public ASTNode visitNewDeclaration(RobocommandeParser.NewDeclarationContext ctx) {
-        String AST = "NEW DECLARATION " + visit(ctx.id());
-        if(ctx.expr() != null){
-            AST += " := " + visit(ctx.expr());
-        }
-        return AST;
+        return new NewDeclarationNode((IdNode)visit(ctx.id()), (ExprNode)visit(ctx.expr()));
     }
 
     @Override
     public ASTNode visitNewEvent(RobocommandeParser.NewEventContext ctx) {
-        return "NEW EVENT " + visit(ctx.id()) + "\n" + visit(ctx.block());
+        return new NewEventNode((IdNode)visit(ctx.id()), (BlockNode)visit(ctx.block()));
     }
 
     @Override
     public ASTNode visitFieldAssignment(RobocommandeParser.FieldAssignmentContext ctx) {
-        return "FIELDASSIGN " + visit(ctx.fieldId()) + " := " + visit(ctx.expr());
+        FieldIdNode fieldIdNode = (FieldIdNode)visit(ctx.fieldId());
+        ExprNode exprNode = (ExprNode)visit(ctx.expr());
+
+        return new FieldAssignmentNode(fieldIdNode, exprNode);
     }
 
     @Override
     public ASTNode visitAssignment(RobocommandeParser.AssignmentContext ctx) {
-        return "ASSIGN " + visit(ctx.id()) + " := " + visit(ctx.expr());
+        IdNode idNode = (IdNode)visit(ctx.id());
+        ExprNode exprNode = (ExprNode)visit(ctx.expr());
+
+        return new AssignmentNode(idNode, exprNode);
     }
 
     @Override
     public ASTNode visitIfStatement(RobocommandeParser.IfStatementContext ctx) {
-        String AST = "";
+        ExprNode predicate = null;
+        BlockNode ifBlockNode = null;
+        List<ElseIfStatementNode> elseIfNodes = new ArrayList<>();
+        BlockNode elseBlockNode = null;
 
         int blockCount = ctx.block().size() - 1;
 
         for(int i = 0; i <= blockCount ; i++){
             if(i == 0){
-                AST += "IF " + visit(ctx.expr(i)) + "\n" + visit(ctx.block(i));
+                predicate = (ExprNode)visit(ctx.expr(i));
+                ifBlockNode = (BlockNode)visit(ctx.expr(i));
             } else if(i != 0 && i == blockCount){
-                AST += indent() + "ELSE \n" + visit(ctx.block(i));
+                elseBlockNode = (BlockNode)visit(ctx.block(i));
             }
             else{
-                AST += indent() + "ELSE IF " + visit(ctx.expr(i)) + "\n" + visit(ctx.block(i));
+                elseIfNodes.add(new ElseIfStatementNode((ExprNode)visit(ctx.expr(i)),
+                        (BlockNode)visit(ctx.block(i))));
             }
         }
-
-        return AST;
+        return new IfStatementNode(predicate, ifBlockNode, elseIfNodes, elseBlockNode);
     }
 
     @Override
     public ASTNode visitFunctionCall(RobocommandeParser.FunctionCallContext ctx) {
-        String AST = "CALL ";
-        AST += visit(ctx.id()) != null ? visit(ctx.id()) : visit(ctx.fieldId());
-        AST += "(";
-        if(ctx.actualParams() != null){
-            AST += visit(ctx.actualParams());
-        }
-        AST += ")";
-        return AST;
+        IdNode idNode = (IdNode)visit(ctx.id()); // what if null?
+        FieldIdNode fieldIdNode = (FieldIdNode)visit(ctx.fieldId()); // what if null?
+        ActualParamsNode actualParamsNode = (ActualParamsNode)visit(ctx.actualParams());
+
+        return new FunctionCallNode(fieldIdNode, idNode, actualParamsNode);
     }
 
     @Override
     public ASTNode visitStructInitialization(RobocommandeParser.StructInitializationContext ctx) {
         IdNode name = (IdNode)visit(ctx.id());
+        List<AssignmentNode> assignments = new ArrayList<>();
 
-
-
-
-
-        String AST = visit(ctx.id()) + "(";
-        indentationLevel++;
         for(RobocommandeParser.AssignmentContext assignment : ctx.assignment()){
-            AST += "\n" + indent() + visit(assignment);
+            assignments.add((AssignmentNode)visit(assignment));
         }
-        indentationLevel--;
-        AST += "\n" + indent() + ")";
-        return AST;
-
-        goto
-
-
+        return new StructInitializationNode(name, assignments);
     }
 
     @Override
     public ASTNode visitLoop(RobocommandeParser.LoopContext ctx) {
-        String AST = "LOOP ";
-        AST += ctx.expr() != null ? "WHILE " + visit(ctx.expr()) : "";
-        AST += "\n" + visit(ctx.block());
-        return AST;
+        ExprNode exprNode = (ExprNode)visit(ctx.expr());
+        BlockNode blockNode = (BlockNode)visit(ctx.block());
+        return new LoopNode(exprNode, blockNode);
     }
 
     @Override
     public ASTNode visitReturnStatement(RobocommandeParser.ReturnStatementContext ctx) {
-        return "RETURN " + visit(ctx.expr());
+        return new ReturnStatementNode((ExprNode)visit(ctx.expr()));
     }
-
-
-
-
-
 
     @Override
     public ASTNode visitLiteral(RobocommandeParser.LiteralContext ctx) {
-        return ctx.getText();
+        return new LiteralNode(ctx.getText());
     }
 
     @Override
@@ -422,7 +397,7 @@ public class ASTBuilder extends RobocommandeBaseVisitor<ASTNode> {
     public ASTNode visitFieldId(RobocommandeParser.FieldIdContext ctx) {
         List<String> idsToBeConverted = Arrays.asList(ctx.getText().split("."));
         List<IdNode> idNodes = new ArrayList<IdNode>();
-        idsToBeConverted.forEach(node -> idNodes.add(new IdNode(node));
+        idsToBeConverted.forEach(node -> idNodes.add(new IdNode(node)));
         return new FieldIdNode(idNodes);
     }
 

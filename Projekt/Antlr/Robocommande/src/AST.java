@@ -137,11 +137,11 @@ class BehaviorFunctionNode extends ASTNode {
 }
 
 class StructDeclarationNode extends GeneralStmtNode {
-    private String idName;
+    private IdNode idName;
     private List<IdNode> idNodes;
     private List<AssignmentNode> assignments;
 
-    public StructDeclarationNode(String idName, List<IdNode> idNodes, List<AssignmentNode> assignments) {
+    public StructDeclarationNode(IdNode idName, List<IdNode> idNodes, List<AssignmentNode> assignments) {
         this.idName = idName;
         this.idNodes = idNodes;
         this.assignments = assignments;
