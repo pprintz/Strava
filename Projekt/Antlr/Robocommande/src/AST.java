@@ -87,10 +87,11 @@ class RunNode extends ASTNode {
 }
 
 class SetupBlockNode extends ASTNode {
-    private SetupStmtNode setupStmt;
+    private List<SetupStmtNode> setupStmts;
 
-    public SetupBlockNode(SetupStmtNode setupStmt) {
-        this.setupStmt = setupStmt;
+
+    public SetupBlockNode(List<SetupStmtNode> setupStmts) {
+        this.setupStmts = setupStmts;
     }
 }
 

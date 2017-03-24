@@ -3,6 +3,7 @@ import org.antlr.v4.runtime.tree.ParseTree;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -11,116 +12,107 @@ import java.util.List;
 public class ASTBuilder extends RobocommandeBaseVisitor<ASTNode> {
     @Override
     public ASTNode visitProg(RobocommandeParser.ProgContext ctx) {
-        String AST = "";
-        AST += visit(ctx.setup());
-        AST += visit(ctx.defaultStrategy());
-
+        SetupNode setupNode = (SetupNode)visit(ctx.setup());
+        DefaultStrategyNode defaultStrategyNode = (DefaultStrategyNode)visit(ctx.defaultStrategy());
+        List<StrategyNode> strategyNodes = new LinkedList<>();
+        List<DefineFunctionNode> defineFunctionNodes = new LinkedList<>();
         for(RobocommandeParser.StrategyContext strategy : ctx.strategy()){
-            AST += visit(strategy);
+            strategyNodes.add((StrategyNode)visit(strategy));
         }
-
         for(RobocommandeParser.DefineFunctionContext defFunc : ctx.defineFunction()){
-            AST += visit(defFunc);
+            defineFunctionNodes.add((DefineFunctionNode)visit(defFunc));
         }
-        return AST;
+        return new ProgNode(setupNode, defaultStrategyNode, strategyNodes, defineFunctionNodes);
     }
 
     @Override
     public ASTNode visitSetup(RobocommandeParser.SetupContext ctx) {
-        return "SETUP\n" + visit(ctx.setupBlock());
+        return new SetupNode((SetupBlockNode)visit(ctx.setupBlock()));
     }
 
     @Override
     public ASTNode visitRun(RobocommandeParser.RunContext ctx) {
-        return "RUN\n" + visit(ctx.block());
+                return new RunNode((BlockNode)visit(ctx.block()));
+
     }
 
     @Override
     public ASTNode visitFunctions(RobocommandeParser.FunctionsContext ctx) {
-        String AST = "";
-        for(RobocommandeParser.BehaviorFunctionContext behaFunc : ctx.behaviorFunction()){
-            AST += indent() + visit(behaFunc);
+        List<BehaviorFunctionNode> behaviorFunctions = new LinkedList<>();
+        List<DefineFunctionNode> defineFunctions = new LinkedList<>();
+
+        for(RobocommandeParser.BehaviorFunctionContext behaFunc : ctx.behaviorFunction()) {
+            behaviorFunctions.add((BehaviorFunctionNode) visit(behaFunc));
         }
-        for(RobocommandeParser.DefineFunctionContext defFunc : ctx.defineFunction()){
-            AST += indent() + visit(defFunc);
+
+        for(RobocommandeParser.DefineFunctionContext defFunc : ctx.defineFunction()) {
+            defineFunctions.add((DefineFunctionNode) visit(defFunc));
         }
-        return AST;
+
+        return new FunctionsNode(defineFunctions, behaviorFunctions);
     }
 
     @Override
     public ASTNode visitDefineFunction(RobocommandeParser.DefineFunctionContext ctx) {
-        return "DEFINE " + visit(ctx.id()) + "(" + visit(ctx.formalParams()) + ")\n" + visit(ctx.block());
+        IdNode idNode = (IdNode) visit((ctx.id()));
+        FormalParamsNode formalParamsNode = (FormalParamsNode) visit((ctx.formalParams()));
+        BlockNode blockNode = (BlockNode) visit((ctx.block()));
+
+        return new DefineFunctionNode(idNode, formalParamsNode, blockNode);
     }
 
     @Override
     public ASTNode visitBehaviorFunction(RobocommandeParser.BehaviorFunctionContext ctx) {
-        return "BEHAVIOR " + visit(ctx.id(0)) + "(" + visit(ctx.id(1)) + ")\n" + visit(ctx.block());
+        IdNode idNode = (IdNode) visit((ctx.id(0)));
+        IdNode eventNode = (IdNode) visit((ctx.id(1)));
+        BlockNode blockNode = (BlockNode) visit((ctx.block()));
+
+        return new BehaviorFunctionNode(idNode, eventNode, blockNode);
     }
 
     @Override
     public ASTNode visitFormalParams(RobocommandeParser.FormalParamsContext ctx) {
-        String AST = "";
-        int size = ctx.id().size() - 1;
-        for(int i = 0; i <= size; i++){
-            if(i == size){
-                AST += visit(ctx.id(i));
-            }
-            else{
-                AST += visit(ctx.id(i)) + ", ";
-            }
-        }
-
-        return AST;
+        List<IdNode> idNodes = new LinkedList<>();
+        ctx.id().forEach(idNode -> idNodes.add((IdNode)visit(idNode)));
+        return new FormalParamsNode(idNodes);
     }
 
     @Override
     public ASTNode visitActualParams(RobocommandeParser.ActualParamsContext ctx) {
-        String AST = "";
-        int size = ctx.expr().size() - 1;
-        for(int i = 0; i <= size; i++){
-            if(i == size){
-                AST += visit(ctx.expr(i));
-            }
-            else{
-                AST += visit(ctx.expr(i)) + ", ";
-            }
-        }
-        return AST;
+        List<ExprNode> exprNodes = new LinkedList<>();
+        ctx.expr().forEach(exprNode -> exprNodes.add((ExprNode)visit(exprNode)));
+        return new ActualParamsNode(exprNodes);
     }
 
     @Override
     public ASTNode visitStrategy(RobocommandeParser.StrategyContext ctx) {
-        return "STRATEGY " + visit(ctx.id()) + "\n" + visit(ctx.strategyDefinition());
+        return new StrategyNode((IdNode) visit(ctx.id()),
+                (StrategyDefinitionNode) visit(ctx.strategyDefinition()));
     }
 
     @Override
     public ASTNode visitDefaultStrategy(RobocommandeParser.DefaultStrategyContext ctx) {
-        return "DEFAULT\n" + visit(ctx.strategyDefinition());
+        return new DefaultStrategyNode((StrategyDefinitionNode) visit(ctx.strategyDefinition()));
     }
 
     @Override
     public ASTNode visitStrategyDefinition(RobocommandeParser.StrategyDefinitionContext ctx) {
-        indentationLevel++;
-        String AST = "";
+        RunNode runNode = null;
+        if(ctx.run() != null)
+            runNode = (RunNode) visit(ctx.run());
 
-        AST += ctx.run() != null ? indent() + visit(ctx.run()) : "";
+        FunctionsNode functionsNode = null;
+        if(ctx.functions() != null)
+            functionsNode = (FunctionsNode) visit(ctx.functions());
 
-        AST += ctx.functions() != null ? visit(ctx.functions()) : "";
-
-        indentationLevel--;
-        return AST;
+        return new StrategyDefinitionNode(runNode, functionsNode);
     }
 
     @Override
     public ASTNode visitSetupBlock(RobocommandeParser.SetupBlockContext ctx) {
-        indentationLevel++;
-        String AST = "";
-
-        for(RobocommandeParser.SetupStmtContext setupStmt : ctx.setupStmt()){
-            AST += visit(setupStmt);
-        }
-        indentationLevel--;
-        return AST;
+        List<SetupStmtNode> setupStmts = new LinkedList<>();
+        ctx.setupStmt().forEach(stmt -> setupStmts.add((SetupStmtNode)visit(stmt)));
+        return new SetupBlockNode(setupStmts);
     }
 
     @Override
