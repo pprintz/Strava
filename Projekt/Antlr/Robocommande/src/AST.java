@@ -250,6 +250,11 @@ class FunctionCallNode extends StmtNode {
 class StructInitializationNode extends ASTNode {
     public IdNode name;
     public List<AssignmentNode> assignments;
+
+    public StructInitializationNode(IdNode name, List<AssignmentNode> assignments) {
+        this.name = name;
+        this.assignments = assignments;
+    }
 }
 
 class ExprFunctionCallNode extends ExprNode {

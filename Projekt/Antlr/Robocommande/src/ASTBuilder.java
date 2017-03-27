@@ -289,7 +289,7 @@ public class ASTBuilder extends RobocommandeBaseVisitor<ASTNode> {
 
     @Override
     public ASTNode visitGroupedExpression(RobocommandeParser.GroupedExpressionContext ctx) {
-        return new GroupedExpression((ExprNode)visit(ctx.expr()));
+        return new GroupedExpressionNode((ExprNode)visit(ctx.expr()));
     }
 
     @Override
