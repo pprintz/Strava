@@ -1,4 +1,3 @@
-import jdk.nashorn.internal.ir.Block;
 import org.antlr.v4.runtime.tree.ParseTree;
 
 import java.util.ArrayList;
@@ -32,7 +31,7 @@ public class ASTBuilder extends RobocommandeBaseVisitor<ASTNode> {
 
     @Override
     public ASTNode visitRun(RobocommandeParser.RunContext ctx) {
-                return new RunNode((BlockNode)visit(ctx.block()));
+        return new RunNode((BlockNode)visit(ctx.block()));
 
     }
 
@@ -110,37 +109,40 @@ public class ASTBuilder extends RobocommandeBaseVisitor<ASTNode> {
 
     @Override
     public ASTNode visitSetupBlock(RobocommandeParser.SetupBlockContext ctx) {
-        List<SetupStmtNode> setupStmts = new LinkedList<>();
-        ctx.setupStmt().forEach(stmt -> setupStmts.add((SetupStmtNode)visit(stmt)));
+        List<StmtNode> setupStmts = new LinkedList<>();
+        ctx.setupStmt().forEach(stmt -> setupStmts.add((StmtNode)visit(stmt)));
         return new SetupBlockNode(setupStmts);
     }
 
     @Override
     public ASTNode visitBlock(RobocommandeParser.BlockContext ctx) {
 
-        List<FunctionStmtNode> functionStmtNodes = new ArrayList<>();
+        List<StmtNode> stmtNodes = new ArrayList<>();
         for(RobocommandeParser.StmtContext stmt : ctx.stmt()){
-            functionStmtNodes.add((FunctionStmtNode)visit(stmt));
+            stmtNodes.add((StmtNode)visit(stmt));
         }
-        return new BlockNode(functionStmtNodes);
+        return new BlockNode(stmtNodes);
     }
+
 
     @Override
     public ASTNode visitSetupStmt(RobocommandeParser.SetupStmtContext ctx) {
-        if(ctx.declaration() != null){ return visit(ctx.declaration()); }
-        else if(ctx.structDeclaration() != null){ return visit(ctx.structDeclaration()); }
-        else if(ctx.assignment() != null){ return visit(ctx.assignment()); }
-        else if(ctx.fieldAssignment() != null){ return visit(ctx.fieldAssignment()); }
-        else if(ctx.ifStatement() != null){ return visit(ctx.ifStatement()); }
-        else if(ctx.functionCall() != null){ return visit(ctx.functionCall()); }
-        else if(ctx.loop() != null){ return visit(ctx.loop()); }
+        if(ctx.generalStmtPart() != null){ return visit(ctx.generalStmtPart()); }
         else if(ctx.newEvent() != null){ return visit(ctx.newEvent()); }
-
         return  null;
     }
 
     @Override
     public ASTNode visitStmt(RobocommandeParser.StmtContext ctx) {
+        if(ctx.generalStmtPart() != null){ return visit(ctx.generalStmtPart()); }
+        else if(ctx.newDeclaration() != null){ return visit(ctx.newDeclaration()); }
+        else if(ctx.returnStatement() != null){ return visit(ctx.returnStatement()); }
+
+        return null;
+    }
+
+    @Override
+    public  ASTNode visitGeneralStmtPart(RobocommandeParser.GeneralStmtPartContext ctx){
         if(ctx.declaration() != null){ return visit(ctx.declaration()); }
         else if(ctx.structDeclaration() != null){ return visit(ctx.structDeclaration()); }
         else if(ctx.assignment() != null){ return visit(ctx.assignment()); }
@@ -148,10 +150,9 @@ public class ASTBuilder extends RobocommandeBaseVisitor<ASTNode> {
         else if(ctx.ifStatement() != null){ return visit(ctx.ifStatement()); }
         else if(ctx.functionCall() != null){ return visit(ctx.functionCall()); }
         else if(ctx.loop() != null){ return visit(ctx.loop()); }
-        else if(ctx.newDeclaration() != null){ return visit(ctx.newDeclaration()); }
-        else if(ctx.returnStatement() != null){ return visit(ctx.returnStatement()); }
 
         return null;
+
     }
 
     @Override
@@ -174,7 +175,8 @@ public class ASTBuilder extends RobocommandeBaseVisitor<ASTNode> {
 
     @Override
     public ASTNode visitDeclaration(RobocommandeParser.DeclarationContext ctx) {
-        return new DeclarationNode((IdNode)visit(ctx.id()), (ExprNode)visit(ctx.expr()));
+        ExprNode exprNode = ctx.expr() != null ? (ExprNode)visit(ctx.expr()) : null;
+        return new DeclarationNode((IdNode)visit(ctx.id()), exprNode);
     }
 
     @Override
@@ -215,7 +217,7 @@ public class ASTBuilder extends RobocommandeBaseVisitor<ASTNode> {
         for(int i = 0; i <= blockCount ; i++){
             if(i == 0){
                 predicate = (ExprNode)visit(ctx.expr(i));
-                ifBlockNode = (BlockNode)visit(ctx.expr(i));
+                ifBlockNode = (BlockNode)visit(ctx.block(i));
             } else if(i != 0 && i == blockCount){
                 elseBlockNode = (BlockNode)visit(ctx.block(i));
             }
@@ -229,9 +231,10 @@ public class ASTBuilder extends RobocommandeBaseVisitor<ASTNode> {
 
     @Override
     public ASTNode visitFunctionCall(RobocommandeParser.FunctionCallContext ctx) {
-        IdNode idNode = (IdNode)visit(ctx.id()); // what if null?
-        FieldIdNode fieldIdNode = (FieldIdNode)visit(ctx.fieldId()); // what if null?
-        ActualParamsNode actualParamsNode = (ActualParamsNode)visit(ctx.actualParams());
+        IdNode idNode = ctx.id() != null ? (IdNode)visit(ctx.id()) : null;
+        FieldIdNode fieldIdNode = ctx.fieldId() != null ? (FieldIdNode)visit(ctx.fieldId()) : null;
+
+        ActualParamsNode actualParamsNode = ctx.actualParams() != null ? (ActualParamsNode)visit(ctx.actualParams()) : null;
 
         return new FunctionCallNode(fieldIdNode, idNode, actualParamsNode);
     }
@@ -271,7 +274,12 @@ public class ASTBuilder extends RobocommandeBaseVisitor<ASTNode> {
 
     @Override
     public ASTNode visitFCall(RobocommandeParser.FCallContext ctx) {
-        return visit(ctx.functionCall());
+        IdNode idNode = ctx.functionCall().id() != null ? (IdNode)visit(ctx.functionCall().id()) : null;
+        FieldIdNode fieldIdNode = ctx.functionCall().fieldId() != null ? (FieldIdNode)visit(ctx.functionCall().fieldId()) : null;
+
+        ActualParamsNode actualParamsNode = ctx.functionCall().actualParams() != null ? (ActualParamsNode)visit(ctx.functionCall().actualParams()) : null;
+
+        return new ExprFunctionCallNode(fieldIdNode, idNode, actualParamsNode);
     }
 
     @Override
@@ -403,7 +411,7 @@ public class ASTBuilder extends RobocommandeBaseVisitor<ASTNode> {
         for(ParseTree child : children){
             String current = child.getText();
             if(Arrays.asList(symbols).contains(current)){
-                res = " " + current + " ";
+                res = current;
             }
         }
         return res;

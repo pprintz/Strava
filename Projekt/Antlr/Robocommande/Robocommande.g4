@@ -18,25 +18,23 @@ strategyDefinition : ':' NEWLINE* run? functions? ';' NEWLINE*;
 setupBlock : ':' (setupStmt)* ';' NEWLINE* ;
 block : ':' (stmt)* ';' NEWLINE* ;
 
-setupStmt : NEWLINE+ ( declaration
-                 | structDeclaration
-                 | assignment
-                 | fieldAssignment
-                 | ifStatement
-                 | functionCall
-                 | loop
+setupStmt : NEWLINE+ ( generalStmtPart
                  | newEvent )? NEWLINE*
                  ;
-stmt : NEWLINE+ (  declaration
-                 | structDeclaration
-                 | assignment
-                 | fieldAssignment
-                 | ifStatement
-                 | functionCall
-                 | loop
+
+stmt : NEWLINE+ (  generalStmtPart
                  | newDeclaration
                  | returnStatement )? NEWLINE*
                  ;
+
+generalStmtPart : declaration
+                | structDeclaration
+                | assignment
+                | fieldAssignment
+                | ifStatement
+                | functionCall
+                | loop
+                ;
 
 structDeclaration : id '{' (id | assignment) (',' (id | assignment))* '}' ;
 declaration: 'var' id (':=' expr)? ;

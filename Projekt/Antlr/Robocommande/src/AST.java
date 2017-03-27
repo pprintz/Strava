@@ -23,8 +23,8 @@ class ProgNode extends ASTNode {
     private List<StrategyNode> strategyNodes;
     private List<DefineFunctionNode> defineFunctionNodes;
 
-    public ProgNode(SetupNode setupNode, DefaultStrategyNode defaultStrategyNode, List<StrategyNode> strategyNodes,
-                    List<DefineFunctionNode> defineFunctionNodes) {
+    public ProgNode(SetupNode setupNode, DefaultStrategyNode defaultStrategyNode,
+                    List<StrategyNode> strategyNodes, List<DefineFunctionNode> defineFunctionNodes) {
         this.setupNode = setupNode;
         this.defaultStrategyNode = defaultStrategyNode;
         this.strategyNodes = strategyNodes;
@@ -87,30 +87,145 @@ class RunNode extends ASTNode {
 }
 
 class SetupBlockNode extends ASTNode {
-    private List<SetupStmtNode> setupStmts;
+    private List<StmtNode> setupStmts;
 
 
-    public SetupBlockNode(List<SetupStmtNode> setupStmts) {
+    public SetupBlockNode(List<StmtNode> setupStmts) {
         this.setupStmts = setupStmts;
     }
 }
 
 class BlockNode extends ASTNode {
-    private List<FunctionStmtNode> functionStmtNodes;
+    private List<StmtNode> functionStmtNodes;
 
-    public BlockNode(List<FunctionStmtNode> functionStmtNodes) {
+    public BlockNode(List<StmtNode> functionStmtNodes) {
         this.functionStmtNodes = functionStmtNodes;
     }
 }
 
 
-abstract class GeneralStmtNode extends ASTNode {
+abstract class StmtNode extends ASTNode {
+}
+class StructDeclarationNode extends StmtNode {
+    private IdNode idName;
+    private List<IdNode> idNodes;
+    private List<AssignmentNode> assignments;
+
+    public StructDeclarationNode(IdNode idName, List<IdNode> idNodes, List<AssignmentNode> assignments) {
+        this.idName = idName;
+        this.idNodes = idNodes;
+        this.assignments = assignments;
+    }
 }
 
-abstract class SetupStmtNode extends GeneralStmtNode {
+class DeclarationNode extends StmtNode {
+    private IdNode id;
+    private ExprNode exprNode;
+
+    public DeclarationNode(IdNode id, ExprNode exprNode) {
+        this.id = id;
+        this.exprNode = exprNode;
+    }
 }
 
-abstract class FunctionStmtNode extends ASTNode {
+class FieldAssignmentNode extends StmtNode {
+    private FieldIdNode fieldIdNode;
+    private ExprNode exprNode;
+
+    public FieldAssignmentNode(FieldIdNode fieldIdNode, ExprNode exprNode) {
+        this.fieldIdNode = fieldIdNode;
+        this.exprNode = exprNode;
+    }
+}
+
+class AssignmentNode extends StmtNode {
+    private IdNode idNode;
+    private ExprNode exprNode;
+
+    public AssignmentNode(IdNode idNode, ExprNode exprNode) {
+        this.idNode = idNode;
+        this.exprNode = exprNode;
+    }
+}
+
+class IfStatementNode extends StmtNode {
+    private ExprNode predicate;
+    private BlockNode ifBlockNode;
+    private List<ElseIfStatementNode> elseIfNodes;
+    private BlockNode elseBlockNode;
+
+    public IfStatementNode(ExprNode predicate, BlockNode ifBlockNode,
+                           List<ElseIfStatementNode> elseIfNodes, BlockNode elseBlockNode) {
+        this.predicate = predicate;
+        this.ifBlockNode = ifBlockNode;
+        this.elseIfNodes = elseIfNodes;
+        this.elseBlockNode = elseBlockNode;
+    }
+}
+
+class FunctionCallNode extends StmtNode {
+    private FieldIdNode fieldIdNode;
+    private IdNode idNode;
+    private ActualParamsNode actualParams;
+
+    public FunctionCallNode(FieldIdNode fieldIdNode, IdNode idNode, ActualParamsNode actualParams) {
+        this.fieldIdNode = fieldIdNode;
+        this.idNode = idNode;
+        this.actualParams = actualParams;
+    }
+}
+
+class ExprFunctionCallNode extends ExprNode {
+    private FieldIdNode fieldIdNode;
+    private IdNode idNode;
+    private ActualParamsNode actualParams;
+
+    public ExprFunctionCallNode(FieldIdNode fieldIdNode, IdNode idNode, ActualParamsNode actualParams) {
+        this.fieldIdNode = fieldIdNode;
+        this.idNode = idNode;
+        this.actualParams = actualParams;
+    }
+}
+
+class LoopNode extends StmtNode {
+    private ExprNode exprNode;
+    private BlockNode block;
+
+    public LoopNode(ExprNode exprNode, BlockNode block) {
+        this.exprNode = exprNode;
+        this.block = block;
+    }
+}
+
+
+class NewEventNode extends StmtNode {
+    private IdNode idNode;
+    private BlockNode blockNode;
+
+    public NewEventNode(IdNode idNode, BlockNode blockNode) {
+        this.idNode = idNode;
+        this.blockNode = blockNode;
+    }
+}
+
+
+
+class NewDeclarationNode extends StmtNode {
+    private IdNode idNode;
+    private ExprNode exprNode;
+
+    public NewDeclarationNode(IdNode idNode, ExprNode exprNode) {
+        this.idNode = idNode;
+        this.exprNode = exprNode;
+    }
+}
+
+class ReturnStatementNode extends StmtNode {
+    private ExprNode exprNode;
+
+    public ReturnStatementNode(ExprNode exprNode) {
+        this.exprNode = exprNode;
+    }
 }
 
 class DefineFunctionNode extends ASTNode {
@@ -137,82 +252,7 @@ class BehaviorFunctionNode extends ASTNode {
     }
 }
 
-class StructDeclarationNode extends GeneralStmtNode {
-    private IdNode idName;
-    private List<IdNode> idNodes;
-    private List<AssignmentNode> assignments;
 
-    public StructDeclarationNode(IdNode idName, List<IdNode> idNodes, List<AssignmentNode> assignments) {
-        this.idName = idName;
-        this.idNodes = idNodes;
-        this.assignments = assignments;
-    }
-}
-
-class DeclarationNode extends GeneralStmtNode {
-    private IdNode id;
-    private ExprNode exprNode;
-
-    public DeclarationNode(IdNode id, ExprNode exprNode) {
-        this.id = id;
-        this.exprNode = exprNode;
-    }
-}
-
-class NewDeclarationNode extends FunctionStmtNode {
-    private IdNode idNode;
-    private ExprNode exprNode;
-
-    public NewDeclarationNode(IdNode idNode, ExprNode exprNode) {
-        this.idNode = idNode;
-        this.exprNode = exprNode;
-    }
-}
-
-class NewEventNode extends SetupStmtNode {
-    private IdNode idNode;
-    private BlockNode blockNode;
-
-    public NewEventNode(IdNode idNode, BlockNode blockNode) {
-        this.idNode = idNode;
-        this.blockNode = blockNode;
-    }
-}
-
-class FieldAssignmentNode extends GeneralStmtNode {
-    private FieldIdNode fieldIdNode;
-    private ExprNode exprNode;
-
-    public FieldAssignmentNode(FieldIdNode fieldIdNode, ExprNode exprNode) {
-        this.fieldIdNode = fieldIdNode;
-        this.exprNode = exprNode;
-    }
-}
-
-class AssignmentNode extends GeneralStmtNode {
-    private IdNode idNode;
-    private ExprNode exprNode;
-
-    public AssignmentNode(IdNode idNode, ExprNode exprNode) {
-        this.idNode = idNode;
-        this.exprNode = exprNode;
-    }
-}
-
-class IfStatementNode extends GeneralStmtNode {
-    private ExprNode predicate;
-    private BlockNode ifBlockNode;
-    private List<ElseIfStatementNode> elseIfNodes;
-    private BlockNode elseBlockNode;
-
-    public IfStatementNode(ExprNode predicate, BlockNode ifBlockNode,
-                           List<ElseIfStatementNode> elseIfNodes, BlockNode elseBlockNode) {
-        this.predicate = predicate;
-        this.ifBlockNode = ifBlockNode;
-        this.elseIfNodes = elseIfNodes;
-        this.elseBlockNode = elseBlockNode;
-    }
-}
 
 class ElseIfStatementNode extends ASTNode {
     private ExprNode predicate;
@@ -224,19 +264,8 @@ class ElseIfStatementNode extends ASTNode {
     }
 }
 
-class FunctionCallNode extends GeneralStmtNode {
-    private FieldIdNode fieldIdNode;
-    private IdNode idNode;
-    private ActualParamsNode actualParams;
 
-    public FunctionCallNode(FieldIdNode fieldIdNode, IdNode idNode, ActualParamsNode actualParams) {
-        this.fieldIdNode = fieldIdNode;
-        this.idNode = idNode;
-        this.actualParams = actualParams;
-    }
-}
-
-class StructInitializationNode extends ASTNode {
+class StructInitializationNode extends ExprNode {
     private IdNode name;
     private List<AssignmentNode> assignments;
 
@@ -246,23 +275,6 @@ class StructInitializationNode extends ASTNode {
     }
 }
 
-class LoopNode extends GeneralStmtNode {
-    private ExprNode exprNode;
-    private BlockNode block;
-
-    public LoopNode(ExprNode exprNode, BlockNode block) {
-        this.exprNode = exprNode;
-        this.block = block;
-    }
-}
-
-class ReturnStatementNode extends FunctionStmtNode {
-    private ExprNode exprNode;
-
-    public ReturnStatementNode(ExprNode exprNode) {
-        this.exprNode = exprNode;
-    }
-}
 
 class FormalParamsNode extends ASTNode {
     private List<IdNode> ids;
@@ -280,7 +292,7 @@ class ActualParamsNode extends ASTNode {
     }
 }
 
-abstract class ExprNode extends ASTNode {
+abstract class ExprNode extends StmtNode {
     public ExprNode() {
     }
 }
