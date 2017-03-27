@@ -4,11 +4,7 @@ import java.util.List;
  * Created by pprintz & kukucumber on 3/24/17.
  */
 
-abstract class Visitor {
-    public void visit(ASTNode a) {
-    }
 
-}
 
 abstract class ASTNode {
     public void accept(Visitor v) {
@@ -18,10 +14,10 @@ abstract class ASTNode {
 
 class ProgNode extends ASTNode {
 
-    private SetupNode setupNode;
-    private DefaultStrategyNode defaultStrategyNode;
-    private List<StrategyNode> strategyNodes;
-    private List<DefineFunctionNode> defineFunctionNodes;
+    public SetupNode setupNode;
+    public DefaultStrategyNode defaultStrategyNode;
+    public List<StrategyNode> strategyNodes;
+    public List<DefineFunctionNode> defineFunctionNodes;
 
     public ProgNode(SetupNode setupNode, DefaultStrategyNode defaultStrategyNode, List<StrategyNode> strategyNodes,
                     List<DefineFunctionNode> defineFunctionNodes) {
@@ -33,7 +29,7 @@ class ProgNode extends ASTNode {
 }
 
 class SetupNode extends ASTNode {
-    private SetupBlockNode setupBlockNode;
+    public SetupBlockNode setupBlockNode;
 
     public SetupNode(SetupBlockNode setupBlockNode) {
         this.setupBlockNode = setupBlockNode;
@@ -41,8 +37,8 @@ class SetupNode extends ASTNode {
 }
 
 class FunctionsNode extends ASTNode {
-    private List<DefineFunctionNode> defineFunctions;
-    private List<BehaviorFunctionNode> behaviorFunctions;
+    public List<DefineFunctionNode> defineFunctions;
+    public List<BehaviorFunctionNode> behaviorFunctions;
 
     public FunctionsNode(List<DefineFunctionNode> defineFunctions, List<BehaviorFunctionNode> behaviorFunctions) {
         this.defineFunctions = defineFunctions;
@@ -51,8 +47,8 @@ class FunctionsNode extends ASTNode {
 }
 
 class StrategyNode extends ASTNode {
-    private IdNode idNode;
-    private StrategyDefinitionNode strategyDefinition;
+    public IdNode idNode;
+    public StrategyDefinitionNode strategyDefinition;
 
     public StrategyNode(IdNode idNode, StrategyDefinitionNode strategyDefinition) {
         this.idNode = idNode;
@@ -61,7 +57,7 @@ class StrategyNode extends ASTNode {
 }
 
 class DefaultStrategyNode extends ASTNode {
-    private StrategyDefinitionNode strategyDefinition;
+    public StrategyDefinitionNode strategyDefinition;
 
     public DefaultStrategyNode(StrategyDefinitionNode strategyDefinition) {
         this.strategyDefinition = strategyDefinition;
@@ -69,8 +65,8 @@ class DefaultStrategyNode extends ASTNode {
 }
 
 class StrategyDefinitionNode extends ASTNode {
-    private RunNode runNode;
-    private FunctionsNode functionsNode;
+    public RunNode runNode;
+    public FunctionsNode functionsNode;
 
     public StrategyDefinitionNode(RunNode runNode, FunctionsNode functionsNode) {
         this.runNode = runNode;
@@ -79,7 +75,7 @@ class StrategyDefinitionNode extends ASTNode {
 }
 
 class RunNode extends ASTNode {
-    private BlockNode blockNode;
+    public BlockNode blockNode;
 
     public RunNode(BlockNode blockNode) {
         this.blockNode = blockNode;
@@ -87,7 +83,7 @@ class RunNode extends ASTNode {
 }
 
 class SetupBlockNode extends ASTNode {
-    private List<SetupStmtNode> setupStmts;
+    public List<SetupStmtNode> setupStmts;
 
 
     public SetupBlockNode(List<SetupStmtNode> setupStmts) {
@@ -96,7 +92,7 @@ class SetupBlockNode extends ASTNode {
 }
 
 class BlockNode extends ASTNode {
-    private List<FunctionStmtNode> functionStmtNodes;
+    public List<FunctionStmtNode> functionStmtNodes;
 
     public BlockNode(List<FunctionStmtNode> functionStmtNodes) {
         this.functionStmtNodes = functionStmtNodes;
@@ -105,18 +101,27 @@ class BlockNode extends ASTNode {
 
 
 abstract class GeneralStmtNode extends ASTNode {
+    public void accept(Visitor v) {
+        v.visit(this);
+    }
 }
 
 abstract class SetupStmtNode extends GeneralStmtNode {
+    public void accept(Visitor v) {
+        v.visit(this);
+    }
 }
 
 abstract class FunctionStmtNode extends ASTNode {
+    public void accept(Visitor v) {
+        v.visit(this);
+    }
 }
 
 class DefineFunctionNode extends ASTNode {
-    private IdNode idNode;
-    private FormalParamsNode formalParamsNode;
-    private BlockNode blockNode;
+    public IdNode idNode;
+    public FormalParamsNode formalParamsNode;
+    public BlockNode blockNode;
 
     public DefineFunctionNode(IdNode idNode, FormalParamsNode formalParamsNode, BlockNode blockNode) {
         this.idNode = idNode;
@@ -126,9 +131,9 @@ class DefineFunctionNode extends ASTNode {
 }
 
 class BehaviorFunctionNode extends ASTNode {
-    private IdNode idNode;
-    private IdNode eventName;
-    private BlockNode blockNode;
+    public IdNode idNode;
+    public IdNode eventName;
+    public BlockNode blockNode;
 
     public BehaviorFunctionNode(IdNode idNode, IdNode eventName, BlockNode blockNode) {
         this.idNode = idNode;
@@ -138,9 +143,9 @@ class BehaviorFunctionNode extends ASTNode {
 }
 
 class StructDeclarationNode extends GeneralStmtNode {
-    private IdNode idName;
-    private List<IdNode> idNodes;
-    private List<AssignmentNode> assignments;
+    public IdNode idName;
+    public List<IdNode> idNodes;
+    public List<AssignmentNode> assignments;
 
     public StructDeclarationNode(IdNode idName, List<IdNode> idNodes, List<AssignmentNode> assignments) {
         this.idName = idName;
@@ -150,8 +155,8 @@ class StructDeclarationNode extends GeneralStmtNode {
 }
 
 class DeclarationNode extends GeneralStmtNode {
-    private IdNode id;
-    private ExprNode exprNode;
+    public IdNode id;
+    public ExprNode exprNode;
 
     public DeclarationNode(IdNode id, ExprNode exprNode) {
         this.id = id;
@@ -160,8 +165,8 @@ class DeclarationNode extends GeneralStmtNode {
 }
 
 class NewDeclarationNode extends FunctionStmtNode {
-    private IdNode idNode;
-    private ExprNode exprNode;
+    public IdNode idNode;
+    public ExprNode exprNode;
 
     public NewDeclarationNode(IdNode idNode, ExprNode exprNode) {
         this.idNode = idNode;
@@ -170,8 +175,8 @@ class NewDeclarationNode extends FunctionStmtNode {
 }
 
 class NewEventNode extends SetupStmtNode {
-    private IdNode idNode;
-    private BlockNode blockNode;
+    public IdNode idNode;
+    public BlockNode blockNode;
 
     public NewEventNode(IdNode idNode, BlockNode blockNode) {
         this.idNode = idNode;
@@ -180,8 +185,8 @@ class NewEventNode extends SetupStmtNode {
 }
 
 class FieldAssignmentNode extends GeneralStmtNode {
-    private FieldIdNode fieldIdNode;
-    private ExprNode exprNode;
+    public FieldIdNode fieldIdNode;
+    public ExprNode exprNode;
 
     public FieldAssignmentNode(FieldIdNode fieldIdNode, ExprNode exprNode) {
         this.fieldIdNode = fieldIdNode;
@@ -190,8 +195,8 @@ class FieldAssignmentNode extends GeneralStmtNode {
 }
 
 class AssignmentNode extends GeneralStmtNode {
-    private IdNode idNode;
-    private ExprNode exprNode;
+    public IdNode idNode;
+    public ExprNode exprNode;
 
     public AssignmentNode(IdNode idNode, ExprNode exprNode) {
         this.idNode = idNode;
@@ -200,10 +205,10 @@ class AssignmentNode extends GeneralStmtNode {
 }
 
 class IfStatementNode extends GeneralStmtNode {
-    private ExprNode predicate;
-    private BlockNode ifBlockNode;
-    private List<ElseIfStatementNode> elseIfNodes;
-    private BlockNode elseBlockNode;
+    public ExprNode predicate;
+    public BlockNode ifBlockNode;
+    public List<ElseIfStatementNode> elseIfNodes;
+    public BlockNode elseBlockNode;
 
     public IfStatementNode(ExprNode predicate, BlockNode ifBlockNode,
                            List<ElseIfStatementNode> elseIfNodes, BlockNode elseBlockNode) {
@@ -215,8 +220,8 @@ class IfStatementNode extends GeneralStmtNode {
 }
 
 class ElseIfStatementNode extends ASTNode {
-    private ExprNode predicate;
-    private BlockNode blockNode;
+    public ExprNode predicate;
+    public BlockNode blockNode;
 
     public ElseIfStatementNode(ExprNode predicate, BlockNode blockNode) {
         this.predicate = predicate;
@@ -225,9 +230,9 @@ class ElseIfStatementNode extends ASTNode {
 }
 
 class FunctionCallNode extends GeneralStmtNode {
-    private FieldIdNode fieldIdNode;
-    private IdNode idNode;
-    private ActualParamsNode actualParams;
+    public FieldIdNode fieldIdNode;
+    public IdNode idNode;
+    public ActualParamsNode actualParams;
 
     public FunctionCallNode(FieldIdNode fieldIdNode, IdNode idNode, ActualParamsNode actualParams) {
         this.fieldIdNode = fieldIdNode;
@@ -237,8 +242,8 @@ class FunctionCallNode extends GeneralStmtNode {
 }
 
 class StructInitializationNode extends ASTNode {
-    private IdNode name;
-    private List<AssignmentNode> assignments;
+    public IdNode name;
+    public List<AssignmentNode> assignments;
 
     public StructInitializationNode(IdNode name, List<AssignmentNode> assignments) {
         this.name = name;
@@ -247,8 +252,8 @@ class StructInitializationNode extends ASTNode {
 }
 
 class LoopNode extends GeneralStmtNode {
-    private ExprNode exprNode;
-    private BlockNode block;
+    public ExprNode exprNode;
+    public BlockNode block;
 
     public LoopNode(ExprNode exprNode, BlockNode block) {
         this.exprNode = exprNode;
@@ -257,7 +262,7 @@ class LoopNode extends GeneralStmtNode {
 }
 
 class ReturnStatementNode extends FunctionStmtNode {
-    private ExprNode exprNode;
+    public ExprNode exprNode;
 
     public ReturnStatementNode(ExprNode exprNode) {
         this.exprNode = exprNode;
@@ -265,7 +270,7 @@ class ReturnStatementNode extends FunctionStmtNode {
 }
 
 class FormalParamsNode extends ASTNode {
-    private List<IdNode> ids;
+    public List<IdNode> ids;
 
     public FormalParamsNode(List<IdNode> ids) {
         this.ids = ids;
@@ -273,7 +278,7 @@ class FormalParamsNode extends ASTNode {
 }
 
 class ActualParamsNode extends ASTNode {
-    private List<ExprNode> exprs;
+    public List<ExprNode> exprs;
 
     public ActualParamsNode(List<ExprNode> exprs) {
         this.exprs = exprs;
@@ -281,28 +286,29 @@ class ActualParamsNode extends ASTNode {
 }
 
 abstract class ExprNode extends ASTNode {
-    public ExprNode() {
+    public void accept(Visitor v) {
+        v.visit(this);
     }
 }
 
 class LiteralNode extends ExprNode {
-    private String literalText;
+    public String literalText;
 
     public LiteralNode(String literalText) {
         this.literalText = literalText;
     }
 }
 
-class GroupedExpression extends ExprNode {
-    private ExprNode exprNode;
+class GroupedExpressionNode extends ExprNode {
+    public ExprNode exprNode;
 
-    public GroupedExpression(ExprNode exprNode) {
+    public GroupedExpressionNode(ExprNode exprNode) {
         this.exprNode = exprNode;
     }
 }
 
 class NegateBoolNode extends ExprNode {
-    private ExprNode exprNode;
+    public ExprNode exprNode;
 
     public NegateBoolNode(ExprNode exprNode) {
         this.exprNode = exprNode;
@@ -310,15 +316,15 @@ class NegateBoolNode extends ExprNode {
 }
 
 class NegateExpressionNode extends ExprNode {
-    private ExprNode exprNode;
+    public ExprNode exprNode;
     public NegateExpressionNode(ExprNode exprNode) {
         this.exprNode = exprNode;
     }
 }
 
 class PowerNode extends ExprNode {
-    private ExprNode baseNode;
-    private ExprNode exponentNode;
+    public ExprNode baseNode;
+    public ExprNode exponentNode;
 
     public PowerNode(ExprNode baseNode, ExprNode exponentNode) {
         this.baseNode = baseNode;
@@ -327,8 +333,8 @@ class PowerNode extends ExprNode {
 }
 
 class MultNode extends ExprNode {
-    private ExprNode leftExprNode;
-    private ExprNode rightExprNode;
+    public ExprNode leftExprNode;
+    public ExprNode rightExprNode;
 
     public MultNode(ExprNode leftExprNode, ExprNode rightExprNode) {
         this.leftExprNode = leftExprNode;
@@ -337,8 +343,8 @@ class MultNode extends ExprNode {
 }
 
 class DivNode extends ExprNode {
-    private ExprNode leftExprNode;
-    private ExprNode rightExprNode;
+    public ExprNode leftExprNode;
+    public ExprNode rightExprNode;
 
     public DivNode(ExprNode leftExprNode, ExprNode rightExprNode) {
         this.leftExprNode = leftExprNode;
@@ -347,8 +353,8 @@ class DivNode extends ExprNode {
 }
 
 class ModNode extends ExprNode {
-    private ExprNode leftExprNode;
-    private ExprNode rightExprNode;
+    public ExprNode leftExprNode;
+    public ExprNode rightExprNode;
 
     public ModNode(ExprNode leftExprNode, ExprNode rightExprNode) {
         this.leftExprNode = leftExprNode;
@@ -357,8 +363,8 @@ class ModNode extends ExprNode {
 }
 
 class PlusNode extends ExprNode {
-    private ExprNode leftExprNode;
-    private ExprNode rightExprNode;
+    public ExprNode leftExprNode;
+    public ExprNode rightExprNode;
 
     public PlusNode(ExprNode leftExprNode, ExprNode rightExprNode) {
         this.leftExprNode = leftExprNode;
@@ -367,8 +373,8 @@ class PlusNode extends ExprNode {
 }
 
 class MinusNode extends ExprNode {
-    private ExprNode leftExprNode;
-    private ExprNode rightExprNode;
+    public ExprNode leftExprNode;
+    public ExprNode rightExprNode;
 
     public MinusNode(ExprNode leftExprNode, ExprNode rightExprNode) {
         this.leftExprNode = leftExprNode;
@@ -377,8 +383,8 @@ class MinusNode extends ExprNode {
 }
 
 class ComparisonNode extends ExprNode {
-    private ExprNode leftExprNode;
-    private ExprNode rightExprNode;
+    public ExprNode leftExprNode;
+    public ExprNode rightExprNode;
 
     public ComparisonNode(ExprNode leftExprNode, ExprNode rightExprNode) {
         this.leftExprNode = leftExprNode;
@@ -387,8 +393,8 @@ class ComparisonNode extends ExprNode {
 }
 
 class EqualityNode extends ExprNode {
-    private ExprNode leftExprNode;
-    private ExprNode rightExprNode;
+    public ExprNode leftExprNode;
+    public ExprNode rightExprNode;
 
     public EqualityNode(ExprNode leftExprNode, ExprNode rightExprNode) {
         this.leftExprNode = leftExprNode;
@@ -397,8 +403,8 @@ class EqualityNode extends ExprNode {
 }
 
 class InEqualityNode extends ExprNode {
-    private ExprNode leftExprNode;
-    private ExprNode rightExprNode;
+    public ExprNode leftExprNode;
+    public ExprNode rightExprNode;
 
     public InEqualityNode(ExprNode leftExprNode, ExprNode rightExprNode) {
         this.leftExprNode = leftExprNode;
@@ -407,8 +413,8 @@ class InEqualityNode extends ExprNode {
 }
 
 class LessThanNode extends ExprNode {
-    private ExprNode leftExprNode;
-    private ExprNode rightExprNode;
+    public ExprNode leftExprNode;
+    public ExprNode rightExprNode;
 
     public LessThanNode(ExprNode leftExprNode, ExprNode rightExprNode) {
         this.leftExprNode = leftExprNode;
@@ -416,8 +422,8 @@ class LessThanNode extends ExprNode {
     }
 }
 class LeqThanNode extends ExprNode {
-    private ExprNode leftExprNode;
-    private ExprNode rightExprNode;
+    public ExprNode leftExprNode;
+    public ExprNode rightExprNode;
 
     public LeqThanNode(ExprNode leftExprNode, ExprNode rightExprNode) {
         this.leftExprNode = leftExprNode;
@@ -425,8 +431,8 @@ class LeqThanNode extends ExprNode {
     }
 }
 class GeqThanNode extends ExprNode {
-    private ExprNode leftExprNode;
-    private ExprNode rightExprNode;
+    public ExprNode leftExprNode;
+    public ExprNode rightExprNode;
 
     public GeqThanNode(ExprNode leftExprNode, ExprNode rightExprNode) {
         this.leftExprNode = leftExprNode;
@@ -434,8 +440,8 @@ class GeqThanNode extends ExprNode {
     }
 }
 class GreaterThanNode extends ExprNode {
-    private ExprNode leftExprNode;
-    private ExprNode rightExprNode;
+    public ExprNode leftExprNode;
+    public ExprNode rightExprNode;
 
     public GreaterThanNode(ExprNode leftExprNode, ExprNode rightExprNode) {
         this.leftExprNode = leftExprNode;
@@ -444,8 +450,8 @@ class GreaterThanNode extends ExprNode {
 }
 
 class AndNode extends ExprNode {
-    private ExprNode leftExprNode;
-    private ExprNode rightExprNode;
+    public ExprNode leftExprNode;
+    public ExprNode rightExprNode;
 
     public AndNode(ExprNode leftExprNode, ExprNode rightExprNode) {
         this.leftExprNode = leftExprNode;
@@ -454,8 +460,8 @@ class AndNode extends ExprNode {
 }
 
 class OrNode extends ExprNode {
-    private ExprNode leftExprNode;
-    private ExprNode rightExprNode;
+    public ExprNode leftExprNode;
+    public ExprNode rightExprNode;
 
     public OrNode(ExprNode leftExprNode, ExprNode rightExprNode) {
         this.leftExprNode = leftExprNode;
@@ -464,7 +470,7 @@ class OrNode extends ExprNode {
 }
 
 class FieldIdNode extends ASTNode {
-    private List<IdNode> ids;
+    public List<IdNode> ids;
 
     public FieldIdNode(List<IdNode> ids) {
         this.ids = ids;
@@ -472,7 +478,7 @@ class FieldIdNode extends ASTNode {
 }
 
 class IdNode extends ASTNode {
-    private String id;
+    public String id;
 
     public IdNode(String id) {
         this.id = id;
