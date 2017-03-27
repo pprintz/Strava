@@ -21,7 +21,11 @@ public class Main {
         ParseTree tree = parser.prog();
 
         //System.out.println(tree.toStringTree(parser));
-        PrettyPrinter prettyPrinter = new PrettyPrinter();
-        System.out.println(prettyPrinter.visit(tree));
+        //PrettyPrinter prettyPrinter = new PrettyPrinter();
+        //System.out.println(prettyPrinter.visit(tree));
+
+        ASTBuilder astBuilder = new ASTBuilder();
+        astBuilder.visit(tree);
+        System.out.println("Everything went okay.");
     }
 }

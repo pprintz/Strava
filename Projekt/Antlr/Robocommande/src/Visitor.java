@@ -1,6 +1,7 @@
 import com.sun.org.apache.xpath.internal.ExpressionNode;
 import jdk.nashorn.internal.ir.IfNode;
 import sun.tools.jstat.Literal;
+import sun.tools.tree.ReturnStatement;
 
 /**
  * Created by Casper on 27/03/2017.
@@ -24,6 +25,7 @@ public abstract class Visitor {
 
     public void visit(AndNode node){
         node.leftExprNode.accept(this);
+        node.rightExprNode.accept(this);
     }
 
     public void visit(GeneralStmtNode node){
@@ -31,102 +33,102 @@ public abstract class Visitor {
     }
 
     public void visit(AssignmentNode node){
-        visit(node.idNode);
-        visit(node.exprNode);
+        node.idNode.accept(this);
+        node.exprNode.accept(this);
     }
 
     public void visit(BehaviorFunctionNode node){
-        visit(node.idNode);
-        visit(node.eventName);
-        visit(node.blockNode);
+        node.idNode.accept(this);
+        node.eventName.accept(this);
+        node.blockNode.accept(this);
     }
 
     public void visit(BlockNode node){
-        for(FunctionStmtNode nodes : node.functionStmtNodes){
-            visit(nodes);
+        for(StmtNode stmtNode : node.functionStmtNodes){
+            stmtNode.accept(this);
         }
     }
 
     public void visit(ComparisonNode node){
-        visit(node.leftExprNode);
-        visit(node.rightExprNode);
+        node.leftExprNode.accept(this);
+        node.rightExprNode.accept(this);
     }
 
     public void visit(DeclarationNode node){
-        visit(node.id);
-        visit(node.exprNode);
+        node.id.accept(this);
+        node.exprNode.accept(this);
     }
 
     public void visit(DefaultStrategyNode node){
-        visit(node.strategyDefinition);
+        node.strategyDefinition.accept(this);
     }
 
     public void visit(DefineFunctionNode node){
-        visit(node.idNode);
-        visit(node.formalParamsNode);
-        visit(node.blockNode);
+        node.idNode.accept(this);
+        node.formalParamsNode.accept(this);
+        node.blockNode.accept(this);
     }
 
     public void visit(DivNode node){
-        visit(node.leftExprNode);
-        visit(node.rightExprNode);
+        node.leftExprNode.accept(this);
+        node.rightExprNode.accept(this);
     }
 
     public void visit(ElseIfStatementNode node){
-        visit(node.predicate);
-        visit(node.blockNode);
+        node.predicate.accept(this);
+        node.blockNode.accept(this);
     }
 
     public void visit(EqualityNode node){
-        visit(node.leftExprNode);
-        visit(node.rightExprNode);
+        node.leftExprNode.accept(this);
+        node.rightExprNode.accept(this);
     }
 
     public void visit(FieldAssignmentNode node){
-        visit(node.fieldIdNode);
-        visit(node.exprNode);
+        node.fieldIdNode.accept(this);
+        node.exprNode.accept(this);
     }
 
     public void visit(FieldIdNode node){
         for(IdNode idnode : node.ids){
-            visit(idnode);
+            idnode.accept(this);
         }
     }
 
     public void visit(FormalParamsNode node){
         for(IdNode pnode : node.ids){
-            visit(pnode);
+            pnode.accept(this);
         }
     }
 
     public void visit(FunctionCallNode node){
-        visit(node.fieldIdNode);
-        visit(node.idNode);
-        visit(node.actualParams);
+        node.fieldIdNode.accept(this);
+        node.idNode.accept(this);
+        node.actualParams.accept(this);
     }
 
     public void visit(FunctionsNode node){
         for(DefineFunctionNode defnode : node.defineFunctions){
-            visit(defnode);
+            defnode.accept(this);
         }
 
         for(BehaviorFunctionNode behnode : node.behaviorFunctions){
-            visit(behnode);
+            behnode.accept(this);
         }
     }
 
     public void visit(GeqThanNode node){
-        visit(node.leftExprNode);
-        visit(node.rightExprNode);
+        node.leftExprNode.accept(this);
+        node.rightExprNode.accept(this);
     }
 
     public void visit(GreaterThanNode node){
-        visit(node.leftExprNode);
-        visit(node.rightExprNode);
+        node.leftExprNode.accept(this);
+        node.rightExprNode.accept(this);
     }
 
     public void visit(GroupedExpressionNode node){
-
+        node.exprNode.accept(this);
     }
 
     public void visit(IdNode node){
@@ -134,27 +136,27 @@ public abstract class Visitor {
     }
 
     public void visit(IfStatementNode node){
-        visit(node.predicate);
-        visit(node.ifBlockNode);
+        node.predicate.accept(this);
+        node.ifBlockNode.accept(this);
         for(ElseIfStatementNode elifNode : node.elseIfNodes){
-            visit(elifNode);
+            elifNode.accept(this);
         }
-        visit(node.elseBlockNode);
+        node.elseBlockNode.accept(this);
     }
 
     public void visit(InEqualityNode node){
-        visit(node.leftExprNode);
-        visit(node.rightExprNode);
+        node.leftExprNode.accept(this);
+        node.rightExprNode.accept(this);
     }
 
     public void visit(LeqThanNode node){
-        visit(node.leftExprNode);
-        visit(node.rightExprNode);
+        node.leftExprNode.accept(this);
+        node.rightExprNode.accept(this);
     }
 
     public void visit(LessThanNode node){
-        visit(node.leftExprNode);
-        visit(node.rightExprNode);
+        node.leftExprNode.accept(this);
+        node.rightExprNode.accept(this);
     }
 
     public void visit(LiteralNode node){
@@ -162,86 +164,86 @@ public abstract class Visitor {
     }
 
     public void visit(LoopNode node){
-        visit(node.exprNode);
-        visit(node.block);
+        node.exprNode.accept(this);
+        node.block.accept(this);
     }
 
     public void visit(MinusNode node){
-        visit(node.leftExprNode);
-        visit(node.rightExprNode);
+        node.leftExprNode.accept(this);
+        node.rightExprNode.accept(this);
     }
 
     public void visit(ModNode node){
-        visit(node.leftExprNode);
-        visit(node.rightExprNode);
+        node.leftExprNode.accept(this);
+        node.rightExprNode.accept(this);
     }
 
     public void visit(MultNode node){
-        visit(node.leftExprNode);
-        visit(node.rightExprNode);
+        node.leftExprNode.accept(this);
+        node.rightExprNode.accept(this);
     }
 
     public void visit(NegateBoolNode node){
-        visit(node.exprNode);
+        node.exprNode.accept(this);
     }
 
     public void visit(NegateExpressionNode node){
-        visit(node.exprNode);
+        node.exprNode.accept(this);
     }
 
     public void visit(NewDeclarationNode node){
-        visit(node.idNode);
-        visit(node.exprNode);
+        node.idNode.accept(this);
+        node.exprNode.accept(this);
     }
 
     public void visit(NewEventNode node){
-        visit(node.idNode);
-        visit(node.blockNode);
+        node.idNode.accept(this);
+        node.blockNode.accept(this);
     }
 
     public void visit(OrNode node) {
-        visit(node.leftExprNode);
-        visit(node.rightExprNode);
+        node.leftExprNode.accept(this);
+        node.rightExprNode.accept(this);
     }
 
     public void visit(PlusNode node) {
-        visit(node.leftExprNode);
-        visit(node.rightExprNode);
+        node.leftExprNode.accept(this);
+        node.rightExprNode.accept(this);
     }
 
     public void visit(PowerNode node) {
-        visit(node.baseNode);
-        visit(node.exponentNode);
+        node.baseNode.accept(this);
+        node.exponentNode.accept(this);
     }
 
     public void visit(ProgNode node) {
-        visit(node.setupNode);
-        visit(node.defaultStrategyNode);
+        node.setupNode.accept(this);
+        node.defaultStrategyNode.accept(this);
         for(StrategyNode strategyNode : node.strategyNodes) {
-            visit(strategyNode);
+            strategyNode.accept(this);
         }
 
         for(DefineFunctionNode defineFunctionsNode : node.defineFunctionNodes) {
-            visit(defineFunctionsNode);
+            defineFunctionsNode.accept(this);
         }
     }
 
     public void visit(ReturnStatementNode node) {
-        visit(node.exprNode);
+        node.exprNode.accept(this);
     }
 
     public void visit(RunNode node) {
-        visit(node.blockNode);
+        node.blockNode.accept(this);
     }
 
     public void visit(SetupBlockNode node) {
-        for (SetupStmtNode setupStmt : node.setupStmts) {
-            visit(setupStmt);
+        for (StmtNode setupStmt : node.setupStmts) {
+            setupStmt.accept(this);
         }
     }
 
     public void visit(SetupNode node) {
-        visit(node.setupBlockNode);
+        node.setupBlockNode.accept(this);
     }
 
     public void visit(SetupStmtNode node) {
@@ -249,32 +251,31 @@ public abstract class Visitor {
     }
 
     public void visit(StrategyDefinitionNode node) {
-        visit(node.runNode);
-        visit(node.functionsNode);
+        node.runNode.accept(this);
+        node.functionsNode.accept(this);
     }
 
     public void visit(StrategyNode node) {
-        visit(node.idNode);
-        visit(node.strategyDefinition);
+        node.idNode.accept(this);
+        node.strategyDefinition.accept(this);
     }
 
     public void visit(StructDeclarationNode node) {
-        visit(node.idName);
+        node.idName.accept(this);
         for(IdNode idNode : node.idNodes) {
-            visit(idNode);
+            idNode.accept(this);
         }
         for(AssignmentNode assignmentNode : node.assignments) {
-            visit(assignmentNode);
+            assignmentNode.accept(this);
         }
     }
 
     public void visit(StructInitializationNode node) {
-        visit(node.name);
+        node.name.accept(this);
         for(AssignmentNode assignmentNode : node.assignments) {
-            visit(assignmentNode);
+            assignmentNode.accept(this);
         }
     }
-
 }
 
 

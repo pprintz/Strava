@@ -19,8 +19,8 @@ class ProgNode extends ASTNode {
     public List<StrategyNode> strategyNodes;
     public List<DefineFunctionNode> defineFunctionNodes;
 
-    public ProgNode(SetupNode setupNode, DefaultStrategyNode defaultStrategyNode, List<StrategyNode> strategyNodes,
-                    List<DefineFunctionNode> defineFunctionNodes) {
+    public ProgNode(SetupNode setupNode, DefaultStrategyNode defaultStrategyNode,
+        List<StrategyNode> strategyNodes, List<DefineFunctionNode> defineFunctionNodes) {
         this.setupNode = setupNode;
         this.defaultStrategyNode = defaultStrategyNode;
         this.strategyNodes = strategyNodes;
@@ -83,18 +83,18 @@ class RunNode extends ASTNode {
 }
 
 class SetupBlockNode extends ASTNode {
-    public List<SetupStmtNode> setupStmts;
+    public List<StmtNode> setupStmts;
 
 
-    public SetupBlockNode(List<SetupStmtNode> setupStmts) {
+    public SetupBlockNode(List<StmtNode> setupStmts) {
         this.setupStmts = setupStmts;
     }
 }
 
 class BlockNode extends ASTNode {
-    public List<FunctionStmtNode> functionStmtNodes;
+    public List<StmtNode> functionStmtNodes;
 
-    public BlockNode(List<FunctionStmtNode> functionStmtNodes) {
+    public BlockNode(List<StmtNode> functionStmtNodes) {
         this.functionStmtNodes = functionStmtNodes;
     }
 }
@@ -142,7 +142,10 @@ class BehaviorFunctionNode extends ASTNode {
     }
 }
 
-class StructDeclarationNode extends GeneralStmtNode {
+abstract class StmtNode extends ASTNode {
+}
+
+class StructDeclarationNode extends StmtNode {
     public IdNode idName;
     public List<IdNode> idNodes;
     public List<AssignmentNode> assignments;
@@ -154,7 +157,7 @@ class StructDeclarationNode extends GeneralStmtNode {
     }
 }
 
-class DeclarationNode extends GeneralStmtNode {
+class DeclarationNode extends StmtNode {
     public IdNode id;
     public ExprNode exprNode;
 
@@ -184,7 +187,7 @@ class NewEventNode extends SetupStmtNode {
     }
 }
 
-class FieldAssignmentNode extends GeneralStmtNode {
+class FieldAssignmentNode extends StmtNode {
     public FieldIdNode fieldIdNode;
     public ExprNode exprNode;
 
@@ -194,7 +197,8 @@ class FieldAssignmentNode extends GeneralStmtNode {
     }
 }
 
-class AssignmentNode extends GeneralStmtNode {
+
+class AssignmentNode extends StmtNode {
     public IdNode idNode;
     public ExprNode exprNode;
 
@@ -204,7 +208,8 @@ class AssignmentNode extends GeneralStmtNode {
     }
 }
 
-class IfStatementNode extends GeneralStmtNode {
+
+class IfStatementNode extends StmtNode {
     public ExprNode predicate;
     public BlockNode ifBlockNode;
     public List<ElseIfStatementNode> elseIfNodes;
@@ -229,7 +234,8 @@ class ElseIfStatementNode extends ASTNode {
     }
 }
 
-class FunctionCallNode extends GeneralStmtNode {
+
+class FunctionCallNode extends StmtNode {
     public FieldIdNode fieldIdNode;
     public IdNode idNode;
     public ActualParamsNode actualParams;
@@ -244,14 +250,21 @@ class FunctionCallNode extends GeneralStmtNode {
 class StructInitializationNode extends ASTNode {
     public IdNode name;
     public List<AssignmentNode> assignments;
+}
 
-    public StructInitializationNode(IdNode name, List<AssignmentNode> assignments) {
-        this.name = name;
-        this.assignments = assignments;
+class ExprFunctionCallNode extends ExprNode {
+    public FieldIdNode fieldIdNode;
+    public IdNode idNode;
+    public ActualParamsNode actualParams;
+
+    public ExprFunctionCallNode(FieldIdNode fieldIdNode, IdNode idNode, ActualParamsNode actualParams) {
+        this.fieldIdNode = fieldIdNode;
+        this.idNode = idNode;
+        this.actualParams = actualParams;
     }
 }
 
-class LoopNode extends GeneralStmtNode {
+class LoopNode extends StmtNode {
     public ExprNode exprNode;
     public BlockNode block;
 
@@ -261,13 +274,6 @@ class LoopNode extends GeneralStmtNode {
     }
 }
 
-class ReturnStatementNode extends FunctionStmtNode {
-    public ExprNode exprNode;
-
-    public ReturnStatementNode(ExprNode exprNode) {
-        this.exprNode = exprNode;
-    }
-}
 
 class FormalParamsNode extends ASTNode {
     public List<IdNode> ids;
@@ -296,6 +302,14 @@ class LiteralNode extends ExprNode {
 
     public LiteralNode(String literalText) {
         this.literalText = literalText;
+    }
+}
+
+class ReturnStatementNode extends StmtNode {
+    public ExprNode exprNode;
+
+    public ReturnStatementNode(ExprNode exprNode) {
+        this.exprNode = exprNode;
     }
 }
 

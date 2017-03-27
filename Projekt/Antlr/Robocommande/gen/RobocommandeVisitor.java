@@ -34,6 +34,30 @@ public interface RobocommandeVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitFunctions(RobocommandeParser.FunctionsContext ctx);
 	/**
+	 * Visit a parse tree produced by {@link RobocommandeParser#defineFunction}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitDefineFunction(RobocommandeParser.DefineFunctionContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link RobocommandeParser#behaviorFunction}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitBehaviorFunction(RobocommandeParser.BehaviorFunctionContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link RobocommandeParser#formalParams}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitFormalParams(RobocommandeParser.FormalParamsContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link RobocommandeParser#actualParams}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitActualParams(RobocommandeParser.ActualParamsContext ctx);
+	/**
 	 * Visit a parse tree produced by {@link RobocommandeParser#strategy}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
@@ -76,17 +100,11 @@ public interface RobocommandeVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitStmt(RobocommandeParser.StmtContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link RobocommandeParser#defineFunction}.
+	 * Visit a parse tree produced by {@link RobocommandeParser#generalStmtPart}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitDefineFunction(RobocommandeParser.DefineFunctionContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link RobocommandeParser#behaviorFunction}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitBehaviorFunction(RobocommandeParser.BehaviorFunctionContext ctx);
+	T visitGeneralStmtPart(RobocommandeParser.GeneralStmtPartContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link RobocommandeParser#structDeclaration}.
 	 * @param ctx the parse tree
@@ -153,18 +171,6 @@ public interface RobocommandeVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitReturnStatement(RobocommandeParser.ReturnStatementContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link RobocommandeParser#formalParams}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitFormalParams(RobocommandeParser.FormalParamsContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link RobocommandeParser#actualParams}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitActualParams(RobocommandeParser.ActualParamsContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code comparison}
 	 * labeled alternative in {@link RobocommandeParser#expr}.
