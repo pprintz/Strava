@@ -25,7 +25,9 @@ public class Main {
         //System.out.println(prettyPrinter.visit(tree));
 
         ASTBuilder astBuilder = new ASTBuilder();
-        astBuilder.visit(tree);
+        PrettyPrintVisitor prettyPrintVisitor = new PrettyPrintVisitor();
+        ASTNode node = astBuilder.visit(tree);
+        prettyPrintVisitor.visit(node);
         System.out.println("Everything went okay.");
     }
 }

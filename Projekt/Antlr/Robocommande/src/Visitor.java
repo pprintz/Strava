@@ -1,8 +1,3 @@
-import com.sun.org.apache.xpath.internal.ExpressionNode;
-import jdk.nashorn.internal.ir.IfNode;
-import sun.tools.jstat.Literal;
-import sun.tools.tree.ReturnStatement;
-
 /**
  * Created by Casper on 27/03/2017.
  */
@@ -56,7 +51,8 @@ public abstract class Visitor {
 
     public void visit(DeclarationNode node){
         node.id.accept(this);
-        node.exprNode.accept(this);
+        if(node.exprNode != null)
+            node.exprNode.accept(this);
     }
 
     public void visit(DefaultStrategyNode node){
@@ -102,8 +98,10 @@ public abstract class Visitor {
     }
 
     public void visit(FunctionCallNode node){
+        if(node.fieldIdNode != null)
         node.fieldIdNode.accept(this);
         node.idNode.accept(this);
+        if(node.actualParams != null)
         node.actualParams.accept(this);
     }
 
@@ -142,6 +140,13 @@ public abstract class Visitor {
             elifNode.accept(this);
         }
         node.elseBlockNode.accept(this);
+    }
+    public void visit(ExprFunctionCallNode node){
+        if(node.fieldIdNode != null)
+            node.fieldIdNode.accept(this);
+        node.idNode.accept(this);
+        if(node.actualParams != null)
+            node.actualParams.accept(this);
     }
 
     public void visit(InEqualityNode node){
@@ -251,8 +256,10 @@ public abstract class Visitor {
     }
 
     public void visit(StrategyDefinitionNode node) {
-        node.runNode.accept(this);
-        node.functionsNode.accept(this);
+        if(node.runNode != null)
+            node.runNode.accept(this);
+        if(node.functionsNode != null)
+            node.functionsNode.accept(this);
     }
 
     public void visit(StrategyNode node) {

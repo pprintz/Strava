@@ -30,7 +30,10 @@ public class PrettyPrintVisitor extends Visitor {
 
     @Override
     public void visit(AssignmentNode node) {
-        super.visit(node);
+        System.out.print("ASSIGN: ");
+        node.idNode.accept(this);
+        System.out.print(" := ");
+        node.exprNode.accept(this);
     }
 
     @Override
@@ -84,8 +87,8 @@ public class PrettyPrintVisitor extends Visitor {
     }
 
     @Override
-    public void visit(FieldIdNode node) {
-        super.visit(node);
+    public void visit(FieldIdNode node)
+    {
     }
 
     @Override
@@ -120,7 +123,7 @@ public class PrettyPrintVisitor extends Visitor {
 
     @Override
     public void visit(IdNode node) {
-        super.visit(node);
+        System.out.print(node.id);
     }
 
     @Override
@@ -145,7 +148,7 @@ public class PrettyPrintVisitor extends Visitor {
 
     @Override
     public void visit(LiteralNode node) {
-        super.visit(node);
+        System.out.print(node.literalText);
     }
 
     @Override
@@ -195,7 +198,9 @@ public class PrettyPrintVisitor extends Visitor {
 
     @Override
     public void visit(PlusNode node) {
-        super.visit(node);
+        node.leftExprNode.accept(this);
+        System.out.print(" + ");
+        node.rightExprNode.accept(this);
     }
 
     @Override
