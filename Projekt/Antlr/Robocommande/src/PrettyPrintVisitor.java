@@ -2,10 +2,23 @@
  * Created by Casper on 27/03/2017.
  */
 public class PrettyPrintVisitor extends Visitor {
+    int indentationLevel = 0;
+
+    private String indent(){
+        return new String(new char[indentationLevel]).replace("\0", "    ");
+    }
 
     @Override
     public void visit(ActualParamsNode node) {
-        super.visit(node);
+        int len = node.exprs.size();
+        for(int i = 0; i < len; i++ ){
+            if(i == len-1) visit(node.exprs.get(i));
+            else {
+                visit(node.exprs.get(i));
+                System.out.print(", ");
+            }
+        }
+
     }
 
     @Override
@@ -20,30 +33,43 @@ public class PrettyPrintVisitor extends Visitor {
 
     @Override
     public void visit(AndNode node) {
-        super.visit(node);
+        visit(node.leftExprNode);
+        System.out.print(" and ");
+        visit(node.rightExprNode);
     }
 
     @Override
     public void visit(GeneralStmtNode node) {
+        System.out.print(indent());
         super.visit(node);
+        System.out.println();
     }
 
     @Override
     public void visit(AssignmentNode node) {
-        System.out.print("ASSIGN: ");
+        System.out.print(indent() + "ASSIGN ");
         node.idNode.accept(this);
         System.out.print(" := ");
         node.exprNode.accept(this);
+        System.out.println();
     }
 
     @Override
     public void visit(BehaviorFunctionNode node) {
-        super.visit(node);
+        System.out.print(indent() + "BEHAVIOR ");
+        visit(node.idNode);
+        System.out.println("(" + node.eventName.id + ")");
+        indentationLevel++;
+        visit(node.blockNode);
+        indentationLevel--;
     }
 
     @Override
     public void visit(BlockNode node) {
+        indentationLevel++;
         super.visit(node);
+        System.out.println();
+        indentationLevel--;
     }
 
     @Override
@@ -53,52 +79,96 @@ public class PrettyPrintVisitor extends Visitor {
 
     @Override
     public void visit(DeclarationNode node) {
-        super.visit(node);
+        System.out.print(indent() + "DECLARE ");
+        visit(node.id);
+        if(node.exprNode != null) {
+            System.out.print(" := ");
+            visit(node.exprNode);
+        }
+        System.out.println();
     }
 
     @Override
     public void visit(DefaultStrategyNode node) {
+        System.out.println(indent() + "DEFAULT STRATEGY ");
+        indentationLevel++;
         super.visit(node);
+        indentationLevel--;
     }
 
     @Override
     public void visit(DefineFunctionNode node) {
-        super.visit(node);
+        System.out.print(indent() + "DEFINE ");
+        visit(node.idNode);
+        System.out.print("(");
+        visit(node.formalParamsNode);
+        System.out.println(")");
+        indentationLevel++;
+        visit(node.blockNode);
+        indentationLevel--;
     }
 
     @Override
     public void visit(DivNode node) {
-        super.visit(node);
+        visit(node.leftExprNode);
+        System.out.print(" / ");
+        visit(node.rightExprNode);
     }
 
     @Override
     public void visit(ElseIfStatementNode node) {
-        super.visit(node);
+        System.out.print(indent() + "ELSE IF ");
+        visit(node.predicate);
+        System.out.println();
+        visit(node.blockNode);
     }
 
     @Override
     public void visit(EqualityNode node) {
-        super.visit(node);
+        visit(node.leftExprNode);
+        System.out.print(" = ");
+        visit(node.rightExprNode);
     }
 
     @Override
     public void visit(FieldAssignmentNode node) {
-        super.visit(node);
+        System.out.print(indent() + "ASSIGN ");
+        visit(node.fieldIdNode);
+        System.out.print(" := ");
+        visit(node.exprNode);
+        System.out.println();
     }
 
     @Override
     public void visit(FieldIdNode node)
     {
+        int len = node.ids.size();
+        for(int i = 0; i < len; i++){
+           visit(node.ids.get(i));
+           if(i < len-1) System.out.print(".");
+        }
     }
 
     @Override
     public void visit(FormalParamsNode node) {
-        super.visit(node);
+        int len = node.ids.size();
+        for(int i = 0; i < len; i++ ){
+            if(i == len-1) visit(node.ids.get(i));
+            else {
+                visit(node.ids.get(i));
+                System.out.print(", ");
+            }
+        }
     }
 
     @Override
     public void visit(FunctionCallNode node) {
-        super.visit(node);
+        System.out.print(indent() + "CALL ");
+        if(node.idNode != null) visit(node.idNode);
+        else visit(node.fieldIdNode);
+        System.out.print("(");
+        if(node.actualParams != null) visit(node.actualParams);
+        System.out.print(")\n");
     }
 
     @Override
@@ -108,17 +178,23 @@ public class PrettyPrintVisitor extends Visitor {
 
     @Override
     public void visit(GeqThanNode node) {
-        super.visit(node);
+        visit(node.leftExprNode);
+        System.out.print(" >= ");
+        visit(node.rightExprNode);
     }
 
     @Override
     public void visit(GreaterThanNode node) {
-        super.visit(node);
+        visit(node.leftExprNode);
+        System.out.print(" > ");
+        visit(node.rightExprNode);
     }
 
     @Override
     public void visit(GroupedExpressionNode node) {
-        super.visit(node);
+        System.out.print("(");
+        visit(node.exprNode);
+        System.out.print(")");
     }
 
     @Override
@@ -128,22 +204,51 @@ public class PrettyPrintVisitor extends Visitor {
 
     @Override
     public void visit(IfStatementNode node) {
-        super.visit(node);
+        System.out.print(indent() + "IF ");
+        visit(node.predicate);
+        System.out.println();
+        visit(node.ifBlockNode);
+        for(ElseIfStatementNode elif : node.elseIfNodes){
+            visit(elif);
+        }
+        if(node.elseBlockNode != null){
+            System.out.print(indent() + "ELSE ");
+            System.out.println();
+            visit(node.elseBlockNode);
+        }
+    }
+
+    @Override
+    public void visit(ExprFunctionCallNode node) {
+        System.out.print("CALL ");
+        if(node.idNode != null)
+            visit(node.idNode);
+        else  if (node.fieldIdNode != null) visit(node.fieldIdNode);
+        System.out.print("(");
+        if(node.actualParams != null)
+        visit(node.actualParams);
+        System.out.print(")");
     }
 
     @Override
     public void visit(InEqualityNode node) {
-        super.visit(node);
+        visit(node.leftExprNode);
+        System.out.print(" != ");
+        visit(node.rightExprNode);
     }
 
     @Override
     public void visit(LeqThanNode node) {
-        super.visit(node);
+        visit(node.leftExprNode);
+        System.out.print(" <= ");
+        visit(node.rightExprNode);
     }
 
     @Override
     public void visit(LessThanNode node) {
-        super.visit(node);
+        visit(node.leftExprNode);
+        System.out.print(" < ");
+        visit(node.rightExprNode);
     }
 
     @Override
@@ -153,47 +258,70 @@ public class PrettyPrintVisitor extends Visitor {
 
     @Override
     public void visit(LoopNode node) {
-        super.visit(node);
+        System.out.print(indent() + "LOOP ");
+        if(node.exprNode != null) System.out.print("WHILE ");
+        visit(node.exprNode);
+        System.out.println();
+        visit(node.block);
     }
 
     @Override
     public void visit(MinusNode node) {
-        super.visit(node);
+        visit(node.leftExprNode);
+        System.out.print(" - ");
+        visit(node.rightExprNode);
     }
 
     @Override
     public void visit(ModNode node) {
-        super.visit(node);
+        visit(node.leftExprNode);
+        System.out.print(" % ");
+        visit(node.rightExprNode);
     }
 
     @Override
     public void visit(MultNode node) {
-        super.visit(node);
+        visit(node.leftExprNode);
+        System.out.print(" * ");
+        visit(node.rightExprNode);
     }
 
     @Override
     public void visit(NegateBoolNode node) {
+        System.out.print("not ");
         super.visit(node);
     }
 
     @Override
     public void visit(NegateExpressionNode node) {
+        System.out.print("-");
         super.visit(node);
     }
 
     @Override
     public void visit(NewDeclarationNode node) {
-        super.visit(node);
+        System.out.print(indent() + "NEW ");
+        visit(node.idNode);
+        if(node.exprNode != null){
+            System.out.print(" := ");
+            visit(node.exprNode);
+        }
+        System.out.println();
+
     }
 
     @Override
     public void visit(NewEventNode node) {
-        super.visit(node);
+        System.out.print(indent() + "NEW EVENT ");
+        System.out.print(node.idNode.id + "\n");
+        visit(node.blockNode);
     }
 
     @Override
     public void visit(OrNode node) {
-        super.visit(node);
+        visit(node.leftExprNode);
+        System.out.print(" or ");
+        visit(node.rightExprNode);
     }
 
     @Override
@@ -205,7 +333,10 @@ public class PrettyPrintVisitor extends Visitor {
 
     @Override
     public void visit(PowerNode node) {
-        super.visit(node);
+        visit(node.baseNode);
+        System.out.print("^(");
+        visit(node.exponentNode);
+        System.out.print(")");
     }
 
     @Override
@@ -215,26 +346,41 @@ public class PrettyPrintVisitor extends Visitor {
 
     @Override
     public void visit(ReturnStatementNode node) {
+        System.out.print(indent() + "RETURN ");
         super.visit(node);
+        System.out.println();
     }
 
     @Override
     public void visit(RunNode node) {
-        super.visit(node);
+        System.out.println(indent() + "ON RUN ");
+        visit(node.blockNode);
     }
 
     @Override
     public void visit(SetupBlockNode node) {
+        indentationLevel++;
         super.visit(node);
+        System.out.println();
+        indentationLevel--;
     }
+
 
     @Override
     public void visit(SetupNode node) {
+        System.out.print("SETUP: \n");
         super.visit(node);
     }
 
     @Override
     public void visit(SetupStmtNode node) {
+        System.out.print(indent());
+        super.visit(node);
+    }
+
+    @Override
+    public void visit(StmtNode node) {
+        System.out.print(indent());
         super.visit(node);
     }
 
@@ -245,16 +391,48 @@ public class PrettyPrintVisitor extends Visitor {
 
     @Override
     public void visit(StrategyNode node) {
-        super.visit(node);
+        System.out.print(indent() + "STRATEGY ");
+        visit(node.idNode);
+        System.out.println();
+        indentationLevel++;
+        visit(node.strategyDefinition);
+        indentationLevel--;
     }
 
     @Override
     public void visit(StructDeclarationNode node) {
-        super.visit(node);
+        System.out.print(indent() + "STRUCT ");
+        indentationLevel++;
+        System.out.print("{ ");
+        int idLen = node.idNodes.size();
+        int assLen = node.assignments.size();
+        int fieldSize = node.idNodes.size() - 1 + node.assignments.size();
+        System.out.println();
+        for(int i = 0; i < idLen; i++){
+            System.out.print(indent() + "FIELD ");
+            visit(node.idNodes.get(i));
+            if(i != fieldSize)
+                System.out.println();
+        }
+        for(int i = 0; i < assLen; i++){
+            visit(node.assignments.get(i));
+            if(i != fieldSize-idLen)
+                System.out.println();
+        }
+        indentationLevel--;
+        System.out.println(indent() + "}");
     }
 
     @Override
     public void visit(StructInitializationNode node) {
-        super.visit(node);
+        visit(node.name);
+        System.out.println("(");
+        indentationLevel++;
+        int len = node.assignments.size();
+        for(int i = 0; i < len; i++){
+            visit(node.assignments.get(i));
+        }
+        indentationLevel--;
+        System.out.print(indent() + ")");
     }
 }
