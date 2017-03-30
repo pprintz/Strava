@@ -206,13 +206,15 @@ class StructDefinitionNode extends StmtNode {
     }
 }
 
-abstract class DeclarationNode extends StmtNode {
+class DeclarationNode extends StmtNode {
     public IdNode id;
     public ExprNode exprNode;
+    public Type type;
 
-    public DeclarationNode(IdNode id, ExprNode exprNode) {
+    public DeclarationNode(IdNode id, ExprNode exprNode, Type type) {
         this.id = id;
         this.exprNode = exprNode;
+        this.type = type;
     }
     @Override
     public void accept(Visitor v) {
@@ -220,28 +222,13 @@ abstract class DeclarationNode extends StmtNode {
     }
 }
 
-class NumDeclarationNode extends DeclarationNode {
-    public NumDeclarationNode(IdNode id, ExprNode exprNode) {
-        super(id, exprNode);
-    }
-}
-class TextDeclarationNode extends DeclarationNode {
-    public TextDeclarationNode(IdNode id, ExprNode exprNode) {
-        super(id, exprNode);
-    }
-}
-class BoolDeclarationNode extends DeclarationNode{
-
-    public BoolDeclarationNode(IdNode id, ExprNode exprNode) {
-        super(id, exprNode);
-    }
-}
+public enum Type { num, text, bool, struct}
 
 class StructDeclarationNode extends DeclarationNode{
     public String structName;
 
-    public StructDeclarationNode(IdNode id, ExprNode exprNode, String structName) {
-        super(id, exprNode);
+    public StructDeclarationNode(IdNode id, ExprNode exprNode, Type type, String structName) {
+        super(id, exprNode, type);
         this.structName = structName;
     }
 }

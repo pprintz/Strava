@@ -1387,48 +1387,16 @@ public class RobocommandeParser extends Parser {
 	}
 
 	public static class TypeContext extends ParserRuleContext {
+		public IdContext id() {
+			return getRuleContext(IdContext.class,0);
+		}
 		public TypeContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_type; }
-	 
-		public TypeContext() { }
-		public void copyFrom(TypeContext ctx) {
-			super.copyFrom(ctx);
-		}
-	}
-	public static class StructTypeContext extends TypeContext {
-		public IdContext id() {
-			return getRuleContext(IdContext.class,0);
-		}
-		public StructTypeContext(TypeContext ctx) { copyFrom(ctx); }
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof RobocommandeVisitor ) return ((RobocommandeVisitor<? extends T>)visitor).visitStructType(this);
-			else return visitor.visitChildren(this);
-		}
-	}
-	public static class TextTypeContext extends TypeContext {
-		public TextTypeContext(TypeContext ctx) { copyFrom(ctx); }
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof RobocommandeVisitor ) return ((RobocommandeVisitor<? extends T>)visitor).visitTextType(this);
-			else return visitor.visitChildren(this);
-		}
-	}
-	public static class NumTypeContext extends TypeContext {
-		public NumTypeContext(TypeContext ctx) { copyFrom(ctx); }
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof RobocommandeVisitor ) return ((RobocommandeVisitor<? extends T>)visitor).visitNumType(this);
-			else return visitor.visitChildren(this);
-		}
-	}
-	public static class BoolTypeContext extends TypeContext {
-		public BoolTypeContext(TypeContext ctx) { copyFrom(ctx); }
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof RobocommandeVisitor ) return ((RobocommandeVisitor<? extends T>)visitor).visitBoolType(this);
+			if ( visitor instanceof RobocommandeVisitor ) return ((RobocommandeVisitor<? extends T>)visitor).visitType(this);
 			else return visitor.visitChildren(this);
 		}
 	}
@@ -1441,7 +1409,6 @@ public class RobocommandeParser extends Parser {
 			_errHandler.sync(this);
 			switch (_input.LA(1)) {
 			case T__14:
-				_localctx = new NumTypeContext(_localctx);
 				enterOuterAlt(_localctx, 1);
 				{
 				setState(250);
@@ -1449,7 +1416,6 @@ public class RobocommandeParser extends Parser {
 				}
 				break;
 			case T__15:
-				_localctx = new TextTypeContext(_localctx);
 				enterOuterAlt(_localctx, 2);
 				{
 				setState(251);
@@ -1457,7 +1423,6 @@ public class RobocommandeParser extends Parser {
 				}
 				break;
 			case T__16:
-				_localctx = new BoolTypeContext(_localctx);
 				enterOuterAlt(_localctx, 3);
 				{
 				setState(252);
@@ -1465,7 +1430,6 @@ public class RobocommandeParser extends Parser {
 				}
 				break;
 			case ID:
-				_localctx = new StructTypeContext(_localctx);
 				enterOuterAlt(_localctx, 4);
 				{
 				setState(253);

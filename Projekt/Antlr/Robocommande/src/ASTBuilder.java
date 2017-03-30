@@ -174,31 +174,20 @@ public class ASTBuilder extends RobocommandeBaseVisitor<ASTNode> {
         return new StructDefinitionNode(name, idNodes, assignments);
     }
 
-
     @Override
     public ASTNode visitDeclaration(RobocommandeParser.DeclarationContext ctx) {
         ExprNode exprNode = ctx.expr() != null ? (ExprNode)visit(ctx.expr()) : null;
-        return new DeclarationNode((IdNode)visit(ctx.id()), exprNode);
-    }
 
-    @Override
-    public ASTNode visitNumType(RobocommandeParser.NumTypeContext ctx) {
-        return super.visitNumType(ctx);
-    }
-
-    @Override
-    public ASTNode visitTextType(RobocommandeParser.TextTypeContext ctx) {
-        return super.visitTextType(ctx);
-    }
-
-    @Override
-    public ASTNode visitBoolType(RobocommandeParser.BoolTypeContext ctx) {
-        return super.visitBoolType(ctx);
-    }
-
-    @Override
-    public ASTNode visitStructType(RobocommandeParser.StructTypeContext ctx) {
-        return super.visitStructType(ctx);
+        switch(ctx.type().getText()){
+            case "num":
+                return new DeclarationNode((IdNode)visit(ctx.id()), exprNode, Type.num);
+            case "text":
+                return new DeclarationNode((IdNode)visit(ctx.id()), exprNode, Type.text);
+            case "bool":
+                return new DeclarationNode((IdNode)visit(ctx.id()), exprNode, Type.bool);
+            default:
+                return new StructDeclarationNode((IdNode)visit(ctx.id()), exprNode, Type.struct, ctx.type().getText());
+        }
     }
 
     @Override

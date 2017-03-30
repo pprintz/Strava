@@ -118,33 +118,11 @@ public interface RobocommandeVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitDeclaration(RobocommandeParser.DeclarationContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code numType}
-	 * labeled alternative in {@link RobocommandeParser#type}.
+	 * Visit a parse tree produced by {@link RobocommandeParser#type}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitNumType(RobocommandeParser.NumTypeContext ctx);
-	/**
-	 * Visit a parse tree produced by the {@code textType}
-	 * labeled alternative in {@link RobocommandeParser#type}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitTextType(RobocommandeParser.TextTypeContext ctx);
-	/**
-	 * Visit a parse tree produced by the {@code boolType}
-	 * labeled alternative in {@link RobocommandeParser#type}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitBoolType(RobocommandeParser.BoolTypeContext ctx);
-	/**
-	 * Visit a parse tree produced by the {@code structType}
-	 * labeled alternative in {@link RobocommandeParser#type}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitStructType(RobocommandeParser.StructTypeContext ctx);
+	T visitType(RobocommandeParser.TypeContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link RobocommandeParser#newDeclaration}.
 	 * @param ctx the parse tree

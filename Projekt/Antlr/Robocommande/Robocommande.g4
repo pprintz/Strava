@@ -38,10 +38,10 @@ generalStmtPart : declaration
 
 structDefinition : id '{' declaration (',' declaration)* '}' ;
 declaration: type id (':=' expr)? ;
-type: 'num'     #numType
-    | 'text'    #textType
-    | 'bool'    #boolType
-    | id        #structType
+type: 'num'
+    | 'text'
+    | 'bool'
+    | id
     ;
 
 newDeclaration : 'new' declaration ;
