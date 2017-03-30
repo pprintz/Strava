@@ -10,39 +10,39 @@ behavior onSetup():
     ;
 
 
-    a := 2
+    num a := 2
 
-    c := 3
-    var d := 5
+    num c := 3
+    d := 5
 
-    myStruct { a, b, c, d := 2 + 2 + 3 - 4 }
+    myStruct { num a, text b, text c, num d := 2 + 2 + 3 - 4 }
 
     myRobot.color := RED
-    var mmmmm := myStruct()
+    myStruct mmmmm := myStruct()
 
-    nnnnn := myNewStruct(q := 3, s := 4)
+    myStruct nnnnn := myStruct(q := 3, s := 4)
 
 
 
 
     if 2 = 3:
-        exxxx := 3
+        num exxxx := 3
     ;
     else if 3:
-        elifelif := 4444
+        num elifelif := 4444
     ;
     else if 3:
-            elifelif := 4444
+            num elifelif := 4444
         ;
     else if 3:
-            elifelif := 4444 % 3 = (2 * 3)
+            bool elifelif := 4444 % 3 = (2 * 3)
         ;
     else if 3:
             lool(a, b, c)
             lolo()
         ;
     else:
-        elelelele := 4
+        text elelelele := "hej"
     ;
 ;
 
@@ -50,16 +50,20 @@ behavior onSetup():
 
 strategy default:
     behavior onRun():
-       a := 2
-       new bubber := 3
+       num a := 2
+       new num bubber := 3
+       num a := myFunction(a, b, c)
     ;
 
-    define myfunction(a, b, c):
-        return a + b - c
+
+
+
+    define num myfunction(num a, num b, num c):
+            return a + b - c
     ;
 
-    define lol(a):
-        return 0
+    define text lol(text a):
+        return a + a
     ;
 ;
 

@@ -106,17 +106,45 @@ public interface RobocommandeVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitGeneralStmtPart(RobocommandeParser.GeneralStmtPartContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link RobocommandeParser#structDeclaration}.
+	 * Visit a parse tree produced by {@link RobocommandeParser#structDefinition}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitStructDeclaration(RobocommandeParser.StructDeclarationContext ctx);
+	T visitStructDefinition(RobocommandeParser.StructDefinitionContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link RobocommandeParser#declaration}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitDeclaration(RobocommandeParser.DeclarationContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code numType}
+	 * labeled alternative in {@link RobocommandeParser#type}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitNumType(RobocommandeParser.NumTypeContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code textType}
+	 * labeled alternative in {@link RobocommandeParser#type}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitTextType(RobocommandeParser.TextTypeContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code boolType}
+	 * labeled alternative in {@link RobocommandeParser#type}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitBoolType(RobocommandeParser.BoolTypeContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code structType}
+	 * labeled alternative in {@link RobocommandeParser#type}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitStructType(RobocommandeParser.StructTypeContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link RobocommandeParser#newDeclaration}.
 	 * @param ctx the parse tree

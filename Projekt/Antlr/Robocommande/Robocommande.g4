@@ -6,9 +6,9 @@ setup: 'behavior' 'onSetup' '('')' setupBlock;
 run: 'behavior' 'onRun' '('')' block;
 
 functions : (defineFunction | behaviorFunction)* ;
-defineFunction : 'define' id '(' formalParams? ')' block;
+defineFunction : 'define' type id '(' formalParams? ')' block;
 behaviorFunction : 'behavior' id '(' id ')' block;
-formalParams: id (',' id)* ;
+formalParams: type id (',' type id)* ;
 actualParams: expr (',' expr)* ;
 
 strategy : 'strategy' id strategyDefinition;
@@ -28,7 +28,7 @@ stmt : NEWLINE+ (  generalStmtPart
                  ;
 
 generalStmtPart : declaration
-                | structDeclaration
+                | structDefinition
                 | assignment
                 | fieldAssignment
                 | ifStatement
@@ -36,9 +36,15 @@ generalStmtPart : declaration
                 | loop
                 ;
 
-structDeclaration : id '{' (id | assignment) (',' (id | assignment))* '}' ;
-declaration: 'var' id (':=' expr)? ;
-newDeclaration : 'new' id (':=' expr)? ;
+structDefinition : id '{' declaration (',' declaration)* '}' ;
+declaration: type id (':=' expr)? ;
+type: 'num'     #numType
+    | 'text'    #textType
+    | 'bool'    #boolType
+    | id        #structType
+    ;
+
+newDeclaration : 'new' declaration ;
 newEvent : 'new' 'event' id block ;
 fieldAssignment : fieldId ':=' expr ;
 assignment : id ':=' expr ;
@@ -72,7 +78,6 @@ id : ID;
 
 
 // LEXER PART
-
 ID : LETTER (LETTER | DIGIT)* ;
 NUM : INT | FLOAT ;
 INT : DIGIT+ ;
