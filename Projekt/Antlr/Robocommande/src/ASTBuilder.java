@@ -145,7 +145,7 @@ public class ASTBuilder extends RobocommandeBaseVisitor<ASTNode> {
     @Override
     public  ASTNode visitGeneralStmtPart(RobocommandeParser.GeneralStmtPartContext ctx){
         if(ctx.declaration() != null){ return visit(ctx.declaration()); }
-        else if(ctx.structDeclaration() != null){ return visit(ctx.structDeclaration()); }
+        else if(ctx.structDefinition() != null){ return visit(ctx.structDefinition()); }
         else if(ctx.assignment() != null){ return visit(ctx.assignment()); }
         else if(ctx.fieldAssignment() != null){ return visit(ctx.fieldAssignment()); }
         else if(ctx.ifStatement() != null){ return visit(ctx.ifStatement()); }
@@ -157,8 +157,8 @@ public class ASTBuilder extends RobocommandeBaseVisitor<ASTNode> {
     }
 
     @Override
-    public ASTNode visitStructDeclaration(RobocommandeParser.StructDeclarationContext ctx) {
-        IdNode name = (IdNode)visit(ctx.id(0));
+    public ASTNode visitStructDefinition(RobocommandeParser.StructDefinitionContext ctx) {
+        IdNode name = (IdNode)visit(ctx.id());
         List<IdNode> idNodes = new ArrayList<>();
         List<AssignmentNode> assignments = new ArrayList<>();
 
@@ -171,13 +171,34 @@ public class ASTBuilder extends RobocommandeBaseVisitor<ASTNode> {
                 idNodes.add((IdNode)visit(field));
             }
         }
-        return new StructDeclarationNode(name, idNodes, assignments);
+        return new StructDefinitionNode(name, idNodes, assignments);
     }
+
 
     @Override
     public ASTNode visitDeclaration(RobocommandeParser.DeclarationContext ctx) {
         ExprNode exprNode = ctx.expr() != null ? (ExprNode)visit(ctx.expr()) : null;
         return new DeclarationNode((IdNode)visit(ctx.id()), exprNode);
+    }
+
+    @Override
+    public ASTNode visitNumType(RobocommandeParser.NumTypeContext ctx) {
+        return super.visitNumType(ctx);
+    }
+
+    @Override
+    public ASTNode visitTextType(RobocommandeParser.TextTypeContext ctx) {
+        return super.visitTextType(ctx);
+    }
+
+    @Override
+    public ASTNode visitBoolType(RobocommandeParser.BoolTypeContext ctx) {
+        return super.visitBoolType(ctx);
+    }
+
+    @Override
+    public ASTNode visitStructType(RobocommandeParser.StructTypeContext ctx) {
+        return super.visitStructType(ctx);
     }
 
     @Override

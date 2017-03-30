@@ -4,8 +4,6 @@ import java.util.List;
  * Created by pprintz & kukucumber on 3/24/17.
  */
 
-
-
 abstract class ASTNode {
     public abstract void accept(Visitor v) ;
 }
@@ -192,12 +190,12 @@ abstract class StmtNode extends ASTNode {
     }
 }
 
-class StructDeclarationNode extends StmtNode {
+class StructDefinitionNode extends StmtNode {
     public IdNode idName;
     public List<IdNode> idNodes;
     public List<AssignmentNode> assignments;
 
-    public StructDeclarationNode(IdNode idName, List<IdNode> idNodes, List<AssignmentNode> assignments) {
+    public StructDefinitionNode(IdNode idName, List<IdNode> idNodes, List<AssignmentNode> assignments) {
         this.idName = idName;
         this.idNodes = idNodes;
         this.assignments = assignments;
@@ -208,7 +206,7 @@ class StructDeclarationNode extends StmtNode {
     }
 }
 
-class DeclarationNode extends StmtNode {
+abstract class DeclarationNode extends StmtNode {
     public IdNode id;
     public ExprNode exprNode;
 
@@ -219,6 +217,32 @@ class DeclarationNode extends StmtNode {
     @Override
     public void accept(Visitor v) {
         v.visit(this);
+    }
+}
+
+class NumDeclarationNode extends DeclarationNode {
+    public NumDeclarationNode(IdNode id, ExprNode exprNode) {
+        super(id, exprNode);
+    }
+}
+class TextDeclarationNode extends DeclarationNode {
+    public TextDeclarationNode(IdNode id, ExprNode exprNode) {
+        super(id, exprNode);
+    }
+}
+class BoolDeclarationNode extends DeclarationNode{
+
+    public BoolDeclarationNode(IdNode id, ExprNode exprNode) {
+        super(id, exprNode);
+    }
+}
+
+class StructDeclarationNode extends DeclarationNode{
+    public String structName;
+
+    public StructDeclarationNode(IdNode id, ExprNode exprNode, String structName) {
+        super(id, exprNode);
+        this.structName = structName;
     }
 }
 

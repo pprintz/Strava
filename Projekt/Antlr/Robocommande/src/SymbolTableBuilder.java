@@ -116,7 +116,7 @@ public class SymbolTableBuilder extends Visitor {
     }
 
     @Override
-    public void visit(StructDeclarationNode node) {
+    public void visit(StructDefinitionNode node) {
         super.visit(node);
     }
 

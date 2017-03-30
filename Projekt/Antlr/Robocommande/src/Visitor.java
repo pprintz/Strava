@@ -270,7 +270,7 @@ public abstract class Visitor {
         node.strategyDefinition.accept(this);
     }
 
-    public void visit(StructDeclarationNode node) {
+    public void visit(StructDefinitionNode node) {
         node.idName.accept(this);
         for(IdNode idNode : node.idNodes) {
             idNode.accept(this);

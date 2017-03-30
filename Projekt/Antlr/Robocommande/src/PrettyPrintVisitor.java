@@ -400,7 +400,7 @@ public class PrettyPrintVisitor extends Visitor {
     }
 
     @Override
-    public void visit(StructDeclarationNode node) {
+    public void visit(StructDefinitionNode node) {
         System.out.print(indent() + "STRUCT ");
         indentationLevel++;
         System.out.print("{ ");
