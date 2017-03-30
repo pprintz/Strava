@@ -18,16 +18,18 @@ public class Main {
 
         RobocommandeParser parser = new RobocommandeParser(tokens);
 
-        ParseTree tree = parser.prog();
+        ParseTree cst = parser.prog();
 
         //System.out.println(tree.toStringTree(parser));
         //PrettyPrinter prettyPrinter = new PrettyPrinter();
         //System.out.println(prettyPrinter.visit(tree));
 
         ASTBuilder astBuilder = new ASTBuilder();
-        PrettyPrintVisitor prettyPrintVisitor = new PrettyPrintVisitor();
-        ASTNode node = astBuilder.visit(tree);
-        prettyPrintVisitor.visit(node);
+        //PrettyPrintVisitor prettyPrintVisitor = new PrettyPrintVisitor();
+        ASTNode ast = astBuilder.visit(cst);
+        SymbolTableBuilder symbolTableBuilder = new SymbolTableBuilder();
+        symbolTableBuilder.visit(ast);
+        //prettyPrintVisitor.visit(node);
         System.out.println("Everything went okay.");
     }
 }

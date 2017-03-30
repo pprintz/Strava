@@ -677,6 +677,8 @@ class FieldIdNode extends ASTNode {
     public void accept(Visitor v) {
         v.visit(this);
     }
+
+
 }
 
 class IdNode extends ASTNode {
@@ -689,6 +691,22 @@ class IdNode extends ASTNode {
     @Override
     public void accept(Visitor v) {
         v.visit(this);
+    }
+
+    @Override
+    public int hashCode(){
+        return id.hashCode();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (!(obj instanceof IdNode))
+            return false;
+        if (obj == this)
+            return true;
+
+        IdNode other = (IdNode) obj;
+        return other.id.equals(this.id);
     }
 }
 

@@ -9,7 +9,6 @@ behavior onSetup():
 
 
     a := 2
-    var b
     c := 3
     var d := 5
 
@@ -49,7 +48,7 @@ behavior onSetup():
 strategy default:
     behavior onRun():
        a := 2
-       new b := 3
+       new bubber := 3
     ;
 
     define myfunction(a, b, c):
