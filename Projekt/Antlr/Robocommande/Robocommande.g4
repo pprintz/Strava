@@ -44,7 +44,6 @@ type: 'num'
     | id
     ;
 
-newDeclaration : 'new' declaration ;
 newEvent : 'new' 'event' id block ;
 fieldAssignment : fieldId ':=' expr ;
 assignment : id ':=' expr ;

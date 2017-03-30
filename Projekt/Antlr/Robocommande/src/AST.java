@@ -222,7 +222,7 @@ class DeclarationNode extends StmtNode {
     }
 }
 
-public enum Type { num, text, bool, struct}
+enum Type { num, text, bool, struct}
 
 class StructDeclarationNode extends DeclarationNode{
     public String structName;
@@ -230,20 +230,6 @@ class StructDeclarationNode extends DeclarationNode{
     public StructDeclarationNode(IdNode id, ExprNode exprNode, Type type, String structName) {
         super(id, exprNode, type);
         this.structName = structName;
-    }
-}
-
-class NewDeclarationNode extends StmtNode {
-    public IdNode idNode;
-    public ExprNode exprNode;
-
-    public NewDeclarationNode(IdNode idNode, ExprNode exprNode) {
-        this.idNode = idNode;
-        this.exprNode = exprNode;
-    }
-    @Override
-    public void accept(Visitor v) {
-        v.visit(this);
     }
 }
 

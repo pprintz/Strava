@@ -191,11 +191,6 @@ public class ASTBuilder extends RobocommandeBaseVisitor<ASTNode> {
     }
 
     @Override
-    public ASTNode visitNewDeclaration(RobocommandeParser.NewDeclarationContext ctx) {
-        return new NewDeclarationNode((IdNode)visit(ctx.id()), (ExprNode)visit(ctx.expr()));
-    }
-
-    @Override
     public ASTNode visitNewEvent(RobocommandeParser.NewEventContext ctx) {
         return new NewEventNode((IdNode)visit(ctx.id()), (BlockNode)visit(ctx.block()));
     }
