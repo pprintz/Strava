@@ -186,6 +186,10 @@ class BehaviorFunctionNode extends ASTNode {
 }
 
 abstract class StmtNode extends ASTNode {
+    @Override
+    public void accept(Visitor v) {
+        v.visit(this);
+    }
 }
 
 class StructDeclarationNode extends StmtNode {

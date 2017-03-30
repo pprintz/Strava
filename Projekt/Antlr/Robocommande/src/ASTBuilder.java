@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.regex.Pattern;
 
 /**
  * Created by Kasper Dissing Bargsteen on 21/03/2017.
@@ -395,7 +396,7 @@ public class ASTBuilder extends RobocommandeBaseVisitor<ASTNode> {
 
     @Override
     public ASTNode visitFieldId(RobocommandeParser.FieldIdContext ctx) {
-        List<String> idsToBeConverted = Arrays.asList(ctx.getText().split("."));
+        List<String> idsToBeConverted = Arrays.asList(ctx.getText().split(Pattern.quote(".")));
         List<IdNode> idNodes = new ArrayList<IdNode>();
         idsToBeConverted.forEach(node -> idNodes.add(new IdNode(node)));
         return new FieldIdNode(idNodes);

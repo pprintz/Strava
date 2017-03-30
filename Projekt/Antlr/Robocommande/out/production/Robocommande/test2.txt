@@ -2,13 +2,20 @@ behavior onSetup():
 
     new event KASPERWINS:
         loop while 2 <= 3:
-            doThis()
+            doThis(a,b)
+            doThat(b, c)
+            a := Foo(123)
         ;
 
     ;
 
 
+<<<<<<< HEAD
     a := 2
+=======
+    a := 2^23/3%3
+    var b
+>>>>>>> 99780ec991316de32724f8825c2b85efd5576d91
     c := 3
     var d := 5
 

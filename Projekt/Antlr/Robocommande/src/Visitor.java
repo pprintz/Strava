@@ -254,6 +254,9 @@ public abstract class Visitor {
     public void visit(SetupStmtNode node) {
         // SetupStmtNode is abstract
     }
+    public void visit(StmtNode node){
+        node.accept(this);
+    }
 
     public void visit(StrategyDefinitionNode node) {
         if(node.runNode != null)
