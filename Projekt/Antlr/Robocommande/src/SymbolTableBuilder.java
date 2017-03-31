@@ -80,7 +80,7 @@ public class SymbolTableBuilder extends Visitor {
 
     @Override
     public void visit(DeclarationNode node) {
-        DeclarationInCurrentScope(node.id, node.exprNode);
+        DeclarationInCurrentScope(node.typeIdNode, node.exprNode);
 
     }
 

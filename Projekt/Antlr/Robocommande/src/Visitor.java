@@ -50,7 +50,7 @@ public abstract class Visitor {
     }
 
     public void visit(DeclarationNode node){
-        node.id.accept(this);
+        node.typeIdNode.accept(this);
         if(node.exprNode != null)
             node.exprNode.accept(this);
     }
@@ -86,7 +86,7 @@ public abstract class Visitor {
     }
 
     public void visit(FieldIdNode node){
-        for(TypeIdNode idnode : node.ids){
+        for(TypeIdNode idnode : node.typeIdNodes){
             idnode.accept(this);
         }
     }
@@ -271,7 +271,7 @@ public abstract class Visitor {
     }
 
     public void visit(StructDefinitionNode node) {
-        node.idName.accept(this);
+        node.typeIdNode.accept(this);
         for(TypeIdNode typeIdNode : node.typeIdNodes) {
             typeIdNode.accept(this);
         }

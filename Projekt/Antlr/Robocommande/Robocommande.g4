@@ -6,12 +6,12 @@ setup: 'behavior' 'onSetup' '('')' setupBlock;
 run: 'behavior' 'onRun' '('')' block;
 
 functions : (defineFunction | behaviorFunction)* ;
-defineFunction : 'define' type id '(' formalParams? ')' block;
-behaviorFunction : 'behavior' id '(' id ')' block;
-formalParams: type id (',' type id)* ;
+defineFunction : 'define' type ID '(' formalParams? ')' block;
+behaviorFunction : 'behavior' ID '(' ID ')' block;
+formalParams: type ID (',' type ID)* ;
 actualParams: expr (',' expr)* ;
 
-strategy : 'strategy' id strategyDefinition;
+strategy : 'strategy' ID strategyDefinition;
 defaultStrategy : 'strategy' 'default' strategyDefinition;
 strategyDefinition : ':' NEWLINE* run? functions? ';' NEWLINE*;
 
@@ -35,25 +35,25 @@ generalStmtPart : declaration
                 | loop
                 ;
 
-structDefinition : id '{' declaration (',' declaration)* '}' ;
-declaration: type id (':=' expr)? ;
+structDefinition : ID '{' declaration (',' declaration)* '}' ;
+declaration: type ID (':=' expr)? ;
 type: 'num'
     | 'text'
     | 'bool'
-    | id
+    | ID
     ;
 
-newEvent : 'new' 'event' id block ;
+newEvent : 'new' 'event' ID block ;
 fieldAssignment : fieldId ':=' expr ;
-assignment : id ':=' expr ;
+assignment : ID ':=' expr ;
 ifStatement: 'if' expr block ('else if' expr block)* ('else' block)? ;
-functionCall: (fieldId | id) '(' actualParams? ')' ;
-structInitialization: id '(' assignment? (',' assignment)* ')' ;
+functionCall: (fieldId | ID) '(' actualParams? ')' ;
+structInitialization: ID '(' assignment? (',' assignment)* ')' ;
 loop: 'loop' ('while' expr)? block ;
 returnStatement : 'return' expr ;
 
 expr :     ('true' | 'false')               # literal
-          | id                              # literal
+          | ID                              # literal
           | NUM                             # literal
           | STRING                          # literal
           | fieldId                         # fieldIdentifier
@@ -71,8 +71,7 @@ expr :     ('true' | 'false')               # literal
           | expr 'or' expr                  # or
           ;
 
-fieldId : id ('.' id)+ ;
-id : ID;
+fieldId : ID ('.' ID)+ ;
 
 
 // LEXER PART

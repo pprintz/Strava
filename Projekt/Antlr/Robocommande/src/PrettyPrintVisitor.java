@@ -80,7 +80,7 @@ public class PrettyPrintVisitor extends Visitor {
     @Override
     public void visit(DeclarationNode node) {
         System.out.print(indent() + "DECLARE ");
-        visit(node.id);
+        visit(node.typeIdNode);
         if(node.exprNode != null) {
             System.out.print(" := ");
             visit(node.exprNode);
@@ -142,9 +142,9 @@ public class PrettyPrintVisitor extends Visitor {
     @Override
     public void visit(FieldIdNode node)
     {
-        int len = node.ids.size();
+        int len = node.typeIdNodes.size();
         for(int i = 0; i < len; i++){
-           visit(node.ids.get(i));
+           visit(node.typeIdNodes.get(i));
            if(i < len-1) System.out.print(".");
         }
     }

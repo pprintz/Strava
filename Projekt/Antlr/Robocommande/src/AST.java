@@ -191,12 +191,12 @@ abstract class StmtNode extends ASTNode {
 }
 
 class StructDefinitionNode extends StmtNode {
-    public TypeIdNode idName;
+    public TypeIdNode structIdNode;
     public List<TypeIdNode> typeIdNodes;
     public List<AssignmentNode> assignments;
 
-    public StructDefinitionNode(TypeIdNode idName, List<TypeIdNode> typeIdNodes, List<AssignmentNode> assignments) {
-        this.idName = idName;
+    public StructDefinitionNode(TypeIdNode structIdNode, List<TypeIdNode> typeIdNodes, List<AssignmentNode> assignments) {
+        this.structIdNode = structIdNode;
         this.typeIdNodes = typeIdNodes;
         this.assignments = assignments;
     }
@@ -207,30 +207,15 @@ class StructDefinitionNode extends StmtNode {
 }
 
 class DeclarationNode extends StmtNode {
-    public TypeIdNode id;
+    public TypeIdNode typeIdNode;
     public ExprNode exprNode;
-    public Type type;
 
-    public DeclarationNode(TypeIdNode id, ExprNode exprNode, Type type) {
-        this.id = id;
+    public DeclarationNode(TypeIdNode typeIdNode, ExprNode exprNode) {
+        this.typeIdNode = typeIdNode;
         this.exprNode = exprNode;
-        this.type = type;
     }
     @Override
-    public void accept(Visitor v) {
-        v.visit(this);
-    }
-}
-
-enum Type { num, text, bool, struct}
-
-class StructDeclarationNode extends DeclarationNode{
-    public String structName;
-
-    public StructDeclarationNode(TypeIdNode id, ExprNode exprNode, Type type, String structName) {
-        super(id, exprNode, type);
-        this.structName = structName;
-    }
+    public void accept(Visitor v) { v.visit(this); }
 }
 
 class NewEventNode extends StmtNode {
@@ -328,11 +313,11 @@ class FunctionCallNode extends StmtNode {
 }
 
 class StructInitializationNode extends ExprNode {
-    public TypeIdNode name;
+    public TypeIdNode typeIdNode;
     public List<AssignmentNode> assignments;
 
-    public StructInitializationNode(TypeIdNode name, List<AssignmentNode> assignments) {
-        this.name = name;
+    public StructInitializationNode(TypeIdNode typeIdNode, List<AssignmentNode> assignments) {
+        this.typeIdNode = typeIdNode;
         this.assignments = assignments;
     }
     @Override
@@ -351,10 +336,6 @@ class ExprFunctionCallNode extends ExprNode {
         this.typeIdNode = typeIdNode;
         this.actualParams = actualParams;
     }
-    @Override
-    public void accept(Visitor v) {
-        v.visit(this);
-    }
 }
 
 class LoopNode extends StmtNode {
@@ -365,22 +346,18 @@ class LoopNode extends StmtNode {
         this.exprNode = exprNode;
         this.block = block;
     }
-    @Override
-    public void accept(Visitor v) {
-        v.visit(this);
-    }
 }
 
 
 class FormalParamsNode extends ASTNode {
-    public List<TypeIdNode> ids;
-    public List<Type>
-    public FormalParamsNode(List<TypeIdNode> ids) {
-        this.ids = ids;
+    public List<TypeIdNode> typeIdNodes;
+    public FormalParamsNode(List<TypeIdNode> typeIdNodes) {
+        this.typeIdNodes = typeIdNodes;
     }
+
     @Override
     public void accept(Visitor v) {
-        v.visit(this);
+
     }
 }
 
@@ -390,13 +367,14 @@ class ActualParamsNode extends ASTNode {
     public ActualParamsNode(List<ExprNode> exprs) {
         this.exprs = exprs;
     }
+
     @Override
     public void accept(Visitor v) {
-        v.visit(this);
     }
 }
 
 abstract class ExprNode extends ASTNode {
+    @Override
     public void accept(Visitor v) {
         v.visit(this);
     }
@@ -408,10 +386,6 @@ class LiteralNode extends ExprNode {
     public LiteralNode(String literalText) {
         this.literalText = literalText;
     }
-    @Override
-    public void accept(Visitor v) {
-        v.visit(this);
-    }
 }
 
 class ReturnStatementNode extends StmtNode {
@@ -419,10 +393,6 @@ class ReturnStatementNode extends StmtNode {
 
     public ReturnStatementNode(ExprNode exprNode) {
         this.exprNode = exprNode;
-    }
-    @Override
-    public void accept(Visitor v) {
-        v.visit(this);
     }
 }
 
@@ -432,10 +402,6 @@ class GroupedExpressionNode extends ExprNode {
     public GroupedExpressionNode(ExprNode exprNode) {
         this.exprNode = exprNode;
     }
-    @Override
-    public void accept(Visitor v) {
-        v.visit(this);
-    }
 }
 
 class NegateBoolNode extends ExprNode {
@@ -444,20 +410,12 @@ class NegateBoolNode extends ExprNode {
     public NegateBoolNode(ExprNode exprNode) {
         this.exprNode = exprNode;
     }
-    @Override
-    public void accept(Visitor v) {
-        v.visit(this);
-    }
 }
 
 class NegateExpressionNode extends ExprNode {
     public ExprNode exprNode;
     public NegateExpressionNode(ExprNode exprNode) {
         this.exprNode = exprNode;
-    }
-    @Override
-    public void accept(Visitor v) {
-        v.visit(this);
     }
 }
 
@@ -469,10 +427,6 @@ class PowerNode extends ExprNode {
         this.baseNode = baseNode;
         this.exponentNode = exponentNode;
     }
-    @Override
-    public void accept(Visitor v) {
-        v.visit(this);
-    }
 }
 
 class MultNode extends ExprNode {
@@ -482,10 +436,6 @@ class MultNode extends ExprNode {
     public MultNode(ExprNode leftExprNode, ExprNode rightExprNode) {
         this.leftExprNode = leftExprNode;
         this.rightExprNode = rightExprNode;
-    }
-    @Override
-    public void accept(Visitor v) {
-        v.visit(this);
     }
 }
 
@@ -497,10 +447,6 @@ class DivNode extends ExprNode {
         this.leftExprNode = leftExprNode;
         this.rightExprNode = rightExprNode;
     }
-    @Override
-    public void accept(Visitor v) {
-        v.visit(this);
-    }
 }
 
 class ModNode extends ExprNode {
@@ -510,10 +456,6 @@ class ModNode extends ExprNode {
     public ModNode(ExprNode leftExprNode, ExprNode rightExprNode) {
         this.leftExprNode = leftExprNode;
         this.rightExprNode = rightExprNode;
-    }
-    @Override
-    public void accept(Visitor v) {
-        v.visit(this);
     }
 }
 
@@ -525,10 +467,6 @@ class PlusNode extends ExprNode {
         this.leftExprNode = leftExprNode;
         this.rightExprNode = rightExprNode;
     }
-    @Override
-    public void accept(Visitor v) {
-        v.visit(this);
-    }
 }
 
 class MinusNode extends ExprNode {
@@ -538,10 +476,6 @@ class MinusNode extends ExprNode {
     public MinusNode(ExprNode leftExprNode, ExprNode rightExprNode) {
         this.leftExprNode = leftExprNode;
         this.rightExprNode = rightExprNode;
-    }
-    @Override
-    public void accept(Visitor v) {
-        v.visit(this);
     }
 }
 
@@ -553,10 +487,6 @@ class ComparisonNode extends ExprNode {
         this.leftExprNode = leftExprNode;
         this.rightExprNode = rightExprNode;
     }
-    @Override
-    public void accept(Visitor v) {
-        v.visit(this);
-    }
 }
 
 class EqualityNode extends ExprNode {
@@ -566,10 +496,6 @@ class EqualityNode extends ExprNode {
     public EqualityNode(ExprNode leftExprNode, ExprNode rightExprNode) {
         this.leftExprNode = leftExprNode;
         this.rightExprNode = rightExprNode;
-    }
-    @Override
-    public void accept(Visitor v) {
-        v.visit(this);
     }
 }
 
@@ -581,10 +507,7 @@ class InEqualityNode extends ExprNode {
         this.leftExprNode = leftExprNode;
         this.rightExprNode = rightExprNode;
     }
-    @Override
-    public void accept(Visitor v) {
-        v.visit(this);
-    }
+    
 }
 
 class LessThanNode extends ExprNode {
@@ -648,10 +571,7 @@ class AndNode extends ExprNode {
         this.leftExprNode = leftExprNode;
         this.rightExprNode = rightExprNode;
     }
-    @Override
-    public void accept(Visitor v) {
-        v.visit(this);
-    }
+    
 }
 
 class OrNode extends ExprNode {
@@ -662,17 +582,14 @@ class OrNode extends ExprNode {
         this.leftExprNode = leftExprNode;
         this.rightExprNode = rightExprNode;
     }
-    @Override
-    public void accept(Visitor v) {
-        v.visit(this);
-    }
+    
 }
 
 class FieldIdNode extends ASTNode {
-    public List<TypeIdNode> ids;
+    public List<TypeIdNode> typeIdNodes;
 
-    public FieldIdNode(List<TypeIdNode> ids) {
-        this.ids = ids;
+    public FieldIdNode(List<TypeIdNode> typeIdNodes) {
+        this.typeIdNodes = typeIdNodes;
     }
     @Override
     public void accept(Visitor v) {
