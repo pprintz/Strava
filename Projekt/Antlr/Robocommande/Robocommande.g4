@@ -23,7 +23,6 @@ setupStmt : NEWLINE+ ( generalStmtPart
                  ;
 
 stmt : NEWLINE+ (  generalStmtPart
-                 | newDeclaration
                  | returnStatement )? NEWLINE*
                  ;
 

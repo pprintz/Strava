@@ -6,7 +6,7 @@ import java.util.Stack;
  */
 public class SymbolTableBuilder extends Visitor {
 
-    Stack<HashMap<IdNode, ASTNode>> symbolTable;
+    Stack<HashMap<TypeIdNode, ASTNode>> symbolTable;
 
     public SymbolTableBuilder() {
         symbolTable = new Stack<>();
@@ -19,12 +19,12 @@ public class SymbolTableBuilder extends Visitor {
     private void CloseScope(){
         symbolTable.pop();
     }
-    private void InsertInCurrentScope(IdNode key, ASTNode val){
+    private void InsertInCurrentScope(TypeIdNode key, ASTNode val){
         symbolTable.peek().put(key, val);
         System.out.println("INSERT: " + key.id + " INTO SCOPE #" + (symbolTable.size() - 1) );
     }
 
-    private void DeclarationInCurrentScope(IdNode key, ASTNode val){
+    private void DeclarationInCurrentScope(TypeIdNode key, ASTNode val){
         boolean alreadyDeclared = KeyExistsInCurrentOrOuterScope(key);
         if( ! alreadyDeclared ){
             InsertInCurrentScope(key, val);
@@ -33,7 +33,7 @@ public class SymbolTableBuilder extends Visitor {
         }
     }
 
-    private void NewDeclarationInCurrentScope(IdNode key, ASTNode val){
+    private void NewDeclarationInCurrentScope(TypeIdNode key, ASTNode val){
         boolean alreadyDeclared = KeyExistsInCurrentOrOuterScope(key);
         if( ! alreadyDeclared){
             System.out.println("WARNING: New used when no declaration in outer scope : " + key.id);
@@ -42,7 +42,7 @@ public class SymbolTableBuilder extends Visitor {
     }
 
 
-    private boolean KeyExistsInCurrentOrOuterScope(IdNode key) {
+    private boolean KeyExistsInCurrentOrOuterScope(TypeIdNode key) {
         for (int i = symbolTable.size() - 1; i >= 0; i--) {
             if (symbolTable.get(i).containsKey(key)) {
                 return true;
@@ -51,7 +51,7 @@ public class SymbolTableBuilder extends Visitor {
         return false;
     }
 
-    private void AssignOrDeclareInCurrentScope(IdNode key, ASTNode val){
+    private void AssignOrDeclareInCurrentScope(TypeIdNode key, ASTNode val){
         if(KeyExistsInCurrentOrOuterScope(key)){ // assign
             for (int i = symbolTable.size() - 1; i >= 0; i--) {
                 if (symbolTable.get(i).containsKey(key)) {
@@ -68,7 +68,7 @@ public class SymbolTableBuilder extends Visitor {
 
     @Override
     public void visit(AssignmentNode node) {
-        AssignOrDeclareInCurrentScope(node.idNode, node.exprNode);
+        AssignOrDeclareInCurrentScope(node.typeIdNode, node.exprNode);
     }
 
     @Override

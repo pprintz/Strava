@@ -54,27 +54,27 @@ public class ASTBuilder extends RobocommandeBaseVisitor<ASTNode> {
 
     @Override
     public ASTNode visitDefineFunction(RobocommandeParser.DefineFunctionContext ctx) {
-        IdNode idNode = (IdNode) visit((ctx.id()));
-        FormalParamsNode formalParamsNode = (FormalParamsNode) visit((ctx.formalParams()));
-        BlockNode blockNode = (BlockNode) visit((ctx.block()));
+        TypeIdNode typeIdNode = new TypeIdNode(visit(ctx.id()), ctx.type().getText());
+        FormalParamsNode formalParamsNode = (FormalParamsNode) visit(ctx.formalParams());
+        BlockNode blockNode = (BlockNode) visit(ctx.block());
 
-        return new DefineFunctionNode(idNode, formalParamsNode, blockNode);
-    }
-
-    @Override
-    public ASTNode visitBehaviorFunction(RobocommandeParser.BehaviorFunctionContext ctx) {
-        IdNode idNode = (IdNode) visit((ctx.id(0)));
-        IdNode eventNode = (IdNode) visit((ctx.id(1)));
-        BlockNode blockNode = (BlockNode) visit((ctx.block()));
-
-        return new BehaviorFunctionNode(idNode, eventNode, blockNode);
+        return new DefineFunctionNode(typeIdNode, formalParamsNode, blockNode);
     }
 
     @Override
     public ASTNode visitFormalParams(RobocommandeParser.FormalParamsContext ctx) {
-        List<IdNode> idNodes = new LinkedList<>();
-        ctx.id().forEach(idNode -> idNodes.add((IdNode)visit(idNode)));
-        return new FormalParamsNode(idNodes);
+        List<TypeIdNode> typeIdNodes = new LinkedList<>();
+        ctx.id().forEach(idNode -> typeIdNodes.add((TypeIdNode)visit(idNode)));
+        return new FormalParamsNode(typeIdNodes);
+    }
+
+    @Override
+    public ASTNode visitBehaviorFunction(RobocommandeParser.BehaviorFunctionContext ctx) {
+        TypeIdNode typeIdNode = new TypeIdNode((visit(ctx.id()), "void");
+        TypeIdNode eventNode = (TypeIdNode) visit((ctx.id(1)));
+        BlockNode blockNode = (BlockNode) visit((ctx.block()));
+
+        return new BehaviorFunctionNode(typeIdNode, eventNode, blockNode);
     }
 
     @Override
@@ -86,7 +86,7 @@ public class ASTBuilder extends RobocommandeBaseVisitor<ASTNode> {
 
     @Override
     public ASTNode visitStrategy(RobocommandeParser.StrategyContext ctx) {
-        return new StrategyNode((IdNode) visit(ctx.id()),
+        return new StrategyNode((TypeIdNode) visit(ctx.id()),
                 (StrategyDefinitionNode) visit(ctx.strategyDefinition()));
     }
 
@@ -158,8 +158,8 @@ public class ASTBuilder extends RobocommandeBaseVisitor<ASTNode> {
 
     @Override
     public ASTNode visitStructDefinition(RobocommandeParser.StructDefinitionContext ctx) {
-        IdNode name = (IdNode)visit(ctx.id());
-        List<IdNode> idNodes = new ArrayList<>();
+        TypeIdNode name = (TypeIdNode)visit(ctx.id());
+        List<TypeIdNode> typeIdNodes = new ArrayList<>();
         List<AssignmentNode> assignments = new ArrayList<>();
 
         int childrenCount = ctx.children.size();
@@ -168,10 +168,10 @@ public class ASTBuilder extends RobocommandeBaseVisitor<ASTNode> {
             if(field instanceof RobocommandeParser.AssignmentContext){
                 assignments.add((AssignmentNode)visit(field));
             } else if(field instanceof RobocommandeParser.IdContext){
-                idNodes.add((IdNode)visit(field));
+                typeIdNodes.add((TypeIdNode)visit(field));
             }
         }
-        return new StructDefinitionNode(name, idNodes, assignments);
+        return new StructDefinitionNode(name, typeIdNodes, assignments);
     }
 
     @Override
@@ -180,19 +180,19 @@ public class ASTBuilder extends RobocommandeBaseVisitor<ASTNode> {
 
         switch(ctx.type().getText()){
             case "num":
-                return new DeclarationNode((IdNode)visit(ctx.id()), exprNode, Type.num);
+                return new DeclarationNode((TypeIdNode)visit(ctx.id()), exprNode, Type.num);
             case "text":
-                return new DeclarationNode((IdNode)visit(ctx.id()), exprNode, Type.text);
+                return new DeclarationNode((TypeIdNode)visit(ctx.id()), exprNode, Type.text);
             case "bool":
-                return new DeclarationNode((IdNode)visit(ctx.id()), exprNode, Type.bool);
+                return new DeclarationNode((TypeIdNode)visit(ctx.id()), exprNode, Type.bool);
             default:
-                return new StructDeclarationNode((IdNode)visit(ctx.id()), exprNode, Type.struct, ctx.type().getText());
+                return new StructDeclarationNode((TypeIdNode)visit(ctx.id()), exprNode, Type.struct, ctx.type().getText());
         }
     }
 
     @Override
     public ASTNode visitNewEvent(RobocommandeParser.NewEventContext ctx) {
-        return new NewEventNode((IdNode)visit(ctx.id()), (BlockNode)visit(ctx.block()));
+        return new NewEventNode((TypeIdNode)visit(ctx.id()), (BlockNode)visit(ctx.block()));
     }
 
     @Override
@@ -205,10 +205,10 @@ public class ASTBuilder extends RobocommandeBaseVisitor<ASTNode> {
 
     @Override
     public ASTNode visitAssignment(RobocommandeParser.AssignmentContext ctx) {
-        IdNode idNode = (IdNode)visit(ctx.id());
+        TypeIdNode typeIdNode = (TypeIdNode)visit(ctx.id());
         ExprNode exprNode = (ExprNode)visit(ctx.expr());
 
-        return new AssignmentNode(idNode, exprNode);
+        return new AssignmentNode(typeIdNode, exprNode);
     }
 
     @Override
@@ -237,17 +237,17 @@ public class ASTBuilder extends RobocommandeBaseVisitor<ASTNode> {
 
     @Override
     public ASTNode visitFunctionCall(RobocommandeParser.FunctionCallContext ctx) {
-        IdNode idNode = ctx.id() != null ? (IdNode)visit(ctx.id()) : null;
+        TypeIdNode typeIdNode = ctx.id() != null ? (TypeIdNode)visit(ctx.id()) : null;
         FieldIdNode fieldIdNode = ctx.fieldId() != null ? (FieldIdNode)visit(ctx.fieldId()) : null;
 
         ActualParamsNode actualParamsNode = ctx.actualParams() != null ? (ActualParamsNode)visit(ctx.actualParams()) : null;
 
-        return new FunctionCallNode(fieldIdNode, idNode, actualParamsNode);
+        return new FunctionCallNode(fieldIdNode, typeIdNode, actualParamsNode);
     }
 
     @Override
     public ASTNode visitStructInitialization(RobocommandeParser.StructInitializationContext ctx) {
-        IdNode name = (IdNode)visit(ctx.id());
+        TypeIdNode name = (TypeIdNode)visit(ctx.id());
         List<AssignmentNode> assignments = new ArrayList<>();
 
         for(RobocommandeParser.AssignmentContext assignment : ctx.assignment()){
@@ -280,12 +280,12 @@ public class ASTBuilder extends RobocommandeBaseVisitor<ASTNode> {
 
     @Override
     public ASTNode visitFCall(RobocommandeParser.FCallContext ctx) {
-        IdNode idNode = ctx.functionCall().id() != null ? (IdNode)visit(ctx.functionCall().id()) : null;
+        TypeIdNode typeIdNode = ctx.functionCall().id() != null ? (TypeIdNode)visit(ctx.functionCall().id()) : null;
         FieldIdNode fieldIdNode = ctx.functionCall().fieldId() != null ? (FieldIdNode)visit(ctx.functionCall().fieldId()) : null;
 
         ActualParamsNode actualParamsNode = ctx.functionCall().actualParams() != null ? (ActualParamsNode)visit(ctx.functionCall().actualParams()) : null;
 
-        return new ExprFunctionCallNode(fieldIdNode, idNode, actualParamsNode);
+        return new ExprFunctionCallNode(fieldIdNode, typeIdNode, actualParamsNode);
     }
 
     @Override
@@ -402,14 +402,14 @@ public class ASTBuilder extends RobocommandeBaseVisitor<ASTNode> {
     @Override
     public ASTNode visitFieldId(RobocommandeParser.FieldIdContext ctx) {
         List<String> idsToBeConverted = Arrays.asList(ctx.getText().split(Pattern.quote(".")));
-        List<IdNode> idNodes = new ArrayList<IdNode>();
-        idsToBeConverted.forEach(node -> idNodes.add(new IdNode(node)));
-        return new FieldIdNode(idNodes);
+        List<TypeIdNode> typeIdNodes = new ArrayList<TypeIdNode>();
+        idsToBeConverted.forEach(node -> typeIdNodes.add(new TypeIdNode(node)));
+        return new FieldIdNode(typeIdNodes);
     }
 
     @Override
     public ASTNode visitId(RobocommandeParser.IdContext ctx) {
-        return new IdNode(ctx.ID().getText());
+        return ctx.ID().getText();
     }
 
     private String getOperatorSymbol(List<ParseTree> children, String... symbols){

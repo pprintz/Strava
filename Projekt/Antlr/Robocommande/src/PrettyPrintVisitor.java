@@ -48,7 +48,7 @@ public class PrettyPrintVisitor extends Visitor {
     @Override
     public void visit(AssignmentNode node) {
         System.out.print(indent() + "ASSIGN ");
-        node.idNode.accept(this);
+        node.typeIdNode.accept(this);
         System.out.print(" := ");
         node.exprNode.accept(this);
         System.out.println();
@@ -57,7 +57,7 @@ public class PrettyPrintVisitor extends Visitor {
     @Override
     public void visit(BehaviorFunctionNode node) {
         System.out.print(indent() + "BEHAVIOR ");
-        visit(node.idNode);
+        visit(node.typeIdNode);
         System.out.println("(" + node.eventName.id + ")");
         indentationLevel++;
         visit(node.blockNode);
@@ -99,7 +99,7 @@ public class PrettyPrintVisitor extends Visitor {
     @Override
     public void visit(DefineFunctionNode node) {
         System.out.print(indent() + "DEFINE ");
-        visit(node.idNode);
+        visit(node.typeIdNode);
         System.out.print("(");
         visit(node.formalParamsNode);
         System.out.println(")");
@@ -164,7 +164,7 @@ public class PrettyPrintVisitor extends Visitor {
     @Override
     public void visit(FunctionCallNode node) {
         System.out.print(indent() + "CALL ");
-        if(node.idNode != null) visit(node.idNode);
+        if(node.typeIdNode != null) visit(node.typeIdNode);
         else visit(node.fieldIdNode);
         System.out.print("(");
         if(node.actualParams != null) visit(node.actualParams);
@@ -198,7 +198,7 @@ public class PrettyPrintVisitor extends Visitor {
     }
 
     @Override
-    public void visit(IdNode node) {
+    public void visit(TypeIdNode node) {
         System.out.print(node.id);
     }
 
@@ -221,8 +221,8 @@ public class PrettyPrintVisitor extends Visitor {
     @Override
     public void visit(ExprFunctionCallNode node) {
         System.out.print("CALL ");
-        if(node.idNode != null)
-            visit(node.idNode);
+        if(node.typeIdNode != null)
+            visit(node.typeIdNode);
         else  if (node.fieldIdNode != null) visit(node.fieldIdNode);
         System.out.print("(");
         if(node.actualParams != null)
@@ -313,7 +313,7 @@ public class PrettyPrintVisitor extends Visitor {
     @Override
     public void visit(NewEventNode node) {
         System.out.print(indent() + "NEW EVENT ");
-        System.out.print(node.idNode.id + "\n");
+        System.out.print(node.typeIdNode.id + "\n");
         visit(node.blockNode);
     }
 
@@ -392,7 +392,7 @@ public class PrettyPrintVisitor extends Visitor {
     @Override
     public void visit(StrategyNode node) {
         System.out.print(indent() + "STRATEGY ");
-        visit(node.idNode);
+        visit(node.typeIdNode);
         System.out.println();
         indentationLevel++;
         visit(node.strategyDefinition);
@@ -404,13 +404,13 @@ public class PrettyPrintVisitor extends Visitor {
         System.out.print(indent() + "STRUCT ");
         indentationLevel++;
         System.out.print("{ ");
-        int idLen = node.idNodes.size();
+        int idLen = node.typeIdNodes.size();
         int assLen = node.assignments.size();
-        int fieldSize = node.idNodes.size() - 1 + node.assignments.size();
+        int fieldSize = node.typeIdNodes.size() - 1 + node.assignments.size();
         System.out.println();
         for(int i = 0; i < idLen; i++){
             System.out.print(indent() + "FIELD ");
-            visit(node.idNodes.get(i));
+            visit(node.typeIdNodes.get(i));
             if(i != fieldSize)
                 System.out.println();
         }
