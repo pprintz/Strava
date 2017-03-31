@@ -34,7 +34,7 @@ public abstract class Visitor {
 
     public void visit(BehaviorFunctionNode node){
         node.idNode.accept(this);
-        node.eventName.accept(this);
+        node.eventType.accept(this);
         node.blockNode.accept(this);
     }
 
@@ -92,7 +92,10 @@ public abstract class Visitor {
     }
 
     public void visit(FormalParamsNode node){
-        for(IdNode pnode : node.ids){
+        for(IdNode pnode : node.idNodes){
+            pnode.accept(this);
+        }
+        for(IdNode pnode : node.idNodes){
             pnode.accept(this);
         }
     }
@@ -196,11 +199,6 @@ public abstract class Visitor {
         node.exprNode.accept(this);
     }
 
-    public void visit(NewDeclarationNode node){
-        node.idNode.accept(this);
-        node.exprNode.accept(this);
-    }
-
     public void visit(NewEventNode node){
         node.idNode.accept(this);
         node.blockNode.accept(this);
@@ -271,17 +269,14 @@ public abstract class Visitor {
     }
 
     public void visit(StructDefinitionNode node) {
-        node.typeIdNode.accept(this);
-        for(IdNode idNode : node.idNodes) {
-            idNode.accept(this);
-        }
-        for(AssignmentNode assignmentNode : node.assignments) {
-            assignmentNode.accept(this);
+        node.structIdNode.accept(this);
+        for(DeclarationNode declNode : node.declarationNodes) {
+            declNode.accept(this);
         }
     }
 
     public void visit(StructInitializationNode node) {
-        node.name.accept(this);
+        node.typeNode.accept(this);
         for(AssignmentNode assignmentNode : node.assignments) {
             assignmentNode.accept(this);
         }
