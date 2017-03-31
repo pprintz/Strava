@@ -56,9 +56,11 @@ strategy default:
        num bubber := 3
        num a := myFunction(a, b, c)
     ;
-
-
-
+    define void procedureOne(num a, num b):
+        //DO stuff
+        a := 2
+        b := 3
+    ;
 
     define num myfunction(num a, num b, num c):
             return a + b - c
@@ -71,7 +73,7 @@ strategy default:
 
 
 strategy theWinningOne:
-    behavior onHitBySkank(ev):
+    behavior onHitByBullet(ev):
         hitBack()
     ;
 ;

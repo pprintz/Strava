@@ -107,7 +107,9 @@ public class PrettyPrintVisitor extends Visitor {
         visit(node.idNode);
         System.out.print("(");
         visit(node.formalParamsNode);
-        System.out.println(")");
+        System.out.print(")");
+        System.out.println(" RETURNS " + node.typeNode.type);
+
         indentationLevel++;
         visit(node.blockNode);
         indentationLevel--;
