@@ -172,12 +172,12 @@ class DefineFunctionNode extends ASTNode {
 
 class BehaviorFunctionNode extends ASTNode {
     public IdNode idNode;
-    public IdNode eventName;
+    public TypeNode eventType;
     public BlockNode blockNode;
 
-    public BehaviorFunctionNode(IdNode idNode, IdNode eventName, BlockNode blockNode) {
+    public BehaviorFunctionNode(IdNode idNode, TypeNode eventType, BlockNode blockNode) {
         this.idNode = idNode;
-        this.eventName = eventName;
+        this.eventType = eventType;
         this.blockNode = blockNode;
     }
     @Override
@@ -195,14 +195,13 @@ abstract class StmtNode extends ASTNode {
 
 class StructDefinitionNode extends StmtNode {
     public IdNode structIdNode;
-    public List<IdNode> idNodes;
-    public List<AssignmentNode> assignments;
+    public List<DeclarationNode> declarationNodes;
 
-    public StructDefinitionNode(IdNode structIdNode, List<IdNode> idNodes, List<AssignmentNode> assignments) {
+    public StructDefinitionNode(IdNode structIdNode, List<DeclarationNode> declarationNodes) {
         this.structIdNode = structIdNode;
-        this.idNodes = idNodes;
-        this.assignments = assignments;
+        this.declarationNodes = declarationNodes;
     }
+
     @Override
     public void accept(Visitor v) {
         v.visit(this);
