@@ -299,18 +299,6 @@ public class PrettyPrintVisitor extends Visitor {
     }
 
     @Override
-    public void visit(NewDeclarationNode node) {
-        System.out.print(indent() + "NEW ");
-        visit(node.idNode);
-        if(node.exprNode != null){
-            System.out.print(" := ");
-            visit(node.exprNode);
-        }
-        System.out.println();
-
-    }
-
-    @Override
     public void visit(NewEventNode node) {
         System.out.print(indent() + "NEW EVENT ");
         System.out.print(node.idNode.id + "\n");
@@ -425,7 +413,7 @@ public class PrettyPrintVisitor extends Visitor {
 
     @Override
     public void visit(StructInitializationNode node) {
-        visit(node.name);
+        visit(node.typeNode);
         System.out.println("(");
         indentationLevel++;
         int len = node.assignments.size();
