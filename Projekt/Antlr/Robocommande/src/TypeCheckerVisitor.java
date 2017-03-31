@@ -52,25 +52,6 @@ public class TypeCheckerVisitor extends Visitor {
         super.visit(node);
     }
 
-    @Override
-    public void visit(NumDeclarationNode node) {
-        super.visit(node);
-    }
-
-    @Override
-    public void visit(TextDeclarationNode node) {
-        super.visit(node);
-    }
-
-    @Override
-    public void visit(BoolDeclarationNode node) {
-        super.visit(node);
-    }
-
-    @Override
-    public void visit(StructDeclarationNode node) {
-        super.visit(node);
-    }
 
     @Override
     public void visit(DefaultStrategyNode node) {
@@ -203,11 +184,6 @@ public class TypeCheckerVisitor extends Visitor {
     }
 
     @Override
-    public void visit(NewDeclarationNode node) {
-        super.visit(node);
-    }
-
-    @Override
     public void visit(NewEventNode node) {
         super.visit(node);
     }
@@ -257,10 +233,6 @@ public class TypeCheckerVisitor extends Visitor {
         super.visit(node);
     }
 
-    @Override
-    public void visit(StmtNode node) {
-        super.visit(node);
-    }
 
     @Override
     public void visit(StrategyDefinitionNode node) {

@@ -10,6 +10,7 @@ public abstract class Visitor {
         }
     }
 
+    public void visit(TypeNode node) {node.accept(this);}
     public void visit(ASTNode node){
         node.accept(this);
     }

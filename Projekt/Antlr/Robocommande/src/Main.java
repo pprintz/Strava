@@ -25,11 +25,11 @@ public class Main {
         //System.out.println(prettyPrinter.visit(tree));
 
         ASTBuilder astBuilder = new ASTBuilder();
-        //PrettyPrintVisitor prettyPrintVisitor = new PrettyPrintVisitor();
+        PrettyPrintVisitor prettyPrintVisitor = new PrettyPrintVisitor();
         ASTNode ast = astBuilder.visit(cst);
-        SymbolTableBuilder symbolTableBuilder = new SymbolTableBuilder();
-        symbolTableBuilder.visit(ast);
-        //prettyPrintVisitor.visit(node);
+        //SymbolTableBuilder symbolTableBuilder = new SymbolTableBuilder();
+        //symbolTableBuilder.visit(ast);
+        prettyPrintVisitor.visit(ast);
         System.out.println("Everything went okay.");
     }
 }
