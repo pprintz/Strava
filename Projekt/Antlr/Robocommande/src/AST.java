@@ -56,11 +56,11 @@ class FunctionsNode extends ASTNode {
 }
 
 class StrategyNode extends ASTNode {
-    public TypeIdNode typeIdNode;
+    public IdNode idNode;
     public StrategyDefinitionNode strategyDefinition;
 
-    public StrategyNode(TypeIdNode typeIdNode, StrategyDefinitionNode strategyDefinition) {
-        this.typeIdNode = typeIdNode;
+    public StrategyNode(IdNode idNode, StrategyDefinitionNode strategyDefinition) {
+        this.idNode = idNode;
         this.strategyDefinition = strategyDefinition;
     }
     @Override
@@ -152,15 +152,18 @@ abstract class FunctionStmtNode extends ASTNode {
 }
 
 class DefineFunctionNode extends ASTNode {
-    public TypeIdNode typeIdNode;
+    public TypeNode typeNode;
+    public IdNode idNode;
     public FormalParamsNode formalParamsNode;
     public BlockNode blockNode;
 
-    public DefineFunctionNode(TypeIdNode typeIdNode, FormalParamsNode formalParamsNode, BlockNode blockNode) {
-        this.typeIdNode = typeIdNode;
+    public DefineFunctionNode(TypeNode typeNode, IdNode idNode, FormalParamsNode formalParamsNode, BlockNode blockNode) {
+        this.typeNode = typeNode;
+        this.idNode = idNode;
         this.formalParamsNode = formalParamsNode;
         this.blockNode = blockNode;
     }
+
     @Override
     public void accept(Visitor v) {
         v.visit(this);
@@ -168,12 +171,12 @@ class DefineFunctionNode extends ASTNode {
 }
 
 class BehaviorFunctionNode extends ASTNode {
-    public TypeIdNode typeIdNode;
-    public TypeIdNode eventName;
+    public IdNode idNode;
+    public IdNode eventName;
     public BlockNode blockNode;
 
-    public BehaviorFunctionNode(TypeIdNode typeIdNode, TypeIdNode eventName, BlockNode blockNode) {
-        this.typeIdNode = typeIdNode;
+    public BehaviorFunctionNode(IdNode idNode, IdNode eventName, BlockNode blockNode) {
+        this.idNode = idNode;
         this.eventName = eventName;
         this.blockNode = blockNode;
     }
@@ -191,13 +194,13 @@ abstract class StmtNode extends ASTNode {
 }
 
 class StructDefinitionNode extends StmtNode {
-    public TypeIdNode structIdNode;
-    public List<TypeIdNode> typeIdNodes;
+    public IdNode structIdNode;
+    public List<IdNode> idNodes;
     public List<AssignmentNode> assignments;
 
-    public StructDefinitionNode(TypeIdNode structIdNode, List<TypeIdNode> typeIdNodes, List<AssignmentNode> assignments) {
+    public StructDefinitionNode(IdNode structIdNode, List<IdNode> idNodes, List<AssignmentNode> assignments) {
         this.structIdNode = structIdNode;
-        this.typeIdNodes = typeIdNodes;
+        this.idNodes = idNodes;
         this.assignments = assignments;
     }
     @Override
@@ -207,23 +210,26 @@ class StructDefinitionNode extends StmtNode {
 }
 
 class DeclarationNode extends StmtNode {
-    public TypeIdNode typeIdNode;
+    public TypeNode typeNode;
+    public IdNode idNode;
     public ExprNode exprNode;
 
-    public DeclarationNode(TypeIdNode typeIdNode, ExprNode exprNode) {
-        this.typeIdNode = typeIdNode;
+    public DeclarationNode(TypeNode typeNode, IdNode idNode, ExprNode exprNode) {
+        this.typeNode = typeNode;
+        this.idNode = idNode;
         this.exprNode = exprNode;
     }
+
     @Override
     public void accept(Visitor v) { v.visit(this); }
 }
 
 class NewEventNode extends StmtNode {
-    public TypeIdNode typeIdNode;
+    public IdNode idNode;
     public BlockNode blockNode;
 
-    public NewEventNode(TypeIdNode typeIdNode, BlockNode blockNode) {
-        this.typeIdNode = typeIdNode;
+    public NewEventNode(IdNode idNode, BlockNode blockNode) {
+        this.idNode = idNode;
         this.blockNode = blockNode;
     }
     @Override
@@ -248,11 +254,11 @@ class FieldAssignmentNode extends StmtNode {
 
 
 class AssignmentNode extends StmtNode {
-    public TypeIdNode typeIdNode;
+    public IdNode idNode;
     public ExprNode exprNode;
 
-    public AssignmentNode(TypeIdNode typeIdNode, ExprNode exprNode) {
-        this.typeIdNode = typeIdNode;
+    public AssignmentNode(IdNode idNode, ExprNode exprNode) {
+        this.idNode = idNode;
         this.exprNode = exprNode;
     }
     @Override
@@ -298,12 +304,12 @@ class ElseIfStatementNode extends ASTNode {
 
 class FunctionCallNode extends StmtNode {
     public FieldIdNode fieldIdNode;
-    public TypeIdNode typeIdNode;
+    public IdNode idNode;
     public ActualParamsNode actualParams;
 
-    public FunctionCallNode(FieldIdNode fieldIdNode, TypeIdNode typeIdNode, ActualParamsNode actualParams) {
+    public FunctionCallNode(FieldIdNode fieldIdNode, IdNode idNode, ActualParamsNode actualParams) {
         this.fieldIdNode = fieldIdNode;
-        this.typeIdNode = typeIdNode;
+        this.idNode = idNode;
         this.actualParams = actualParams;
     }
     @Override
@@ -313,11 +319,11 @@ class FunctionCallNode extends StmtNode {
 }
 
 class StructInitializationNode extends ExprNode {
-    public TypeIdNode typeIdNode;
+    public TypeNode typeNode;
     public List<AssignmentNode> assignments;
 
-    public StructInitializationNode(TypeIdNode typeIdNode, List<AssignmentNode> assignments) {
-        this.typeIdNode = typeIdNode;
+    public StructInitializationNode(TypeNode typeNode, List<AssignmentNode> assignments) {
+        this.typeNode = typeNode;
         this.assignments = assignments;
     }
     @Override
@@ -328,12 +334,12 @@ class StructInitializationNode extends ExprNode {
 
 class ExprFunctionCallNode extends ExprNode {
     public FieldIdNode fieldIdNode;
-    public TypeIdNode typeIdNode;
+    public IdNode idNode;
     public ActualParamsNode actualParams;
 
-    public ExprFunctionCallNode(FieldIdNode fieldIdNode, TypeIdNode typeIdNode, ActualParamsNode actualParams) {
+    public ExprFunctionCallNode(FieldIdNode fieldIdNode, IdNode idNode, ActualParamsNode actualParams) {
         this.fieldIdNode = fieldIdNode;
-        this.typeIdNode = typeIdNode;
+        this.idNode = idNode;
         this.actualParams = actualParams;
     }
 }
@@ -350,10 +356,14 @@ class LoopNode extends StmtNode {
 
 
 class FormalParamsNode extends ASTNode {
-    public List<TypeIdNode> typeIdNodes;
-    public FormalParamsNode(List<TypeIdNode> typeIdNodes) {
-        this.typeIdNodes = typeIdNodes;
+    public List<TypeNode> typeNodes;
+    public List<IdNode> idNodes;
+
+    public FormalParamsNode(List<TypeNode> typeNodes, List<IdNode> idNodes) {
+        this.typeNodes = typeNodes;
+        this.idNodes = idNodes;
     }
+
 
     @Override
     public void accept(Visitor v) {
@@ -586,10 +596,10 @@ class OrNode extends ExprNode {
 }
 
 class FieldIdNode extends ASTNode {
-    public List<TypeIdNode> typeIdNodes;
+    public List<IdNode> idNodes;
 
-    public FieldIdNode(List<TypeIdNode> typeIdNodes) {
-        this.typeIdNodes = typeIdNodes;
+    public FieldIdNode(List<IdNode> idNodes) {
+        this.idNodes = idNodes;
     }
     @Override
     public void accept(Visitor v) {
@@ -599,12 +609,23 @@ class FieldIdNode extends ASTNode {
 
 }
 
-class TypeIdNode extends ASTNode {
-    public String id;
+class TypeNode extends ASTNode{
     public String type;
-    public TypeIdNode(String id, String type) {
-        this.id = id;
+
+    public TypeNode(String type) {
         this.type = type;
+    }
+
+    @Override
+    public void accept(Visitor v) {
+
+    }
+}
+
+class IdNode extends ASTNode {
+    public String id;
+    public IdNode(String id) {
+        this.id = id;
     }
 
     @Override
@@ -619,13 +640,13 @@ class TypeIdNode extends ASTNode {
 
     @Override
     public boolean equals(Object obj) {
-        if (!(obj instanceof TypeIdNode))
+        if (!(obj instanceof IdNode))
             return false;
         if (obj == this)
             return true;
 
-        TypeIdNode other = (TypeIdNode) obj;
-        return other.id.equals(this.id) && other.type.equals(this.type);
+        IdNode other = (IdNode) obj;
+        return other.id.equals(this.id);
     }
 }
 

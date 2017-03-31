@@ -28,12 +28,12 @@ public abstract class Visitor {
     }
 
     public void visit(AssignmentNode node){
-        node.typeIdNode.accept(this);
+        node.idNode.accept(this);
         node.exprNode.accept(this);
     }
 
     public void visit(BehaviorFunctionNode node){
-        node.typeIdNode.accept(this);
+        node.idNode.accept(this);
         node.eventName.accept(this);
         node.blockNode.accept(this);
     }
@@ -50,7 +50,7 @@ public abstract class Visitor {
     }
 
     public void visit(DeclarationNode node){
-        node.typeIdNode.accept(this);
+        node.idNode.accept(this);
         if(node.exprNode != null)
             node.exprNode.accept(this);
     }
@@ -60,7 +60,7 @@ public abstract class Visitor {
     }
 
     public void visit(DefineFunctionNode node){
-        node.typeIdNode.accept(this);
+        node.idNode.accept(this);
         node.formalParamsNode.accept(this);
         node.blockNode.accept(this);
     }
@@ -86,13 +86,13 @@ public abstract class Visitor {
     }
 
     public void visit(FieldIdNode node){
-        for(TypeIdNode idnode : node.typeIdNodes){
+        for(IdNode idnode : node.idNodes){
             idnode.accept(this);
         }
     }
 
     public void visit(FormalParamsNode node){
-        for(TypeIdNode pnode : node.ids){
+        for(IdNode pnode : node.ids){
             pnode.accept(this);
         }
     }
@@ -100,7 +100,7 @@ public abstract class Visitor {
     public void visit(FunctionCallNode node){
         if(node.fieldIdNode != null)
         node.fieldIdNode.accept(this);
-        node.typeIdNode.accept(this);
+        node.idNode.accept(this);
         if(node.actualParams != null)
         node.actualParams.accept(this);
     }
@@ -129,7 +129,7 @@ public abstract class Visitor {
         node.exprNode.accept(this);
     }
 
-    public void visit(TypeIdNode node){
+    public void visit(IdNode node){
 
     }
 
@@ -144,7 +144,7 @@ public abstract class Visitor {
     public void visit(ExprFunctionCallNode node){
         if(node.fieldIdNode != null)
             node.fieldIdNode.accept(this);
-        node.typeIdNode.accept(this);
+        node.idNode.accept(this);
         if(node.actualParams != null)
             node.actualParams.accept(this);
     }
@@ -202,7 +202,7 @@ public abstract class Visitor {
     }
 
     public void visit(NewEventNode node){
-        node.typeIdNode.accept(this);
+        node.idNode.accept(this);
         node.blockNode.accept(this);
     }
 
@@ -266,14 +266,14 @@ public abstract class Visitor {
     }
 
     public void visit(StrategyNode node) {
-        node.typeIdNode.accept(this);
+        node.idNode.accept(this);
         node.strategyDefinition.accept(this);
     }
 
     public void visit(StructDefinitionNode node) {
         node.typeIdNode.accept(this);
-        for(TypeIdNode typeIdNode : node.typeIdNodes) {
-            typeIdNode.accept(this);
+        for(IdNode idNode : node.idNodes) {
+            idNode.accept(this);
         }
         for(AssignmentNode assignmentNode : node.assignments) {
             assignmentNode.accept(this);
