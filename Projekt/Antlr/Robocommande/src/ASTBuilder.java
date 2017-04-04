@@ -257,6 +257,7 @@ public class ASTBuilder extends RobocommandeBaseVisitor<ASTNode> {
 
     @Override
     public ASTNode visitLiteral(RobocommandeParser.LiteralContext ctx) {
+        if(ctx.ID() != null) return new IdNode(ctx.getText());
         return new LiteralNode(ctx.getText());
     }
 

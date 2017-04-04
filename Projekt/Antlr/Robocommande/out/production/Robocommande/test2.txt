@@ -2,7 +2,7 @@ behavior onSetup():
 
     new event KASPERWINS:
         loop while 2 <= 3:
-            doThis(a,b)
+            doThat(a,b)
             doThat(b, c)
             a := Foo(123)
         ;
@@ -50,11 +50,12 @@ behavior onSetup():
 
 
 
+
 strategy default:
     behavior onRun():
        num a := 2
        num bubber := 3
-       num a := myFunction(a, b, c)
+       //num a := myFunction(a, b, c)
     ;
     define void procedureOne(num a, num b):
         //DO stuff
@@ -70,10 +71,11 @@ strategy default:
         return a + a
     ;
 ;
-
-
+define void doThat(num a):
+    return a
+;
 strategy theWinningOne:
     behavior onHitByBullet(ev):
-        hitBack()
+        a := b
     ;
 ;

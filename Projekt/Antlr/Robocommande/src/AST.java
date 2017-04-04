@@ -302,6 +302,7 @@ class FunctionCallNode extends StmtNode {
     public FieldIdNode fieldIdNode;
     public IdNode idNode;
     public ActualParamsNode actualParams;
+    public DefineFunctionNode defineFunctionNode;
 
     public FunctionCallNode(FieldIdNode fieldIdNode, IdNode idNode, ActualParamsNode actualParams) {
         this.fieldIdNode = fieldIdNode;
@@ -317,6 +318,7 @@ class FunctionCallNode extends StmtNode {
 class StructInitializationNode extends ExprNode {
     public TypeNode typeNode;
     public List<AssignmentNode> assignments;
+    public StructDefinitionNode structDefinitionNode;
 
     public StructInitializationNode(TypeNode typeNode, List<AssignmentNode> assignments) {
         this.typeNode = typeNode;
@@ -332,6 +334,7 @@ class ExprFunctionCallNode extends ExprNode {
     public FieldIdNode fieldIdNode;
     public IdNode idNode;
     public ActualParamsNode actualParams;
+    public DefineFunctionNode defineFunctionNode;
 
     public ExprFunctionCallNode(FieldIdNode fieldIdNode, IdNode idNode, ActualParamsNode actualParams) {
         this.fieldIdNode = fieldIdNode;
@@ -666,6 +669,7 @@ class OrNode extends ExprNode {
 
 class FieldIdNode extends ASTNode {
     public List<IdNode> idNodes;
+    public StructDefinitionNode structDefinitionNode;
 
     public FieldIdNode(List<IdNode> idNodes) {
         this.idNodes = idNodes;
@@ -690,11 +694,13 @@ class TypeNode extends ASTNode{
     }
 }
 
-class IdNode extends ASTNode {
+class IdNode extends ExprNode {
     public String id;
     public IdNode(String id) {
         this.id = id;
     }
+    public DeclarationNode declarationNode;
+
 
     @Override
     public void accept(Visitor v) {
