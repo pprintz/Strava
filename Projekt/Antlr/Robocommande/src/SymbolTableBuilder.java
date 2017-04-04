@@ -96,11 +96,6 @@ public class SymbolTableBuilder extends Visitor {
 
 
     @Override
-    public void visit(NewDeclarationNode node) {
-        NewDeclarationInCurrentScope(node.idNode, node.exprNode);
-    }
-
-    @Override
     public void visit(ProgNode node) {
         super.visit(node);
     }

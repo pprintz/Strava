@@ -187,10 +187,7 @@ class BehaviorFunctionNode extends ASTNode {
 }
 
 abstract class StmtNode extends ASTNode {
-    @Override
-    public void accept(Visitor v) {
-        v.visit(this);
-    }
+    public abstract void accept(Visitor v);
 }
 
 class StructDefinitionNode extends StmtNode {
@@ -305,6 +302,7 @@ class FunctionCallNode extends StmtNode {
     public FieldIdNode fieldIdNode;
     public IdNode idNode;
     public ActualParamsNode actualParams;
+    public DefineFunctionNode defineFunctionNode;
 
     public FunctionCallNode(FieldIdNode fieldIdNode, IdNode idNode, ActualParamsNode actualParams) {
         this.fieldIdNode = fieldIdNode;
@@ -320,6 +318,7 @@ class FunctionCallNode extends StmtNode {
 class StructInitializationNode extends ExprNode {
     public TypeNode typeNode;
     public List<AssignmentNode> assignments;
+    public StructDefinitionNode structDefinitionNode;
 
     public StructInitializationNode(TypeNode typeNode, List<AssignmentNode> assignments) {
         this.typeNode = typeNode;
@@ -335,11 +334,16 @@ class ExprFunctionCallNode extends ExprNode {
     public FieldIdNode fieldIdNode;
     public IdNode idNode;
     public ActualParamsNode actualParams;
+    public DefineFunctionNode defineFunctionNode;
 
     public ExprFunctionCallNode(FieldIdNode fieldIdNode, IdNode idNode, ActualParamsNode actualParams) {
         this.fieldIdNode = fieldIdNode;
         this.idNode = idNode;
         this.actualParams = actualParams;
+    }
+    @Override
+    public void accept(Visitor v) {
+        v.visit(this);
     }
 }
 
@@ -350,6 +354,11 @@ class LoopNode extends StmtNode {
     public LoopNode(ExprNode exprNode, BlockNode block) {
         this.exprNode = exprNode;
         this.block = block;
+    }
+
+    @Override
+    public void accept(Visitor v) {
+        v.visit(this);
     }
 }
 
@@ -366,7 +375,7 @@ class FormalParamsNode extends ASTNode {
 
     @Override
     public void accept(Visitor v) {
-
+        v.visit(this);
     }
 }
 
@@ -379,14 +388,13 @@ class ActualParamsNode extends ASTNode {
 
     @Override
     public void accept(Visitor v) {
+        v.visit(this);
     }
 }
 
 abstract class ExprNode extends ASTNode {
     @Override
-    public void accept(Visitor v) {
-        v.visit(this);
-    }
+    public abstract void accept(Visitor v);
 }
 
 class LiteralNode extends ExprNode {
@@ -394,6 +402,10 @@ class LiteralNode extends ExprNode {
 
     public LiteralNode(String literalText) {
         this.literalText = literalText;
+    }
+    @Override
+    public void accept(Visitor v) {
+        v.visit(this);
     }
 }
 
@@ -403,6 +415,11 @@ class ReturnStatementNode extends StmtNode {
     public ReturnStatementNode(ExprNode exprNode) {
         this.exprNode = exprNode;
     }
+
+    @Override
+    public void accept(Visitor v) {
+        v.visit(this);
+    }
 }
 
 class GroupedExpressionNode extends ExprNode {
@@ -410,6 +427,10 @@ class GroupedExpressionNode extends ExprNode {
 
     public GroupedExpressionNode(ExprNode exprNode) {
         this.exprNode = exprNode;
+    }
+    @Override
+    public void accept(Visitor v) {
+        v.visit(this);
     }
 }
 
@@ -419,12 +440,20 @@ class NegateBoolNode extends ExprNode {
     public NegateBoolNode(ExprNode exprNode) {
         this.exprNode = exprNode;
     }
+    @Override
+    public void accept(Visitor v) {
+        v.visit(this);
+    }
 }
 
 class NegateExpressionNode extends ExprNode {
     public ExprNode exprNode;
     public NegateExpressionNode(ExprNode exprNode) {
         this.exprNode = exprNode;
+    }
+    @Override
+    public void accept(Visitor v) {
+        v.visit(this);
     }
 }
 
@@ -436,6 +465,10 @@ class PowerNode extends ExprNode {
         this.baseNode = baseNode;
         this.exponentNode = exponentNode;
     }
+    @Override
+    public void accept(Visitor v) {
+        v.visit(this);
+    }
 }
 
 class MultNode extends ExprNode {
@@ -445,6 +478,10 @@ class MultNode extends ExprNode {
     public MultNode(ExprNode leftExprNode, ExprNode rightExprNode) {
         this.leftExprNode = leftExprNode;
         this.rightExprNode = rightExprNode;
+    }
+    @Override
+    public void accept(Visitor v) {
+        v.visit(this);
     }
 }
 
@@ -456,6 +493,10 @@ class DivNode extends ExprNode {
         this.leftExprNode = leftExprNode;
         this.rightExprNode = rightExprNode;
     }
+    @Override
+    public void accept(Visitor v) {
+        v.visit(this);
+    }
 }
 
 class ModNode extends ExprNode {
@@ -465,6 +506,10 @@ class ModNode extends ExprNode {
     public ModNode(ExprNode leftExprNode, ExprNode rightExprNode) {
         this.leftExprNode = leftExprNode;
         this.rightExprNode = rightExprNode;
+    }
+    @Override
+    public void accept(Visitor v) {
+        v.visit(this);
     }
 }
 
@@ -476,6 +521,10 @@ class PlusNode extends ExprNode {
         this.leftExprNode = leftExprNode;
         this.rightExprNode = rightExprNode;
     }
+    @Override
+    public void accept(Visitor v) {
+        v.visit(this);
+    }
 }
 
 class MinusNode extends ExprNode {
@@ -485,6 +534,10 @@ class MinusNode extends ExprNode {
     public MinusNode(ExprNode leftExprNode, ExprNode rightExprNode) {
         this.leftExprNode = leftExprNode;
         this.rightExprNode = rightExprNode;
+    }
+    @Override
+    public void accept(Visitor v) {
+        v.visit(this);
     }
 }
 
@@ -496,6 +549,10 @@ class ComparisonNode extends ExprNode {
         this.leftExprNode = leftExprNode;
         this.rightExprNode = rightExprNode;
     }
+    @Override
+    public void accept(Visitor v) {
+        v.visit(this);
+    }
 }
 
 class EqualityNode extends ExprNode {
@@ -505,6 +562,10 @@ class EqualityNode extends ExprNode {
     public EqualityNode(ExprNode leftExprNode, ExprNode rightExprNode) {
         this.leftExprNode = leftExprNode;
         this.rightExprNode = rightExprNode;
+    }
+    @Override
+    public void accept(Visitor v) {
+        v.visit(this);
     }
 }
 
@@ -516,7 +577,11 @@ class InEqualityNode extends ExprNode {
         this.leftExprNode = leftExprNode;
         this.rightExprNode = rightExprNode;
     }
-    
+    @Override
+    public void accept(Visitor v) {
+        v.visit(this);
+    }
+
 }
 
 class LessThanNode extends ExprNode {
@@ -580,7 +645,11 @@ class AndNode extends ExprNode {
         this.leftExprNode = leftExprNode;
         this.rightExprNode = rightExprNode;
     }
-    
+    @Override
+    public void accept(Visitor v) {
+        v.visit(this);
+    }
+
 }
 
 class OrNode extends ExprNode {
@@ -591,11 +660,16 @@ class OrNode extends ExprNode {
         this.leftExprNode = leftExprNode;
         this.rightExprNode = rightExprNode;
     }
-    
+    @Override
+    public void accept(Visitor v) {
+        v.visit(this);
+    }
+
 }
 
 class FieldIdNode extends ASTNode {
     public List<IdNode> idNodes;
+    public StructDefinitionNode structDefinitionNode;
 
     public FieldIdNode(List<IdNode> idNodes) {
         this.idNodes = idNodes;
@@ -614,18 +688,19 @@ class TypeNode extends ASTNode{
     public TypeNode(String type) {
         this.type = type;
     }
-
     @Override
     public void accept(Visitor v) {
-
+        v.visit(this);
     }
 }
 
-class IdNode extends ASTNode {
+class IdNode extends ExprNode {
     public String id;
     public IdNode(String id) {
         this.id = id;
     }
+    public DeclarationNode declarationNode;
+
 
     @Override
     public void accept(Visitor v) {

@@ -25,11 +25,16 @@ public class Main {
         //System.out.println(prettyPrinter.visit(tree));
 
         ASTBuilder astBuilder = new ASTBuilder();
-        //PrettyPrintVisitor prettyPrintVisitor = new PrettyPrintVisitor();
         ASTNode ast = astBuilder.visit(cst);
-        SymbolTableBuilder symbolTableBuilder = new SymbolTableBuilder();
-        symbolTableBuilder.visit(ast);
-        //prettyPrintVisitor.visit(node);
+        BindingVisitor bindingVisitor = new BindingVisitor();
+        bindingVisitor.visit(ast);
+        BindingVisitor.hasFunctionsBeenDeclared = true;
+        bindingVisitor.visit(ast);
+        if(BindingVisitor.hasRefError){
+            System.exit(0);
+        }
+        PrettyPrintVisitor prettyPrintVisitor = new PrettyPrintVisitor();
+        prettyPrintVisitor.visit(ast);
         System.out.println("Everything went okay.");
     }
 }

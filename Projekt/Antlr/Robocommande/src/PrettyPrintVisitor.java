@@ -22,6 +22,10 @@ public class PrettyPrintVisitor extends Visitor {
     }
 
     @Override
+    public void visit(TypeNode node) {
+    }
+
+    @Override
     public void visit(ASTNode node) {
         super.visit(node);
     }
@@ -58,7 +62,7 @@ public class PrettyPrintVisitor extends Visitor {
     public void visit(BehaviorFunctionNode node) {
         System.out.print(indent() + "BEHAVIOR ");
         visit(node.idNode);
-        System.out.println("(" + node.eventName.id + ")");
+        System.out.println("(" + node.eventType.type + " " + node.idNode.id + ")");
         indentationLevel++;
         visit(node.blockNode);
         indentationLevel--;
@@ -80,6 +84,7 @@ public class PrettyPrintVisitor extends Visitor {
     @Override
     public void visit(DeclarationNode node) {
         System.out.print(indent() + "DECLARE ");
+        System.out.print(node.typeNode.type + " ");
         visit(node.idNode);
         if(node.exprNode != null) {
             System.out.print(" := ");
@@ -102,7 +107,9 @@ public class PrettyPrintVisitor extends Visitor {
         visit(node.idNode);
         System.out.print("(");
         visit(node.formalParamsNode);
-        System.out.println(")");
+        System.out.print(")");
+        System.out.println(" RETURNS " + node.typeNode.type);
+
         indentationLevel++;
         visit(node.blockNode);
         indentationLevel--;
@@ -151,13 +158,12 @@ public class PrettyPrintVisitor extends Visitor {
 
     @Override
     public void visit(FormalParamsNode node) {
-        int len = node.ids.size();
+        int len = node.idNodes.size();
         for(int i = 0; i < len; i++ ){
-            if(i == len-1) visit(node.ids.get(i));
-            else {
-                visit(node.ids.get(i));
+            System.out.print(node.typeNodes.get(i).type + " ");
+            visit(node.idNodes.get(i));
+            if(i < len-1)
                 System.out.print(", ");
-            }
         }
     }
 
@@ -169,6 +175,8 @@ public class PrettyPrintVisitor extends Visitor {
         System.out.print("(");
         if(node.actualParams != null) visit(node.actualParams);
         System.out.print(")\n");
+        System.out.println(node.defineFunctionNode.idNode.id);
+
     }
 
     @Override
@@ -221,6 +229,10 @@ public class PrettyPrintVisitor extends Visitor {
     @Override
     public void visit(ExprFunctionCallNode node) {
         System.out.print("CALL ");
+        System.out.println();
+        System.out.println();
+        System.out.println();
+        System.out.println();
         if(node.idNode != null)
             visit(node.idNode);
         else  if (node.fieldIdNode != null) visit(node.fieldIdNode);
@@ -366,7 +378,6 @@ public class PrettyPrintVisitor extends Visitor {
         super.visit(node);
     }
 
-    @Override
     public void visit(StmtNode node) {
         System.out.print(indent());
         super.visit(node);
@@ -391,21 +402,14 @@ public class PrettyPrintVisitor extends Visitor {
     public void visit(StructDefinitionNode node) {
         System.out.print(indent() + "STRUCT ");
         indentationLevel++;
-        System.out.print("{ ");
-        int idLen = node.idNodes.size();
-        int assLen = node.assignments.size();
-        int fieldSize = node.idNodes.size() - 1 + node.assignments.size();
-        System.out.println();
-        for(int i = 0; i < idLen; i++){
-            System.out.print(indent() + "FIELD ");
-            visit(node.idNodes.get(i));
-            if(i != fieldSize)
-                System.out.println();
-        }
-        for(int i = 0; i < assLen; i++){
-            visit(node.assignments.get(i));
-            if(i != fieldSize-idLen)
-                System.out.println();
+        System.out.println("{ ");
+        for(DeclarationNode declNode : node.declarationNodes){
+            System.out.print(indent() + declNode.typeNode.type + " " + declNode.idNode.id);
+            if(declNode.exprNode != null) {
+                System.out.print(" := ");
+                visit(declNode.exprNode);
+            }
+            System.out.println();
         }
         indentationLevel--;
         System.out.println(indent() + "}");
