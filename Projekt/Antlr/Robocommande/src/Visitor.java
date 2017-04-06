@@ -277,7 +277,7 @@ public abstract class Visitor {
     }
 
     public void visit(StructInitializationNode node) {
-        node.typeNode.accept(this);
+        node.idNode.accept(this);
         for(AssignmentNode assignmentNode : node.assignments) {
             assignmentNode.accept(this);
         }

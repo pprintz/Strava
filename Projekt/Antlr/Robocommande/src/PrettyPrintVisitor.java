@@ -417,7 +417,7 @@ public class PrettyPrintVisitor extends Visitor {
 
     @Override
     public void visit(StructInitializationNode node) {
-        visit(node.typeNode);
+        visit(node.idNode);
         System.out.println("(");
         indentationLevel++;
         int len = node.assignments.size();

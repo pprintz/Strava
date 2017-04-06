@@ -1,3 +1,5 @@
+import org.antlr.v4.runtime.ParserRuleContext;
+
 import java.util.List;
 
 /**
@@ -6,6 +8,15 @@ import java.util.List;
 
 abstract class ASTNode {
     public abstract void accept(Visitor v) ;
+    public LineInformation lineInformation;
+
+    public void SetLineInformation(ParserRuleContext context){
+        lineInformation.lineNumber = context.start.getLine();
+        lineInformation.columnNumber = context.start.getCharPositionInLine();
+    }
+    public class LineInformation{
+        public int lineNumber, columnNumber;
+    }
 }
 
 class ProgNode extends ASTNode {
@@ -316,12 +327,12 @@ class FunctionCallNode extends StmtNode {
 }
 
 class StructInitializationNode extends ExprNode {
-    public TypeNode typeNode;
+    public IdNode idNode;
     public List<AssignmentNode> assignments;
     public StructDefinitionNode structDefinitionNode;
 
-    public StructInitializationNode(TypeNode typeNode, List<AssignmentNode> assignments) {
-        this.typeNode = typeNode;
+    public StructInitializationNode(IdNode idNode, List<AssignmentNode> assignments) {
+        this.idNode = idNode;
         this.assignments = assignments;
     }
     @Override
