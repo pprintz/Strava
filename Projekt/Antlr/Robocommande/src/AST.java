@@ -220,6 +220,7 @@ class DeclarationNode extends StmtNode {
     public TypeNode typeNode;
     public IdNode idNode;
     public ExprNode exprNode;
+    public StructDefinitionNode structDefinitionNode;
 
     public DeclarationNode(TypeNode typeNode, IdNode idNode, ExprNode exprNode) {
         this.typeNode = typeNode;

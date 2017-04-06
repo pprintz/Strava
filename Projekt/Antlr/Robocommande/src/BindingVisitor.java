@@ -31,9 +31,18 @@ public class BindingVisitor extends Visitor {
         CloseScope();
     }
 
+
     @Override
     public void visit(DeclarationNode node) {
-        symbolTable.peek().put(node.idNode, node);
+        switch (node.typeNode.type) {
+            case "num":
+            case "text":
+            case "bool":
+                symbolTable.peek().put(node.idNode, node);
+                break;
+            default:
+                BindStructDeclarationToDefinition(node);
+        }
     }
 
     @Override
@@ -49,6 +58,7 @@ public class BindingVisitor extends Visitor {
     public void visit(FieldIdNode node) {
         super.visit(node);
     }
+
     private void BindIdToDeclaration(IdNode idNode) {
         boolean isDeclared = false;
         for (int i = symbolTable.size() - 1; i >= 0; i--) {
@@ -59,9 +69,10 @@ public class BindingVisitor extends Visitor {
         }
         if(!isDeclared){
             hasRefError = true;
-            PrintNotDeclaredError(" id ", idNode.id);
+            PrintNotDeclaredError("id", idNode.id);
         }
     }
+
     public static boolean hasRefError = false;
     private void BindFunctionCallToDeclaration(FunctionCallNode fCallNode) {
         boolean isDeclared = false;
@@ -96,15 +107,35 @@ public class BindingVisitor extends Visitor {
         }
     }
     private void PrintNotDeclaredError(String type, String id){
-        System.out.println("There is no" + type + "named: " + id);
+        System.out.println("There is no " + type + " named: " + id);
     }
     private void BindStructInitializationToDefinition(StructInitializationNode structInitializationNode) {
+        boolean isStructDefined = false;
         for (int i = symbolTable.size() - 1; i >= 0; i--) {
-            if (symbolTable.get(i).containsKey(structInitializationNode.typeNode.type)) {
-                structInitializationNode.structDefinitionNode = (StructDefinitionNode) symbolTable.get(i).get(structInitializationNode.typeNode.type);
+            if (symbolTable.get(i).containsKey(structInitializationNode.idNode)) {
+                structInitializationNode.structDefinitionNode = (StructDefinitionNode) symbolTable.get(i).get(structInitializationNode.idNode);
+                isStructDefined = true;
             }
         }
+        if (!isStructDefined) {
+            //PrintNotDeclaredError("struct", structInitializationNode.structDefinitionNode.structIdNode.id);
+            PrintNotDeclaredError("struct", structInitializationNode.idNode.id);
+        }
     }
+
+    private void BindStructDeclarationToDefinition(DeclarationNode node) {
+        boolean isStructDefined = false;
+        for (int i = symbolTable.size() - 1; i >= 0; i--) {
+            if (symbolTable.get(i).containsKey(node.idNode)) {
+                node.structDefinitionNode = (StructDefinitionNode) symbolTable.get(i).get(node.idNode);
+                isStructDefined = true;
+            }
+        }
+        if (!isStructDefined) {
+            PrintNotDeclaredError("struct", node.typeNode.type);
+        }
+    }
+
     @Override
     public void visit(FunctionCallNode node) {
         BindFunctionCallToDeclaration(node);
@@ -116,6 +147,10 @@ public class BindingVisitor extends Visitor {
     @Override
     public void visit(IdNode node) {
         BindIdToDeclaration(node);
+    }
+    @Override
+    public void visit(StructInitializationNode node) {
+        BindStructInitializationToDefinition(node);
     }
 
 }
