@@ -63,7 +63,7 @@ public class BindingVisitor extends Visitor {
         }
     }
     public static boolean hasRefError = false;
-    private void BindFunctionCallToDeclarition(FunctionCallNode fCallNode) {
+    private void BindFunctionCallToDeclaration(FunctionCallNode fCallNode) {
         boolean isDeclared = false;
         if(hasFunctionsBeenDeclared) {
             for (int i = symbolTable.size() - 1; i >= 0; i--) {
@@ -72,10 +72,11 @@ public class BindingVisitor extends Visitor {
                     isDeclared = true;
                 }
             }
-        }
-        if(!isDeclared){
-            hasRefError = true;
-            PrintNotDeclaredError(" function ", fCallNode.idNode.id);
+
+            if (!isDeclared) {
+                hasRefError = true;
+                PrintNotDeclaredError(" function ", fCallNode.idNode.id);
+            }
         }
     }
     private void BindExprFunctionCallToDeclaration(ExprFunctionCallNode fCallNode) {
@@ -87,10 +88,11 @@ public class BindingVisitor extends Visitor {
                     isDeclared = true;
                 }
             }
-        }
-        if(!isDeclared){
-            hasRefError = true;
-            PrintNotDeclaredError(" function ", fCallNode.idNode.id);
+
+            if (!isDeclared) {
+                hasRefError = true;
+                PrintNotDeclaredError(" function ", fCallNode.idNode.id);
+            }
         }
     }
     private void PrintNotDeclaredError(String type, String id){
@@ -105,7 +107,7 @@ public class BindingVisitor extends Visitor {
     }
     @Override
     public void visit(FunctionCallNode node) {
-        BindFunctionCallToDeclarition(node);
+        BindFunctionCallToDeclaration(node);
     }
     @Override
     public void visit(ExprFunctionCallNode node){
