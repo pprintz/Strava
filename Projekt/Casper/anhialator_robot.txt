@@ -1,0 +1,33 @@
+/*
+	Anhialator Robot for RoboCode
+	Written in: RCSimple
+*/
+
+Robot Anhialator {
+	Sequence movement {
+		bot.pos -> (right + 3);
+		bot.pos -> (down + 4);
+		bot.pos -> (up + 5);
+		bot.pos -> (left + 6);
+	}
+
+	Sequence shoot {
+		bot.shoot -> target;
+		bot.shoot -> target+2;
+	}
+
+	initialize {
+		bot as Anhialator;
+
+		movement.initialize();
+		shoot.initialize();
+	}
+
+	update {
+		movement.perform();
+
+		event(FoundTarget target){
+			shoot.perform();
+		}
+	}
+}

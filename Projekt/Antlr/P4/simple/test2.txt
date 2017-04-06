@@ -1,0 +1,25 @@
+behavior onSetup():
+    var a
+    a := 1337
+    b := "asd"
+    new behavior OnTeitursMom : 
+        return true
+    ;
+;
+
+
+
+strategy default:
+    behavior onRun():
+    ;
+;
+strategy aggressive:
+    behavior onRun():
+
+    ;
+
+
+
+;
+define foo(a,b,c):
+;
