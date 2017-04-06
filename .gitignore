@@ -78,7 +78,7 @@ nbactions*.xml
 # Generated files
 *.class
 /out/
-/gen/
+gen/
 /gen3/
 /gen4/
 /tool/playground/
