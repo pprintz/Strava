@@ -2,27 +2,26 @@ behavior onSetup():
 
     new event KASPERWINS:
         loop while 2 <= 3:
+            num a := 2
+            num b
             doThat(a,b)
             doThat(b, c)
             a := Foo(123)
         ;
-
-
-
-    ;
+ ;
 
 
     num a := 2
-
+    num b
     num c := 3
-    d := 5
+    num d := 5
 
-    myStruct { num a, text b, text c, num d := 2 + 2 + 3 - 4 }
-
-    myRobot.color := RED
-    myStruct mmmmm := myStruct()
-
-    myStruct nnnnn := myStruct(q := 3, s := 4)
+    myStruct { num y, text b, text c, num d := 2 + 2 + 3 - 4 }
+    myRobot {num x, text color}
+    myStruct mmmmm := myStruct(a := 10)
+    mmmmm := 10
+    myStruct nnnnn := myStruct(b := 3, a := 4)
+    myStruct aa := myStruct(q := 10, x := 20)
 
 
 
@@ -64,15 +63,22 @@ strategy default:
     ;
 
     define num myfunction(num a, num b, num c):
-            return a + b - c
+            return a + b - c-d
     ;
 
     define text lol(text a):
         return a + a
     ;
 ;
+define text lool(text b):
+;
+define text lolo(text b):
+;
 define void doThat(num a):
     return a
+;
+define void Foo(text b):
+    num boum
 ;
 strategy theWinningOne:
     behavior onHitByBullet(ev):

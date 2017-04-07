@@ -714,6 +714,7 @@ class IdNode extends ExprNode {
     }
 
     public DeclarationNode declarationNode;
+    public boolean isDeclaration = false;
 
 
     @Override
