@@ -298,7 +298,7 @@ public class ASTBuilder extends RobocommandeBaseVisitor<ASTNode> {
                 unaryExprNode.unaryOperator = UnaryOperator.PARANTHESIS;
                 break;
             case "not":
-                unaryExprNode.unaryOperator = UnaryOperator.NEGATBOOL;
+                unaryExprNode.unaryOperator = UnaryOperator.NEGATEBOOL;
                 break;
             case "-":
                 unaryExprNode.unaryOperator = UnaryOperator.NEGATE;

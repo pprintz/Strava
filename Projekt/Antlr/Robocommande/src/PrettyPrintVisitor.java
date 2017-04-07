@@ -70,6 +70,11 @@ public class PrettyPrintVisitor extends Visitor {
     }
 
     @Override
+    public void visit(BinaryExprNode node) {
+        super.visit(node);
+    }
+
+    @Override
     public void visit(DeclarationNode node) {
         System.out.print(indent() + "DECLARE ");
         System.out.print(node.typeNode.type + " ");
@@ -160,6 +165,25 @@ public class PrettyPrintVisitor extends Visitor {
     @Override
     public void visit(FunctionsNode node) {
         super.visit(node);
+    }
+
+    @Override
+    public void visit(UnaryExprNode node) {
+        switch(node.unaryOperator){
+            case NEGATEBOOL:
+                System.out.print(" NOT ");
+                visit(node.exprNode);
+                break;
+            case NEGATE:
+                System.out.print(" !");
+                visit(node.exprNode);
+                break;
+            case PARANTHESIS:
+                System.out.print("(");
+                visit(node.exprNode);
+                System.out.print(")");
+                break;
+        }
     }
 
     @Override
@@ -271,6 +295,11 @@ public class PrettyPrintVisitor extends Visitor {
         visit(node.exprNode);
         System.out.println();
         visit(node.block);
+    }
+
+    @Override
+    public void visit(NewEventNode node) {
+        super.visit(node);
     }
 
     @Override
