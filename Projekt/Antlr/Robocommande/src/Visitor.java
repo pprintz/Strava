@@ -39,11 +39,14 @@ public abstract class Visitor {
         node.blockNode.accept(this);
     }
 
-    public void visit(BlockNode node){
-        for(StmtNode stmtNode : node.functionStmtNodes){
-            stmtNode.accept(this);
+    public void visit(BlockNode node) {
+        for (StmtNode stmtNode : node.functionStmtNodes) {
+            if (stmtNode != null)
+                stmtNode.accept(this);
         }
     }
+
+
 
     public void visit(ComparisonNode node){
         node.leftExprNode.accept(this);

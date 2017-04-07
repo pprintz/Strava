@@ -30,6 +30,7 @@ public class ASTBuilder extends RobocommandeBaseVisitor<ASTNode> {
         return new SetupNode((SetupBlockNode)visit(ctx.setupBlock()));
     }
 
+
     @Override
     public ASTNode visitRun(RobocommandeParser.RunContext ctx) {
         return new RunNode((BlockNode)visit(ctx.block()));
@@ -56,6 +57,7 @@ public class ASTBuilder extends RobocommandeBaseVisitor<ASTNode> {
     public ASTNode visitDefineFunction(RobocommandeParser.DefineFunctionContext ctx) {
         TypeNode typeNode = new TypeNode(ctx.type().getText());
         IdNode idNode = new IdNode(ctx.ID().getText());
+        idNode.isDeclaration = true;
         FormalParamsNode formalParamsNode = (FormalParamsNode) visit(ctx.formalParams());
         BlockNode blockNode = (BlockNode) visit(ctx.block());
 
@@ -65,7 +67,7 @@ public class ASTBuilder extends RobocommandeBaseVisitor<ASTNode> {
     @Override
     public ASTNode visitFormalParams(RobocommandeParser.FormalParamsContext ctx) {
         List<IdNode> idNodes = new ArrayList<>();
-        ctx.ID().forEach(idNode -> idNodes.add(new IdNode(idNode.getText())));
+        ctx.ID().forEach(idNode -> idNodes.add(new IdNode(idNode.getText()){{isDeclaration = true;}}));
         List<TypeNode> typeNodes = new ArrayList<>();
         ctx.type().forEach(typeNode -> typeNodes.add(new TypeNode(typeNode.getText())));
         return new FormalParamsNode(typeNodes, idNodes);
@@ -74,6 +76,7 @@ public class ASTBuilder extends RobocommandeBaseVisitor<ASTNode> {
     @Override
     public ASTNode visitBehaviorFunction(RobocommandeParser.BehaviorFunctionContext ctx) {
         IdNode idNode = new IdNode(ctx.ID(0).getText());
+        idNode.isDeclaration = true;
         TypeNode eventType = new TypeNode(ctx.ID(1).getText());
         BlockNode blockNode = (BlockNode) visit((ctx.block()));
 
@@ -89,7 +92,7 @@ public class ASTBuilder extends RobocommandeBaseVisitor<ASTNode> {
 
     @Override
     public ASTNode visitStrategy(RobocommandeParser.StrategyContext ctx) {
-        return new StrategyNode(new IdNode(ctx.ID().getText()),
+        return new StrategyNode(new IdNode(ctx.ID().getText()){{isDeclaration = true;}},
                 (StrategyDefinitionNode) visit(ctx.strategyDefinition()));
     }
 
@@ -161,6 +164,7 @@ public class ASTBuilder extends RobocommandeBaseVisitor<ASTNode> {
     @Override
     public ASTNode visitStructDefinition(RobocommandeParser.StructDefinitionContext ctx) {
         IdNode name = new IdNode(ctx.ID().getText());
+        name.isDeclaration = true;
         List<DeclarationNode> declarationNodes = new ArrayList<>();
 
         for(RobocommandeParser.DeclarationContext declaration : ctx.declaration()){
@@ -173,14 +177,14 @@ public class ASTBuilder extends RobocommandeBaseVisitor<ASTNode> {
     public ASTNode visitDeclaration(RobocommandeParser.DeclarationContext ctx) {
         ExprNode exprNode = ctx.expr() != null ? (ExprNode)visit(ctx.expr()) : null;
         TypeNode typeNode = new TypeNode(ctx.type().getText());
-        IdNode idNode = new IdNode(ctx.ID().getText());
+        IdNode idNode = new IdNode(ctx.ID().getText()){{isDeclaration = true;}};
         DeclarationNode declarationNode = new DeclarationNode(typeNode, idNode, exprNode);
         return declarationNode;
     }
 
     @Override
     public ASTNode visitNewEvent(RobocommandeParser.NewEventContext ctx) {
-        return new NewEventNode(new IdNode(ctx.ID().getText()), (BlockNode)visit(ctx.block()));
+        return new NewEventNode(new IdNode(ctx.ID().getText()){{isDeclaration = true;}}, (BlockNode)visit(ctx.block()));
     }
 
     @Override
@@ -195,7 +199,8 @@ public class ASTBuilder extends RobocommandeBaseVisitor<ASTNode> {
     public ASTNode visitAssignment(RobocommandeParser.AssignmentContext ctx) {
         IdNode idNode = new IdNode(ctx.ID().getText());
         ExprNode exprNode = (ExprNode)visit(ctx.expr());
-
+        if(exprNode instanceof StructInitializationNode)
+            return null;
         return new AssignmentNode(idNode, exprNode);
     }
 
@@ -282,111 +287,194 @@ public class ASTBuilder extends RobocommandeBaseVisitor<ASTNode> {
         return visit(ctx.structInitialization());
     }
 
-    @Override
-    public ASTNode visitGroupedExpression(RobocommandeParser.GroupedExpressionContext ctx) {
-        return new GroupedExpressionNode((ExprNode)visit(ctx.expr()));
-    }
 
     @Override
-    public ASTNode visitNegateBool(RobocommandeParser.NegateBoolContext ctx) {
-        return new NegateBoolNode((ExprNode)visit(ctx.expr()));
-    }
+    public ASTNode visitUnaryExpr(RobocommandeParser.UnaryExprContext ctx) {
 
-    @Override
-    public ASTNode visitNegateExpression(RobocommandeParser.NegateExpressionContext ctx) {
-        return new NegateExpressionNode((ExprNode)visit(ctx.expr()));
-    }
+        UnaryExprNode unaryExprNode = new UnaryExprNode((ExprNode) visit(ctx.expr()));
 
-    @Override
-    public ASTNode visitPower(RobocommandeParser.PowerContext ctx) {
-        ExprNode base = (ExprNode)visit(ctx.expr(0));
-        ExprNode exponent = (ExprNode)visit(ctx.expr(1));
-        return new PowerNode(base, exponent);
-    }
-
-
-    @Override
-    public ASTNode visitMultDivMod(RobocommandeParser.MultDivModContext ctx) {
-        ExprNode left = (ExprNode)visit(ctx.expr(0));
-        ExprNode right = (ExprNode)visit(ctx.expr(1));
-
-        switch (getOperatorSymbol(ctx.children, "*", "/", "%")){
-            case "*":
-                return new MultNode(left, right);
-            case "/":
-                return new DivNode(left, right);
-            case "%":
-                return new ModNode(left, right);
-            default:
-                return null;
-        }
-    }
-
-
-
-    @Override
-    public ASTNode visitPlusOrMinus(RobocommandeParser.PlusOrMinusContext ctx) {
-        ExprNode left = (ExprNode)visit(ctx.expr(0));
-        ExprNode right = (ExprNode)visit(ctx.expr(1));
-
-        switch (getOperatorSymbol(ctx.children, "+", "-")){
-            case "+":
-                return new PlusNode(left, right);
+        switch (getOperatorSymbol(ctx.children, "(", "not", "-")) {
+            case "(":
+                unaryExprNode.unaryOperator = UnaryOperator.PARANTHESIS;
+                break;
+            case "not":
+                unaryExprNode.unaryOperator = UnaryOperator.NEGATBOOL;
+                break;
             case "-":
-                return new MinusNode(left, right);
+                unaryExprNode.unaryOperator = UnaryOperator.NEGATE;
+                break;
             default:
+                // TODO Error handling?
                 return null;
         }
+
+        return unaryExprNode;
+
     }
 
-
     @Override
-    public ASTNode visitComparison(RobocommandeParser.ComparisonContext ctx) {
-
+    public ASTNode visitBinaryExpr(RobocommandeParser.BinaryExprContext ctx) {
         ExprNode left = (ExprNode)visit(ctx.expr(0));
         ExprNode right = (ExprNode)visit(ctx.expr(1));
 
-        switch (getOperatorSymbol(ctx.children, "<=", ">=", "<", ">")){
+        BinaryExprNode binaryExprNode = new BinaryExprNode(left, right);
+
+        switch (getOperatorSymbol(ctx.children, "*", "/", "%", "^", "+","-","<=",
+                                                         ">=","<",">", "=", "and", "or", "!=")){
+            case "*":
+                binaryExprNode.binaryOperator = BinaryOperator.MULTIPLY;
+                break;
+            case "/":
+                binaryExprNode.binaryOperator = BinaryOperator.DIVISION;
+                break;
+            case "%":
+                binaryExprNode.binaryOperator = BinaryOperator.MODULO;
+                break;
+            case "^":
+                binaryExprNode.binaryOperator = BinaryOperator.POWER;
+                break;
+            case "+":
+                binaryExprNode.binaryOperator = BinaryOperator.PLUS;
+                break;
+            case "-":
+                binaryExprNode.binaryOperator = BinaryOperator.MINUS;
+                break;
             case "<=":
-                return new LeqThanNode(left, right);
+                binaryExprNode.binaryOperator = BinaryOperator.LESSTHANEQUAL;
+                break;
             case ">=":
-                return new GeqThanNode(left, right);
+                binaryExprNode.binaryOperator = BinaryOperator.GREATERTHANEQUAL;
+                break;
             case "<":
-                return new LessThanNode(left, right);
+                binaryExprNode.binaryOperator = BinaryOperator.LESSTHAN;
+                break;
             case ">":
-                return new GreaterThanNode(left, right);
-            default:
-                return null;
-        }
-    }
-
-    @Override
-    public ASTNode visitEquality(RobocommandeParser.EqualityContext ctx) {
-        ExprNode left = (ExprNode)visit(ctx.expr(0));
-        ExprNode right = (ExprNode)visit(ctx.expr(1));
-
-        switch (getOperatorSymbol(ctx.children, "=", "!=")){
+                binaryExprNode.binaryOperator = BinaryOperator.GREATERTHAN;
+                break;
             case "=":
-                return new EqualityNode(left, right);
+                binaryExprNode.binaryOperator = BinaryOperator.EQUAL;
+                break;
+            case "and":
+                binaryExprNode.binaryOperator = BinaryOperator.AND;
+                break;
+            case "or":
+                binaryExprNode.binaryOperator = BinaryOperator.OR;
+                break;
             case "!=":
-                return new InEqualityNode(left, right);
+                binaryExprNode.binaryOperator = BinaryOperator.NOTEQUAL;
+                break;
             default:
+                // TODO Error handling?
                 return null;
         }
+        return binaryExprNode;
     }
-
-    @Override
-    public ASTNode visitAnd(RobocommandeParser.AndContext ctx) {
-        ExprNode left = (ExprNode)visit(ctx.expr(0));
-        ExprNode right = (ExprNode)visit(ctx.expr(1));
-        return new AndNode(left, right);
-    }
-    @Override
-    public ASTNode visitOr(RobocommandeParser.OrContext ctx) {
-        ExprNode left = (ExprNode)visit(ctx.expr(0));
-        ExprNode right = (ExprNode)visit(ctx.expr(1));
-        return new OrNode(left, right);
-    }
+//
+//    @Override
+//    public ASTNode visitGroupedExpression(RobocommandeParser.GroupedExpressionContext ctx) {
+//        return new GroupedExpressionNode((ExprNode)visit(ctx.expr()));
+//    }
+//
+//    @Override
+//    public ASTNode visitNegateBool(RobocommandeParser.NegateBoolContext ctx) {
+//        return new NegateBoolNode((ExprNode)visit(ctx.expr()));
+//    }
+//
+//    @Override
+//    public ASTNode visitNegateExpression(RobocommandeParser.NegateExpressionContext ctx) {
+//        return new NegateExpressionNode((ExprNode)visit(ctx.expr()));
+//    }
+//
+//    @Override
+//    public ASTNode visitPower(RobocommandeParser.PowerContext ctx) {
+//        ExprNode base = (ExprNode)visit(ctx.expr(0));
+//        ExprNode exponent = (ExprNode)visit(ctx.expr(1));
+//        return new PowerNode(base, exponent);
+//    }
+//
+//
+//    @Override
+//    public ASTNode visitMultDivMod(RobocommandeParser.MultDivModContext ctx) {
+//        ExprNode left = (ExprNode)visit(ctx.expr(0));
+//        ExprNode right = (ExprNode)visit(ctx.expr(1));
+//
+//        switch (getOperatorSymbol(ctx.children, "*", "/", "%")){
+//            case "*":
+//                return new MultNode(left, right);
+//            case "/":
+//                return new DivNode(left, right);
+//            case "%":
+//                return new ModNode(left, right);
+//            default:
+//                return null;
+//        }
+//    }
+//
+//
+//
+//    @Override
+//    public ASTNode visitPlusOrMinus(RobocommandeParser.PlusOrMinusContext ctx) {
+//        ExprNode left = (ExprNode)visit(ctx.expr(0));
+//        ExprNode right = (ExprNode)visit(ctx.expr(1));
+//
+//        switch (getOperatorSymbol(ctx.children, "+", "-")){
+//            case "+":
+//                return new PlusNode(left, right);
+//            case "-":
+//                return new MinusNode(left, right);
+//            default:
+//                return null;
+//        }
+//    }
+//
+//
+//    @Override
+//    public ASTNode visitComparison(RobocommandeParser.ComparisonContext ctx) {
+//
+//        ExprNode left = (ExprNode)visit(ctx.expr(0));
+//        ExprNode right = (ExprNode)visit(ctx.expr(1));
+//
+//        switch (getOperatorSymbol(ctx.children, "<=", ">=", "<", ">")){
+//            case "<=":
+//                return new LeqThanNode(left, right);
+//            case ">=":
+//                return new GeqThanNode(left, right);
+//            case "<":
+//                return new LessThanNode(left, right);
+//            case ">":
+//                return new GreaterThanNode(left, right);
+//            default:
+//                return null;
+//        }
+//    }
+//
+//    @Override
+//    public ASTNode visitEquality(RobocommandeParser.EqualityContext ctx) {
+//        ExprNode left = (ExprNode)visit(ctx.expr(0));
+//        ExprNode right = (ExprNode)visit(ctx.expr(1));
+//
+//        switch (getOperatorSymbol(ctx.children, "=", "!=")){
+//            case "=":
+//                return new EqualityNode(left, right);
+//            case "!=":
+//                return new InEqualityNode(left, right);
+//            default:
+//                return null;
+//        }
+//    }
+//
+//    @Override
+//    public ASTNode visitAnd(RobocommandeParser.AndContext ctx) {
+//        ExprNode left = (ExprNode)visit(ctx.expr(0));
+//        ExprNode right = (ExprNode)visit(ctx.expr(1));
+//        return new AndNode(left, right);
+//    }
+//    @Override
+//    public ASTNode visitOr(RobocommandeParser.OrContext ctx) {
+//        ExprNode left = (ExprNode)visit(ctx.expr(0));
+//        ExprNode right = (ExprNode)visit(ctx.expr(1));
+//        return new OrNode(left, right);
+//    }
 
     @Override
     public ASTNode visitFieldId(RobocommandeParser.FieldIdContext ctx) {
