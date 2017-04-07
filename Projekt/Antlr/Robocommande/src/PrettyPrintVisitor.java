@@ -195,7 +195,69 @@ public class PrettyPrintVisitor extends Visitor {
         System.out.print(")");
     }
 
+    @Override
+    public void visit(BinaryExprNode node) {
+        switch (node.binaryOperator) {
+            case PLUS:
+                binaryStatements(node, "+");
+                break;
+            case MINUS:
+                binaryStatements(node, "-");
+                break;
+            case MULTIPLY:
+                binaryStatements(node, "*");
+                break;
+            case DIVISION:
+                binaryStatements(node, "/");
+                break;
+            case MODULO:
+                binaryStatements(node, "%");
+                break;
+            case LESSTHANEQUAL:
+                binaryStatements(node, "<=");
+                break;
+            case GREATERTHANEQUAL:
+                binaryStatements(node, ">=");
+                break;
+            case POWER:
+                binaryStatements(node, "^");
+                break;
+            case AND:
+                binaryStatements(node, "and");
+                break;
+            case OR:
+                binaryStatements(node, "or");
+                break;
+            case LESSTHAN:
+                binaryStatements(node, "<");
+                break;
+            case GREATERTHAN:
+                binaryStatements(node, ">");
+                break;
+            case EQUAL:
+                binaryStatements(node, "=");
+                break;
+            case NOTEQUAL:
+                binaryStatements(node, "!=");
+                break;
+        }
+    }
 
+    private void binaryStatements(BinaryExprNode node, String symbol) {
+        if (node.leftNode != null) visit(node.leftNode);
+        System.out.print(" " + symbol + " ");
+        if (node.rigthNode != null) visit(node.rigthNode);
+    }
+
+    @Override
+    public void visit(UnaryExprNode node) {
+        super.visit(node);
+    }
+
+    @Override
+    public void visit(NewEventNode node) {
+        super.visit(node);
+    }
 
     @Override
     public void visit(LiteralNode node) {
