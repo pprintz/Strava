@@ -36,13 +36,6 @@ public class PrettyPrintVisitor extends Visitor {
     }
 
     @Override
-    public void visit(AndNode node) {
-        visit(node.leftExprNode);
-        System.out.print(" and ");
-        visit(node.rightExprNode);
-    }
-
-    @Override
     public void visit(GeneralStmtNode node) {
         System.out.print(indent());
         super.visit(node);
@@ -74,11 +67,6 @@ public class PrettyPrintVisitor extends Visitor {
         super.visit(node);
         System.out.println();
         indentationLevel--;
-    }
-
-    @Override
-    public void visit(ComparisonNode node) {
-        super.visit(node);
     }
 
     @Override
@@ -117,12 +105,7 @@ public class PrettyPrintVisitor extends Visitor {
         }
     }
 
-    @Override
-    public void visit(DivNode node) {
-        visit(node.leftExprNode);
-        System.out.print(" / ");
-        visit(node.rightExprNode);
-    }
+
 
     @Override
     public void visit(ElseIfStatementNode node) {
@@ -132,12 +115,6 @@ public class PrettyPrintVisitor extends Visitor {
         visit(node.blockNode);
     }
 
-    @Override
-    public void visit(EqualityNode node) {
-        visit(node.leftExprNode);
-        System.out.print(" = ");
-        visit(node.rightExprNode);
-    }
 
     @Override
     public void visit(FieldAssignmentNode node) {
@@ -186,27 +163,6 @@ public class PrettyPrintVisitor extends Visitor {
     }
 
     @Override
-    public void visit(GeqThanNode node) {
-        visit(node.leftExprNode);
-        System.out.print(" >= ");
-        visit(node.rightExprNode);
-    }
-
-    @Override
-    public void visit(GreaterThanNode node) {
-        visit(node.leftExprNode);
-        System.out.print(" > ");
-        visit(node.rightExprNode);
-    }
-
-    @Override
-    public void visit(GroupedExpressionNode node) {
-        System.out.print("(");
-        visit(node.exprNode);
-        System.out.print(")");
-    }
-
-    @Override
     public void visit(IdNode node) {
         System.out.print(node.id);
     }
@@ -239,26 +195,7 @@ public class PrettyPrintVisitor extends Visitor {
         System.out.print(")");
     }
 
-    @Override
-    public void visit(InEqualityNode node) {
-        visit(node.leftExprNode);
-        System.out.print(" != ");
-        visit(node.rightExprNode);
-    }
 
-    @Override
-    public void visit(LeqThanNode node) {
-        visit(node.leftExprNode);
-        System.out.print(" <= ");
-        visit(node.rightExprNode);
-    }
-
-    @Override
-    public void visit(LessThanNode node) {
-        visit(node.leftExprNode);
-        System.out.print(" < ");
-        visit(node.rightExprNode);
-    }
 
     @Override
     public void visit(LiteralNode node) {
@@ -272,68 +209,6 @@ public class PrettyPrintVisitor extends Visitor {
         visit(node.exprNode);
         System.out.println();
         visit(node.block);
-    }
-
-    @Override
-    public void visit(MinusNode node) {
-        visit(node.leftExprNode);
-        System.out.print(" - ");
-        visit(node.rightExprNode);
-    }
-
-    @Override
-    public void visit(ModNode node) {
-        visit(node.leftExprNode);
-        System.out.print(" % ");
-        visit(node.rightExprNode);
-    }
-
-    @Override
-    public void visit(MultNode node) {
-        visit(node.leftExprNode);
-        System.out.print(" * ");
-        visit(node.rightExprNode);
-    }
-
-    @Override
-    public void visit(NegateBoolNode node) {
-        System.out.print("not ");
-        super.visit(node);
-    }
-
-    @Override
-    public void visit(NegateExpressionNode node) {
-        System.out.print("-");
-        super.visit(node);
-    }
-
-    @Override
-    public void visit(NewEventNode node) {
-        System.out.print(indent() + "NEW EVENT ");
-        System.out.print(node.idNode.id + "\n");
-        visit(node.blockNode);
-    }
-
-    @Override
-    public void visit(OrNode node) {
-        visit(node.leftExprNode);
-        System.out.print(" or ");
-        visit(node.rightExprNode);
-    }
-
-    @Override
-    public void visit(PlusNode node) {
-        node.leftExprNode.accept(this);
-        System.out.print(" + ");
-        node.rightExprNode.accept(this);
-    }
-
-    @Override
-    public void visit(PowerNode node) {
-        visit(node.baseNode);
-        System.out.print("^(");
-        visit(node.exponentNode);
-        System.out.print(")");
     }
 
     @Override
