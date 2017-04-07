@@ -110,9 +110,11 @@ public class PrettyPrintVisitor extends Visitor {
         System.out.print(")");
         System.out.println(" RETURNS " + node.typeNode.type);
 
-        indentationLevel++;
-        visit(node.blockNode);
-        indentationLevel--;
+        if(node.blockNode != null) {
+            indentationLevel++;
+            visit(node.blockNode);
+            indentationLevel--;
+        }
     }
 
     @Override
@@ -175,7 +177,6 @@ public class PrettyPrintVisitor extends Visitor {
         System.out.print("(");
         if(node.actualParams != null) visit(node.actualParams);
         System.out.print(")\n");
-        System.out.println(node.defineFunctionNode.idNode.id);
 
     }
 
@@ -229,10 +230,6 @@ public class PrettyPrintVisitor extends Visitor {
     @Override
     public void visit(ExprFunctionCallNode node) {
         System.out.print("CALL ");
-        System.out.println();
-        System.out.println();
-        System.out.println();
-        System.out.println();
         if(node.idNode != null)
             visit(node.idNode);
         else  if (node.fieldIdNode != null) visit(node.fieldIdNode);

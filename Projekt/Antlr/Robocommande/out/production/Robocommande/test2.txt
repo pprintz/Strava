@@ -6,7 +6,7 @@ behavior onSetup():
             num b
             doThat(a,b)
             doThat(b, c)
-           
+            a := Foo(123)
         ;
  ;
 
@@ -16,11 +16,12 @@ behavior onSetup():
     num c := 3
     num d := 5
 
-    myStruct { num a, text b, text c, num d := 2 + 2 + 3 - 4 }
+    myStruct { num y, text b, text c, num d := 2 + 2 + 3 - 4 }
     myRobot {num x, text color}
-    myStruct mmmmm := myStruct()
-
-    myStruct nnnnn := myStruct(q := 3, s := 4)
+    myStruct mmmmm := myStruct(a := 10)
+    mmmmm := 10
+    myStruct nnnnn := myStruct(b := 3, a := 4)
+    myStruct aa := myStruct(q := 10, x := 20)
 
 
 

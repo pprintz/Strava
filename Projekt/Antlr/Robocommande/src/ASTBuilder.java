@@ -198,6 +198,8 @@ public class ASTBuilder extends RobocommandeBaseVisitor<ASTNode> {
     public ASTNode visitAssignment(RobocommandeParser.AssignmentContext ctx) {
         IdNode idNode = new IdNode(ctx.ID().getText());
         ExprNode exprNode = (ExprNode)visit(ctx.expr());
+        if(exprNode instanceof StructInitializationNode)
+            return null;
         return new AssignmentNode(idNode, exprNode);
     }
 

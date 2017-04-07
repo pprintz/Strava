@@ -52,6 +52,7 @@ public class BindingVisitor extends Visitor {
                 break;
             default:
                 BindStructDeclarationToDefinition(node);
+                symbolTable.peek().put(node.idNode, node);
         }
     }
 
@@ -80,8 +81,8 @@ public class BindingVisitor extends Visitor {
     private void BindIdToDeclaration(IdNode idNode) {
         boolean isDeclared = false;
         for (int i = symbolTable.size() - 1; i >= 0; i--) {
-            if (symbolTable.get(i).containsKey(idNode.id)) {
-                idNode.declarationNode = (DeclarationNode)symbolTable.get(i).get(idNode.id);
+            if (symbolTable.get(i).containsKey(idNode)) {
+                idNode.declarationNode = (DeclarationNode)symbolTable.get(i).get(idNode);
                 isDeclared = true;
             }
         }
@@ -103,7 +104,7 @@ public class BindingVisitor extends Visitor {
             }
             if (!isDeclared) {
                 hasRefError = true;
-                PrintNotDeclaredError(" function ", fCallNode.idNode.id);
+                PrintNotDeclaredError("function", fCallNode.idNode.id);
             }
         }
     }
@@ -131,6 +132,9 @@ public class BindingVisitor extends Visitor {
             if (symbolTable.get(i).containsKey(structInitializationNode.idNode)) {
                 structInitializationNode.structDefinitionNode = (StructDefinitionNode) symbolTable.get(i).get(structInitializationNode.idNode);
                 isStructDefined = true;
+                if(!getStructInitValidity(structInitializationNode)){
+                    System.out.println("Struct initialization does not match struct field declaration");
+                }
             }
         }
         if (!isStructDefined) {
@@ -139,11 +143,30 @@ public class BindingVisitor extends Visitor {
         }
     }
 
+    private boolean getStructInitValidity(StructInitializationNode structInitializationNode) {
+        boolean doesInitMatchFields = false;
+        for(AssignmentNode assignmentNode : structInitializationNode.assignments){
+            boolean doesAssigmentMatchFieldDecl = false;
+            for(DeclarationNode dclNode : structInitializationNode.structDefinitionNode.declarationNodes){
+                doesAssigmentMatchFieldDecl = false;
+                if(assignmentNode.idNode.equals(dclNode.idNode)){
+                    doesAssigmentMatchFieldDecl = true;
+                    break;
+                }
+            }
+            if(doesAssigmentMatchFieldDecl) doesInitMatchFields = true; else{
+                doesInitMatchFields = false;
+                System.out.print("There is no field with name : " + assignmentNode.idNode);
+            }
+        }
+        return doesInitMatchFields;
+    }
+
     private void BindStructDeclarationToDefinition(DeclarationNode node) {
         boolean isStructDefined = false;
         for (int i = symbolTable.size() - 1; i >= 0; i--) {
-            if (symbolTable.get(i).containsKey(node.idNode)) {
-                node.structDefinitionNode = (StructDefinitionNode) symbolTable.get(i).get(node.idNode);
+            if (symbolTable.get(i).containsKey(new IdNode(node.typeNode.type))) {
+                node.structDefinitionNode = (StructDefinitionNode) symbolTable.get(i).get(new IdNode(node.typeNode.type));
                 isStructDefined = true;
             }
         }
@@ -162,7 +185,7 @@ public class BindingVisitor extends Visitor {
     }
     @Override
     public void visit(IdNode node) {
-        if(!node.isDeclaration)
+        if(!node.isDeclaration )
             BindIdToDeclaration(node);
     }
     @Override
