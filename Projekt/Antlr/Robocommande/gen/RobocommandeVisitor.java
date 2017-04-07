@@ -1,4 +1,4 @@
-// Generated from /Users/Kasper/P4-AAU-Kursusopgaver/Projekt/Antlr/Robocommande/Robocommande.g4 by ANTLR 4.6
+// Generated from C:/Users/Teitur/Desktop/P4/P4-AAU-Kursusopgaver/Projekt/Antlr/Robocommande\Robocommande.g4 by ANTLR 4.6
 import org.antlr.v4.runtime.tree.ParseTreeVisitor;
 
 /**
@@ -172,61 +172,19 @@ public interface RobocommandeVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitReturnStatement(RobocommandeParser.ReturnStatementContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code comparison}
-	 * labeled alternative in {@link RobocommandeParser#expr}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitComparison(RobocommandeParser.ComparisonContext ctx);
-	/**
-	 * Visit a parse tree produced by the {@code or}
-	 * labeled alternative in {@link RobocommandeParser#expr}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitOr(RobocommandeParser.OrContext ctx);
-	/**
-	 * Visit a parse tree produced by the {@code multDivMod}
-	 * labeled alternative in {@link RobocommandeParser#expr}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitMultDivMod(RobocommandeParser.MultDivModContext ctx);
-	/**
-	 * Visit a parse tree produced by the {@code plusOrMinus}
-	 * labeled alternative in {@link RobocommandeParser#expr}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitPlusOrMinus(RobocommandeParser.PlusOrMinusContext ctx);
-	/**
-	 * Visit a parse tree produced by the {@code negateBool}
-	 * labeled alternative in {@link RobocommandeParser#expr}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitNegateBool(RobocommandeParser.NegateBoolContext ctx);
-	/**
-	 * Visit a parse tree produced by the {@code literal}
-	 * labeled alternative in {@link RobocommandeParser#expr}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitLiteral(RobocommandeParser.LiteralContext ctx);
-	/**
-	 * Visit a parse tree produced by the {@code groupedExpression}
-	 * labeled alternative in {@link RobocommandeParser#expr}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitGroupedExpression(RobocommandeParser.GroupedExpressionContext ctx);
-	/**
 	 * Visit a parse tree produced by the {@code structInit}
 	 * labeled alternative in {@link RobocommandeParser#expr}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitStructInit(RobocommandeParser.StructInitContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code unaryExpr}
+	 * labeled alternative in {@link RobocommandeParser#expr}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitUnaryExpr(RobocommandeParser.UnaryExprContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code fieldIdentifier}
 	 * labeled alternative in {@link RobocommandeParser#expr}.
@@ -235,13 +193,6 @@ public interface RobocommandeVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitFieldIdentifier(RobocommandeParser.FieldIdentifierContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code and}
-	 * labeled alternative in {@link RobocommandeParser#expr}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitAnd(RobocommandeParser.AndContext ctx);
-	/**
 	 * Visit a parse tree produced by the {@code fCall}
 	 * labeled alternative in {@link RobocommandeParser#expr}.
 	 * @param ctx the parse tree
@@ -249,26 +200,19 @@ public interface RobocommandeVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitFCall(RobocommandeParser.FCallContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code power}
+	 * Visit a parse tree produced by the {@code binaryExpr}
 	 * labeled alternative in {@link RobocommandeParser#expr}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitPower(RobocommandeParser.PowerContext ctx);
+	T visitBinaryExpr(RobocommandeParser.BinaryExprContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code negateExpression}
+	 * Visit a parse tree produced by the {@code literal}
 	 * labeled alternative in {@link RobocommandeParser#expr}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitNegateExpression(RobocommandeParser.NegateExpressionContext ctx);
-	/**
-	 * Visit a parse tree produced by the {@code equality}
-	 * labeled alternative in {@link RobocommandeParser#expr}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitEquality(RobocommandeParser.EqualityContext ctx);
+	T visitLiteral(RobocommandeParser.LiteralContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link RobocommandeParser#fieldId}.
 	 * @param ctx the parse tree

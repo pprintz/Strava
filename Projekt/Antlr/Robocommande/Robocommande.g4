@@ -59,16 +59,16 @@ expr :     ('true' | 'false')               # literal
           | fieldId                         # fieldIdentifier
           | functionCall                    # fCall
           | structInitialization            # structInit
-          |'(' expr ')'                     # groupedExpression
-          | 'not' expr                      # negateBool
-          | '-' expr                        # negateExpression
-          | <assoc=right> expr '^' expr     # power
-          | expr ('*'|'/'|'%') expr         # multDivMod
-          | expr ('+'|'-') expr             # plusOrMinus
-          | expr ('<='|'>='|'<'|'>') expr   # comparison
-          | expr ('!='|'=') expr            # equality
-          | expr 'and' expr                 # and
-          | expr 'or' expr                  # or
+          |'(' expr ')'                     # unaryExpr
+          | 'not' expr                      # unaryExpr
+          | '-' expr                        # unaryExpr
+          | <assoc=right> expr '^' expr     # binaryExpr
+          | expr ('*'|'/'|'%') expr         # binaryExpr
+          | expr ('+'|'-') expr             # binaryExpr
+          | expr ('<='|'>='|'<'|'>') expr   # binaryExpr
+          | expr ('!='|'=') expr            # binaryExpr
+          | expr 'and' expr                 # binaryExpr
+          | expr 'or' expr                  # binaryExpr
           ;
 
 fieldId : ID ('.' ID)+ ;

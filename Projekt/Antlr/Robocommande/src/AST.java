@@ -708,9 +708,11 @@ class TypeNode extends ASTNode{
 
 class IdNode extends ExprNode {
     public String id;
+
     public IdNode(String id) {
         this.id = id;
     }
+
     public DeclarationNode declarationNode;
 
 
@@ -720,7 +722,7 @@ class IdNode extends ExprNode {
     }
 
     @Override
-    public int hashCode(){
+    public int hashCode() {
         return id.hashCode();
     }
 
@@ -734,34 +736,58 @@ class IdNode extends ExprNode {
         IdNode other = (IdNode) obj;
         return other.id.equals(this.id);
     }
+}
+    class UnaryExprNode extends ExprNode{
 
-    class UnaryExprNode extends ASTNode{
         public UnaryExprNode(ExprNode exprNode) {
             this.exprNode = exprNode;
         }
 
         public ExprNode exprNode;
 
-
         @Override
         public void accept(Visitor v) {
-
+            v.visit(this);
         }
+
     }
 
-    class BinaryExprNode extends ASTNode {
+    class BinaryExprNode extends ExprNode {
 
         @Override
         public void accept(Visitor v) {
-
+            v.visit(this);
         }
+
         public ExprNode leftNode;
         public ExprNode rigthNode;
-
-        public BinaryExprNode(ExprNode leftNode, ExprNode rigthNode) {
+        public BinaryOperator binaryOperator;
+        public BinaryExprNode(ExprNode leftNode, ExprNode rigthNode, BinaryOperator binaryOperator) {
             this.leftNode = leftNode;
             this.rigthNode = rigthNode;
+            this.binaryOperator = binaryOperator;
         }
     }
-}
+    enum BinaryOperator{
+        PLUS,
+        MINUS,
+        MULTIPLY,
+        DIVISION,
+        MODULO,
+        LESSTHANEQUAL,
+        GREATERTHANEQUAL,
+        POWER,
+        AND,
+        OR,
+        LESSTHAN,
+        GREATERTHAN,
+        EQUALITY,
+        INEQUALITY
+    }
+    enum UnaryOperator{
+        PARANTHESIS,
+        NEGATBOOL,
+        NEGATE
+    }
+
 

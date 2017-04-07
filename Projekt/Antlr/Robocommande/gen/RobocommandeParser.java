@@ -1,4 +1,4 @@
-// Generated from /Users/Kasper/P4-AAU-Kursusopgaver/Projekt/Antlr/Robocommande/Robocommande.g4 by ANTLR 4.6
+// Generated from C:/Users/Teitur/Desktop/P4/P4-AAU-Kursusopgaver/Projekt/Antlr/Robocommande\Robocommande.g4 by ANTLR 4.6
 import org.antlr.v4.runtime.atn.*;
 import org.antlr.v4.runtime.dfa.DFA;
 import org.antlr.v4.runtime.*;
@@ -134,6 +134,14 @@ public class RobocommandeParser extends Parser {
 		}
 		@Override public int getRuleIndex() { return RULE_prog; }
 		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof RobocommandeListener ) ((RobocommandeListener)listener).enterProg(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof RobocommandeListener ) ((RobocommandeListener)listener).exitProg(this);
+		}
+		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
 			if ( visitor instanceof RobocommandeVisitor ) return ((RobocommandeVisitor<? extends T>)visitor).visitProg(this);
 			else return visitor.visitChildren(this);
@@ -225,6 +233,14 @@ public class RobocommandeParser extends Parser {
 		}
 		@Override public int getRuleIndex() { return RULE_setup; }
 		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof RobocommandeListener ) ((RobocommandeListener)listener).enterSetup(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof RobocommandeListener ) ((RobocommandeListener)listener).exitSetup(this);
+		}
+		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
 			if ( visitor instanceof RobocommandeVisitor ) return ((RobocommandeVisitor<? extends T>)visitor).visitSetup(this);
 			else return visitor.visitChildren(this);
@@ -268,6 +284,14 @@ public class RobocommandeParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_run; }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof RobocommandeListener ) ((RobocommandeListener)listener).enterRun(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof RobocommandeListener ) ((RobocommandeListener)listener).exitRun(this);
+		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
 			if ( visitor instanceof RobocommandeVisitor ) return ((RobocommandeVisitor<? extends T>)visitor).visitRun(this);
@@ -321,6 +345,14 @@ public class RobocommandeParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_functions; }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof RobocommandeListener ) ((RobocommandeListener)listener).enterFunctions(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof RobocommandeListener ) ((RobocommandeListener)listener).exitFunctions(this);
+		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
 			if ( visitor instanceof RobocommandeVisitor ) return ((RobocommandeVisitor<? extends T>)visitor).visitFunctions(this);
@@ -392,6 +424,14 @@ public class RobocommandeParser extends Parser {
 		}
 		@Override public int getRuleIndex() { return RULE_defineFunction; }
 		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof RobocommandeListener ) ((RobocommandeListener)listener).enterDefineFunction(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof RobocommandeListener ) ((RobocommandeListener)listener).exitDefineFunction(this);
+		}
+		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
 			if ( visitor instanceof RobocommandeVisitor ) return ((RobocommandeVisitor<? extends T>)visitor).visitDefineFunction(this);
 			else return visitor.visitChildren(this);
@@ -453,6 +493,14 @@ public class RobocommandeParser extends Parser {
 		}
 		@Override public int getRuleIndex() { return RULE_behaviorFunction; }
 		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof RobocommandeListener ) ((RobocommandeListener)listener).enterBehaviorFunction(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof RobocommandeListener ) ((RobocommandeListener)listener).exitBehaviorFunction(this);
+		}
+		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
 			if ( visitor instanceof RobocommandeVisitor ) return ((RobocommandeVisitor<? extends T>)visitor).visitBehaviorFunction(this);
 			else return visitor.visitChildren(this);
@@ -505,6 +553,14 @@ public class RobocommandeParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_formalParams; }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof RobocommandeListener ) ((RobocommandeListener)listener).enterFormalParams(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof RobocommandeListener ) ((RobocommandeListener)listener).exitFormalParams(this);
+		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
 			if ( visitor instanceof RobocommandeVisitor ) return ((RobocommandeVisitor<? extends T>)visitor).visitFormalParams(this);
@@ -566,6 +622,14 @@ public class RobocommandeParser extends Parser {
 		}
 		@Override public int getRuleIndex() { return RULE_actualParams; }
 		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof RobocommandeListener ) ((RobocommandeListener)listener).enterActualParams(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof RobocommandeListener ) ((RobocommandeListener)listener).exitActualParams(this);
+		}
+		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
 			if ( visitor instanceof RobocommandeVisitor ) return ((RobocommandeVisitor<? extends T>)visitor).visitActualParams(this);
 			else return visitor.visitChildren(this);
@@ -620,6 +684,14 @@ public class RobocommandeParser extends Parser {
 		}
 		@Override public int getRuleIndex() { return RULE_strategy; }
 		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof RobocommandeListener ) ((RobocommandeListener)listener).enterStrategy(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof RobocommandeListener ) ((RobocommandeListener)listener).exitStrategy(this);
+		}
+		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
 			if ( visitor instanceof RobocommandeVisitor ) return ((RobocommandeVisitor<? extends T>)visitor).visitStrategy(this);
 			else return visitor.visitChildren(this);
@@ -659,6 +731,14 @@ public class RobocommandeParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_defaultStrategy; }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof RobocommandeListener ) ((RobocommandeListener)listener).enterDefaultStrategy(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof RobocommandeListener ) ((RobocommandeListener)listener).exitDefaultStrategy(this);
+		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
 			if ( visitor instanceof RobocommandeVisitor ) return ((RobocommandeVisitor<? extends T>)visitor).visitDefaultStrategy(this);
@@ -706,6 +786,14 @@ public class RobocommandeParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_strategyDefinition; }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof RobocommandeListener ) ((RobocommandeListener)listener).enterStrategyDefinition(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof RobocommandeListener ) ((RobocommandeListener)listener).exitStrategyDefinition(this);
+		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
 			if ( visitor instanceof RobocommandeVisitor ) return ((RobocommandeVisitor<? extends T>)visitor).visitStrategyDefinition(this);
@@ -801,6 +889,14 @@ public class RobocommandeParser extends Parser {
 		}
 		@Override public int getRuleIndex() { return RULE_setupBlock; }
 		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof RobocommandeListener ) ((RobocommandeListener)listener).enterSetupBlock(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof RobocommandeListener ) ((RobocommandeListener)listener).exitSetupBlock(this);
+		}
+		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
 			if ( visitor instanceof RobocommandeVisitor ) return ((RobocommandeVisitor<? extends T>)visitor).visitSetupBlock(this);
 			else return visitor.visitChildren(this);
@@ -874,6 +970,14 @@ public class RobocommandeParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_block; }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof RobocommandeListener ) ((RobocommandeListener)listener).enterBlock(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof RobocommandeListener ) ((RobocommandeListener)listener).exitBlock(this);
+		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
 			if ( visitor instanceof RobocommandeVisitor ) return ((RobocommandeVisitor<? extends T>)visitor).visitBlock(this);
@@ -951,6 +1055,14 @@ public class RobocommandeParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_setupStmt; }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof RobocommandeListener ) ((RobocommandeListener)listener).enterSetupStmt(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof RobocommandeListener ) ((RobocommandeListener)listener).exitSetupStmt(this);
+		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
 			if ( visitor instanceof RobocommandeVisitor ) return ((RobocommandeVisitor<? extends T>)visitor).visitSetupStmt(this);
@@ -1055,6 +1167,14 @@ public class RobocommandeParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_stmt; }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof RobocommandeListener ) ((RobocommandeListener)listener).enterStmt(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof RobocommandeListener ) ((RobocommandeListener)listener).exitStmt(this);
+		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
 			if ( visitor instanceof RobocommandeVisitor ) return ((RobocommandeVisitor<? extends T>)visitor).visitStmt(this);
@@ -1171,6 +1291,14 @@ public class RobocommandeParser extends Parser {
 		}
 		@Override public int getRuleIndex() { return RULE_generalStmtPart; }
 		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof RobocommandeListener ) ((RobocommandeListener)listener).enterGeneralStmtPart(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof RobocommandeListener ) ((RobocommandeListener)listener).exitGeneralStmtPart(this);
+		}
+		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
 			if ( visitor instanceof RobocommandeVisitor ) return ((RobocommandeVisitor<? extends T>)visitor).visitGeneralStmtPart(this);
 			else return visitor.visitChildren(this);
@@ -1259,6 +1387,14 @@ public class RobocommandeParser extends Parser {
 		}
 		@Override public int getRuleIndex() { return RULE_structDefinition; }
 		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof RobocommandeListener ) ((RobocommandeListener)listener).enterStructDefinition(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof RobocommandeListener ) ((RobocommandeListener)listener).exitStructDefinition(this);
+		}
+		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
 			if ( visitor instanceof RobocommandeVisitor ) return ((RobocommandeVisitor<? extends T>)visitor).visitStructDefinition(this);
 			else return visitor.visitChildren(this);
@@ -1322,6 +1458,14 @@ public class RobocommandeParser extends Parser {
 		}
 		@Override public int getRuleIndex() { return RULE_declaration; }
 		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof RobocommandeListener ) ((RobocommandeListener)listener).enterDeclaration(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof RobocommandeListener ) ((RobocommandeListener)listener).exitDeclaration(this);
+		}
+		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
 			if ( visitor instanceof RobocommandeVisitor ) return ((RobocommandeVisitor<? extends T>)visitor).visitDeclaration(this);
 			else return visitor.visitChildren(this);
@@ -1371,6 +1515,14 @@ public class RobocommandeParser extends Parser {
 		}
 		@Override public int getRuleIndex() { return RULE_type; }
 		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof RobocommandeListener ) ((RobocommandeListener)listener).enterType(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof RobocommandeListener ) ((RobocommandeListener)listener).exitType(this);
+		}
+		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
 			if ( visitor instanceof RobocommandeVisitor ) return ((RobocommandeVisitor<? extends T>)visitor).visitType(this);
 			else return visitor.visitChildren(this);
@@ -1417,6 +1569,14 @@ public class RobocommandeParser extends Parser {
 		}
 		@Override public int getRuleIndex() { return RULE_newEvent; }
 		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof RobocommandeListener ) ((RobocommandeListener)listener).enterNewEvent(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof RobocommandeListener ) ((RobocommandeListener)listener).exitNewEvent(this);
+		}
+		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
 			if ( visitor instanceof RobocommandeVisitor ) return ((RobocommandeVisitor<? extends T>)visitor).visitNewEvent(this);
 			else return visitor.visitChildren(this);
@@ -1462,6 +1622,14 @@ public class RobocommandeParser extends Parser {
 		}
 		@Override public int getRuleIndex() { return RULE_fieldAssignment; }
 		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof RobocommandeListener ) ((RobocommandeListener)listener).enterFieldAssignment(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof RobocommandeListener ) ((RobocommandeListener)listener).exitFieldAssignment(this);
+		}
+		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
 			if ( visitor instanceof RobocommandeVisitor ) return ((RobocommandeVisitor<? extends T>)visitor).visitFieldAssignment(this);
 			else return visitor.visitChildren(this);
@@ -1502,6 +1670,14 @@ public class RobocommandeParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_assignment; }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof RobocommandeListener ) ((RobocommandeListener)listener).enterAssignment(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof RobocommandeListener ) ((RobocommandeListener)listener).exitAssignment(this);
+		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
 			if ( visitor instanceof RobocommandeVisitor ) return ((RobocommandeVisitor<? extends T>)visitor).visitAssignment(this);
@@ -1551,6 +1727,14 @@ public class RobocommandeParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_ifStatement; }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof RobocommandeListener ) ((RobocommandeListener)listener).enterIfStatement(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof RobocommandeListener ) ((RobocommandeListener)listener).exitIfStatement(this);
+		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
 			if ( visitor instanceof RobocommandeVisitor ) return ((RobocommandeVisitor<? extends T>)visitor).visitIfStatement(this);
@@ -1627,6 +1811,14 @@ public class RobocommandeParser extends Parser {
 		}
 		@Override public int getRuleIndex() { return RULE_functionCall; }
 		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof RobocommandeListener ) ((RobocommandeListener)listener).enterFunctionCall(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof RobocommandeListener ) ((RobocommandeListener)listener).exitFunctionCall(this);
+		}
+		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
 			if ( visitor instanceof RobocommandeVisitor ) return ((RobocommandeVisitor<? extends T>)visitor).visitFunctionCall(this);
 			else return visitor.visitChildren(this);
@@ -1695,6 +1887,14 @@ public class RobocommandeParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_structInitialization; }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof RobocommandeListener ) ((RobocommandeListener)listener).enterStructInitialization(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof RobocommandeListener ) ((RobocommandeListener)listener).exitStructInitialization(this);
+		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
 			if ( visitor instanceof RobocommandeVisitor ) return ((RobocommandeVisitor<? extends T>)visitor).visitStructInitialization(this);
@@ -1766,6 +1966,14 @@ public class RobocommandeParser extends Parser {
 		}
 		@Override public int getRuleIndex() { return RULE_loop; }
 		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof RobocommandeListener ) ((RobocommandeListener)listener).enterLoop(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof RobocommandeListener ) ((RobocommandeListener)listener).exitLoop(this);
+		}
+		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
 			if ( visitor instanceof RobocommandeVisitor ) return ((RobocommandeVisitor<? extends T>)visitor).visitLoop(this);
 			else return visitor.visitChildren(this);
@@ -1817,6 +2025,14 @@ public class RobocommandeParser extends Parser {
 		}
 		@Override public int getRuleIndex() { return RULE_returnStatement; }
 		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof RobocommandeListener ) ((RobocommandeListener)listener).enterReturnStatement(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof RobocommandeListener ) ((RobocommandeListener)listener).exitReturnStatement(this);
+		}
+		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
 			if ( visitor instanceof RobocommandeVisitor ) return ((RobocommandeVisitor<? extends T>)visitor).visitReturnStatement(this);
 			else return visitor.visitChildren(this);
@@ -1857,103 +2073,41 @@ public class RobocommandeParser extends Parser {
 			super.copyFrom(ctx);
 		}
 	}
-	public static class ComparisonContext extends ExprContext {
-		public List<ExprContext> expr() {
-			return getRuleContexts(ExprContext.class);
-		}
-		public ExprContext expr(int i) {
-			return getRuleContext(ExprContext.class,i);
-		}
-		public ComparisonContext(ExprContext ctx) { copyFrom(ctx); }
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof RobocommandeVisitor ) return ((RobocommandeVisitor<? extends T>)visitor).visitComparison(this);
-			else return visitor.visitChildren(this);
-		}
-	}
-	public static class OrContext extends ExprContext {
-		public List<ExprContext> expr() {
-			return getRuleContexts(ExprContext.class);
-		}
-		public ExprContext expr(int i) {
-			return getRuleContext(ExprContext.class,i);
-		}
-		public OrContext(ExprContext ctx) { copyFrom(ctx); }
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof RobocommandeVisitor ) return ((RobocommandeVisitor<? extends T>)visitor).visitOr(this);
-			else return visitor.visitChildren(this);
-		}
-	}
-	public static class MultDivModContext extends ExprContext {
-		public List<ExprContext> expr() {
-			return getRuleContexts(ExprContext.class);
-		}
-		public ExprContext expr(int i) {
-			return getRuleContext(ExprContext.class,i);
-		}
-		public MultDivModContext(ExprContext ctx) { copyFrom(ctx); }
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof RobocommandeVisitor ) return ((RobocommandeVisitor<? extends T>)visitor).visitMultDivMod(this);
-			else return visitor.visitChildren(this);
-		}
-	}
-	public static class PlusOrMinusContext extends ExprContext {
-		public List<ExprContext> expr() {
-			return getRuleContexts(ExprContext.class);
-		}
-		public ExprContext expr(int i) {
-			return getRuleContext(ExprContext.class,i);
-		}
-		public PlusOrMinusContext(ExprContext ctx) { copyFrom(ctx); }
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof RobocommandeVisitor ) return ((RobocommandeVisitor<? extends T>)visitor).visitPlusOrMinus(this);
-			else return visitor.visitChildren(this);
-		}
-	}
-	public static class NegateBoolContext extends ExprContext {
-		public ExprContext expr() {
-			return getRuleContext(ExprContext.class,0);
-		}
-		public NegateBoolContext(ExprContext ctx) { copyFrom(ctx); }
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof RobocommandeVisitor ) return ((RobocommandeVisitor<? extends T>)visitor).visitNegateBool(this);
-			else return visitor.visitChildren(this);
-		}
-	}
-	public static class LiteralContext extends ExprContext {
-		public TerminalNode ID() { return getToken(RobocommandeParser.ID, 0); }
-		public TerminalNode NUM() { return getToken(RobocommandeParser.NUM, 0); }
-		public TerminalNode STRING() { return getToken(RobocommandeParser.STRING, 0); }
-		public LiteralContext(ExprContext ctx) { copyFrom(ctx); }
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof RobocommandeVisitor ) return ((RobocommandeVisitor<? extends T>)visitor).visitLiteral(this);
-			else return visitor.visitChildren(this);
-		}
-	}
-	public static class GroupedExpressionContext extends ExprContext {
-		public ExprContext expr() {
-			return getRuleContext(ExprContext.class,0);
-		}
-		public GroupedExpressionContext(ExprContext ctx) { copyFrom(ctx); }
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof RobocommandeVisitor ) return ((RobocommandeVisitor<? extends T>)visitor).visitGroupedExpression(this);
-			else return visitor.visitChildren(this);
-		}
-	}
 	public static class StructInitContext extends ExprContext {
 		public StructInitializationContext structInitialization() {
 			return getRuleContext(StructInitializationContext.class,0);
 		}
 		public StructInitContext(ExprContext ctx) { copyFrom(ctx); }
 		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof RobocommandeListener ) ((RobocommandeListener)listener).enterStructInit(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof RobocommandeListener ) ((RobocommandeListener)listener).exitStructInit(this);
+		}
+		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
 			if ( visitor instanceof RobocommandeVisitor ) return ((RobocommandeVisitor<? extends T>)visitor).visitStructInit(this);
+			else return visitor.visitChildren(this);
+		}
+	}
+	public static class UnaryExprContext extends ExprContext {
+		public ExprContext expr() {
+			return getRuleContext(ExprContext.class,0);
+		}
+		public UnaryExprContext(ExprContext ctx) { copyFrom(ctx); }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof RobocommandeListener ) ((RobocommandeListener)listener).enterUnaryExpr(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof RobocommandeListener ) ((RobocommandeListener)listener).exitUnaryExpr(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof RobocommandeVisitor ) return ((RobocommandeVisitor<? extends T>)visitor).visitUnaryExpr(this);
 			else return visitor.visitChildren(this);
 		}
 	}
@@ -1963,22 +2117,16 @@ public class RobocommandeParser extends Parser {
 		}
 		public FieldIdentifierContext(ExprContext ctx) { copyFrom(ctx); }
 		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof RobocommandeVisitor ) return ((RobocommandeVisitor<? extends T>)visitor).visitFieldIdentifier(this);
-			else return visitor.visitChildren(this);
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof RobocommandeListener ) ((RobocommandeListener)listener).enterFieldIdentifier(this);
 		}
-	}
-	public static class AndContext extends ExprContext {
-		public List<ExprContext> expr() {
-			return getRuleContexts(ExprContext.class);
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof RobocommandeListener ) ((RobocommandeListener)listener).exitFieldIdentifier(this);
 		}
-		public ExprContext expr(int i) {
-			return getRuleContext(ExprContext.class,i);
-		}
-		public AndContext(ExprContext ctx) { copyFrom(ctx); }
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof RobocommandeVisitor ) return ((RobocommandeVisitor<? extends T>)visitor).visitAnd(this);
+			if ( visitor instanceof RobocommandeVisitor ) return ((RobocommandeVisitor<? extends T>)visitor).visitFieldIdentifier(this);
 			else return visitor.visitChildren(this);
 		}
 	}
@@ -1988,47 +2136,57 @@ public class RobocommandeParser extends Parser {
 		}
 		public FCallContext(ExprContext ctx) { copyFrom(ctx); }
 		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof RobocommandeListener ) ((RobocommandeListener)listener).enterFCall(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof RobocommandeListener ) ((RobocommandeListener)listener).exitFCall(this);
+		}
+		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
 			if ( visitor instanceof RobocommandeVisitor ) return ((RobocommandeVisitor<? extends T>)visitor).visitFCall(this);
 			else return visitor.visitChildren(this);
 		}
 	}
-	public static class PowerContext extends ExprContext {
+	public static class BinaryExprContext extends ExprContext {
 		public List<ExprContext> expr() {
 			return getRuleContexts(ExprContext.class);
 		}
 		public ExprContext expr(int i) {
 			return getRuleContext(ExprContext.class,i);
 		}
-		public PowerContext(ExprContext ctx) { copyFrom(ctx); }
+		public BinaryExprContext(ExprContext ctx) { copyFrom(ctx); }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof RobocommandeListener ) ((RobocommandeListener)listener).enterBinaryExpr(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof RobocommandeListener ) ((RobocommandeListener)listener).exitBinaryExpr(this);
+		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof RobocommandeVisitor ) return ((RobocommandeVisitor<? extends T>)visitor).visitPower(this);
+			if ( visitor instanceof RobocommandeVisitor ) return ((RobocommandeVisitor<? extends T>)visitor).visitBinaryExpr(this);
 			else return visitor.visitChildren(this);
 		}
 	}
-	public static class NegateExpressionContext extends ExprContext {
-		public ExprContext expr() {
-			return getRuleContext(ExprContext.class,0);
+	public static class LiteralContext extends ExprContext {
+		public TerminalNode ID() { return getToken(RobocommandeParser.ID, 0); }
+		public TerminalNode NUM() { return getToken(RobocommandeParser.NUM, 0); }
+		public TerminalNode STRING() { return getToken(RobocommandeParser.STRING, 0); }
+		public LiteralContext(ExprContext ctx) { copyFrom(ctx); }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof RobocommandeListener ) ((RobocommandeListener)listener).enterLiteral(this);
 		}
-		public NegateExpressionContext(ExprContext ctx) { copyFrom(ctx); }
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof RobocommandeListener ) ((RobocommandeListener)listener).exitLiteral(this);
+		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof RobocommandeVisitor ) return ((RobocommandeVisitor<? extends T>)visitor).visitNegateExpression(this);
-			else return visitor.visitChildren(this);
-		}
-	}
-	public static class EqualityContext extends ExprContext {
-		public List<ExprContext> expr() {
-			return getRuleContexts(ExprContext.class);
-		}
-		public ExprContext expr(int i) {
-			return getRuleContext(ExprContext.class,i);
-		}
-		public EqualityContext(ExprContext ctx) { copyFrom(ctx); }
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof RobocommandeVisitor ) return ((RobocommandeVisitor<? extends T>)visitor).visitEquality(this);
+			if ( visitor instanceof RobocommandeVisitor ) return ((RobocommandeVisitor<? extends T>)visitor).visitLiteral(this);
 			else return visitor.visitChildren(this);
 		}
 	}
@@ -2126,7 +2284,7 @@ public class RobocommandeParser extends Parser {
 				break;
 			case 8:
 				{
-				_localctx = new GroupedExpressionContext(_localctx);
+				_localctx = new UnaryExprContext(_localctx);
 				_ctx = _localctx;
 				_prevctx = _localctx;
 				setState(318);
@@ -2139,7 +2297,7 @@ public class RobocommandeParser extends Parser {
 				break;
 			case 9:
 				{
-				_localctx = new NegateBoolContext(_localctx);
+				_localctx = new UnaryExprContext(_localctx);
 				_ctx = _localctx;
 				_prevctx = _localctx;
 				setState(322);
@@ -2150,7 +2308,7 @@ public class RobocommandeParser extends Parser {
 				break;
 			case 10:
 				{
-				_localctx = new NegateExpressionContext(_localctx);
+				_localctx = new UnaryExprContext(_localctx);
 				_ctx = _localctx;
 				_prevctx = _localctx;
 				setState(324);
@@ -2174,7 +2332,7 @@ public class RobocommandeParser extends Parser {
 					switch ( getInterpreter().adaptivePredict(_input,34,_ctx) ) {
 					case 1:
 						{
-						_localctx = new PowerContext(new ExprContext(_parentctx, _parentState));
+						_localctx = new BinaryExprContext(new ExprContext(_parentctx, _parentState));
 						pushNewRecursionContext(_localctx, _startState, RULE_expr);
 						setState(328);
 						if (!(precpred(_ctx, 7))) throw new FailedPredicateException(this, "precpred(_ctx, 7)");
@@ -2186,7 +2344,7 @@ public class RobocommandeParser extends Parser {
 						break;
 					case 2:
 						{
-						_localctx = new MultDivModContext(new ExprContext(_parentctx, _parentState));
+						_localctx = new BinaryExprContext(new ExprContext(_parentctx, _parentState));
 						pushNewRecursionContext(_localctx, _startState, RULE_expr);
 						setState(331);
 						if (!(precpred(_ctx, 6))) throw new FailedPredicateException(this, "precpred(_ctx, 6)");
@@ -2206,7 +2364,7 @@ public class RobocommandeParser extends Parser {
 						break;
 					case 3:
 						{
-						_localctx = new PlusOrMinusContext(new ExprContext(_parentctx, _parentState));
+						_localctx = new BinaryExprContext(new ExprContext(_parentctx, _parentState));
 						pushNewRecursionContext(_localctx, _startState, RULE_expr);
 						setState(334);
 						if (!(precpred(_ctx, 5))) throw new FailedPredicateException(this, "precpred(_ctx, 5)");
@@ -2226,7 +2384,7 @@ public class RobocommandeParser extends Parser {
 						break;
 					case 4:
 						{
-						_localctx = new ComparisonContext(new ExprContext(_parentctx, _parentState));
+						_localctx = new BinaryExprContext(new ExprContext(_parentctx, _parentState));
 						pushNewRecursionContext(_localctx, _startState, RULE_expr);
 						setState(337);
 						if (!(precpred(_ctx, 4))) throw new FailedPredicateException(this, "precpred(_ctx, 4)");
@@ -2246,7 +2404,7 @@ public class RobocommandeParser extends Parser {
 						break;
 					case 5:
 						{
-						_localctx = new EqualityContext(new ExprContext(_parentctx, _parentState));
+						_localctx = new BinaryExprContext(new ExprContext(_parentctx, _parentState));
 						pushNewRecursionContext(_localctx, _startState, RULE_expr);
 						setState(340);
 						if (!(precpred(_ctx, 3))) throw new FailedPredicateException(this, "precpred(_ctx, 3)");
@@ -2266,7 +2424,7 @@ public class RobocommandeParser extends Parser {
 						break;
 					case 6:
 						{
-						_localctx = new AndContext(new ExprContext(_parentctx, _parentState));
+						_localctx = new BinaryExprContext(new ExprContext(_parentctx, _parentState));
 						pushNewRecursionContext(_localctx, _startState, RULE_expr);
 						setState(343);
 						if (!(precpred(_ctx, 2))) throw new FailedPredicateException(this, "precpred(_ctx, 2)");
@@ -2278,7 +2436,7 @@ public class RobocommandeParser extends Parser {
 						break;
 					case 7:
 						{
-						_localctx = new OrContext(new ExprContext(_parentctx, _parentState));
+						_localctx = new BinaryExprContext(new ExprContext(_parentctx, _parentState));
 						pushNewRecursionContext(_localctx, _startState, RULE_expr);
 						setState(346);
 						if (!(precpred(_ctx, 1))) throw new FailedPredicateException(this, "precpred(_ctx, 1)");
@@ -2317,6 +2475,14 @@ public class RobocommandeParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_fieldId; }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof RobocommandeListener ) ((RobocommandeListener)listener).enterFieldId(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof RobocommandeListener ) ((RobocommandeListener)listener).exitFieldId(this);
+		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
 			if ( visitor instanceof RobocommandeVisitor ) return ((RobocommandeVisitor<? extends T>)visitor).visitFieldId(this);
