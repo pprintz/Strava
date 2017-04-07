@@ -78,10 +78,10 @@ nbactions*.xml
 # Generated files
 *.class
 *.tokens
-/out/
+out/
 gen/
-/gen3/
-/gen4/
+gen3/
+gen4/
 /tool/playground/
 tmp/
 
