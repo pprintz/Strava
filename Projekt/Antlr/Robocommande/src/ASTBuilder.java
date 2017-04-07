@@ -30,6 +30,7 @@ public class ASTBuilder extends RobocommandeBaseVisitor<ASTNode> {
         return new SetupNode((SetupBlockNode)visit(ctx.setupBlock()));
     }
 
+
     @Override
     public ASTNode visitRun(RobocommandeParser.RunContext ctx) {
         return new RunNode((BlockNode)visit(ctx.block()));

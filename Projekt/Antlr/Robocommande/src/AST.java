@@ -434,250 +434,250 @@ class ReturnStatementNode extends StmtNode {
     }
 }
 
-class GroupedExpressionNode extends ExprNode {
-    public ExprNode exprNode;
+//class GroupedExpressionNode extends ExprNode {
+//    public ExprNode exprNode;
+//
+//    public GroupedExpressionNode(ExprNode exprNode) {
+//        this.exprNode = exprNode;
+//    }
+//    @Override
+//    public void accept(Visitor v) {
+//        v.visit(this);
+//    }
+//}
+//
+//class NegateBoolNode extends ExprNode {
+//    public ExprNode exprNode;
+//
+//    public NegateBoolNode(ExprNode exprNode) {
+//        this.exprNode = exprNode;
+//    }
+//    @Override
+//    public void accept(Visitor v) {
+//        v.visit(this);
+//    }
+//}
+//
+//class NegateExpressionNode extends ExprNode {
+//    public ExprNode exprNode;
+//    public NegateExpressionNode(ExprNode exprNode) {
+//        this.exprNode = exprNode;
+//    }
+//    @Override
+//    public void accept(Visitor v) {
+//        v.visit(this);
+//    }
+//}
 
-    public GroupedExpressionNode(ExprNode exprNode) {
-        this.exprNode = exprNode;
-    }
-    @Override
-    public void accept(Visitor v) {
-        v.visit(this);
-    }
-}
+//class PowerNode extends ExprNode {
+//    public ExprNode baseNode;
+//    public ExprNode exponentNode;
+//
+//    public PowerNode(ExprNode baseNode, ExprNode exponentNode) {
+//        this.baseNode = baseNode;
+//        this.exponentNode = exponentNode;
+//    }
+//    @Override
+//    public void accept(Visitor v) {
+//        v.visit(this);
+//    }
+//}
 
-class NegateBoolNode extends ExprNode {
-    public ExprNode exprNode;
+//class MultNode extends ExprNode {
+//    public ExprNode leftExprNode;
+//    public ExprNode rightExprNode;
+//
+//    public MultNode(ExprNode leftExprNode, ExprNode rightExprNode) {
+//        this.leftExprNode = leftExprNode;
+//        this.rightExprNode = rightExprNode;
+//    }
+//    @Override
+//    public void accept(Visitor v) {
+//        v.visit(this);
+//    }
+//}
 
-    public NegateBoolNode(ExprNode exprNode) {
-        this.exprNode = exprNode;
-    }
-    @Override
-    public void accept(Visitor v) {
-        v.visit(this);
-    }
-}
+//class DivNode extends ExprNode {
+//    public ExprNode leftExprNode;
+//    public ExprNode rightExprNode;
+//
+//    public DivNode(ExprNode leftExprNode, ExprNode rightExprNode) {
+//        this.leftExprNode = leftExprNode;
+//        this.rightExprNode = rightExprNode;
+//    }
+//    @Override
+//    public void accept(Visitor v) {
+//        v.visit(this);
+//    }
+//}
 
-class NegateExpressionNode extends ExprNode {
-    public ExprNode exprNode;
-    public NegateExpressionNode(ExprNode exprNode) {
-        this.exprNode = exprNode;
-    }
-    @Override
-    public void accept(Visitor v) {
-        v.visit(this);
-    }
-}
+//class ModNode extends ExprNode {
+//    public ExprNode leftExprNode;
+//    public ExprNode rightExprNode;
+//
+//    public ModNode(ExprNode leftExprNode, ExprNode rightExprNode) {
+//        this.leftExprNode = leftExprNode;
+//        this.rightExprNode = rightExprNode;
+//    }
+//    @Override
+//    public void accept(Visitor v) {
+//        v.visit(this);
+//    }
+//}
 
-class PowerNode extends ExprNode {
-    public ExprNode baseNode;
-    public ExprNode exponentNode;
+//class PlusNode extends ExprNode {
+//    public ExprNode leftExprNode;
+//    public ExprNode rightExprNode;
+//
+//    public PlusNode(ExprNode leftExprNode, ExprNode rightExprNode) {
+//        this.leftExprNode = leftExprNode;
+//        this.rightExprNode = rightExprNode;
+//    }
+//    @Override
+//    public void accept(Visitor v) {
+//        v.visit(this);
+//    }
+//}
 
-    public PowerNode(ExprNode baseNode, ExprNode exponentNode) {
-        this.baseNode = baseNode;
-        this.exponentNode = exponentNode;
-    }
-    @Override
-    public void accept(Visitor v) {
-        v.visit(this);
-    }
-}
+//class MinusNode extends ExprNode {
+//    public ExprNode leftExprNode;
+//    public ExprNode rightExprNode;
+//
+//    public MinusNode(ExprNode leftExprNode, ExprNode rightExprNode) {
+//        this.leftExprNode = leftExprNode;
+//        this.rightExprNode = rightExprNode;
+//    }
+//    @Override
+//    public void accept(Visitor v) {
+//        v.visit(this);
+//    }
+//}
 
-class MultNode extends ExprNode {
-    public ExprNode leftExprNode;
-    public ExprNode rightExprNode;
+//class ComparisonNode extends ExprNode {
+//    public ExprNode leftExprNode;
+//    public ExprNode rightExprNode;
+//
+//    public ComparisonNode(ExprNode leftExprNode, ExprNode rightExprNode) {
+//        this.leftExprNode = leftExprNode;
+//        this.rightExprNode = rightExprNode;
+//    }
+//    @Override
+//    public void accept(Visitor v) {
+//        v.visit(this);
+//    }
+//}
 
-    public MultNode(ExprNode leftExprNode, ExprNode rightExprNode) {
-        this.leftExprNode = leftExprNode;
-        this.rightExprNode = rightExprNode;
-    }
-    @Override
-    public void accept(Visitor v) {
-        v.visit(this);
-    }
-}
-
-class DivNode extends ExprNode {
-    public ExprNode leftExprNode;
-    public ExprNode rightExprNode;
-
-    public DivNode(ExprNode leftExprNode, ExprNode rightExprNode) {
-        this.leftExprNode = leftExprNode;
-        this.rightExprNode = rightExprNode;
-    }
-    @Override
-    public void accept(Visitor v) {
-        v.visit(this);
-    }
-}
-
-class ModNode extends ExprNode {
-    public ExprNode leftExprNode;
-    public ExprNode rightExprNode;
-
-    public ModNode(ExprNode leftExprNode, ExprNode rightExprNode) {
-        this.leftExprNode = leftExprNode;
-        this.rightExprNode = rightExprNode;
-    }
-    @Override
-    public void accept(Visitor v) {
-        v.visit(this);
-    }
-}
-
-class PlusNode extends ExprNode {
-    public ExprNode leftExprNode;
-    public ExprNode rightExprNode;
-
-    public PlusNode(ExprNode leftExprNode, ExprNode rightExprNode) {
-        this.leftExprNode = leftExprNode;
-        this.rightExprNode = rightExprNode;
-    }
-    @Override
-    public void accept(Visitor v) {
-        v.visit(this);
-    }
-}
-
-class MinusNode extends ExprNode {
-    public ExprNode leftExprNode;
-    public ExprNode rightExprNode;
-
-    public MinusNode(ExprNode leftExprNode, ExprNode rightExprNode) {
-        this.leftExprNode = leftExprNode;
-        this.rightExprNode = rightExprNode;
-    }
-    @Override
-    public void accept(Visitor v) {
-        v.visit(this);
-    }
-}
-
-class ComparisonNode extends ExprNode {
-    public ExprNode leftExprNode;
-    public ExprNode rightExprNode;
-
-    public ComparisonNode(ExprNode leftExprNode, ExprNode rightExprNode) {
-        this.leftExprNode = leftExprNode;
-        this.rightExprNode = rightExprNode;
-    }
-    @Override
-    public void accept(Visitor v) {
-        v.visit(this);
-    }
-}
-
-class EqualityNode extends ExprNode {
-    public ExprNode leftExprNode;
-    public ExprNode rightExprNode;
-
-    public EqualityNode(ExprNode leftExprNode, ExprNode rightExprNode) {
-        this.leftExprNode = leftExprNode;
-        this.rightExprNode = rightExprNode;
-    }
-    @Override
-    public void accept(Visitor v) {
-        v.visit(this);
-    }
-}
-
-class InEqualityNode extends ExprNode {
-    public ExprNode leftExprNode;
-    public ExprNode rightExprNode;
-
-    public InEqualityNode(ExprNode leftExprNode, ExprNode rightExprNode) {
-        this.leftExprNode = leftExprNode;
-        this.rightExprNode = rightExprNode;
-    }
-    @Override
-    public void accept(Visitor v) {
-        v.visit(this);
-    }
-
-}
-
-class LessThanNode extends ExprNode {
-    public ExprNode leftExprNode;
-    public ExprNode rightExprNode;
-
-    public LessThanNode(ExprNode leftExprNode, ExprNode rightExprNode) {
-        this.leftExprNode = leftExprNode;
-        this.rightExprNode = rightExprNode;
-    }
-    @Override
-    public void accept(Visitor v) {
-        v.visit(this);
-    }
-}
-class LeqThanNode extends ExprNode {
-    public ExprNode leftExprNode;
-    public ExprNode rightExprNode;
-
-    public LeqThanNode(ExprNode leftExprNode, ExprNode rightExprNode) {
-        this.leftExprNode = leftExprNode;
-        this.rightExprNode = rightExprNode;
-    }
-    @Override
-    public void accept(Visitor v) {
-        v.visit(this);
-    }
-}
-class GeqThanNode extends ExprNode {
-    public ExprNode leftExprNode;
-    public ExprNode rightExprNode;
-
-    public GeqThanNode(ExprNode leftExprNode, ExprNode rightExprNode) {
-        this.leftExprNode = leftExprNode;
-        this.rightExprNode = rightExprNode;
-    }
-    @Override
-    public void accept(Visitor v) {
-        v.visit(this);
-    }
-}
-class GreaterThanNode extends ExprNode {
-    public ExprNode leftExprNode;
-    public ExprNode rightExprNode;
-
-    public GreaterThanNode(ExprNode leftExprNode, ExprNode rightExprNode) {
-        this.leftExprNode = leftExprNode;
-        this.rightExprNode = rightExprNode;
-    }
-    @Override
-    public void accept(Visitor v) {
-        v.visit(this);
-    }
-}
-
-class AndNode extends ExprNode {
-    public ExprNode leftExprNode;
-    public ExprNode rightExprNode;
-
-    public AndNode(ExprNode leftExprNode, ExprNode rightExprNode) {
-        this.leftExprNode = leftExprNode;
-        this.rightExprNode = rightExprNode;
-    }
-    @Override
-    public void accept(Visitor v) {
-        v.visit(this);
-    }
-
-}
-
-class OrNode extends ExprNode {
-    public ExprNode leftExprNode;
-    public ExprNode rightExprNode;
-
-    public OrNode(ExprNode leftExprNode, ExprNode rightExprNode) {
-        this.leftExprNode = leftExprNode;
-        this.rightExprNode = rightExprNode;
-    }
-    @Override
-    public void accept(Visitor v) {
-        v.visit(this);
-    }
-
-}
+//class EqualityNode extends ExprNode {
+//    public ExprNode leftExprNode;
+//    public ExprNode rightExprNode;
+//
+//    public EqualityNode(ExprNode leftExprNode, ExprNode rightExprNode) {
+//        this.leftExprNode = leftExprNode;
+//        this.rightExprNode = rightExprNode;
+//    }
+//    @Override
+//    public void accept(Visitor v) {
+//        v.visit(this);
+//    }
+//}
+//
+//class InEqualityNode extends ExprNode {
+//    public ExprNode leftExprNode;
+//    public ExprNode rightExprNode;
+//
+//    public InEqualityNode(ExprNode leftExprNode, ExprNode rightExprNode) {
+//        this.leftExprNode = leftExprNode;
+//        this.rightExprNode = rightExprNode;
+//    }
+//    @Override
+//    public void accept(Visitor v) {
+//        v.visit(this);
+//    }
+//
+//}
+//
+//class LessThanNode extends ExprNode {
+//    public ExprNode leftExprNode;
+//    public ExprNode rightExprNode;
+//
+//    public LessThanNode(ExprNode leftExprNode, ExprNode rightExprNode) {
+//        this.leftExprNode = leftExprNode;
+//        this.rightExprNode = rightExprNode;
+//    }
+//    @Override
+//    public void accept(Visitor v) {
+//        v.visit(this);
+//    }
+//}
+//class LeqThanNode extends ExprNode {
+//    public ExprNode leftExprNode;
+//    public ExprNode rightExprNode;
+//
+//    public LeqThanNode(ExprNode leftExprNode, ExprNode rightExprNode) {
+//        this.leftExprNode = leftExprNode;
+//        this.rightExprNode = rightExprNode;
+//    }
+//    @Override
+//    public void accept(Visitor v) {
+//        v.visit(this);
+//    }
+//}
+//class GeqThanNode extends ExprNode {
+//    public ExprNode leftExprNode;
+//    public ExprNode rightExprNode;
+//
+//    public GeqThanNode(ExprNode leftExprNode, ExprNode rightExprNode) {
+//        this.leftExprNode = leftExprNode;
+//        this.rightExprNode = rightExprNode;
+//    }
+//    @Override
+//    public void accept(Visitor v) {
+//        v.visit(this);
+//    }
+//}
+//class GreaterThanNode extends ExprNode {
+//    public ExprNode leftExprNode;
+//    public ExprNode rightExprNode;
+//
+//    public GreaterThanNode(ExprNode leftExprNode, ExprNode rightExprNode) {
+//        this.leftExprNode = leftExprNode;
+//        this.rightExprNode = rightExprNode;
+//    }
+//    @Override
+//    public void accept(Visitor v) {
+//        v.visit(this);
+//    }
+//}
+//
+//class AndNode extends ExprNode {
+//    public ExprNode leftExprNode;
+//    public ExprNode rightExprNode;
+//
+//    public AndNode(ExprNode leftExprNode, ExprNode rightExprNode) {
+//        this.leftExprNode = leftExprNode;
+//        this.rightExprNode = rightExprNode;
+//    }
+//    @Override
+//    public void accept(Visitor v) {
+//        v.visit(this);
+//    }
+//
+//}
+//
+//class OrNode extends ExprNode {
+//    public ExprNode leftExprNode;
+//    public ExprNode rightExprNode;
+//
+//    public OrNode(ExprNode leftExprNode, ExprNode rightExprNode) {
+//        this.leftExprNode = leftExprNode;
+//        this.rightExprNode = rightExprNode;
+//    }
+//    @Override
+//    public void accept(Visitor v) {
+//        v.visit(this);
+//    }
+//
+//}
 
 class FieldIdNode extends ASTNode {
     public List<IdNode> idNodes;
@@ -733,6 +733,35 @@ class IdNode extends ExprNode {
 
         IdNode other = (IdNode) obj;
         return other.id.equals(this.id);
+    }
+
+    class UnaryExprNode extends ASTNode{
+        public UnaryExprNode(ExprNode exprNode) {
+            this.exprNode = exprNode;
+        }
+
+        public ExprNode exprNode;
+
+
+        @Override
+        public void accept(Visitor v) {
+
+        }
+    }
+
+    class BinaryExprNode extends ASTNode {
+
+        @Override
+        public void accept(Visitor v) {
+
+        }
+        public ExprNode leftNode;
+        public ExprNode rigthNode;
+
+        public BinaryExprNode(ExprNode leftNode, ExprNode rigthNode) {
+            this.leftNode = leftNode;
+            this.rigthNode = rigthNode;
+        }
     }
 }
 
