@@ -19,11 +19,6 @@ public abstract class Visitor {
         node.accept(this);
     }
 
-    public void visit(AndNode node){
-        node.leftExprNode.accept(this);
-        node.rightExprNode.accept(this);
-    }
-
     public void visit(GeneralStmtNode node){
         node.accept(this);
     }
@@ -48,9 +43,9 @@ public abstract class Visitor {
 
 
 
-    public void visit(ComparisonNode node){
-        node.leftExprNode.accept(this);
-        node.rightExprNode.accept(this);
+    public void visit(BinaryExprNode node){
+        node.leftNode.accept(this);
+        node.rigthNode.accept(this);
     }
 
     public void visit(DeclarationNode node){
@@ -69,19 +64,9 @@ public abstract class Visitor {
         node.blockNode.accept(this);
     }
 
-    public void visit(DivNode node){
-        node.leftExprNode.accept(this);
-        node.rightExprNode.accept(this);
-    }
-
     public void visit(ElseIfStatementNode node){
         node.predicate.accept(this);
         node.blockNode.accept(this);
-    }
-
-    public void visit(EqualityNode node){
-        node.leftExprNode.accept(this);
-        node.rightExprNode.accept(this);
     }
 
     public void visit(FieldAssignmentNode node){
@@ -122,17 +107,7 @@ public abstract class Visitor {
         }
     }
 
-    public void visit(GeqThanNode node){
-        node.leftExprNode.accept(this);
-        node.rightExprNode.accept(this);
-    }
-
-    public void visit(GreaterThanNode node){
-        node.leftExprNode.accept(this);
-        node.rightExprNode.accept(this);
-    }
-
-    public void visit(GroupedExpressionNode node){
+    public void visit(UnaryExprNode node){
         node.exprNode.accept(this);
     }
 
@@ -156,21 +131,6 @@ public abstract class Visitor {
             node.actualParams.accept(this);
     }
 
-    public void visit(InEqualityNode node){
-        node.leftExprNode.accept(this);
-        node.rightExprNode.accept(this);
-    }
-
-    public void visit(LeqThanNode node){
-        node.leftExprNode.accept(this);
-        node.rightExprNode.accept(this);
-    }
-
-    public void visit(LessThanNode node){
-        node.leftExprNode.accept(this);
-        node.rightExprNode.accept(this);
-    }
-
     public void visit(LiteralNode node){
 
     }
@@ -180,47 +140,9 @@ public abstract class Visitor {
         node.block.accept(this);
     }
 
-    public void visit(MinusNode node){
-        node.leftExprNode.accept(this);
-        node.rightExprNode.accept(this);
-    }
-
-    public void visit(ModNode node){
-        node.leftExprNode.accept(this);
-        node.rightExprNode.accept(this);
-    }
-
-    public void visit(MultNode node){
-        node.leftExprNode.accept(this);
-        node.rightExprNode.accept(this);
-    }
-
-    public void visit(NegateBoolNode node){
-        node.exprNode.accept(this);
-    }
-
-    public void visit(NegateExpressionNode node){
-        node.exprNode.accept(this);
-    }
-
     public void visit(NewEventNode node){
         node.idNode.accept(this);
         node.blockNode.accept(this);
-    }
-
-    public void visit(OrNode node) {
-        node.leftExprNode.accept(this);
-        node.rightExprNode.accept(this);
-    }
-
-    public void visit(PlusNode node) {
-        node.leftExprNode.accept(this);
-        node.rightExprNode.accept(this);
-    }
-
-    public void visit(PowerNode node) {
-        node.baseNode.accept(this);
-        node.exponentNode.accept(this);
     }
 
     public void visit(ProgNode node) {
