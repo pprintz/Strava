@@ -800,7 +800,7 @@ class IdNode extends ExprNode {
     }
     enum UnaryOperator{
         PARANTHESIS,
-        NEGATBOOL,
+        NEGATEBOOL,
         NEGATE
     }
 
