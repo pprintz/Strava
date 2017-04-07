@@ -712,6 +712,7 @@ class IdNode extends ExprNode {
         this.id = id;
     }
     public DeclarationNode declarationNode;
+    public boolean isDeclaration = false;
 
 
     @Override

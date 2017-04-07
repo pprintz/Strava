@@ -27,8 +27,18 @@ public class BindingVisitor extends Visitor {
     @Override
     public void visit(BlockNode node) {
         OpenScope();
+        if(isParamsVisisted) includeFormalParamsInScope();
         super.visit(node);
         CloseScope();
+    }
+
+    private void includeFormalParamsInScope() {
+
+        for(int i = 0 ; i < formalParamsNode.idNodes.size(); i++){
+            DeclarationNode dcNode = new DeclarationNode(formalParamsNode.typeNodes.get(i), formalParamsNode.idNodes.get(i),null);
+            visit(dcNode);
+        }
+        isParamsVisisted = false;
     }
 
 
@@ -59,6 +69,14 @@ public class BindingVisitor extends Visitor {
         super.visit(node);
     }
 
+    private boolean isParamsVisisted = false;
+    private FormalParamsNode formalParamsNode = null;
+    @Override
+    public void visit(FormalParamsNode node) {
+        isParamsVisisted = true;
+        formalParamsNode = node;
+    }
+
     private void BindIdToDeclaration(IdNode idNode) {
         boolean isDeclared = false;
         for (int i = symbolTable.size() - 1; i >= 0; i--) {
@@ -83,7 +101,6 @@ public class BindingVisitor extends Visitor {
                     isDeclared = true;
                 }
             }
-
             if (!isDeclared) {
                 hasRefError = true;
                 PrintNotDeclaredError(" function ", fCallNode.idNode.id);
@@ -94,12 +111,11 @@ public class BindingVisitor extends Visitor {
         boolean isDeclared = false;
         if(hasFunctionsBeenDeclared) {
             for (int i = symbolTable.size() - 1; i >= 0; i--) {
-                if (symbolTable.get(i).containsKey(fCallNode.idNode.id)) {
+                if (symbolTable.get(i).containsKey(fCallNode.idNode)) {
                     fCallNode.defineFunctionNode = (DefineFunctionNode) symbolTable.get(i).get(fCallNode.idNode);
                     isDeclared = true;
                 }
             }
-
             if (!isDeclared) {
                 hasRefError = true;
                 PrintNotDeclaredError(" function ", fCallNode.idNode.id);
@@ -146,7 +162,8 @@ public class BindingVisitor extends Visitor {
     }
     @Override
     public void visit(IdNode node) {
-        BindIdToDeclaration(node);
+        if(!node.isDeclaration)
+            BindIdToDeclaration(node);
     }
     @Override
     public void visit(StructInitializationNode node) {
