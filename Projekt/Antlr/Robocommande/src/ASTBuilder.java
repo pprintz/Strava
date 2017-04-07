@@ -287,13 +287,83 @@ public class ASTBuilder extends RobocommandeBaseVisitor<ASTNode> {
     @Override
     public ASTNode visitUnaryExpr(RobocommandeParser.UnaryExprContext ctx) {
 
+        UnaryExprNode unaryExprNode = new UnaryExprNode((ExprNode) visit(ctx.expr()));
 
-        return new UnaryExprNode(exprNode);
+        switch (getOperatorSymbol(ctx.children, "(", "not", "-")) {
+            case "(":
+                unaryExprNode.unaryOperator = UnaryOperator.PARANTHESIS;
+                break;
+            case "not":
+                unaryExprNode.unaryOperator = UnaryOperator.NEGATBOOL;
+                break;
+            case "-":
+                unaryExprNode.unaryOperator = UnaryOperator.NEGATE;
+                break;
+            default:
+                // TODO Error handling?
+                return null;
+        }
+
+        return unaryExprNode;
+
     }
 
     @Override
     public ASTNode visitBinaryExpr(RobocommandeParser.BinaryExprContext ctx) {
-        return super.visitBinaryExpr(ctx);
+        ExprNode left = (ExprNode)visit(ctx.expr(0));
+        ExprNode right = (ExprNode)visit(ctx.expr(1));
+
+        BinaryExprNode binaryExprNode = new BinaryExprNode(left, right);
+
+        switch (getOperatorSymbol(ctx.children, "*", "/", "%", "^", "+","-","<=",
+                                                         ">=","<",">", "=", "and", "or", "!=")){
+            case "*":
+                binaryExprNode.binaryOperator = BinaryOperator.MULTIPLY;
+                break;
+            case "/":
+                binaryExprNode.binaryOperator = BinaryOperator.DIVISION;
+                break;
+            case "%":
+                binaryExprNode.binaryOperator = BinaryOperator.MODULO;
+                break;
+            case "^":
+                binaryExprNode.binaryOperator = BinaryOperator.POWER;
+                break;
+            case "+":
+                binaryExprNode.binaryOperator = BinaryOperator.PLUS;
+                break;
+            case "-":
+                binaryExprNode.binaryOperator = BinaryOperator.MINUS;
+                break;
+            case "<=":
+                binaryExprNode.binaryOperator = BinaryOperator.LESSTHANEQUAL;
+                break;
+            case ">=":
+                binaryExprNode.binaryOperator = BinaryOperator.GREATERTHANEQUAL;
+                break;
+            case "<":
+                binaryExprNode.binaryOperator = BinaryOperator.LESSTHAN;
+                break;
+            case ">":
+                binaryExprNode.binaryOperator = BinaryOperator.GREATERTHAN;
+                break;
+            case "=":
+                binaryExprNode.binaryOperator = BinaryOperator.EQUAL;
+                break;
+            case "and":
+                binaryExprNode.binaryOperator = BinaryOperator.AND;
+                break;
+            case "or":
+                binaryExprNode.binaryOperator = BinaryOperator.OR;
+                break;
+            case "!=":
+                binaryExprNode.binaryOperator = BinaryOperator.NOTEQUAL;
+                break;
+            default:
+                // TODO Error handling?
+                return null;
+        }
+        return binaryExprNode;
     }
 //
 //    @Override

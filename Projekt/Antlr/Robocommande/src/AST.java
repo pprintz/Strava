@@ -739,10 +739,16 @@ class IdNode extends ExprNode {
 }
     class UnaryExprNode extends ExprNode{
 
+        public UnaryExprNode(ExprNode exprNode, UnaryOperator unaryOperator) {
+            this.exprNode = exprNode;
+            this.unaryOperator = unaryOperator;
+        }
+
         public UnaryExprNode(ExprNode exprNode) {
             this.exprNode = exprNode;
         }
 
+        public UnaryOperator unaryOperator;
         public ExprNode exprNode;
 
         @Override
@@ -761,8 +767,15 @@ class IdNode extends ExprNode {
 
         public ExprNode leftNode;
         public ExprNode rigthNode;
+
         public BinaryOperator binaryOperator;
         public BinaryExprNode(ExprNode leftNode, ExprNode rigthNode, BinaryOperator binaryOperator) {
+            this.leftNode = leftNode;
+            this.rigthNode = rigthNode;
+            this.binaryOperator = binaryOperator;
+        }
+
+        public BinaryExprNode(ExprNode leftNode, ExprNode rigthNode) {
             this.leftNode = leftNode;
             this.rigthNode = rigthNode;
             this.binaryOperator = binaryOperator;
@@ -781,8 +794,8 @@ class IdNode extends ExprNode {
         OR,
         LESSTHAN,
         GREATERTHAN,
-        EQUALITY,
-        INEQUALITY
+        EQUAL,
+        NOTEQUAL
     }
     enum UnaryOperator{
         PARANTHESIS,
