@@ -52,10 +52,10 @@ structInitialization: ID '(' assignment? (',' assignment)* ')' ;
 loop: 'loop' ('while' expr)? block ;
 returnStatement : 'return' expr ;
 
-expr :     ('true' | 'false')               # literal
-          | ID                              # literal
-          | NUM                             # literal
-          | STRING                          # literal
+expr :     ('true' | 'false')               # literalBool
+          | ID                              # idRef
+          | NUM                             # literalNum
+          | STRING                          # literalString
           | fieldId                         # fieldIdentifier
           | functionCall                    # fCall
           | structInitialization            # structInit
