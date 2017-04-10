@@ -4,7 +4,7 @@
 public class TypeChecker extends Visitor {
 
     public void visit(AssignmentNode node){
-        node.exprNode.Type
+     //   node.exprNode.Type
     }
 
     private void Err(){
@@ -74,30 +74,30 @@ public class TypeChecker extends Visitor {
         return typesAreCompatible;
     }
 
-    private boolean checkExpectedType(UnaryExprNode node, Type expectedType) {
-        if(expectedType == Type.TEXT || expectedType == Type.STRUCT){
-            System.exit(0);
-        }
-        Boolean typesAreCompatible = false;
-        String typeString = expectedType == Type.BOOL ? "bool" : "num";
-
-        if(node.leftNode.Type == expectedType && node.rightNode.Type == expectedType){
-            typesAreCompatible = true;
-        }
-        else if(node.leftNode instanceof IdNode){
-            IdNode idNode = (IdNode) node.leftNode;
-            if(node.rightNode.Type == expectedType && idNode.declarationNode.typeNode.type.equals(typeString)) {
-                typesAreCompatible = true;
-            }
-        }
-        else if(node.rightNode instanceof IdNode){
-            IdNode idNode = (IdNode) node.leftNode;
-            if(node.leftNode.Type == expectedType && idNode.declarationNode.typeNode.type.equals(typeString)) {
-                typesAreCompatible = true;
-            }
-        }
-
-        return typesAreCompatible;
-    }
+//    private boolean checkExpectedType(UnaryExprNode node, Type expectedType) {
+//        if(expectedType == Type.TEXT || expectedType == Type.STRUCT){
+//            System.exit(0);
+//        }
+//        Boolean typesAreCompatible = false;
+//        String typeString = expectedType == Type.BOOL ? "bool" : "num";
+//
+//        if(node.leftNode.Type == expectedType && node.rightNode.Type == expectedType){
+//            typesAreCompatible = true;
+//        }
+//        else if(node.leftNode instanceof IdNode){
+//            IdNode idNode = (IdNode) node.leftNode;
+//            if(node.rightNode.Type == expectedType && idNode.declarationNode.typeNode.type.equals(typeString)) {
+//                typesAreCompatible = true;
+//            }
+//        }
+//        else if(node.rightNode instanceof IdNode){
+//            IdNode idNode = (IdNode) node.leftNode;
+//            if(node.leftNode.Type == expectedType && idNode.declarationNode.typeNode.type.equals(typeString)) {
+//                typesAreCompatible = true;
+//            }
+//        }
+//
+//        return typesAreCompatible;
+//    }
 
 }
