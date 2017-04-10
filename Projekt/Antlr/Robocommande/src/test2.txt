@@ -53,6 +53,8 @@ behavior onSetup():
 strategy default:
     behavior onRun():
        num a := 2
+       b := 2
+       yxz := 23
        num bubber := 3
        //num a := myFunction(a, b, c)
     ;

@@ -237,7 +237,11 @@ public class PrettyPrintVisitor extends Visitor {
 
     @Override
     public void visit(NewEventNode node) {
-        super.visit(node);
+        System.out.print("NEW EVENT ");
+        System.out.println(node.idNode.id);
+        indentationLevel++;
+        visit(node.blockNode);
+        indentationLevel--;
     }
 
     @Override

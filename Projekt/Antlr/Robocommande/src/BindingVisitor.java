@@ -41,6 +41,9 @@ public class BindingVisitor extends Visitor {
         isParamsVisisted = false;
     }
 
+    private boolean doesDeclExistLocally(DeclarationNode node){
+
+    }
 
     @Override
     public void visit(DeclarationNode node) {
@@ -185,7 +188,7 @@ public class BindingVisitor extends Visitor {
     }
     @Override
     public void visit(IdNode node) {
-        if(!node.isDeclaration )
+        if(!node.isDeclaration)
             BindIdToDeclaration(node);
     }
     @Override
