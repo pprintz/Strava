@@ -1,9 +1,13 @@
 behavior onSetup():
 
+    num test := 2
+    num a := 2
+    num b := 2
     new event KASPERWINS:
         loop while 2 <= 3:
-            num a := 2
             num b
+            num test := 2
+            num test := 2
             doThat(a,b)
             doThat(b, c)
             a := Foo(123)
@@ -11,8 +15,6 @@ behavior onSetup():
  ;
 
 
-    num a := 2
-    num b
     num c := 3
     num d := 5
 
@@ -52,8 +54,8 @@ behavior onSetup():
 
 strategy default:
     behavior onRun():
-       num a := 2
        b := 2
+       num test := 2
        num bubber := 3
        //num a := myFunction(a, b, c)
     ;
