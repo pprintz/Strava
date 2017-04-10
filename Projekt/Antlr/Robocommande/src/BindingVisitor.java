@@ -42,7 +42,7 @@ public class BindingVisitor extends Visitor {
     }
 
     private boolean doesDeclExistLocally(DeclarationNode node){
-
+        return true;
     }
 
     @Override

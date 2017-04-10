@@ -69,10 +69,6 @@ public class PrettyPrintVisitor extends Visitor {
         indentationLevel--;
     }
 
-    @Override
-    public void visit(BinaryExprNode node) {
-        super.visit(node);
-    }
 
     @Override
     public void visit(DeclarationNode node) {
@@ -271,16 +267,6 @@ public class PrettyPrintVisitor extends Visitor {
         if (node.leftNode != null) visit(node.leftNode);
         System.out.print(" " + symbol + " ");
         if (node.rigthNode != null) visit(node.rigthNode);
-    }
-
-    @Override
-    public void visit(UnaryExprNode node) {
-        super.visit(node);
-    }
-
-    @Override
-    public void visit(NewEventNode node) {
-        super.visit(node);
     }
 
     @Override
