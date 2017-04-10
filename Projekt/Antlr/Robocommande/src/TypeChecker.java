@@ -18,32 +18,86 @@ public class TypeChecker extends Visitor {
             case MULTIPLY:
             case DIVISION:
             case MODULO:
-                if(node.leftNode.Type == Type.NUM && node.rigthNode.Type == Type.NUM){
+            case POWER:
+                if(checkExpectedType(node, Type.NUM)){
                     node.Type = Type.NUM;
                 }
-                else{
-                    Err();
+                break;
+
+            case GREATERTHAN:
+            case LESSTHANEQUAL:
+            case GREATERTHANEQUAL:
+            case LESSTHAN:
+                if(checkExpectedType(node, Type.NUM)){
+                    node.Type = Type.BOOL;
                 }
                 break;
-            case LESSTHANEQUAL:
-                break;
-            case GREATERTHANEQUAL:
-                break;
-            case POWER:
-                break;
             case AND:
-                break;
             case OR:
-                break;
-            case LESSTHAN:
-                break;
-            case GREATERTHAN:
+                if(checkExpectedType(node, Type.BOOL)){
+                    node.Type = Type.BOOL;
+                }
                 break;
             case EQUAL:
-                break;
             case NOTEQUAL:
+                if(checkExpectedType(node, Type.BOOL)
+                        || checkExpectedType(node, Type.BOOL)) {
+                    node.Type = Type.BOOL;
+                }
                 break;
         }
+    }
+
+    private boolean checkExpectedType(BinaryExprNode node, Type expectedType) {
+        if(expectedType == Type.TEXT || expectedType == Type.STRUCT){
+            System.exit(0);
+        }
+        Boolean typesAreCompatible = false;
+        String typeString = expectedType == Type.BOOL ? "bool" : "num";
+
+        if(node.leftNode.Type == expectedType && node.rightNode.Type == expectedType){
+            typesAreCompatible = true;
+        }
+        else if(node.leftNode instanceof IdNode){
+            IdNode idNode = (IdNode) node.leftNode;
+            if(node.rightNode.Type == expectedType && idNode.declarationNode.typeNode.type.equals(typeString)) {
+                typesAreCompatible = true;
+            }
+        }
+        else if(node.rightNode instanceof IdNode){
+            IdNode idNode = (IdNode) node.leftNode;
+            if(node.leftNode.Type == expectedType && idNode.declarationNode.typeNode.type.equals(typeString)) {
+                typesAreCompatible = true;
+            }
+        }
+
+        return typesAreCompatible;
+    }
+
+    private boolean checkExpectedType(UnaryExprNode node, Type expectedType) {
+        if(expectedType == Type.TEXT || expectedType == Type.STRUCT){
+            System.exit(0);
+        }
+        Boolean typesAreCompatible = false;
+        String typeString = expectedType == Type.BOOL ? "bool" : "num";
+
+        if(node.leftNode.Type == expectedType && node.rightNode.Type == expectedType){
+            typesAreCompatible = true;
+        }
+        else if(node.leftNode instanceof IdNode){
+            IdNode idNode = (IdNode) node.leftNode;
+            if(node.rightNode.Type == expectedType && idNode.declarationNode.typeNode.type.equals(typeString)) {
+                typesAreCompatible = true;
+            }
+        }
+        else if(node.rightNode instanceof IdNode){
+            IdNode idNode = (IdNode) node.leftNode;
+            if(node.leftNode.Type == expectedType && idNode.declarationNode.typeNode.type.equals(typeString)) {
+                typesAreCompatible = true;
+            }
+        }
+
+        return typesAreCompatible;
     }
 
 }

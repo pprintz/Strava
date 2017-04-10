@@ -525,18 +525,18 @@ class IdNode extends ExprNode {
         }
 
         public ExprNode leftNode;
-        public ExprNode rigthNode;
+        public ExprNode rightNode;
 
         public BinaryOperator binaryOperator;
         public BinaryExprNode(ExprNode leftNode, ExprNode rigthNode, BinaryOperator binaryOperator) {
             this.leftNode = leftNode;
-            this.rigthNode = rigthNode;
+            this.rightNode = rigthNode;
             this.binaryOperator = binaryOperator;
         }
 
         public BinaryExprNode(ExprNode leftNode, ExprNode rigthNode) {
             this.leftNode = leftNode;
-            this.rigthNode = rigthNode;
+            this.rightNode = rigthNode;
             this.binaryOperator = binaryOperator;
         }
     }

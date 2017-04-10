@@ -266,7 +266,7 @@ public class PrettyPrintVisitor extends Visitor {
     private void binaryStatements(BinaryExprNode node, String symbol) {
         if (node.leftNode != null) visit(node.leftNode);
         System.out.print(" " + symbol + " ");
-        if (node.rigthNode != null) visit(node.rigthNode);
+        if (node.rightNode != null) visit(node.rightNode);
     }
 
     @Override

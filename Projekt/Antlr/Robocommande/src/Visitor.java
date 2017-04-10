@@ -45,7 +45,7 @@ public abstract class Visitor {
 
     public void visit(BinaryExprNode node){
         node.leftNode.accept(this);
-        node.rigthNode.accept(this);
+        node.rightNode.accept(this);
     }
 
     public void visit(DeclarationNode node){
