@@ -27,13 +27,13 @@ public class ASTBuilder extends RobocommandeBaseVisitor<ASTNode> {
 
     @Override
     public ASTNode visitSetup(RobocommandeParser.SetupContext ctx) {
-        return new SetupNode((SetupBlockNode)visit(ctx.setupBlock()));
+        return new SetupNode((SetupBlockNode)visit(ctx.setupBlock()),ctx);
     }
 
 
     @Override
     public ASTNode visitRun(RobocommandeParser.RunContext ctx) {
-        return new RunNode((BlockNode)visit(ctx.block()));
+        return new RunNode((BlockNode)visit(ctx.block()),ctx);
 
     }
 
@@ -64,7 +64,7 @@ public class ASTBuilder extends RobocommandeBaseVisitor<ASTNode> {
         }
         BlockNode blockNode = (BlockNode) visit(ctx.block());
 
-        return new DefineFunctionNode(typeNode, idNode, formalParamsNode, blockNode);
+        return new DefineFunctionNode(typeNode, idNode, formalParamsNode, blockNode,ctx);
     }
 
     @Override
@@ -83,7 +83,7 @@ public class ASTBuilder extends RobocommandeBaseVisitor<ASTNode> {
         TypeNode eventType = new TypeNode(ctx.ID(1).getText());
         BlockNode blockNode = (BlockNode) visit((ctx.block()));
 
-        return new BehaviorFunctionNode(idNode, eventType, blockNode);
+        return new BehaviorFunctionNode(idNode, eventType, blockNode,ctx);
     }
 
     @Override
@@ -96,12 +96,12 @@ public class ASTBuilder extends RobocommandeBaseVisitor<ASTNode> {
     @Override
     public ASTNode visitStrategy(RobocommandeParser.StrategyContext ctx) {
         return new StrategyNode(new IdNode(ctx.ID().getText()){{isDeclaration = true;}},
-                (StrategyDefinitionNode) visit(ctx.strategyDefinition()));
+                (StrategyDefinitionNode) visit(ctx.strategyDefinition()),ctx);
     }
 
     @Override
     public ASTNode visitDefaultStrategy(RobocommandeParser.DefaultStrategyContext ctx) {
-        return new DefaultStrategyNode((StrategyDefinitionNode) visit(ctx.strategyDefinition()));
+        return new DefaultStrategyNode((StrategyDefinitionNode) visit(ctx.strategyDefinition()),ctx);
     }
 
     @Override
@@ -114,14 +114,14 @@ public class ASTBuilder extends RobocommandeBaseVisitor<ASTNode> {
         if(ctx.functions() != null)
             functionsNode = (FunctionsNode) visit(ctx.functions());
 
-        return new StrategyDefinitionNode(runNode, functionsNode);
+        return new StrategyDefinitionNode(runNode, functionsNode,ctx);
     }
 
     @Override
     public ASTNode visitSetupBlock(RobocommandeParser.SetupBlockContext ctx) {
         List<StmtNode> setupStmts = new LinkedList<>();
         ctx.setupStmt().forEach(stmt -> setupStmts.add((StmtNode) visit(stmt)));
-        return new SetupBlockNode(setupStmts);
+        return new SetupBlockNode(setupStmts,ctx);
     }
 
     @Override
@@ -131,7 +131,7 @@ public class ASTBuilder extends RobocommandeBaseVisitor<ASTNode> {
         for(RobocommandeParser.StmtContext stmt : ctx.stmt()){
             stmtNodes.add((StmtNode)visit(stmt));
         }
-        return new BlockNode(stmtNodes);
+        return new BlockNode(stmtNodes,ctx);
     }
 
 
@@ -173,7 +173,7 @@ public class ASTBuilder extends RobocommandeBaseVisitor<ASTNode> {
         for(RobocommandeParser.DeclarationContext declaration : ctx.declaration()){
             declarationNodes.add((DeclarationNode) visit(declaration));
         }
-        return new StructDefinitionNode(name, declarationNodes);
+        return new StructDefinitionNode(name, declarationNodes,ctx);
     }
 
     @Override
