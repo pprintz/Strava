@@ -87,7 +87,8 @@ class StrategyNode extends ASTNode {
 class DefaultStrategyNode extends ASTNode {
     public StrategyDefinitionNode strategyDefinition;
 
-    public DefaultStrategyNode(StrategyDefinitionNode strategyDefinition) {
+    public DefaultStrategyNode(StrategyDefinitionNode strategyDefinition, RobocommandeParser.StrategyDefinitionContext ctx) {
+        super(ctx);
         this.strategyDefinition = strategyDefinition;
     }
     @Override
@@ -100,7 +101,8 @@ class StrategyDefinitionNode extends ASTNode {
     public RunNode runNode;
     public FunctionsNode functionsNode;
 
-    public StrategyDefinitionNode(RunNode runNode, FunctionsNode functionsNode) {
+    public StrategyDefinitionNode(RunNode runNode, FunctionsNode functionsNode, RobocommandeParser.StrategyDefinitionContext ctx) {
+        super(ctx);
         this.runNode = runNode;
         this.functionsNode = functionsNode;
     }
@@ -113,7 +115,8 @@ class StrategyDefinitionNode extends ASTNode {
 class RunNode extends ASTNode {
     public BlockNode blockNode;
 
-    public RunNode(BlockNode blockNode) {
+    public RunNode(BlockNode blockNode, RobocommandeParser.RunContext ctx) {
+        super(ctx);
         this.blockNode = blockNode;
     }
     @Override
@@ -126,7 +129,8 @@ class SetupBlockNode extends ASTNode {
     public List<StmtNode> setupStmts;
 
 
-    public SetupBlockNode(List<StmtNode> setupStmts) {
+    public SetupBlockNode(List<StmtNode> setupStmts, RobocommandeParser.SetupBlockContext ctx) {
+        super(ctx);
         this.setupStmts = setupStmts;
     }
     @Override
@@ -138,7 +142,8 @@ class SetupBlockNode extends ASTNode {
 class BlockNode extends ASTNode {
     public List<StmtNode> functionStmtNodes;
 
-    public BlockNode(List<StmtNode> functionStmtNodes) {
+    public BlockNode(List<StmtNode> functionStmtNodes, RobocommandeParser.BlockContext ctx) {
+        super(ctx);
         this.functionStmtNodes = functionStmtNodes;
     }
     @Override
@@ -172,7 +177,9 @@ class DefineFunctionNode extends ASTNode {
     public FormalParamsNode formalParamsNode;
     public BlockNode blockNode;
 
-    public DefineFunctionNode(TypeNode typeNode, IdNode idNode, FormalParamsNode formalParamsNode, BlockNode blockNode) {
+    public DefineFunctionNode(TypeNode typeNode, IdNode idNode, FormalParamsNode formalParamsNode,
+                              BlockNode blockNode, RobocommandeParser.DefineFunctionContext ctx) {
+        super(ctx);
         this.typeNode = typeNode;
         this.idNode = idNode;
         this.formalParamsNode = formalParamsNode;
@@ -190,7 +197,9 @@ class BehaviorFunctionNode extends ASTNode {
     public TypeNode eventType;
     public BlockNode blockNode;
 
-    public BehaviorFunctionNode(IdNode idNode, TypeNode eventType, BlockNode blockNode) {
+    public BehaviorFunctionNode(IdNode idNode, TypeNode eventType, BlockNode blockNode,
+                                RobocommandeParser.BehaviorFunctionContext ctx) {
+        super(ctx);
         this.idNode = idNode;
         this.eventType = eventType;
         this.blockNode = blockNode;
@@ -209,7 +218,8 @@ class StructDefinitionNode extends StmtNode {
     public IdNode structIdNode;
     public List<DeclarationNode> declarationNodes;
 
-    public StructDefinitionNode(IdNode structIdNode, List<DeclarationNode> declarationNodes) {
+    public StructDefinitionNode(IdNode structIdNode, List<DeclarationNode> declarationNodes,
+                                RobocommandeParser.StructDefinitionContext ctx) {
         this.structIdNode = structIdNode;
         this.declarationNodes = declarationNodes;
     }
