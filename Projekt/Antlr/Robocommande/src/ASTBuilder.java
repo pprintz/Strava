@@ -1,3 +1,4 @@
+import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.ParseTree;
 
 import java.util.*;
@@ -27,13 +28,13 @@ public class ASTBuilder extends RobocommandeBaseVisitor<ASTNode> {
 
     @Override
     public ASTNode visitSetup(RobocommandeParser.SetupContext ctx) {
-        return new SetupNode((SetupBlockNode)visit(ctx.setupBlock()));
+        return new SetupNode((SetupBlockNode)visit(ctx.setupBlock()), ctx);
     }
 
 
     @Override
     public ASTNode visitRun(RobocommandeParser.RunContext ctx) {
-        return new RunNode((BlockNode)visit(ctx.block()));
+        return new RunNode((BlockNode)visit(ctx.block()), ctx);
 
     }
 
@@ -173,7 +174,7 @@ public class ASTBuilder extends RobocommandeBaseVisitor<ASTNode> {
         for(RobocommandeParser.DeclarationContext declaration : ctx.declaration()){
             declarationNodes.add((DeclarationNode) visit(declaration));
         }
-        return new StructDefinitionNode(name, declarationNodes);
+        return new StructDefinitionNode(name, declarationNodes, ctx);
     }
 
     @Override
@@ -266,7 +267,7 @@ public class ASTBuilder extends RobocommandeBaseVisitor<ASTNode> {
 
     @Override
     public ASTNode visitReturnStatement(RobocommandeParser.ReturnStatementContext ctx) {
-        return new ReturnStatementNode((ExprNode)visit(ctx.expr()));
+        return new ReturnStatementNode((ExprNode)visit(ctx.expr()), ctx);
     }
 
     @Override
@@ -489,7 +490,7 @@ public class ASTBuilder extends RobocommandeBaseVisitor<ASTNode> {
         List<String> idsToBeConverted = Arrays.asList(ctx.getText().split(Pattern.quote(".")));
         List<IdNode> idNodes = new ArrayList<IdNode>();
         idsToBeConverted.forEach(node -> idNodes.add(new IdNode(node)));
-        return new FieldIdNode(idNodes);
+        return new FieldIdNode(idNodes, ctx);
     }
 
     private String getOperatorSymbol(List<ParseTree> children, String... symbols){
