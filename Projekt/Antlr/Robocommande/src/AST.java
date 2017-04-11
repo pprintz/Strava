@@ -1,3 +1,4 @@
+import org.antlr.v4.runtime.Parser;
 import org.antlr.v4.runtime.ParserRuleContext;
 
 import java.util.List;
@@ -203,6 +204,14 @@ class BehaviorFunctionNode extends ASTNode {
 
 abstract class StmtNode extends ASTNode {
     public abstract void accept(Visitor v);
+
+    public StmtNode(){
+
+    }
+
+    public StmtNode(ParserRuleContext ctx){
+        super(ctx);
+    }
 }
 
 class StructDefinitionNode extends StmtNode {
@@ -429,7 +438,8 @@ class LiteralNode extends ExprNode {
 class ReturnStatementNode extends StmtNode {
     public ExprNode exprNode;
 
-    public ReturnStatementNode(ExprNode exprNode) {
+    public ReturnStatementNode(ExprNode exprNode, RobocommandeParser.ReturnStatementContext ctx) {
+        super(ctx);
         this.exprNode = exprNode;
     }
 
@@ -688,7 +698,8 @@ class FieldIdNode extends ASTNode {
     public List<IdNode> idNodes;
     public StructDefinitionNode structDefinitionNode;
 
-    public FieldIdNode(List<IdNode> idNodes) {
+    public FieldIdNode(List<IdNode> idNodes, RobocommandeParser.FieldIdContext ctx) {
+        super(ctx);
         this.idNodes = idNodes;
     }
     @Override
@@ -702,7 +713,8 @@ class FieldIdNode extends ASTNode {
 class TypeNode extends ASTNode{
     public String type;
 
-    public TypeNode(String type) {
+    public TypeNode(String type, RobocommandeParser.TypeContext ctx) {
+        super(ctx);
         this.type = type;
     }
     @Override
