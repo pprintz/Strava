@@ -20,38 +20,6 @@ public class BindingVisitor extends Visitor {
         symbolTable.pop();
     }
 
-
-
-    private void includeFormalParamsInScope() {
-
-        for(int i = 0 ; i < formalParamsNode.idNodes.size(); i++){
-            DeclarationNode dcNode = new DeclarationNode(formalParamsNode.typeNodes.get(i), formalParamsNode.idNodes.get(i),null);
-            visit(dcNode);
-        }
-        isParamsVisisted = false;
-    }
-
-    private boolean doesDeclExistLocally(DeclarationNode node){
-        for(int i = symbolTable.size()-1; i >= 0; i--){
-            if(symbolTable.get(i).containsKey(node.idNode)){
-                DeclarationNode declNodeFound = (DeclarationNode)symbolTable.get(i).get(node.idNode);
-                if(!declNodeFound.IsGlobal) {
-                    System.out.println("Already declared variable with name :" + node.idNode.id);
-                    return true;
-                }
-                else{
-                    if(i == symbolTable.size() -1) {
-                        System.out.println("Already declared variable with name :" + node.idNode.id);
-                        return true;
-                    }
-                }
-            }
-        }
-        return false;
-    }
-
-
-
     private void BindIdToDeclaration(IdNode idNode) {
         boolean isDeclared = false;
         for (int i = symbolTable.size() - 1; i >= 0; i--) {
@@ -61,12 +29,29 @@ public class BindingVisitor extends Visitor {
             }
         }
         if(!isDeclared){
-            hasRefError = true;
+            hasBindingErrorOccured = true;
             PrintNotDeclaredError("id", idNode.id);
         }
     }
+    private void BindFieldIdToDeclaration(FieldIdNode fieldIdNode) {
+        boolean isDeclared = false;
+        IdNode structId = fieldIdNode.idNodes.get(0);
+        for (int i = symbolTable.size() - 1; i >= 0; i--) {
+            if(symbolTable.get(i).containsKey(structId)){
+                ASTNode astNode = symbolTable.get(i).get(structId);
+                DeclarationNode declarationNode = (DeclarationNode) astNode;
+                if(declarationNode.structDefinitionNode != null) {
+                    fieldIdNode.structDefinitionNode = declarationNode.structDefinitionNode;
+                    isDeclared = true;
+                }
+            }
+        }
+        if(!isDeclared){
+            PrintNotDeclaredError("struct", structId.id);
+        }
+    }
 
-    public static boolean hasRefError = false;
+    public static boolean hasBindingErrorOccured = false;
     private void BindFunctionCallToDeclaration(FunctionCallNode fCallNode) {
         boolean isDeclared = false;
         if(hasFunctionsBeenDeclared) {
@@ -77,7 +62,7 @@ public class BindingVisitor extends Visitor {
                 }
             }
             if (!isDeclared) {
-                hasRefError = true;
+                hasBindingErrorOccured = true;
                 PrintNotDeclaredError("function", fCallNode.idNode.id);
             }
         }
@@ -91,7 +76,7 @@ public class BindingVisitor extends Visitor {
             }
         }
         if (!isDeclared) {
-            hasRefError = true;
+            hasBindingErrorOccured = true;
             PrintNotDeclaredError(" function ", fCallNode.idNode.id);
         }
     }
@@ -175,7 +160,6 @@ public class BindingVisitor extends Visitor {
     public void visit(DeclarationNode node) {
         if(!hasFunctionsBeenDeclared) {
             if (!doesDeclExistLocally(node)) {
-
                 switch (node.typeNode.type) {
                     case "num":
                     case "text":
@@ -186,15 +170,46 @@ public class BindingVisitor extends Visitor {
                         BindStructDeclarationToDefinition(node);
                         symbolTable.peek().put(node.idNode, node);
                 }
-            } else hasRefError = true;
+            } else hasBindingErrorOccured = true;
         }
     }
+    private boolean doesDeclExistLocally(DeclarationNode node){
+        for(int i = symbolTable.size()-1; i >= 0; i--){
+            if(symbolTable.get(i).containsKey(node.idNode)){
+                DeclarationNode declNodeFound = (DeclarationNode)symbolTable.get(i).get(node.idNode);
+                if(!declNodeFound.IsGlobal) {
+                    System.out.println("Already declared variable with name :" + node.idNode.id);
+                    return true;
+                }
+                else{
+                    if(i == symbolTable.size() -1) {
+                        System.out.println("Already declared variable with name :" + node.idNode.id);
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
 
     @Override
     public void visit(DefineFunctionNode node) {
         if(!hasFunctionsBeenDeclared) {
             symbolTable.peek().put(node.idNode, node);
+            if(node.formalParamsNode != null) {
+                isParamsVisisted = true;
+                formalParamsNode = node.formalParamsNode;
+            }
+            visit(node.blockNode);
         }
+    }
+     private void includeFormalParamsInScope() {
+        for(int i = 0 ; i < formalParamsNode.idNodes.size(); i++){
+            DeclarationNode dcNode = new DeclarationNode(formalParamsNode.typeNodes.get(i), formalParamsNode.idNodes.get(i),null);
+            visit(dcNode);
+        }
+        isParamsVisisted = false;
     }
     @Override
     public void visit(StructDefinitionNode node) {
@@ -205,18 +220,14 @@ public class BindingVisitor extends Visitor {
 
     @Override
     public void visit(FieldIdNode node) {
-        super.visit(node);
+        if(!hasFunctionsBeenDeclared) {
+            BindFieldIdToDeclaration(node);
+        }
     }
 
     private boolean isParamsVisisted = false;
     private FormalParamsNode formalParamsNode = null;
-    @Override
-    public void visit(FormalParamsNode node) {
-        if(!hasFunctionsBeenDeclared) {
-            isParamsVisisted = true;
-            formalParamsNode = node;
-        }
-    }
+
     @Override
     public void visit(TypeNode node) {
     }

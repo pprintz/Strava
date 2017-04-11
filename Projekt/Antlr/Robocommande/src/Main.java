@@ -30,7 +30,7 @@ public class Main {
         bindingVisitor.visit(ast);
         BindingVisitor.hasFunctionsBeenDeclared = true;
         bindingVisitor.visit(ast);
-        if(BindingVisitor.hasRefError){
+        if(BindingVisitor.hasBindingErrorOccured){
             System.exit(0);
         }
         //PrettyPrintVisitor prettyPrintVisitor = new PrettyPrintVisitor();
