@@ -1,9 +1,6 @@
 import org.antlr.v4.runtime.tree.ParseTree;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 import java.util.regex.Pattern;
 
 /**
@@ -12,7 +9,10 @@ import java.util.regex.Pattern;
 public class ASTBuilder extends RobocommandeBaseVisitor<ASTNode> {
     @Override
     public ASTNode visitProg(RobocommandeParser.ProgContext ctx) {
-        SetupNode setupNode = (SetupNode)visit(ctx.setup());
+        SetupNode setupNode = null;
+        if(ctx.setup() != null) {
+            setupNode = (SetupNode) visit(ctx.setup());
+        }
         DefaultStrategyNode defaultStrategyNode = (DefaultStrategyNode)visit(ctx.defaultStrategy());
         List<StrategyNode> strategyNodes = new LinkedList<>();
         List<DefineFunctionNode> defineFunctionNodes = new LinkedList<>();
@@ -58,7 +58,10 @@ public class ASTBuilder extends RobocommandeBaseVisitor<ASTNode> {
         TypeNode typeNode = new TypeNode(ctx.type().getText());
         IdNode idNode = new IdNode(ctx.ID().getText());
         idNode.isDeclaration = true;
-        FormalParamsNode formalParamsNode = (FormalParamsNode) visit(ctx.formalParams());
+        FormalParamsNode formalParamsNode = null;
+        if(ctx.formalParams() != null) {
+            formalParamsNode = (FormalParamsNode) visit(ctx.formalParams());
+        }
         BlockNode blockNode = (BlockNode) visit(ctx.block());
 
         return new DefineFunctionNode(typeNode, idNode, formalParamsNode, blockNode);
@@ -117,7 +120,7 @@ public class ASTBuilder extends RobocommandeBaseVisitor<ASTNode> {
     @Override
     public ASTNode visitSetupBlock(RobocommandeParser.SetupBlockContext ctx) {
         List<StmtNode> setupStmts = new LinkedList<>();
-        ctx.setupStmt().forEach(stmt -> setupStmts.add((StmtNode)visit(stmt)));
+        ctx.setupStmt().forEach(stmt -> setupStmts.add((StmtNode) visit(stmt)));
         return new SetupBlockNode(setupStmts);
     }
 

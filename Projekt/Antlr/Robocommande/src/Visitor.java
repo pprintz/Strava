@@ -81,11 +81,13 @@ public abstract class Visitor {
     }
 
     public void visit(FormalParamsNode node){
-        for(IdNode pnode : node.idNodes){
-            pnode.accept(this);
-        }
-        for(IdNode pnode : node.idNodes){
-            pnode.accept(this);
+        if(!node.idNodes.isEmpty()) {
+            for (IdNode pnode : node.idNodes) {
+                pnode.accept(this);
+            }
+            for (IdNode pnode : node.idNodes) {
+                pnode.accept(this);
+            }
         }
     }
 
@@ -146,7 +148,9 @@ public abstract class Visitor {
     }
 
     public void visit(ProgNode node) {
-        node.setupNode.accept(this);
+        if(node.setupNode != null) {
+            node.setupNode.accept(this);
+        }
         node.defaultStrategyNode.accept(this);
         for(StrategyNode strategyNode : node.strategyNodes) {
             strategyNode.accept(this);
@@ -167,7 +171,9 @@ public abstract class Visitor {
 
     public void visit(SetupBlockNode node) {
         for (StmtNode setupStmt : node.setupStmts) {
-            setupStmt.accept(this);
+            if(setupStmt != null) {
+                setupStmt.accept(this);
+            }
         }
     }
 

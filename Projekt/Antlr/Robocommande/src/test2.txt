@@ -7,7 +7,6 @@ behavior onSetup():
         loop while 2 <= 3:
             num b
             num test := 2
-            num test := 2
             doThat(a,b)
             doThat(b, c)
             a := Foo(123)
@@ -24,6 +23,7 @@ behavior onSetup():
     mmmmm := 10
     myStruct nnnnn := myStruct(b := 3, a := 4)
     myStruct aa := myStruct(q := 10, x := 20)
+    aa.q := 2
 
 
 
@@ -55,12 +55,12 @@ behavior onSetup():
 strategy default:
     behavior onRun():
        b := 2
+       a.b := 23
        num test := 2
        num bubber := 3
        //num a := myFunction(a, b, c)
     ;
-    define void procedureOne(num a, num b):
-        //DO stuff
+    define void procedureOne(num lort, num b):
         a := 2
         b := 3
     ;
@@ -85,6 +85,7 @@ define void Foo(text b):
 ;
 strategy theWinningOne:
     behavior onHitByBullet(ev):
+        num a
         a := b
     ;
 ;

@@ -99,11 +99,9 @@ public class PrettyPrintVisitor extends Visitor {
         System.out.print(")");
         System.out.println(" RETURNS " + node.typeNode.type);
 
-        if(node.blockNode != null) {
-            indentationLevel++;
-            visit(node.blockNode);
-            indentationLevel--;
-        }
+        indentationLevel++;
+        visit(node.blockNode);
+        indentationLevel--;
     }
 
 
@@ -138,12 +136,14 @@ public class PrettyPrintVisitor extends Visitor {
 
     @Override
     public void visit(FormalParamsNode node) {
-        int len = node.idNodes.size();
-        for(int i = 0; i < len; i++ ){
-            System.out.print(node.typeNodes.get(i).type + " ");
-            visit(node.idNodes.get(i));
-            if(i < len-1)
-                System.out.print(", ");
+        if(node != null) {
+            int len = node.idNodes.size();
+            for (int i = 0; i < len; i++) {
+                System.out.print(node.typeNodes.get(i).type + " ");
+                visit(node.idNodes.get(i));
+                if (i < len - 1)
+                    System.out.print(", ");
+            }
         }
     }
 
@@ -285,7 +285,7 @@ public class PrettyPrintVisitor extends Visitor {
 
     @Override
     public void visit(NewEventNode node) {
-        System.out.print("NEW EVENT ");
+        System.out.print(indent() + "NEW EVENT ");
         System.out.println(node.idNode.id);
         indentationLevel++;
         visit(node.blockNode);
@@ -354,6 +354,7 @@ public class PrettyPrintVisitor extends Visitor {
     @Override
     public void visit(StructDefinitionNode node) {
         System.out.print(indent() + "STRUCT ");
+        System.out.print(node.structIdNode.id);
         indentationLevel++;
         System.out.println("{ ");
         for(DeclarationNode declNode : node.declarationNodes){
