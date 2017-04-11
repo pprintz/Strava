@@ -178,12 +178,13 @@ public class BindingVisitor extends Visitor {
             if(symbolTable.get(i).containsKey(node.idNode)){
                 DeclarationNode declNodeFound = (DeclarationNode)symbolTable.get(i).get(node.idNode);
                 if(!declNodeFound.IsGlobal) {
-                    System.out.println("Already declared variable with name :" + node.idNode.id);
+                    System.out.println("Already declared variable with name: " + node.idNode.id + " LINE" + declNodeFound.lineNumber);
                     return true;
                 }
                 else{
                     if(i == symbolTable.size() -1) {
-                        System.out.println("Already declared variable with name :" + node.idNode.id);
+                        System.out.println("Already declared variable with name: " + node.idNode.id +
+                                " LINE " + declNodeFound.lineNumber + " COLUMN " + declNodeFound.columnNumber);
                         return true;
                     }
                 }
@@ -206,7 +207,9 @@ public class BindingVisitor extends Visitor {
     }
      private void includeFormalParamsInScope() {
         for(int i = 0 ; i < formalParamsNode.idNodes.size(); i++){
-            DeclarationNode dcNode = new DeclarationNode(formalParamsNode.typeNodes.get(i), formalParamsNode.idNodes.get(i),null);
+            DeclarationNode dcNode = new DeclarationNode();
+            dcNode.typeNode = formalParamsNode.typeNodes.get(i);
+            dcNode.idNode = formalParamsNode.idNodes.get(i);
             visit(dcNode);
         }
         isParamsVisisted = false;

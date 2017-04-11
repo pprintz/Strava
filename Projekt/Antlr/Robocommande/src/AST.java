@@ -243,6 +243,10 @@ class StructDefinitionNode extends StmtNode {
 
 class DeclarationNode extends StmtNode {
     public TypeNode typeNode;
+
+    public DeclarationNode() {
+    }
+
     public IdNode idNode;
     public boolean IsGlobal;
     public ExprNode exprNode;

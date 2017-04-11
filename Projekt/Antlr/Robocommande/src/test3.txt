@@ -1,6 +1,6 @@
 behavior onSetup():
-    num a
-    a.a.b := 2
+                   num a
+    a := a
 ;
 strategy default:
 ;
