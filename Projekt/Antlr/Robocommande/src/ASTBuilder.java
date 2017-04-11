@@ -179,7 +179,12 @@ public class ASTBuilder extends RobocommandeBaseVisitor<ASTNode> {
         TypeNode typeNode = new TypeNode(ctx.type().getText());
         IdNode idNode = new IdNode(ctx.ID().getText()){{isDeclaration = true;}};
         DeclarationNode declarationNode = new DeclarationNode(typeNode, idNode, exprNode);
+        declarationNode.IsGlobal = isDeclarationInSetupBlock(ctx);
         return declarationNode;
+    }
+    private boolean isDeclarationInSetupBlock(RobocommandeParser.DeclarationContext declCtx){
+        if(declCtx.parent.parent.parent instanceof RobocommandeParser.SetupBlockContext) return true;
+        else return false;
     }
 
     @Override
