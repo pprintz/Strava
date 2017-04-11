@@ -31,7 +31,7 @@ public class Main {
         BindingVisitor.hasFunctionsBeenDeclared = true;
         bindingVisitor.visit(ast);
 
-        if(BindingVisitor.hasRefError){
+        if(BindingVisitor.hasBindingErrorOccured){
             System.exit(0);
         }
 

@@ -20,67 +20,6 @@ public class BindingVisitor extends Visitor {
         symbolTable.pop();
     }
 
-    @Override
-    public void visit(TypeNode node) {
-    }
-
-    @Override
-    public void visit(BlockNode node) {
-        OpenScope();
-        if(isParamsVisisted) includeFormalParamsInScope();
-        super.visit(node);
-        CloseScope();
-    }
-
-    private void includeFormalParamsInScope() {
-
-        for(int i = 0 ; i < formalParamsNode.idNodes.size(); i++){
-            DeclarationNode dcNode = new DeclarationNode(formalParamsNode.typeNodes.get(i), formalParamsNode.idNodes.get(i),null);
-            visit(dcNode);
-        }
-        isParamsVisisted = false;
-    }
-
-    private boolean doesDeclExistLocally(DeclarationNode node){
-        return true;
-    }
-
-    @Override
-    public void visit(DeclarationNode node) {
-        switch (node.typeNode.type) {
-            case "num":
-            case "text":
-            case "bool":
-                symbolTable.peek().put(node.idNode, node);
-                break;
-            default:
-                BindStructDeclarationToDefinition(node);
-                symbolTable.peek().put(node.idNode, node);
-        }
-    }
-
-    @Override
-    public void visit(DefineFunctionNode node) {
-        symbolTable.peek().put(node.idNode, node);
-    }
-    @Override
-    public void visit(StructDefinitionNode node) {
-        symbolTable.peek().put(node.structIdNode, node);
-    }
-
-    @Override
-    public void visit(FieldIdNode node) {
-        super.visit(node);
-    }
-
-    private boolean isParamsVisisted = false;
-    private FormalParamsNode formalParamsNode = null;
-    @Override
-    public void visit(FormalParamsNode node) {
-        isParamsVisisted = true;
-        formalParamsNode = node;
-    }
-
     private void BindIdToDeclaration(IdNode idNode) {
         boolean isDeclared = false;
         for (int i = symbolTable.size() - 1; i >= 0; i--) {
@@ -90,12 +29,29 @@ public class BindingVisitor extends Visitor {
             }
         }
         if(!isDeclared){
-            hasRefError = true;
+            hasBindingErrorOccured = true;
             PrintNotDeclaredError("id", idNode.id);
         }
     }
+    private void BindFieldIdToDeclaration(FieldIdNode fieldIdNode) {
+        boolean isDeclared = false;
+        IdNode structId = fieldIdNode.idNodes.get(0);
+        for (int i = symbolTable.size() - 1; i >= 0; i--) {
+            if(symbolTable.get(i).containsKey(structId)){
+                ASTNode astNode = symbolTable.get(i).get(structId);
+                DeclarationNode declarationNode = (DeclarationNode) astNode;
+                if(declarationNode.structDefinitionNode != null) {
+                    fieldIdNode.structDefinitionNode = declarationNode.structDefinitionNode;
+                    isDeclared = true;
+                }
+            }
+        }
+        if(!isDeclared){
+            PrintNotDeclaredError("struct", structId.id);
+        }
+    }
 
-    public static boolean hasRefError = false;
+    public static boolean hasBindingErrorOccured = false;
     private void BindFunctionCallToDeclaration(FunctionCallNode fCallNode) {
         boolean isDeclared = false;
         if(hasFunctionsBeenDeclared) {
@@ -106,24 +62,22 @@ public class BindingVisitor extends Visitor {
                 }
             }
             if (!isDeclared) {
-                hasRefError = true;
+                hasBindingErrorOccured = true;
                 PrintNotDeclaredError("function", fCallNode.idNode.id);
             }
         }
     }
     private void BindExprFunctionCallToDeclaration(ExprFunctionCallNode fCallNode) {
         boolean isDeclared = false;
-        if(hasFunctionsBeenDeclared) {
-            for (int i = symbolTable.size() - 1; i >= 0; i--) {
-                if (symbolTable.get(i).containsKey(fCallNode.idNode)) {
-                    fCallNode.defineFunctionNode = (DefineFunctionNode) symbolTable.get(i).get(fCallNode.idNode);
-                    isDeclared = true;
-                }
+        for (int i = symbolTable.size() - 1; i >= 0; i--) {
+            if (symbolTable.get(i).containsKey(fCallNode.idNode)) {
+                fCallNode.defineFunctionNode = (DefineFunctionNode) symbolTable.get(i).get(fCallNode.idNode);
+                isDeclared = true;
             }
-            if (!isDeclared) {
-                hasRefError = true;
-                PrintNotDeclaredError(" function ", fCallNode.idNode.id);
-            }
+        }
+        if (!isDeclared) {
+            hasBindingErrorOccured = true;
+            PrintNotDeclaredError(" function ", fCallNode.idNode.id);
         }
     }
     private void PrintNotDeclaredError(String type, String id){
@@ -180,11 +134,15 @@ public class BindingVisitor extends Visitor {
 
     @Override
     public void visit(FunctionCallNode node) {
-        BindFunctionCallToDeclaration(node);
+        if(hasFunctionsBeenDeclared) {
+            BindFunctionCallToDeclaration(node);
+        }
     }
     @Override
     public void visit(ExprFunctionCallNode node){
-        BindExprFunctionCallToDeclaration(node);
+        if(hasFunctionsBeenDeclared) {
+            BindExprFunctionCallToDeclaration(node);
+        }
     }
     @Override
     public void visit(IdNode node) {
@@ -193,7 +151,95 @@ public class BindingVisitor extends Visitor {
     }
     @Override
     public void visit(StructInitializationNode node) {
-        BindStructInitializationToDefinition(node);
+        if(!hasFunctionsBeenDeclared) {
+            BindStructInitializationToDefinition(node);
+        }
     }
 
+     @Override
+    public void visit(DeclarationNode node) {
+        if(!hasFunctionsBeenDeclared) {
+            if (!doesDeclExistLocally(node)) {
+                switch (node.typeNode.type) {
+                    case "num":
+                    case "text":
+                    case "bool":
+                        symbolTable.peek().put(node.idNode, node);
+                        break;
+                    default:
+                        BindStructDeclarationToDefinition(node);
+                        symbolTable.peek().put(node.idNode, node);
+                }
+            } else hasBindingErrorOccured = true;
+        }
+    }
+    private boolean doesDeclExistLocally(DeclarationNode node){
+        for(int i = symbolTable.size()-1; i >= 0; i--){
+            if(symbolTable.get(i).containsKey(node.idNode)){
+                DeclarationNode declNodeFound = (DeclarationNode)symbolTable.get(i).get(node.idNode);
+                if(!declNodeFound.IsGlobal) {
+                    System.out.println("Already declared variable with name: " + node.idNode.id + " LINE" + declNodeFound.lineNumber);
+                    return true;
+                }
+                else{
+                    if(i == symbolTable.size() -1) {
+                        System.out.println("Already declared variable with name: " + node.idNode.id +
+                                " LINE " + declNodeFound.lineNumber + " COLUMN " + declNodeFound.columnNumber);
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
+
+    @Override
+    public void visit(DefineFunctionNode node) {
+        if(!hasFunctionsBeenDeclared) {
+            symbolTable.peek().put(node.idNode, node);
+            if(node.formalParamsNode != null) {
+                isParamsVisisted = true;
+                formalParamsNode = node.formalParamsNode;
+            }
+            visit(node.blockNode);
+        }
+    }
+     private void includeFormalParamsInScope() {
+        for(int i = 0 ; i < formalParamsNode.idNodes.size(); i++){
+            DeclarationNode dcNode = new DeclarationNode();
+            dcNode.typeNode = formalParamsNode.typeNodes.get(i);
+            dcNode.idNode = formalParamsNode.idNodes.get(i);
+            visit(dcNode);
+        }
+        isParamsVisisted = false;
+    }
+    @Override
+    public void visit(StructDefinitionNode node) {
+        if(!hasFunctionsBeenDeclared) {
+            symbolTable.peek().put(node.structIdNode, node);
+        }
+    }
+
+    @Override
+    public void visit(FieldIdNode node) {
+        if(!hasFunctionsBeenDeclared) {
+            BindFieldIdToDeclaration(node);
+        }
+    }
+
+    private boolean isParamsVisisted = false;
+    private FormalParamsNode formalParamsNode = null;
+
+    @Override
+    public void visit(TypeNode node) {
+    }
+
+    @Override
+    public void visit(BlockNode node) {
+        OpenScope();
+        if(isParamsVisisted) includeFormalParamsInScope();
+        super.visit(node);
+        CloseScope();
+    }
 }
