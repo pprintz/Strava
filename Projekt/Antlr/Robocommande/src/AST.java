@@ -413,7 +413,6 @@ abstract class ExprNode extends ASTNode {
 
 class LiteralNode extends ExprNode {
     public String literalText;
-    public Type Type;
     public LiteralNode(String literalText, Type type) {
         this.literalText = literalText;
         this.Type = type;

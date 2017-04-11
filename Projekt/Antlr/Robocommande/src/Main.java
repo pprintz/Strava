@@ -33,8 +33,11 @@ public class Main {
         if(BindingVisitor.hasRefError){
             System.exit(0);
         }
-        PrettyPrintVisitor prettyPrintVisitor = new PrettyPrintVisitor();
-        prettyPrintVisitor.visit(ast);
+        //PrettyPrintVisitor prettyPrintVisitor = new PrettyPrintVisitor();
+        //prettyPrintVisitor.visit(ast);
+        TypeChecker typeChecker = new TypeChecker();
+        typeChecker.visit(ast);
+
         System.out.println("Everything went okay.");
     }
 }
