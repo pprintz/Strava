@@ -30,9 +30,21 @@ public class Main {
         bindingVisitor.visit(ast);
         BindingVisitor.hasFunctionsBeenDeclared = true;
         bindingVisitor.visit(ast);
+
         if(BindingVisitor.hasRefError){
             System.exit(0);
         }
+
+        TypeChecker typeChecker = new TypeChecker();
+        typeChecker.visit(ast);
+
+        if (typeChecker.programHasTypeErrors){
+            System.out.println("Program has type errors, exiting ..");
+            System.exit(0);
+        } else {
+            System.out.println("No errors occured during type checking");
+        }
+
         PrettyPrintVisitor prettyPrintVisitor = new PrettyPrintVisitor();
         prettyPrintVisitor.visit(ast);
         System.out.println("Everything went okay.");

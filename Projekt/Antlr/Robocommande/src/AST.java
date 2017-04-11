@@ -408,12 +408,10 @@ abstract class ExprNode extends ASTNode {
     @Override
     public abstract void accept(Visitor v);
     public Type Type;
-
 }
 
 class LiteralNode extends ExprNode {
     public String literalText;
-    public Type Type;
     public LiteralNode(String literalText, Type type) {
         this.literalText = literalText;
         this.Type = type;
