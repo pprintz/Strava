@@ -7,15 +7,16 @@ import java.util.List;
  */
 
 abstract class ASTNode {
-    public abstract void accept(Visitor v) ;
-    public LineInformation lineInformation;
+    public ASTNode() {
 
-    public void SetLineInformation(ParserRuleContext context){
-        lineInformation.lineNumber = context.start.getLine();
-        lineInformation.columnNumber = context.start.getCharPositionInLine();
     }
-    public class LineInformation{
-        public int lineNumber, columnNumber;
+    public abstract void accept(Visitor v) ;
+    public int lineNumber;
+    public int columnNumber;
+
+    public ASTNode(ParserRuleContext ctx) {
+        lineNumber = ctx.start.getLine();
+        columnNumber = ctx.start.getCharPositionInLine();
     }
 }
 
@@ -28,10 +29,12 @@ class ProgNode extends ASTNode {
 
     public ProgNode(SetupNode setupNode, DefaultStrategyNode defaultStrategyNode,
         List<StrategyNode> strategyNodes, List<DefineFunctionNode> defineFunctionNodes) {
+        super();
         this.setupNode = setupNode;
         this.defaultStrategyNode = defaultStrategyNode;
         this.strategyNodes = strategyNodes;
         this.defineFunctionNodes = defineFunctionNodes;
+
     }
 
     @Override
@@ -43,7 +46,8 @@ class ProgNode extends ASTNode {
 class SetupNode extends ASTNode {
     public SetupBlockNode setupBlockNode;
 
-    public SetupNode(SetupBlockNode setupBlockNode) {
+    public SetupNode(SetupBlockNode setupBlockNode, RobocommandeParser.SetupContext ctx) {
+        super(ctx);
         this.setupBlockNode = setupBlockNode;
     }
     @Override
