@@ -1,7 +1,6 @@
 behavior onSetup():
-    myStruct{num a, num b}
-    myStruct Foo
-    Foo.a := 2
+    num a
+    a.a.b := 2
 ;
 strategy default:
 ;

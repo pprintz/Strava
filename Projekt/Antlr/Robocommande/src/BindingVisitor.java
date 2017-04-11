@@ -40,8 +40,10 @@ public class BindingVisitor extends Visitor {
             if(symbolTable.get(i).containsKey(structId)){
                 ASTNode astNode = symbolTable.get(i).get(structId);
                 DeclarationNode declarationNode = (DeclarationNode) astNode;
-                fieldIdNode.structDefinitionNode = declarationNode.structDefinitionNode;
-                isDeclared = true;
+                if(declarationNode.structDefinitionNode != null) {
+                    fieldIdNode.structDefinitionNode = declarationNode.structDefinitionNode;
+                    isDeclared = true;
+                }
             }
         }
         if(!isDeclared){
