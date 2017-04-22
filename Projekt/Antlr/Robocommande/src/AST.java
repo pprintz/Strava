@@ -14,6 +14,11 @@ abstract class ASTNode {
     public int lineNumber;
     public int columnNumber;
 
+    @Override
+    public String toString() {
+        return "(Line/column : " + lineNumber + "/" + columnNumber + ")";
+    }
+
     public ASTNode(ParserRuleContext ctx) {
         lineNumber = ctx.start.getLine();
         columnNumber = ctx.start.getCharPositionInLine();
