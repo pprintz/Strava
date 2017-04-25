@@ -97,10 +97,11 @@ public class JavaCodeGenerator extends Visitor {
 
 	@Override
 	public void visit(DefaultStrategyNode node) {
-		Emit("DEFAULT STRATEGY", 1);
+		Emit("class DefaultStrategy extends AdvancedRobot implements Strategy {", 1);
 		indentationLevel++;
 		super.visit(node);
 		indentationLevel--;
+		Emit("}");
 	}
 
 	@Override
@@ -310,6 +311,9 @@ public class JavaCodeGenerator extends Visitor {
 
 	@Override
 	public void visit(ProgNode node) {
+
+		String strategyInterface = CreateStrategyInterface();
+
 		Emit("\nimport java.awt.Color; \n" +
 				"import robocode.AdvancedRobot; \n" +
 				"import robocode.HitByBulletEvent; \n" +
@@ -326,6 +330,11 @@ public class JavaCodeGenerator extends Visitor {
 
 	}
 
+	private String CreateStrategyInterface() {
+		return "public interface IStrategy { \n" +
+				"public void ";
+	}
+
 	@Override
 	public void visit(ReturnStatementNode node) {
 		System.out.print(indent() + "RETURN ");
@@ -335,7 +344,7 @@ public class JavaCodeGenerator extends Visitor {
 
 	@Override
 	public void visit(RunNode node) {
-		Emit("public void runNode() {", 1);
+		Emit("public void run() {", 1);
 		indentationLevel++;
 		visit(node.blockNode);
 		indentationLevel--;

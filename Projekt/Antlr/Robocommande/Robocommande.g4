@@ -7,13 +7,13 @@ run: 'behavior' 'onRun' '('')' block;
 
 functions : (defineFunction | behaviorFunction)* ;
 defineFunction : 'define' type ID '(' formalParams? ')' block;
-behaviorFunction : 'behavior' ID '(' ID ')' block;
+behaviorFunction : 'behavior' ID '(' ID ID ')' block;
 formalParams: type ID (',' type ID)* ;
 actualParams: expr (',' expr)* ;
 
 strategy : 'strategy' ID strategyDefinition;
 defaultStrategy : 'strategy' 'default' strategyDefinition;
-strategyDefinition : ':' NEWLINE* run? functions? ';' NEWLINE*;
+strategyDefinition : ':' NEWLINE+ run? functions? ';' NEWLINE*;
 
 setupBlock : ':' (setupStmt)* ';' NEWLINE* ;
 block : ':' (stmt)* ';' NEWLINE* ;
