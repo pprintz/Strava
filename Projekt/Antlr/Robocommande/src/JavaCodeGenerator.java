@@ -5,6 +5,13 @@ public class JavaCodeGenerator extends Visitor {
 	public void Emit(String emitString){
 		Emit(indent() + emitString, 0);
 	}
+	public void Emit(String emitString, boolean allowIndent){
+		if(allowIndent){
+			Emit(indent() + emitString);
+		}else{
+			Emit(emitString);
+		}
+	}
 
 	public void Emit(String emitString, int numberOfNewLines){
 		System.out.print(indent() + emitString + new String(new char[numberOfNewLines]).replace("\0", "\n"));
