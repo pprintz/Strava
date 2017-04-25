@@ -3,15 +3,11 @@ public class JavaCodeGenerator extends Visitor {
 	private int indentationLevel = 0;
 
 	public void Emit(String emitString){
-		System.out.print(indent() + emitString);
+		Emit(indent() + emitString, 0);
 	}
 
-	public void Emit(String emitString, boolean printNewLine) {
-		Emit(emitString);
-
-		if(printNewLine){
-			System.out.println();
-		}
+	public void Emit(String emitString, int numberOfNewLines){
+		System.out.print(indent() + emitString + new String(new char[numberOfNewLines]).replace("\0", "\n"));
 	}
 
 	private String indent(){
@@ -94,7 +90,7 @@ public class JavaCodeGenerator extends Visitor {
 
 	@Override
 	public void visit(DefaultStrategyNode node) {
-		System.out.println(indent() + "DEFAULT STRATEGY ");
+		Emit("DEFAULT STRATEGY", 1);
 		indentationLevel++;
 		super.visit(node);
 		indentationLevel--;
@@ -254,7 +250,7 @@ public class JavaCodeGenerator extends Visitor {
 				visit(node.leftNode);
 				Emit(", ");
 				visit(node.rightNode);
-				Emit(");\n");
+				Emit(");", 1);
 				break;
 			case AND:
 				binaryStatements(node, "&&");
@@ -291,8 +287,7 @@ public class JavaCodeGenerator extends Visitor {
 
 	@Override
 	public void visit(LoopNode node) {
-		Emit("while(true) {\n");
-		Emit(indent());
+		Emit("while(true) {", 1);
 		visit(node.exprNode);
 		visit(node.block);
 	}
@@ -308,7 +303,7 @@ public class JavaCodeGenerator extends Visitor {
 
 	@Override
 	public void visit(ProgNode node) {
-		Emit("\n\nimport java.awt.Color; \n" +
+		Emit("\nimport java.awt.Color; \n" +
 				"import robocode.AdvancedRobot; \n" +
 				"import robocode.HitByBulletEvent; \n" +
 				"import robocode.ScannedRobotEvent; \n" +
@@ -319,7 +314,7 @@ public class JavaCodeGenerator extends Visitor {
 		indentationLevel++;
 		super.visit(node);
 		indentationLevel--;
-		Emit("}\n\n");
+		Emit("}", 2);
 
 
 	}
@@ -333,11 +328,11 @@ public class JavaCodeGenerator extends Visitor {
 
 	@Override
 	public void visit(RunNode node) {
-		Emit("public void runNode() {", true);
+		Emit("public void runNode() {", 1);
 		indentationLevel++;
 		visit(node.blockNode);
 		indentationLevel--;
-		Emit("}");
+		Emit("}", 2);
 	}
 
 	@Override
@@ -351,11 +346,19 @@ public class JavaCodeGenerator extends Visitor {
 
 	@Override
 	public void visit(SetupNode node) {
-		Emit("public void run() {\n");
-		indentationLevel++;
-		Emit("runNode();", true);
+
+
+
+		Emit("public void run() {", 1);
 		super.visit(node);
-		Emit("}");
+		indentationLevel++;
+		Emit("while(true) {", 1);
+		indentationLevel++;
+		Emit("runNode();", 1);
+		indentationLevel--;
+		Emit("}", 1);
+		indentationLevel--;
+		Emit("}", 1);
 	}
 
 	@Override

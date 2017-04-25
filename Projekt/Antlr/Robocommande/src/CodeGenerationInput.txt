@@ -4,9 +4,9 @@ behavior onSetup () :
 ;
 
 strategy default :
+	behavior onRun () :
 
+    ;
 ;
 
-//behavior onRun () :
-//
-//;
+
