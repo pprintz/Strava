@@ -1,0 +1,8 @@
+behavior onSetup () :
+    num a
+    a := a
+;
+
+strategy default :
+
+;
