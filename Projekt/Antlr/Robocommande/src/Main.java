@@ -49,8 +49,10 @@ public class Main {
         //PrettyPrintVisitor prettyPrintVisitor = new PrettyPrintVisitor();
         //prettyPrintVisitor.visit(ast);
 
+		StrategyVisitor strategyVisitor = new StrategyVisitor();
+        strategyVisitor.visit(ast);
 
-        JavaCodeGenerator codeGenerator = new JavaCodeGenerator();
+        JavaCodeGenerator codeGenerator = new JavaCodeGenerator(strategyVisitor.strategies);
         codeGenerator.visit(ast);
 
 		System.out.println("Everything went okay.");

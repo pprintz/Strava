@@ -97,6 +97,11 @@ class DefaultStrategyNode extends ASTNode {
     public void accept(Visitor v) {
         v.visit(this);
     }
+
+    @Override
+    public String toString() {
+    	return "default";
+	}
 }
 
 class StrategyDefinitionNode extends ASTNode {

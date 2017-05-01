@@ -1,22 +1,26 @@
-behavior onSetup () :
+//behavior onSetup () :
 
-;
+//;
 
 strategy default:
 	behavior onRun () :
 
     ;
 
-    behavior onHitByBullet(hitByBulletEvent e) :
+    //behavior onHitByBullet(hitByBulletEvent e) :
 
-    ;
+   // ;
 ;
 
 strategy aggressive :
-	behavior onHitByBullet(hitByBulletEvent e):
+	//behavior onHitByBullet(hitByBulletEvent e):
 
-	;
+	//;
 ;
+
+//define text ds() :
+
+//;
 
 
 // rotate

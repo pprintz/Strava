@@ -1,14 +1,23 @@
+import java.util.ArrayList;
+
 @SuppressWarnings("Duplicates")
 public class JavaCodeGenerator extends Visitor {
 	private int indentationLevel = 0;
+
+	private ArrayList<String> strategies;
+
+	public JavaCodeGenerator(ArrayList<String> strategies) {
+		super();
+		this.strategies = strategies;
+	}
 
 	public void Emit(String emitString){
 		Emit(indent() + emitString, 0);
 	}
 	public void Emit(String emitString, boolean allowIndent){
-		if(allowIndent){
+		if(allowIndent) {
 			Emit(indent() + emitString);
-		}else{
+		} else {
 			Emit(emitString);
 		}
 	}
@@ -68,7 +77,7 @@ public class JavaCodeGenerator extends Visitor {
 	public void visit(BehaviorFunctionNode node) {
 		System.out.print(indent() + "BEHAVIOR ");
 		visit(node.idNode);
-		System.out.println("(" + node.eventType.type + " " + node.idNode.id + ")");
+		//System.out.println("(" + node.eventType.type + " " + node.idNode.id + ")");
 		indentationLevel++;
 		visit(node.blockNode);
 		indentationLevel--;
@@ -97,12 +106,13 @@ public class JavaCodeGenerator extends Visitor {
 
 	@Override
 	public void visit(DefaultStrategyNode node) {
-		Emit("class DefaultStrategy extends AdvancedRobot implements Strategy {", 1);
+		Emit("class DefaultStrategy extends AdvancedRobot implements Strategy {", 2);
 		indentationLevel++;
 		super.visit(node);
 		indentationLevel--;
-		Emit("}");
+		Emit("}", 2);
 	}
+
 
 	@Override
 	public void visit(DefineFunctionNode node) {
@@ -198,7 +208,7 @@ public class JavaCodeGenerator extends Visitor {
 
 	@Override
 	public void visit(IdNode node) {
-		System.out.print(node.id);
+		//System.out.print(node.id);
 	}
 
 	@Override
@@ -312,8 +322,6 @@ public class JavaCodeGenerator extends Visitor {
 	@Override
 	public void visit(ProgNode node) {
 
-		String strategyInterface = CreateStrategyInterface();
-
 		Emit("\nimport java.awt.Color; \n" +
 				"import robocode.AdvancedRobot; \n" +
 				"import robocode.HitByBulletEvent; \n" +
@@ -321,18 +329,34 @@ public class JavaCodeGenerator extends Visitor {
 				"import java.lang.Math; \n" +
 				"import robocode.util.Utils; \n\n");
 
+		Emit("interface Strategy {", 1);
+		Emit("}", 2);
+
 		Emit("public class MyRobot extends AdvancedRobot {\n");
 		indentationLevel++;
+
+		Emit("public ArrayList<Strategy> strategies;", 2);
+
+		Emit("public MyRobot() {", 1);
+		indentationLevel++;
+
+		for (String strategy : strategies) {
+			Emit("strategies.add(\"" + strategy + "\");",  1);
+		}
+
+		indentationLevel--;
+		Emit("}", 2);
+
+
+		Emit("public void run() {", 1);
+		indentationLevel++;
+		Emit("}", 2);
+
 		super.visit(node);
 		indentationLevel--;
 		Emit("}", 2);
 
 
-	}
-
-	private String CreateStrategyInterface() {
-		return "public interface IStrategy { \n" +
-				"public void ";
 	}
 
 	@Override
@@ -395,12 +419,12 @@ public class JavaCodeGenerator extends Visitor {
 
 	@Override
 	public void visit(StrategyNode node) {
-		System.out.print(indent() + "STRATEGY ");
-		visit(node.idNode);
-		System.out.println();
+
+		Emit("class " + node.idNode.id + " extends DefaultStrategy implements Strategy {", 2);
 		indentationLevel++;
-		visit(node.strategyDefinition);
+		super.visit(node);
 		indentationLevel--;
+		Emit("}", 2);
 	}
 
 	@Override
