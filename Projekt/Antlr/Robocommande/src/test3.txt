@@ -1,11 +1,7 @@
 behavior onSetup():
-    num a := 2 + true
+    num a := 2
 
-
-
-
-
-    num b := not 5
+    a := 1
 
 ;
 strategy default:

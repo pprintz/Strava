@@ -161,4 +161,41 @@ public class TypeChecker extends Visitor {
         return typesAreCompatible;
     }
 
+
+    public void visit(AssignmentNode node){
+
+        System.out.println(node.idNode.Type);
+        if( ! (node.idNode.Type == node.exprNode.Type)){
+            TypeErrorOccured(node, node.exprNode.Type, node.idNode.Type);
+        }
+    }
+
+    public void visit(IdNode node){
+        System.out.println("HI FROM IDNODE - WOO");
+        switch(node.declarationNode.typeNode.type){
+            case "num":
+                node.Type = Type.NUM;
+                break;
+            case "text":
+                node.Type = Type.TEXT;
+                break;
+            case "bool":
+                node.Type = Type.BOOL;
+                break;
+            default:
+                node.Type = Type.STRUCT;
+                //TODO struct types
+                break;
+        }
+    }
+
+
+    public void visit(DeclarationNode node){
+        System.out.println("DECL");
+        visit(node.idNode);
+        if( ! (node.idNode.Type == node.exprNode.Type)){
+            TypeErrorOccured(node, node.exprNode.Type, node.idNode.Type);
+        }
+    }
+
 }

@@ -253,7 +253,7 @@ class DeclarationNode extends StmtNode {
     public StructDefinitionNode structDefinitionNode;
 
     public DeclarationNode(TypeNode typeNode, IdNode idNode, ExprNode exprNode, RobocommandeParser.DeclarationContext ctx) {
-        super(ctx);
+        super(ctx); // TODO what does this do?
         this.typeNode = typeNode;
         this.idNode = idNode;
         this.exprNode = exprNode;
@@ -598,6 +598,7 @@ class IdNode extends ExprNode {
         NUM,
         TEXT,
         BOOL,
-        STRUCT
+        STRUCT,
+        ERROR
     }
 
