@@ -327,7 +327,7 @@ public class ASTBuilder extends RobocommandeBaseVisitor<ASTNode> {
         ExprNode left = (ExprNode)visit(ctx.expr(0));
         ExprNode right = (ExprNode)visit(ctx.expr(1));
 
-        BinaryExprNode binaryExprNode = new BinaryExprNode(left, right);
+        BinaryExprNode binaryExprNode = new BinaryExprNode(left, right, ctx);
 
         switch (getOperatorSymbol(ctx.children, "*", "/", "%", "^", "+","-","<=",
                                                          ">=","<",">", "=", "and", "or", "!=")){
