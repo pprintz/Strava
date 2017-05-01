@@ -1,8 +1,12 @@
 behavior onSetup():
-                   num a
-    a := a
+    num a := 2 + true
+
+
+
+
+
+    num b := not 5
+
 ;
 strategy default:
-;
-define void Foo(num a, num b):
 ;

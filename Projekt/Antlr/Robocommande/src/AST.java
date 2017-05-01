@@ -535,7 +535,6 @@ class IdNode extends ExprNode {
             this.exprNode = exprNode;
             this.unaryOperator = unaryOperator;
         }
-
         public UnaryExprNode(ExprNode exprNode) {
             this.exprNode = exprNode;
         }

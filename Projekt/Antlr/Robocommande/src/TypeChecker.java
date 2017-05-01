@@ -5,18 +5,27 @@ public class TypeChecker extends Visitor {
 
     public Boolean programHasTypeErrors = false;
 
-    private void TypeErrorOccured(Type actualType, Type expectedType){
+    private void TypeErrorOccured(ASTNode node){
         programHasTypeErrors = true;
-
-        System.out.println("Type error occured. The type was: " + actualType +
-                ", but the expected type was: " + expectedType);
+        System.out.format("[%d:%d] Type error of unknown kind.\n", node.lineNumber, node.columnNumber);
     }
 
-    private void TypeErrorOccured(Type typeOne, Type typeTwo, Type expectedType){
+    private void TypeErrorOccured(ASTNode node, Type actualType, Type expectedType){
         programHasTypeErrors = true;
 
-        System.out.println("Type error occured. The type were: " + typeOne + " and " +
-                typeTwo + ", but the expected type was: " + expectedType);
+        System.out.format("[%d:%d] Type error: expected %s, got %s\n", node.lineNumber, node.columnNumber, expectedType, actualType);
+    }
+
+    private void TypeErrorOccured(ASTNode node, Type typeOne, Type typeTwo, Type expectedType){
+        programHasTypeErrors = true;
+
+        System.out.format("[%d:%d] Type error: expected two %s, got %s and %s\n", node.lineNumber, node.columnNumber, expectedType, typeOne, typeTwo);
+    }
+
+    private void TypeErrorOccured(ASTNode node, Type typeOne, Type typeTwo, Type expectedType, Type expectedTypeAlternative){
+        programHasTypeErrors = true;
+
+        System.out.format("[%d:%d] Type error: expected two of %s OR %s, got %s and %s\n", node.lineNumber, node.columnNumber, expectedType, expectedTypeAlternative, typeOne, typeTwo);
     }
 
     public void visit(UnaryExprNode unaryExprNode){
@@ -28,14 +37,20 @@ public class TypeChecker extends Visitor {
                 if(checkExpectedType(unaryExprNode, Type.BOOL)){
                     unaryExprNode.Type = Type.BOOL;
                 }
+                else{
+                    TypeErrorOccured(unaryExprNode, unaryExprNode.exprNode.Type, Type.BOOL);
+                }
                 break;
             case NEGATE:
                 if(checkExpectedType(unaryExprNode, Type.NUM)){
                     unaryExprNode.Type = Type.NUM;
                 }
+                else {
+                    TypeErrorOccured(unaryExprNode, unaryExprNode.exprNode.Type, Type.NUM);
+                }
                 break;
             default:
-                System.out.println("Type checking unaryExpression went horribly wrong.");
+                TypeErrorOccured(unaryExprNode);
         }
     }
 
@@ -50,6 +65,9 @@ public class TypeChecker extends Visitor {
                 if(checkExpectedType(binaryExprNode, Type.NUM)){
                     binaryExprNode.Type = Type.NUM;
                 }
+                else {
+                    TypeErrorOccured(binaryExprNode, binaryExprNode.leftNode.Type, binaryExprNode.rightNode.Type, Type.NUM);
+                }
                 break;
 
             case GREATERTHAN:
@@ -59,22 +77,30 @@ public class TypeChecker extends Visitor {
                 if(checkExpectedType(binaryExprNode, Type.NUM)){
                     binaryExprNode.Type = Type.BOOL;
                 }
+                else{
+                    TypeErrorOccured(binaryExprNode, binaryExprNode.leftNode.Type, binaryExprNode.rightNode.Type, Type.NUM);
+                }
                 break;
             case AND:
             case OR:
                 if(checkExpectedType(binaryExprNode, Type.BOOL)){
                     binaryExprNode.Type = Type.BOOL;
                 }
+                else{
+                    TypeErrorOccured(binaryExprNode, binaryExprNode.leftNode.Type, binaryExprNode.rightNode.Type, Type.BOOL);
+                }
                 break;
             case EQUAL:
             case NOTEQUAL:
                 if(checkExpectedType(binaryExprNode, Type.BOOL)
-                        || checkExpectedType(binaryExprNode, Type.BOOL)) {
+                        || checkExpectedType(binaryExprNode, Type.NUM)) {
                     binaryExprNode.Type = Type.BOOL;
+                }else{
+                    TypeErrorOccured(binaryExprNode, binaryExprNode.leftNode.Type, binaryExprNode.rightNode.Type, Type.NUM, Type.BOOL);
                 }
                 break;
             default:
-                System.out.println("Type checking binaryExpression went horribly wrong.");
+                TypeErrorOccured(binaryExprNode);
         }
     }
 
@@ -103,9 +129,6 @@ public class TypeChecker extends Visitor {
                 typesAreCompatible = true;
             }
         }
-        if(typesAreCompatible == false){
-            TypeErrorOccured(binaryExprNode.leftNode.Type, binaryExprNode.rightNode.Type, expectedType);
-        }
         return typesAreCompatible;
     }
 
@@ -125,24 +148,14 @@ public class TypeChecker extends Visitor {
             typeString = "num";
         }
 
-        if(unaryExprNode.exprNode.Type == expectedType && unaryExprNode.exprNode.Type == expectedType){
+        if(unaryExprNode.exprNode.Type.equals(expectedType) && unaryExprNode.exprNode.Type.equals(expectedType)){
             typesAreCompatible = true;
         }
         else if(unaryExprNode.exprNode instanceof IdNode){
             IdNode idNode = (IdNode) unaryExprNode.exprNode;
-            if(unaryExprNode.exprNode.Type == expectedType && idNode.declarationNode.typeNode.type.equals(typeString)) {
+            if(unaryExprNode.exprNode.Type.equals(expectedType) && idNode.declarationNode.typeNode.type.equals(typeString)) {
                 typesAreCompatible = true;
             }
-        }
-        else if(unaryExprNode.exprNode instanceof IdNode){
-            IdNode idNode = (IdNode) unaryExprNode.exprNode;
-            if(unaryExprNode.exprNode.Type == expectedType && idNode.declarationNode.typeNode.type.equals(typeString)) {
-                typesAreCompatible = true;
-            }
-        }
-
-        if(typesAreCompatible == false){
-            TypeErrorOccured(unaryExprNode.exprNode.Type, unaryExprNode.exprNode.Type, expectedType);
         }
 
         return typesAreCompatible;
