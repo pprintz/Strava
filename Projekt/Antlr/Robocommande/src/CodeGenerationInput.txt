@@ -13,6 +13,10 @@ strategy default:
 ;
 
 strategy aggressive :
+	behavior onRun () :
+		num a
+	;
+
 	//behavior onHitByBullet(hitByBulletEvent e):
 
 	//;

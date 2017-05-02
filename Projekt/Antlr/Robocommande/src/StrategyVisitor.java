@@ -5,7 +5,7 @@ public class StrategyVisitor extends Visitor {
 	public ArrayList<String> strategies;
 
 	public StrategyVisitor() {
-		strategies = new ArrayList();
+		strategies = new ArrayList<>();
 	}
 
 	@Override

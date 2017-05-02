@@ -11,97 +11,39 @@ public class JavaCodeGenerator extends Visitor {
 		this.strategies = strategies;
 	}
 
-	public void Emit(String emitString){
-		Emit(indent() + emitString, 0);
-	}
-	public void Emit(String emitString, boolean allowIndent){
-		if(allowIndent) {
-			Emit(indent() + emitString);
-		} else {
-			Emit(emitString);
-		}
-	}
-
 	public void Emit(String emitString, int numberOfNewLines){
 		System.out.print(indent() + emitString + new String(new char[numberOfNewLines]).replace("\0", "\n"));
+	}
+
+	public void EmitNoIndent(String emitString) {
+		System.out.print(emitString);
 	}
 
 	private String indent(){
 		return new String(new char[indentationLevel]).replace("\0", "    ");
 	}
 
+	// TODO: Not really sure if this is a good idea
+	@Deprecated
 	@Override
-	public void visit(ActualParamsNode node) {
-		int len = node.exprs.size();
-		for(int i = 0; i < len; i++ ){
-			if(i == len-1) visit(node.exprs.get(i));
-			else {
-				visit(node.exprs.get(i));
-				System.out.print(", ");
-			}
+	public void visit(TypeNode node) {}
+
+	public void visit(TypeNode node, boolean indent) {
+		if(indent) {
+			Emit(node.type, 0);
+		} else {
+			EmitNoIndent(" " + node.type);
 		}
-
 	}
-
-	@Override
-	public void visit(TypeNode node) {
-	}
-
-	@Override
-	public void visit(ASTNode node) {
-		super.visit(node);
-	}
-
-	@Override
-	public void visit(FunctionStmtNode node) {
-		super.visit(node);
-	}
-
-	@Override
-	public void visit(GeneralStmtNode node) {
-		System.out.print(indent());
-		super.visit(node);
-		System.out.println();
-	}
-
-	@Override
-	public void visit(AssignmentNode node) {
-		System.out.print(indent() + "ASSIGN ");
-		node.idNode.accept(this);
-		System.out.print(" := ");
-		node.exprNode.accept(this);
-		System.out.println();
-	}
-
-	@Override
-	public void visit(BehaviorFunctionNode node) {
-		System.out.print(indent() + "BEHAVIOR ");
-		visit(node.idNode);
-		//System.out.println("(" + node.eventType.type + " " + node.idNode.id + ")");
-		indentationLevel++;
-		visit(node.blockNode);
-		indentationLevel--;
-	}
-
-	@Override
-	public void visit(BlockNode node) {
-		indentationLevel++;
-		super.visit(node);
-		System.out.println();
-		indentationLevel--;
-	}
-
 
 	@Override
 	public void visit(DeclarationNode node) {
-		System.out.print(indent() + "DECLARE ");
-		System.out.print(node.typeNode.type + " ");
-		visit(node.idNode);
-		if(node.exprNode != null) {
-			System.out.print(" := ");
+		visit(node.typeNode, true);
+		visit(node.idNode, false);
+		if (node.exprNode != null) {
 			visit(node.exprNode);
 		}
-		System.out.println();
+		Emit("", 1);
 	}
 
 	@Override
@@ -113,243 +55,74 @@ public class JavaCodeGenerator extends Visitor {
 		Emit("}", 2);
 	}
 
-
-	@Override
-	public void visit(DefineFunctionNode node) {
-		System.out.print(indent() + "DEFINE ");
-		visit(node.idNode);
-		System.out.print("(");
-		visit(node.formalParamsNode);
-		System.out.print(")");
-		System.out.println(" RETURNS " + node.typeNode.type);
-
-		indentationLevel++;
-		visit(node.blockNode);
-		indentationLevel--;
-	}
-
-
-
-	@Override
-	public void visit(ElseIfStatementNode node) {
-		System.out.print(indent() + "ELSE IF ");
-		visit(node.predicate);
-		System.out.println();
-		visit(node.blockNode);
-	}
-
-
-	@Override
-	public void visit(FieldAssignmentNode node) {
-		System.out.print(indent() + "ASSIGN ");
-		visit(node.fieldIdNode);
-		System.out.print(" := ");
-		visit(node.exprNode);
-		System.out.println();
-	}
-
-	@Override
-	public void visit(FieldIdNode node)
-	{
-		int len = node.idNodes.size();
-		for(int i = 0; i < len; i++){
-			visit(node.idNodes.get(i));
-			if(i < len-1) System.out.print(".");
-		}
-	}
-
-	@Override
-	public void visit(FormalParamsNode node) {
-		if(node != null) {
-			int len = node.idNodes.size();
-			for (int i = 0; i < len; i++) {
-				System.out.print(node.typeNodes.get(i).type + " ");
-				visit(node.idNodes.get(i));
-				if (i < len - 1)
-					System.out.print(", ");
-			}
-		}
-	}
-
-	@Override
-	public void visit(FunctionCallNode node) {
-		System.out.print(indent() + "CALL ");
-		if(node.idNode != null) visit(node.idNode);
-		else visit(node.fieldIdNode);
-		System.out.print("(");
-		if(node.actualParams != null) visit(node.actualParams);
-		System.out.print(")\n");
-
-	}
-
-	@Override
-	public void visit(FunctionsNode node) {
-		super.visit(node);
-	}
-
 	@Override
 	public void visit(UnaryExprNode node) {
 		switch(node.unaryOperator){
 			case NEGATEBOOL:
-				Emit("!");
+				Emit("!", 0);
 				visit(node.exprNode);
 				break;
 			case NEGATE:
-				Emit("-");
+				Emit("-", 0);
 				visit(node.exprNode);
 				break;
 			case PARANTHESIS:
-				Emit("(");
+				Emit("(", 0);
 				visit(node.exprNode);
-				Emit(")");
-				break;
-		}
-	}
-
-	@Override
-	public void visit(IdNode node) {
-		//System.out.print(node.id);
-	}
-
-	@Override
-	public void visit(IfStatementNode node) {
-		System.out.print(indent() + "IF ");
-		visit(node.predicate);
-		System.out.println();
-		visit(node.ifBlockNode);
-		for(ElseIfStatementNode elif : node.elseIfNodes){
-			visit(elif);
-		}
-		if(node.elseBlockNode != null){
-			System.out.print(indent() + "ELSE ");
-			System.out.println();
-			visit(node.elseBlockNode);
-		}
-	}
-
-	@Override
-	public void visit(ExprFunctionCallNode node) {
-		System.out.print("CALL ");
-		if(node.idNode != null)
-			visit(node.idNode);
-		else  if (node.fieldIdNode != null) visit(node.fieldIdNode);
-		System.out.print("(");
-		if(node.actualParams != null)
-			visit(node.actualParams);
-		System.out.print(")");
-	}
-
-	@Override
-	public void visit(BinaryExprNode node) {
-		switch (node.binaryOperator) {
-			case PLUS:
-				binaryStatements(node, "+");
-				break;
-			case MINUS:
-				binaryStatements(node, "-");
-				break;
-			case MULTIPLY:
-				binaryStatements(node, "*");
-				break;
-			case DIVISION:
-				binaryStatements(node, "/");
-				break;
-			case MODULO:
-				binaryStatements(node, "%");
-				break;
-			case LESSTHANEQUAL:
-				binaryStatements(node, "<=");
-				break;
-			case GREATERTHANEQUAL:
-				binaryStatements(node, ">=");
-				break;
-			case POWER:
-				Emit("Math.Pow(");
-				visit(node.leftNode);
-				Emit(", ");
-				visit(node.rightNode);
-				Emit(");", 1);
-				break;
-			case AND:
-				binaryStatements(node, "&&");
-				break;
-			case OR:
-				binaryStatements(node, "||");
-				break;
-			case LESSTHAN:
-				binaryStatements(node, "<");
-				break;
-			case GREATERTHAN:
-				binaryStatements(node, ">");
-				break;
-			case EQUAL:
-				binaryStatements(node, "=");
-				break;
-			case NOTEQUAL:
-				binaryStatements(node, "!=");
+				Emit(")", 0);
 				break;
 		}
 	}
 
 	private void binaryStatements(BinaryExprNode node, String symbol) {
 		if (node.leftNode != null) visit(node.leftNode);
-		Emit(" " + symbol + " ");
+		Emit(" " + symbol + " ", 0);
 		if (node.rightNode != null) visit(node.rightNode);
 
 	}
 
 	@Override
-	public void visit(LiteralNode node) {
-		System.out.print(node.literalText);
-	}
-
-	@Override
-	public void visit(LoopNode node) {
-		Emit("while(true) {", 1);
-		visit(node.exprNode);
-		visit(node.block);
-	}
-
-	@Override
-	public void visit(NewEventNode node) {
-		System.out.print(indent() + "NEW EVENT ");
-		System.out.println(node.idNode.id);
-		indentationLevel++;
-		visit(node.blockNode);
-		indentationLevel--;
-	}
-
-	@Override
 	public void visit(ProgNode node) {
+		String className = "MyRobot";
 
 		Emit("\nimport java.awt.Color; \n" +
 				"import robocode.AdvancedRobot; \n" +
 				"import robocode.HitByBulletEvent; \n" +
 				"import robocode.ScannedRobotEvent; \n" +
 				"import java.lang.Math; \n" +
-				"import robocode.util.Utils; \n\n");
+				"import robocode.util.Utils;", 2);
 
 		Emit("interface Strategy {", 1);
+		indentationLevel++;
+		Emit("public void run();", 1);
+		indentationLevel--;
 		Emit("}", 2);
 
-		Emit("public class MyRobot extends AdvancedRobot {\n");
+		Emit("public class " + className + " extends AdvancedRobot {\n", 1);
 		indentationLevel++;
 
-		Emit("public ArrayList<Strategy> strategies;", 2);
+		Emit("public ArrayList<Strategy> strategies;", 1);
+		Emit("public Strategy currentStrategy;", 2);
 
-		Emit("public MyRobot() {", 1);
+		Emit("public " + className + "() {", 1);
 		indentationLevel++;
+		Emit("strategies = new ArrayList<>();", 1);
 
 		for (String strategy : strategies) {
-			Emit("strategies.add(\"" + strategy + "\");",  1);
+			Emit("strategies.add(new " + strategy + "Strategy());", 1);
 		}
 
 		indentationLevel--;
 		Emit("}", 2);
 
-
 		Emit("public void run() {", 1);
 		indentationLevel++;
+		Emit("while (true) {", 1);
+		indentationLevel++;
+		Emit("currentStrategy.run();", 1);
+		indentationLevel--;
+		Emit("}", 1);
+		indentationLevel--;
 		Emit("}", 2);
 
 		super.visit(node);
@@ -357,13 +130,6 @@ public class JavaCodeGenerator extends Visitor {
 		Emit("}", 2);
 
 
-	}
-
-	@Override
-	public void visit(ReturnStatementNode node) {
-		System.out.print(indent() + "RETURN ");
-		super.visit(node);
-		System.out.println();
 	}
 
 	@Override
@@ -375,20 +141,22 @@ public class JavaCodeGenerator extends Visitor {
 		Emit("}", 2);
 	}
 
+	// TODO: Not really sure if this is a good idea
+	@Deprecated
 	@Override
-	public void visit(SetupBlockNode node) {
-		indentationLevel++;
-		super.visit(node);
-		System.out.println();
-		indentationLevel--;
-	}
+	public void visit(IdNode node) {}
 
+	public void visit(IdNode node, boolean indent) {
+		if (indent) {
+			Emit(node.id, 0);
+		} else {
+			EmitNoIndent(" " + node.id);
+		}
+
+	}
 
 	@Override
 	public void visit(SetupNode node) {
-
-
-
 		Emit("public void run() {", 1);
 		super.visit(node);
 		indentationLevel++;
@@ -402,59 +170,15 @@ public class JavaCodeGenerator extends Visitor {
 	}
 
 	@Override
-	public void visit(SetupStmtNode node) {
-		System.out.print(indent());
-		super.visit(node);
-	}
-
-	public void visit(StmtNode node) {
-		System.out.print(indent());
-		super.visit(node);
-	}
-
-	@Override
-	public void visit(StrategyDefinitionNode node) {
-		super.visit(node);
-	}
-
-	@Override
 	public void visit(StrategyNode node) {
 
-		Emit("class " + node.idNode.id + " extends DefaultStrategy implements Strategy {", 2);
+		Emit("class ", 0);
+		visit(node.idNode, false);
+		EmitNoIndent("Strategy extends DefaultStrategy implements Strategy { \n\n");
 		indentationLevel++;
-		super.visit(node);
+		visit(node.strategyDefinition);
 		indentationLevel--;
 		Emit("}", 2);
 	}
 
-	@Override
-	public void visit(StructDefinitionNode node) {
-		System.out.print(indent() + "STRUCT ");
-		System.out.print(node.structIdNode.id);
-		indentationLevel++;
-		System.out.println("{ ");
-		for(DeclarationNode declNode : node.declarationNodes){
-			System.out.print(indent() + declNode.typeNode.type + " " + declNode.idNode.id);
-			if(declNode.exprNode != null) {
-				System.out.print(" := ");
-				visit(declNode.exprNode);
-			}
-			System.out.println();
-		}
-		indentationLevel--;
-		System.out.println(indent() + "}");
-	}
-
-	@Override
-	public void visit(StructInitializationNode node) {
-		visit(node.idNode);
-		System.out.println("(");
-		indentationLevel++;
-		int len = node.assignments.size();
-		for(int i = 0; i < len; i++){
-			visit(node.assignments.get(i));
-		}
-		indentationLevel--;
-		System.out.print(indent() + ")");
-	}
 }
