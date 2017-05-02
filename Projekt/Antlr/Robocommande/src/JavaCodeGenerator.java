@@ -33,11 +33,11 @@ public class JavaCodeGenerator extends Visitor {
 		}
 	}
 
-	public void Emit(String emitString, int numberOfNewLines){
+	private void Emit(String emitString, int numberOfNewLines){
 		writer.print(indent() + emitString + new String(new char[numberOfNewLines]).replace("\0", "\n"));
 	}
 
-	public void EmitNoIndent(String emitString) {
+	private void EmitNoIndent(String emitString) {
 		writer.print(emitString);
 	}
 
@@ -135,13 +135,6 @@ public class JavaCodeGenerator extends Visitor {
 				Emit(")", 0);
 				break;
 		}
-	}
-
-	private void binaryStatements(BinaryExprNode node, String symbol) {
-		if (node.leftNode != null) visit(node.leftNode);
-		Emit(" " + symbol + " ", 0);
-		if (node.rightNode != null) visit(node.rightNode);
-
 	}
 
 	@Override
