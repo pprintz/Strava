@@ -146,6 +146,7 @@ public class BindingVisitor extends Visitor {
     }
     @Override
     public void visit(IdNode node) {
+
         if(!node.isDeclaration)
             BindIdToDeclaration(node);
     }

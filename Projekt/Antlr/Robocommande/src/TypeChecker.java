@@ -57,6 +57,10 @@ public class TypeChecker extends Visitor {
     public void visit(BinaryExprNode binaryExprNode){
         switch (binaryExprNode.binaryOperator) {
             case PLUS:
+                if(checkExpectedType(binaryExprNode, Type.TEXT)){
+                    binaryExprNode.Type = Type.TEXT;
+                    break;
+                }
             case MINUS:
             case MULTIPLY:
             case DIVISION:
@@ -105,8 +109,8 @@ public class TypeChecker extends Visitor {
     }
 
     private boolean checkExpectedType(BinaryExprNode binaryExprNode, Type expectedType) {
-        if(expectedType == Type.TEXT || expectedType == Type.STRUCT){
-            System.out.println("Don't call checkExpectedType with expectedType TEXT or STRUCT");
+        if(expectedType == Type.STRUCT){
+            System.out.println("Don't call checkExpectedType with expectedType STRUCT");
             return false;
         }
         Boolean typesAreCompatible = false;
@@ -124,7 +128,7 @@ public class TypeChecker extends Visitor {
             }
         }
         else if(binaryExprNode.rightNode instanceof IdNode){
-            IdNode idNode = (IdNode) binaryExprNode.leftNode;
+            IdNode idNode = (IdNode) binaryExprNode.rightNode;
             if(binaryExprNode.leftNode.Type == expectedType && idNode.declarationNode.typeNode.type.equals(typeString)) {
                 typesAreCompatible = true;
             }
@@ -147,7 +151,6 @@ public class TypeChecker extends Visitor {
         else if(expectedType == Type.NUM){
             typeString = "num";
         }
-
         if(unaryExprNode.exprNode.Type.equals(expectedType) && unaryExprNode.exprNode.Type.equals(expectedType)){
             typesAreCompatible = true;
         }
@@ -161,41 +164,72 @@ public class TypeChecker extends Visitor {
         return typesAreCompatible;
     }
 
+    public void visit(LiteralNode node){
+    }
 
     public void visit(AssignmentNode node){
-
-        System.out.println(node.idNode.Type);
-        if( ! (node.idNode.Type == node.exprNode.Type)){
-            TypeErrorOccured(node, node.exprNode.Type, node.idNode.Type);
+        if( ! (node.idNode.declarationNode.Type == node.exprNode.Type)){
+            TypeErrorOccured(node, node.exprNode.Type, node.idNode.declarationNode.Type);
         }
     }
 
     public void visit(IdNode node){
-        System.out.println("HI FROM IDNODE - WOO");
-        switch(node.declarationNode.typeNode.type){
-            case "num":
-                node.Type = Type.NUM;
-                break;
-            case "text":
-                node.Type = Type.TEXT;
-                break;
-            case "bool":
-                node.Type = Type.BOOL;
-                break;
-            default:
-                node.Type = Type.STRUCT;
-                //TODO struct types
-                break;
+
+    }
+
+    public void visit(BlockNode node){
+
+    }
+
+    public void visit(DefineFunctionNode node){
+
+    }
+
+    /*public void visit(StructInitializationNode node){
+        for(AssignmentNode aNode : node.assignments){
+            visit(aNode);
+        }
+    }*/
+
+    public void visit(StructDefinitionNode node){
+        for(DeclarationNode dNode : node.declarationNodes){
+            visit(dNode);
         }
     }
 
+    public void visit(StructInitializationNode node){
+        for(AssignmentNode aNode : node.assignments){
+            visit(aNode);
+        }
+    }
+
+    //public void visit(Struc)
 
     public void visit(DeclarationNode node){
-        System.out.println("DECL");
-        visit(node.idNode);
-        if( ! (node.idNode.Type == node.exprNode.Type)){
-            TypeErrorOccured(node, node.exprNode.Type, node.idNode.Type);
+        node.Type = typeOfTypeNode(node.typeNode);
+        if(node.exprNode != null) {
+            visit(node.exprNode);
+            if(node.Type != node.exprNode.Type ){
+                TypeErrorOccured(node, node.exprNode.Type, node.Type);
+            }
+            else{
+                node.idNode.Type = node.Type;
+            }
         }
+    }
+
+    private Type typeOfTypeNode(TypeNode node){
+        switch(node.type){
+            case "num":
+                return Type.NUM;
+            case "text":
+                return Type.TEXT;
+            case "bool":
+                return Type.BOOL;
+            default:
+                return Type.STRUCT;
+        }
+
     }
 
 }

@@ -1,7 +1,11 @@
 behavior onSetup():
-    num a := 2
+    num a
+    num b := 3
 
-    a := 1
+    myStruct {num fA, num fB }
+
+    myStruct k := myStruct(2, 3)
+
 
 ;
 strategy default:

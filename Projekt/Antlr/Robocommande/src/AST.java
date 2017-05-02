@@ -251,6 +251,7 @@ class DeclarationNode extends StmtNode {
     public boolean IsGlobal;
     public ExprNode exprNode;
     public StructDefinitionNode structDefinitionNode;
+    public Type Type;
 
     public DeclarationNode(TypeNode typeNode, IdNode idNode, ExprNode exprNode, RobocommandeParser.DeclarationContext ctx) {
         super(ctx); // TODO what does this do?
