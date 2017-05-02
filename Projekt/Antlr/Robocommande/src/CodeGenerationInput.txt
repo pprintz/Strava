@@ -14,7 +14,9 @@ strategy default:
 
 strategy aggressive :
 	behavior onRun () :
-		num a
+		num a := 1
+		bool b
+		text c
 	;
 
 	//behavior onHitByBullet(hitByBulletEvent e):

@@ -11,6 +11,19 @@ public class JavaCodeGenerator extends Visitor {
 		this.strategies = strategies;
 	}
 
+	private String RoboToJavaType(String roboType) {
+		switch(roboType) {
+			case "num":
+				return "double";
+			case "text":
+				return "String";
+			case "bool":
+				return "boolean";
+			default:
+				return roboType;
+		}
+	}
+
 	public void Emit(String emitString, int numberOfNewLines){
 		System.out.print(indent() + emitString + new String(new char[numberOfNewLines]).replace("\0", "\n"));
 	}
@@ -28,11 +41,17 @@ public class JavaCodeGenerator extends Visitor {
 	@Override
 	public void visit(TypeNode node) {}
 
+	@Override
+	public void visit(BinaryExprNode node) {
+		super.visit(node);
+	}
+
 	public void visit(TypeNode node, boolean indent) {
+		String javaType = RoboToJavaType(node.type);
 		if(indent) {
-			Emit(node.type, 0);
+			Emit(javaType, 0);
 		} else {
-			EmitNoIndent(" " + node.type);
+			EmitNoIndent(" " + javaType);
 		}
 	}
 
@@ -41,9 +60,10 @@ public class JavaCodeGenerator extends Visitor {
 		visit(node.typeNode, true);
 		visit(node.idNode, false);
 		if (node.exprNode != null) {
+			EmitNoIndent(" = ");
 			visit(node.exprNode);
 		}
-		Emit("", 1);
+		EmitNoIndent("; \n");
 	}
 
 	@Override
@@ -145,6 +165,11 @@ public class JavaCodeGenerator extends Visitor {
 	@Deprecated
 	@Override
 	public void visit(IdNode node) {}
+
+	@Override
+	public void visit(LiteralNode node) {
+		super.visit(node);
+	}
 
 	public void visit(IdNode node, boolean indent) {
 		if (indent) {
