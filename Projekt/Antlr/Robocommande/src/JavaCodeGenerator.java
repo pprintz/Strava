@@ -1,5 +1,5 @@
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
-
+import java.io.FileOutputStream;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 
 @SuppressWarnings("Duplicates")
@@ -7,10 +7,17 @@ public class JavaCodeGenerator extends Visitor {
 	private int indentationLevel = 0;
 
 	private ArrayList<String> strategies;
+	PrintWriter writer;
+
 
 	public JavaCodeGenerator(ArrayList<String> strategies) {
 		super();
 		this.strategies = strategies;
+		try {
+			writer = new PrintWriter(new FileOutputStream("./out/JavaCodeGeneratorOutput.java", false));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	private String RoboToJavaType(String roboType) {
@@ -27,11 +34,11 @@ public class JavaCodeGenerator extends Visitor {
 	}
 
 	public void Emit(String emitString, int numberOfNewLines){
-		System.out.print(indent() + emitString + new String(new char[numberOfNewLines]).replace("\0", "\n"));
+		writer.print(indent() + emitString + new String(new char[numberOfNewLines]).replace("\0", "\n"));
 	}
 
 	public void EmitNoIndent(String emitString) {
-		System.out.print(emitString);
+		writer.print(emitString);
 	}
 
 	private String indent(){
@@ -45,7 +52,9 @@ public class JavaCodeGenerator extends Visitor {
 
 	@Override
 	public void visit(StmtNode node) {
-		throw new NotImplementedException();
+		if (node != null) {
+			super.visit(node);
+		}
 	}
 
 	@Override
@@ -87,7 +96,7 @@ public class JavaCodeGenerator extends Visitor {
 
 	@Override
 	public void visit(DefaultStrategyNode node) {
-		Emit("class DefaultStrategy extends AdvancedRobot implements Strategy {", 2);
+		Emit("class defaultStrategy extends AdvancedRobot implements Strategy {", 2);
 		indentationLevel++;
 		super.visit(node);
 		indentationLevel--;
@@ -144,6 +153,7 @@ public class JavaCodeGenerator extends Visitor {
 				"import robocode.HitByBulletEvent; \n" +
 				"import robocode.ScannedRobotEvent; \n" +
 				"import java.lang.Math; \n" +
+				"import java.util.ArrayList; \n" +
 				"import robocode.util.Utils;", 2);
 
 		Emit("interface Strategy {", 1);
@@ -183,7 +193,7 @@ public class JavaCodeGenerator extends Visitor {
 		indentationLevel--;
 		Emit("}", 2);
 
-
+		writer.close();
 	}
 
 	@Override
@@ -202,7 +212,7 @@ public class JavaCodeGenerator extends Visitor {
 
 	@Override
 	public void visit(LiteralNode node) {
-		super.visit(node);
+		EmitNoIndent(node.literalText);
 	}
 
 	public void visit(IdNode node, boolean indent) {
@@ -233,7 +243,7 @@ public class JavaCodeGenerator extends Visitor {
 
 		Emit("class", 0);
 		visit(node.idNode, false);
-		EmitNoIndent("Strategy extends DefaultStrategy implements Strategy { \n\n");
+		EmitNoIndent("Strategy extends defaultStrategy implements Strategy { \n\n");
 		indentationLevel++;
 		visit(node.strategyDefinition);
 		indentationLevel--;
