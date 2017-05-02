@@ -93,7 +93,7 @@ bild.log
 bild_output.txt
 runtime/Cpp/demo/generated
 xcuserdata
-*.jar
+# *.jar
 .vscode
 
 # VSCode Java plugin temporary files
