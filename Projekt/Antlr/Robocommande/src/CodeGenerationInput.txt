@@ -24,9 +24,9 @@ strategy aggressive :
 	//;
 ;
 
-//define text ds() :
+define text ds() :
 
-//;
+;
 
 
 // rotate

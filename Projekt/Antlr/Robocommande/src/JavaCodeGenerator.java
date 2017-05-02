@@ -1,3 +1,5 @@
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
+
 import java.util.ArrayList;
 
 @SuppressWarnings("Duplicates")
@@ -42,6 +44,23 @@ public class JavaCodeGenerator extends Visitor {
 	public void visit(TypeNode node) {}
 
 	@Override
+	public void visit(StmtNode node) {
+		throw new NotImplementedException();
+	}
+
+	@Override
+	public void visit(BlockNode node) {
+		Emit("", 1);
+		Emit("{", 1);
+		indentationLevel++;
+		for (StmtNode stmtNode : node.functionStmtNodes) {
+			visit(stmtNode);
+		}
+		indentationLevel--;
+		Emit("}", 1);
+	}
+
+	@Override
 	public void visit(BinaryExprNode node) {
 		super.visit(node);
 	}
@@ -73,6 +92,21 @@ public class JavaCodeGenerator extends Visitor {
 		super.visit(node);
 		indentationLevel--;
 		Emit("}", 2);
+	}
+
+	@Override
+	public void visit(DefineFunctionNode node) {
+		Emit("public", 0);
+		visit(node.typeNode, false);
+		visit(node.idNode, false);
+		EmitNoIndent("(");
+		if (node.formalParamsNode != null) {
+			visit(node.formalParamsNode);
+		}
+		EmitNoIndent(")");
+		visit(node.blockNode);
+
+//		super.visit(node);
 	}
 
 	@Override
@@ -154,11 +188,11 @@ public class JavaCodeGenerator extends Visitor {
 
 	@Override
 	public void visit(RunNode node) {
-		Emit("public void run() {", 1);
-		indentationLevel++;
+		Emit("public void run()", 0);
+//		indentationLevel++;
 		visit(node.blockNode);
-		indentationLevel--;
-		Emit("}", 2);
+//		indentationLevel--;
+//		Emit("}", 2);
 	}
 
 	// TODO: Not really sure if this is a good idea
@@ -197,7 +231,7 @@ public class JavaCodeGenerator extends Visitor {
 	@Override
 	public void visit(StrategyNode node) {
 
-		Emit("class ", 0);
+		Emit("class", 0);
 		visit(node.idNode, false);
 		EmitNoIndent("Strategy extends DefaultStrategy implements Strategy { \n\n");
 		indentationLevel++;
