@@ -48,7 +48,7 @@ fieldAssignment : fieldId ':=' expr ;
 assignment : ID ':=' expr ;
 ifStatement: 'if' expr block ('else if' expr block)* ('else' block)? ;
 functionCall: (fieldId | ID) '(' actualParams? ')' ;
-structInitialization: ID '(' assignment? (',' assignment)* ')' ;
+structInitialization: 'new' ID '(' assignment? (',' assignment)* ')' ;
 loop: 'loop' ('while' expr)? block ;
 returnStatement : 'return' expr ;
 

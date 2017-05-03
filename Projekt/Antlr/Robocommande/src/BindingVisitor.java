@@ -7,7 +7,7 @@ import java.util.Stack;
 public class BindingVisitor extends Visitor {
 
     public static boolean hasFunctionsBeenDeclared = false;
-    Stack<HashMap<IdNode, ASTNode>> symbolTable;
+    Stack<HashMap<String, ASTNode>> symbolTable;
 
     public BindingVisitor() {
         symbolTable = new Stack<>();
@@ -23,8 +23,8 @@ public class BindingVisitor extends Visitor {
     private void BindIdToDeclaration(IdNode idNode) {
         boolean isDeclared = false;
         for (int i = symbolTable.size() - 1; i >= 0; i--) {
-            if (symbolTable.get(i).containsKey(idNode)) {
-                idNode.declarationNode = (DeclarationNode)symbolTable.get(i).get(idNode);
+            if (symbolTable.get(i).containsKey(idNode.id)) {
+                idNode.declarationNode = (DeclarationNode)symbolTable.get(i).get(idNode.id);
                 isDeclared = true;
             }
         }
@@ -37,8 +37,8 @@ public class BindingVisitor extends Visitor {
         boolean isDeclared = false;
         IdNode structId = fieldIdNode.idNodes.get(0);
         for (int i = symbolTable.size() - 1; i >= 0; i--) {
-            if(symbolTable.get(i).containsKey(structId)){
-                ASTNode astNode = symbolTable.get(i).get(structId);
+            if(symbolTable.get(i).containsKey(structId.id)){
+                ASTNode astNode = symbolTable.get(i).get(structId.id);
                 DeclarationNode declarationNode = (DeclarationNode) astNode;
                 if(declarationNode.structDefinitionNode != null) {
                     fieldIdNode.structDefinitionNode = declarationNode.structDefinitionNode;
@@ -56,8 +56,8 @@ public class BindingVisitor extends Visitor {
         boolean isDeclared = false;
         if(hasFunctionsBeenDeclared) {
             for (int i = symbolTable.size() - 1; i >= 0; i--) {
-                if (symbolTable.get(i).containsKey(fCallNode.idNode)) {
-                    fCallNode.defineFunctionNode = (DefineFunctionNode) symbolTable.get(i).get(fCallNode.idNode);
+                if (symbolTable.get(i).containsKey(fCallNode.idNode.id)) {
+                    fCallNode.defineFunctionNode = (DefineFunctionNode) symbolTable.get(i).get(fCallNode.idNode.id);
                     isDeclared = true;
                 }
             }
@@ -70,8 +70,8 @@ public class BindingVisitor extends Visitor {
     private void BindExprFunctionCallToDeclaration(ExprFunctionCallNode fCallNode) {
         boolean isDeclared = false;
         for (int i = symbolTable.size() - 1; i >= 0; i--) {
-            if (symbolTable.get(i).containsKey(fCallNode.idNode)) {
-                fCallNode.defineFunctionNode = (DefineFunctionNode) symbolTable.get(i).get(fCallNode.idNode);
+            if (symbolTable.get(i).containsKey(fCallNode.idNode.id)) {
+                fCallNode.defineFunctionNode = (DefineFunctionNode) symbolTable.get(i).get(fCallNode.idNode.id);
                 isDeclared = true;
             }
         }
@@ -86,8 +86,8 @@ public class BindingVisitor extends Visitor {
     private void BindStructInitializationToDefinition(StructInitializationNode structInitializationNode) {
         boolean isStructDefined = false;
         for (int i = symbolTable.size() - 1; i >= 0; i--) {
-            if (symbolTable.get(i).containsKey(structInitializationNode.idNode)) {
-                structInitializationNode.structDefinitionNode = (StructDefinitionNode) symbolTable.get(i).get(structInitializationNode.idNode);
+            if (symbolTable.get(i).containsKey(structInitializationNode.typeNode.type)) {
+                structInitializationNode.structDefinitionNode = (StructDefinitionNode) symbolTable.get(i).get(structInitializationNode.typeNode.type);
                 isStructDefined = true;
                 if(!getStructInitValidity(structInitializationNode)){
                     System.out.println("Struct initialization does not match struct field declaration");
@@ -96,7 +96,7 @@ public class BindingVisitor extends Visitor {
         }
         if (!isStructDefined) {
             //PrintNotDeclaredError("struct", structInitializationNode.structDefinitionNode.structIdNode.id);
-            PrintNotDeclaredError("struct", structInitializationNode.idNode.id, structInitializationNode);
+            PrintNotDeclaredError("struct", structInitializationNode.typeNode.type, structInitializationNode);
         }
     }
 
@@ -122,8 +122,8 @@ public class BindingVisitor extends Visitor {
     private void BindStructDeclarationToDefinition(DeclarationNode node) {
         boolean isStructDefined = false;
         for (int i = symbolTable.size() - 1; i >= 0; i--) {
-            if (symbolTable.get(i).containsKey(new IdNode(node.typeNode.type))) {
-                node.structDefinitionNode = (StructDefinitionNode) symbolTable.get(i).get(new IdNode(node.typeNode.type));
+            if (symbolTable.get(i).containsKey(node.typeNode.type)) {
+                node.structDefinitionNode = (StructDefinitionNode) symbolTable.get(i).get(node.typeNode.type);
                 isStructDefined = true;
             }
         }
@@ -165,19 +165,19 @@ public class BindingVisitor extends Visitor {
                     case "num":
                     case "text":
                     case "bool":
-                        symbolTable.peek().put(node.idNode, node);
+                        symbolTable.peek().put(node.idNode.id, node);
                         break;
                     default:
                         BindStructDeclarationToDefinition(node);
-                        symbolTable.peek().put(node.idNode, node);
+                        symbolTable.peek().put(node.idNode.id, node);
                 }
             } else hasBindingErrorOccured = true;
         }
     }
     private boolean doesDeclExistLocally(DeclarationNode node){
         for(int i = symbolTable.size()-1; i >= 0; i--){
-            if(symbolTable.get(i).containsKey(node.idNode)){
-                DeclarationNode declNodeFound = (DeclarationNode)symbolTable.get(i).get(node.idNode);
+            if(symbolTable.get(i).containsKey(node.idNode.id)){
+                DeclarationNode declNodeFound = (DeclarationNode)symbolTable.get(i).get(node.idNode.id);
                 if(!declNodeFound.IsGlobal) {
                     System.out.println("Already declared variable with name: " + node.idNode.id + " LINE" + declNodeFound.lineNumber);
                     return true;
@@ -198,7 +198,7 @@ public class BindingVisitor extends Visitor {
     @Override
     public void visit(DefineFunctionNode node) {
         if(!hasFunctionsBeenDeclared) {
-            symbolTable.peek().put(node.idNode, node);
+            symbolTable.peek().put(node.idNode.id, node);
             if(node.formalParamsNode != null) {
                 isParamsVisisted = true;
                 formalParamsNode = node.formalParamsNode;
@@ -218,7 +218,7 @@ public class BindingVisitor extends Visitor {
     @Override
     public void visit(StructDefinitionNode node) {
         if(!hasFunctionsBeenDeclared) {
-            symbolTable.peek().put(node.structIdNode, node);
+                symbolTable.peek().put(node.typeNode.type, node);
         }
     }
 

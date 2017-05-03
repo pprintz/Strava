@@ -35,13 +35,11 @@ public class Main {
             System.exit(0);
         }
 
-		StrategyVisitor strategyVisitor = new StrategyVisitor();
-        strategyVisitor.visit(ast);
+		//StrategyVisitor strategyVisitor = new StrategyVisitor();
+        //strategyVisitor.visit(ast);
 
-        JavaCodeGenerator codeGenerator = new JavaCodeGenerator(strategyVisitor.strategies);
-        codeGenerator.visit(ast);
-
-		System.out.println("Everything went okay.");
+        //JavaCodeGenerator codeGenerator = new JavaCodeGenerator(strategyVisitor.strategies);
+        //codeGenerator.visit(ast);
 
 
         TypeChecker typeChecker = new TypeChecker();

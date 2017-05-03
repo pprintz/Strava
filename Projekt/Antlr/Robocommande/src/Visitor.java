@@ -200,14 +200,14 @@ public abstract class Visitor {
     }
 
     public void visit(StructDefinitionNode node) {
-        node.structIdNode.accept(this);
+        node.typeNode.accept(this);
         for(DeclarationNode declNode : node.declarationNodes) {
             declNode.accept(this);
         }
     }
 
     public void visit(StructInitializationNode node) {
-        node.idNode.accept(this);
+        node.typeNode.accept(this);
         for(AssignmentNode assignmentNode : node.assignments) {
             assignmentNode.accept(this);
         }

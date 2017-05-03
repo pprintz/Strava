@@ -38,6 +38,7 @@ public class TypeChecker extends Visitor {
                     unaryExprNode.Type = Type.BOOL;
                 }
                 else{
+                    unaryExprNode.Type = Type.ERROR;
                     TypeErrorOccured(unaryExprNode, unaryExprNode.exprNode.Type, Type.BOOL);
                 }
                 break;
@@ -46,15 +47,20 @@ public class TypeChecker extends Visitor {
                     unaryExprNode.Type = Type.NUM;
                 }
                 else {
+                    unaryExprNode.Type = Type.ERROR;
                     TypeErrorOccured(unaryExprNode, unaryExprNode.exprNode.Type, Type.NUM);
                 }
                 break;
             default:
+                unaryExprNode.Type = Type.ERROR;
                 TypeErrorOccured(unaryExprNode);
         }
     }
 
     public void visit(BinaryExprNode binaryExprNode){
+        visit((binaryExprNode.leftNode));
+        visit((binaryExprNode.rightNode));
+
         switch (binaryExprNode.binaryOperator) {
             case PLUS:
                 if(checkExpectedType(binaryExprNode, Type.TEXT)){
@@ -70,7 +76,8 @@ public class TypeChecker extends Visitor {
                     binaryExprNode.Type = Type.NUM;
                 }
                 else {
-                    TypeErrorOccured(binaryExprNode, binaryExprNode.leftNode.Type, binaryExprNode.rightNode.Type, Type.NUM);
+                    binaryExprNode.Type = Type.ERROR;
+                    TypeErrorOccured(binaryExprNode, binaryExprNode.leftNode.Type, binaryExprNode.rightNode.Type, Type.NUM, Type.TEXT);
                 }
                 break;
 
@@ -82,6 +89,7 @@ public class TypeChecker extends Visitor {
                     binaryExprNode.Type = Type.BOOL;
                 }
                 else{
+                    binaryExprNode.Type = Type.ERROR;
                     TypeErrorOccured(binaryExprNode, binaryExprNode.leftNode.Type, binaryExprNode.rightNode.Type, Type.NUM, Type.TEXT);
                 }
                 break;
@@ -91,6 +99,7 @@ public class TypeChecker extends Visitor {
                     binaryExprNode.Type = Type.BOOL;
                 }
                 else{
+                    binaryExprNode.Type = Type.ERROR;
                     TypeErrorOccured(binaryExprNode, binaryExprNode.leftNode.Type, binaryExprNode.rightNode.Type, Type.BOOL);
                 }
                 break;
@@ -100,10 +109,12 @@ public class TypeChecker extends Visitor {
                         || checkExpectedType(binaryExprNode, Type.NUM)) {
                     binaryExprNode.Type = Type.BOOL;
                 }else{
+                    binaryExprNode.Type = Type.ERROR;
                     TypeErrorOccured(binaryExprNode, binaryExprNode.leftNode.Type, binaryExprNode.rightNode.Type, Type.NUM, Type.BOOL);
                 }
                 break;
             default:
+                binaryExprNode.Type = Type.ERROR;
                 TypeErrorOccured(binaryExprNode);
         }
     }
@@ -115,7 +126,6 @@ public class TypeChecker extends Visitor {
         }
         Boolean typesAreCompatible = false;
 
-        // TODO do smarter
         if(binaryExprNode.leftNode.Type == expectedType && binaryExprNode.rightNode.Type == expectedType){
             typesAreCompatible = true;
         }
@@ -165,9 +175,15 @@ public class TypeChecker extends Visitor {
     public void visit(LiteralNode node){
     }
 
-    public void visit(AssignmentNode node){
-        if( ! (node.idNode.declarationNode.Type == node.exprNode.Type)){
-            TypeErrorOccured(node, node.exprNode.Type, node.idNode.declarationNode.Type);
+    public void visit(AssignmentNode node) {
+        visit(node.exprNode);
+        if (node.exprNode.Type != Type.STRUCT) {
+            if (!(node.idNode.declarationNode.Type == node.exprNode.Type)) {
+                TypeErrorOccured(node, node.exprNode.Type, node.idNode.declarationNode.Type);
+            }
+        }
+        else{
+            System.out.println("we did it. woo");
         }
     }
 
@@ -191,7 +207,7 @@ public class TypeChecker extends Visitor {
 
     public void visit(StructDefinitionNode node){
         for(DeclarationNode dNode : node.declarationNodes){
-            visit(dNode);
+         //   visit(dNode);
         }
     }
 
@@ -201,10 +217,9 @@ public class TypeChecker extends Visitor {
         }
     }
 
-    //public void visit(Struc)
 
     public void visit(DeclarationNode node){
-        node.Type = typeOfTypeNode(node.typeNode);
+        node.Type = node.typeNode.Type;
         if(node.exprNode != null) {
             visit(node.exprNode);
             if(node.Type != node.exprNode.Type ){
@@ -214,20 +229,6 @@ public class TypeChecker extends Visitor {
                 node.idNode.Type = node.Type;
             }
         }
-    }
-
-    private Type typeOfTypeNode(TypeNode node){
-        switch(node.type){
-            case "num":
-                return Type.NUM;
-            case "text":
-                return Type.TEXT;
-            case "bool":
-                return Type.BOOL;
-            default:
-                return Type.STRUCT;
-        }
-
     }
 
 }

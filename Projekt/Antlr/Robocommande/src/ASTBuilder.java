@@ -165,14 +165,14 @@ public class ASTBuilder extends RobocommandeBaseVisitor<ASTNode> {
 
     @Override
     public ASTNode visitStructDefinition(RobocommandeParser.StructDefinitionContext ctx) {
-        IdNode name = new IdNode(ctx.ID().getText());
-        name.isDeclaration = true;
+        TypeNode structName = new TypeNode(ctx.ID().getText());
+
         List<DeclarationNode> declarationNodes = new ArrayList<>();
 
         for(RobocommandeParser.DeclarationContext declaration : ctx.declaration()){
             declarationNodes.add((DeclarationNode) visit(declaration));
         }
-        return new StructDefinitionNode(name, declarationNodes, ctx);
+        return new StructDefinitionNode(structName, declarationNodes, ctx);
     }
 
     @Override
@@ -247,13 +247,13 @@ public class ASTBuilder extends RobocommandeBaseVisitor<ASTNode> {
 
     @Override
     public ASTNode visitStructInitialization(RobocommandeParser.StructInitializationContext ctx) {
-        IdNode idNode = new IdNode(ctx.ID().getText());
+        TypeNode typeNode = new TypeNode(ctx.ID().getText());
         List<AssignmentNode> assignments = new ArrayList<>();
 
         for(RobocommandeParser.AssignmentContext assignment : ctx.assignment()){
             assignments.add((AssignmentNode)visit(assignment));
         }
-        return new StructInitializationNode(idNode, assignments);
+        return new StructInitializationNode(typeNode, assignments);
     }
 
     @Override

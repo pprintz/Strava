@@ -1,34 +1,13 @@
-//behavior onSetup () :
+behavior onSetup():
+    myStruct {num b}
+    //myStruct a := new myStruct(b := 10)
 
-//;
-
-strategy default:
-	behavior onRun () :
-
-    ;
-
-    //behavior onHitByBullet(hitByBulletEvent e) :
-
-   // ;
-;
-
-strategy aggressive :
-	behavior onRun () :
-		num a := 1
-		bool b
-		text c
-	;
-
-	//behavior onHitByBullet(hitByBulletEvent e):
-
-	//;
-;
-
-define text ds() :
 
 ;
 
 
-// rotate
-// move
-// changeStrat
+strategy default :
+
+
+
+;

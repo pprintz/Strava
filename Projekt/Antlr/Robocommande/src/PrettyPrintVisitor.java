@@ -355,7 +355,7 @@ public class PrettyPrintVisitor extends Visitor {
     @Override
     public void visit(StructDefinitionNode node) {
         System.out.print(indent() + "STRUCT ");
-        System.out.print(node.structIdNode.id);
+        System.out.print(node.typeNode.type);
         indentationLevel++;
         System.out.println("{ ");
         for(DeclarationNode declNode : node.declarationNodes){
@@ -372,7 +372,7 @@ public class PrettyPrintVisitor extends Visitor {
 
     @Override
     public void visit(StructInitializationNode node) {
-        visit(node.idNode);
+        visit(node.typeNode);
         System.out.println("(");
         indentationLevel++;
         int len = node.assignments.size();

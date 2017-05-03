@@ -235,13 +235,13 @@ abstract class StmtNode extends ASTNode {
 }
 
 class StructDefinitionNode extends StmtNode {
-    public IdNode structIdNode;
+    public TypeNode typeNode;
     public List<DeclarationNode> declarationNodes;
 
-    public StructDefinitionNode(IdNode structIdNode, List<DeclarationNode> declarationNodes,
+    public StructDefinitionNode(TypeNode typeNode, List<DeclarationNode> declarationNodes,
                                 RobocommandeParser.StructDefinitionContext ctx) {
         super(ctx);
-        this.structIdNode = structIdNode;
+        this.typeNode = typeNode;
         this.declarationNodes = declarationNodes;
     }
 
@@ -372,13 +372,14 @@ class FunctionCallNode extends StmtNode {
 }
 
 class StructInitializationNode extends ExprNode {
-    public IdNode idNode;
+    public TypeNode typeNode;
     public List<AssignmentNode> assignments;
     public StructDefinitionNode structDefinitionNode;
 
-    public StructInitializationNode(IdNode idNode, List<AssignmentNode> assignments) {
-        this.idNode = idNode;
+    public StructInitializationNode(TypeNode typeNode, List<AssignmentNode> assignments) {
+        this.typeNode = typeNode;
         this.assignments = assignments;
+        this.Type = typeNode.Type;
     }
     @Override
     public void accept(Visitor v) {
@@ -505,9 +506,21 @@ class FieldIdNode extends ASTNode {
 
 class TypeNode extends ASTNode{
     public String type;
+    public Type Type;
 
     public TypeNode(String type) {
         this.type = type;
+        switch(this.type){
+            case "num":
+                this.Type = Type.NUM;
+            case "text":
+                this.Type = Type.TEXT;
+            case "bool":
+                this.Type = Type.BOOL;
+            default:
+                this.Type = Type.STRUCT;
+        }
+
     }
     @Override
     public void accept(Visitor v) {
