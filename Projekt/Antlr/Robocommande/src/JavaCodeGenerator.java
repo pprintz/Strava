@@ -10,7 +10,7 @@ public class JavaCodeGenerator extends Visitor {
 	PrintWriter writer;
 
 
-	public JavaCodeGenerator(ArrayList<String> strategies) {
+	JavaCodeGenerator(ArrayList<String> strategies) {
 		super();
 		this.strategies = strategies;
 		try {
@@ -79,11 +79,21 @@ public class JavaCodeGenerator extends Visitor {
 		if(indent) {
 			Emit(javaType, 0);
 		} else {
-			EmitNoIndent(" " + javaType);
+			EmitNoIndent(javaType);
 		}
 	}
 
-	@Override
+    @Override
+    public void visit(BehaviorFunctionNode node) {
+	    Emit("\n", 0);
+        Emit("void " + node.idNode.id + "(", 0);
+        visit(node.eventType, false);
+        EmitNoIndent(" e");
+        EmitNoIndent(")");
+        visit(node.blockNode);
+    }
+
+    @Override
 	public void visit(DeclarationNode node) {
 		visit(node.typeNode, true);
 		visit(node.idNode, false);
@@ -141,7 +151,8 @@ public class JavaCodeGenerator extends Visitor {
 	public void visit(ProgNode node) {
 		String className = "MyRobot";
 
-		Emit("\nimport java.awt.Color; \n" +
+		Emit("package Robocommande;", 2);
+		Emit("import java.awt.Color; \n" +
 				"import robocode.AdvancedRobot; \n" +
 				"import robocode.HitByBulletEvent; \n" +
 				"import robocode.ScannedRobotEvent; \n" +
