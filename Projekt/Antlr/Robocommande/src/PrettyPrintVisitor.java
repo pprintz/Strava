@@ -23,6 +23,7 @@ public class PrettyPrintVisitor extends Visitor {
 
     @Override
     public void visit(TypeNode node) {
+
     }
 
     @Override

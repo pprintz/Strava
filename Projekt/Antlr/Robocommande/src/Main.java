@@ -35,26 +35,18 @@ public class Main {
             System.exit(0);
         }
 
+		StrategyVisitor strategyVisitor = new StrategyVisitor();
+        strategyVisitor.visit(ast);
 
-        TypeChecker typeChecker = new TypeChecker();
-        typeChecker.visit(ast);
-
-        //if (typeChecker.programHasTypeErrors){
-          //  System.out.println("Program has type errors, exiting ..");
-            //System.exit(0);
-        //} else {
-          //  System.out.println("No errors occured during type checking");
-        //}
-
-        //PrettyPrintVisitor prettyPrintVisitor = new PrettyPrintVisitor();
-        //prettyPrintVisitor.visit(ast);
-
-
-        //JavaCodeGenerator codeGenerator = new JavaCodeGenerator();
-        //codeGenerator.visit(ast);
+        JavaCodeGenerator codeGenerator = new JavaCodeGenerator(strategyVisitor.strategies);
+        codeGenerator.visit(ast);
 
 		System.out.println("Everything went okay.");
 
 
+        TypeChecker typeChecker = new TypeChecker();
+        typeChecker.visit(ast);
+
+        System.out.println("Everything went okay.");
     }
 }

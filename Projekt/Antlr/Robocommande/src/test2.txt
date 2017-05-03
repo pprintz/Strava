@@ -52,29 +52,8 @@ strategy default :
     ;
 ;
 
-
-
-
 strategy default:
-    behavior onRun():
-       b := 2
-       a.b := 23
-       num test := 2
-       num bubber := 3
-       //num a := myFunction(a, b, c)
-    ;
-    define void procedureOne(num lort, num b):
-        a := 2
-        b := 3
-    ;
 
-    define num myfunction(num a, num b, num c):
-            return a + b - c-d
-    ;
-
-    define text lol(text a):
-        return a + a
-    ;
 ;
 define text lool(text b):
 ;

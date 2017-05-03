@@ -30,7 +30,7 @@ public class BindingVisitor extends Visitor {
         }
         if(!isDeclared){
             hasBindingErrorOccured = true;
-            PrintNotDeclaredError("id", idNode.id);
+            PrintNotDeclaredError("id", idNode.id, idNode);
         }
     }
     private void BindFieldIdToDeclaration(FieldIdNode fieldIdNode) {
@@ -47,7 +47,7 @@ public class BindingVisitor extends Visitor {
             }
         }
         if(!isDeclared){
-            PrintNotDeclaredError("struct", structId.id);
+            PrintNotDeclaredError("struct", structId.id, fieldIdNode);
         }
     }
 
@@ -63,7 +63,7 @@ public class BindingVisitor extends Visitor {
             }
             if (!isDeclared) {
                 hasBindingErrorOccured = true;
-                PrintNotDeclaredError("function", fCallNode.idNode.id);
+                PrintNotDeclaredError("function", fCallNode.idNode.id, fCallNode);
             }
         }
     }
@@ -77,11 +77,11 @@ public class BindingVisitor extends Visitor {
         }
         if (!isDeclared) {
             hasBindingErrorOccured = true;
-            PrintNotDeclaredError(" function ", fCallNode.idNode.id);
+            PrintNotDeclaredError(" function ", fCallNode.idNode.id, fCallNode);
         }
     }
-    private void PrintNotDeclaredError(String type, String id){
-        System.out.println("There is no " + type + " named: " + id);
+    private void PrintNotDeclaredError(String type, String id, ASTNode node){
+        System.out.println("There is no " + type + " named: " + id + node.toString());
     }
     private void BindStructInitializationToDefinition(StructInitializationNode structInitializationNode) {
         boolean isStructDefined = false;
@@ -96,7 +96,7 @@ public class BindingVisitor extends Visitor {
         }
         if (!isStructDefined) {
             //PrintNotDeclaredError("struct", structInitializationNode.structDefinitionNode.structIdNode.id);
-            PrintNotDeclaredError("struct", structInitializationNode.idNode.id);
+            PrintNotDeclaredError("struct", structInitializationNode.idNode.id, structInitializationNode);
         }
     }
 
@@ -128,7 +128,7 @@ public class BindingVisitor extends Visitor {
             }
         }
         if (!isStructDefined) {
-            PrintNotDeclaredError("struct", node.typeNode.type);
+            PrintNotDeclaredError("struct", node.typeNode.type, node);
         }
     }
 

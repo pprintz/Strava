@@ -109,3 +109,9 @@ class AggressiveStrategy extends DefaultStrategy {
     }
 }
 
+public interface Strategy{
+    public void run();
+    public void onHitByBullet(HitByBulletEvent e);
+    public void onScannedRobot(ScannedRobotEvent e);
+
+}

@@ -1,28 +1,34 @@
-behavior onSetup () :
+//behavior onSetup () :
 
-;
+//;
 
 strategy default:
 	behavior onRun () :
-		rotate("gun", 100)
+
     ;
 
-    behavior onHitByBullet(hitByBulletEvent e) :
-    	move("forward", 100)
-    ;
+    //behavior onHitByBullet(hitByBulletEvent e) :
+
+   // ;
 ;
 
 strategy aggressive :
-	behavior onHitByBullet(hitByBulletEvent e):
-		move("backward", 200)
-		switchTo("default")
+	behavior onRun () :
+		num a := 1
+		bool b
+		text c
 	;
+
+	//behavior onHitByBullet(hitByBulletEvent e):
+
+	//;
+;
+
+define text ds() :
+
 ;
 
 
-define void rotate(text gun, num degrees):
-	;
-define void move(text direction, num amount):
-	;
-define void switchTo(text strat):
-	;
+// rotate
+// move
+// changeStrat

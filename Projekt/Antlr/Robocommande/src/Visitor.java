@@ -1,6 +1,3 @@
-/**
- * Created by Casper on 27/03/2017.
- */
 public abstract class Visitor {
 
 
@@ -60,7 +57,9 @@ public abstract class Visitor {
 
     public void visit(DefineFunctionNode node){
         node.idNode.accept(this);
-        node.formalParamsNode.accept(this);
+        if(node.formalParamsNode != null) {
+			node.formalParamsNode.accept(this);
+		}
         node.blockNode.accept(this);
     }
 
