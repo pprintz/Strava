@@ -6,9 +6,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.regex.Pattern;
 
-/**
- * Created by Kasper Dissing Bargsteen on 21/03/2017.
- */
 public class ASTBuilder extends RobocommandeBaseVisitor<ASTNode> {
     @Override
     public ASTNode visitProg(RobocommandeParser.ProgContext ctx) {
@@ -330,9 +327,7 @@ public class ASTBuilder extends RobocommandeBaseVisitor<ASTNode> {
     public ASTNode visitBinaryExpr(RobocommandeParser.BinaryExprContext ctx) {
         ExprNode left = (ExprNode)visit(ctx.expr(0));
         ExprNode right = (ExprNode)visit(ctx.expr(1));
-
-
-        BinaryExprNode binaryExprNode = new BinaryExprNode(left, right);
+        BinaryExprNode binaryExprNode = new BinaryExprNode(left, right, ctx);
 
         switch (getOperatorSymbol(ctx.children, "*", "/", "%", "^", "+","-","<=",
                                                          ">=","<",">", "=", "and", "or", "!=")){
