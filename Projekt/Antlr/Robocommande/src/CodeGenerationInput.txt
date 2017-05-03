@@ -1,39 +1,37 @@
-//behavior onSetup () :
-
-//;
+behavior onSetup () :
+    text b
+;
 
 strategy default:
 	behavior onRun () :
-
+        ahead(10)
     ;
 
     behavior onHitByBullet(hitByBulletEvent e) :
-        num a := 5
-        text b := "Hello, world!"
-        bool c := false
+        back(45)
     ;
 ;
 
 strategy aggressive :
 	behavior onRun () :
-		num a := 1
-		bool b
-		text c
 	;
 
-	behavior onHitByBullet(hitByBulletEvent e):
+//    behavior onHitByBullet(hitByBulletEvent e):
+//        changeStrategy("defensive")
+//    ;
 
-	;
-
-	behavior onScannedRobot(scannedRobotEvent e) :
-
-	;
+//    behavior onScannedRobot(scannedRobotEvent e) :
+//    ;
 ;
 
-define text ds() :
-
+strategy defensive :
+    //behavior onRun() :
+    //;
 ;
 
+//define text ds() :
+//    return "hello"
+//;
 
 // rotate
 // move
