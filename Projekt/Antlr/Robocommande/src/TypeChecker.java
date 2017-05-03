@@ -82,7 +82,7 @@ public class TypeChecker extends Visitor {
                     binaryExprNode.Type = Type.BOOL;
                 }
                 else{
-                    TypeErrorOccured(binaryExprNode, binaryExprNode.leftNode.Type, binaryExprNode.rightNode.Type, Type.NUM);
+                    TypeErrorOccured(binaryExprNode, binaryExprNode.leftNode.Type, binaryExprNode.rightNode.Type, Type.NUM, Type.TEXT);
                 }
                 break;
             case AND:
@@ -116,20 +116,18 @@ public class TypeChecker extends Visitor {
         Boolean typesAreCompatible = false;
 
         // TODO do smarter
-        String typeString = expectedType == Type.BOOL ? "bool" : "num";
-
         if(binaryExprNode.leftNode.Type == expectedType && binaryExprNode.rightNode.Type == expectedType){
             typesAreCompatible = true;
         }
         else if(binaryExprNode.leftNode instanceof IdNode){
             IdNode idNode = (IdNode) binaryExprNode.leftNode;
-            if(binaryExprNode.rightNode.Type == expectedType && idNode.declarationNode.typeNode.type.equals(typeString)) {
+            if(binaryExprNode.rightNode.Type == expectedType && idNode.declarationNode.Type == expectedType) {
                 typesAreCompatible = true;
             }
         }
         else if(binaryExprNode.rightNode instanceof IdNode){
             IdNode idNode = (IdNode) binaryExprNode.rightNode;
-            if(binaryExprNode.leftNode.Type == expectedType && idNode.declarationNode.typeNode.type.equals(typeString)) {
+            if(binaryExprNode.leftNode.Type == expectedType && idNode.declarationNode.Type == expectedType) {
                 typesAreCompatible = true;
             }
         }
