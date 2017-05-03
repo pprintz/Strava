@@ -14,6 +14,11 @@ abstract class ASTNode {
     public int lineNumber;
     public int columnNumber;
 
+    @Override
+    public String toString() {
+        return "(Line/column : " + lineNumber + "/" + columnNumber + ")";
+    }
+
     public ASTNode(ParserRuleContext ctx) {
         lineNumber = ctx.start.getLine();
         columnNumber = ctx.start.getCharPositionInLine();
@@ -443,6 +448,13 @@ class ActualParamsNode extends ASTNode {
 }
 
 abstract class ExprNode extends ASTNode {
+    public ExprNode(){
+
+    }
+
+    public ExprNode(ParserRuleContext ctx){
+        super(ctx);
+    }
     @Override
     public abstract void accept(Visitor v);
     public Type Type;
@@ -536,7 +548,8 @@ class IdNode extends ExprNode {
 }
     class UnaryExprNode extends ExprNode{
 
-        public UnaryExprNode(ExprNode exprNode, UnaryOperator unaryOperator) {
+        public UnaryExprNode(ExprNode exprNode, UnaryOperator unaryOperator, RobocommandeParser.UnaryExprContext ctx) {
+            super(ctx);
             this.exprNode = exprNode;
             this.unaryOperator = unaryOperator;
         }
@@ -566,13 +579,15 @@ class IdNode extends ExprNode {
         public ExprNode rightNode;
 
         public BinaryOperator binaryOperator;
-        public BinaryExprNode(ExprNode leftNode, ExprNode rigthNode, BinaryOperator binaryOperator) {
+        public BinaryExprNode(ExprNode leftNode, ExprNode rigthNode, BinaryOperator binaryOperator, RobocommandeParser.BinaryExprContext ctx) {
+            super(ctx);
             this.leftNode = leftNode;
             this.rightNode = rigthNode;
             this.binaryOperator = binaryOperator;
         }
 
-        public BinaryExprNode(ExprNode leftNode, ExprNode rigthNode) {
+        public BinaryExprNode(ExprNode leftNode, ExprNode rigthNode, RobocommandeParser.BinaryExprContext ctx) {
+            super(ctx);
             this.leftNode = leftNode;
             this.rightNode = rigthNode;
             this.binaryOperator = binaryOperator;
