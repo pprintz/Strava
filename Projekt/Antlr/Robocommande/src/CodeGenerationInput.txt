@@ -7,9 +7,11 @@ strategy default:
 
     ;
 
-    //behavior onHitByBullet(hitByBulletEvent e) :
-
-   // ;
+    behavior onHitByBullet(hitByBulletEvent e) :
+        num a := 5
+        text b := "Hello, world!"
+        bool c := false
+    ;
 ;
 
 strategy aggressive :
@@ -19,9 +21,13 @@ strategy aggressive :
 		text c
 	;
 
-	//behavior onHitByBullet(hitByBulletEvent e):
+	behavior onHitByBullet(hitByBulletEvent e):
 
-	//;
+	;
+
+	behavior onScannedRobot(scannedRobotEvent e) :
+
+	;
 ;
 
 define text ds() :
