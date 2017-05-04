@@ -1,4 +1,5 @@
 import java.util.HashMap;
+import java.util.List;
 import java.util.Stack;
 
 /**
@@ -33,13 +34,27 @@ public class BindingVisitor extends Visitor {
             PrintNotDeclaredError("id", idNode.id, idNode);
         }
     }
+
+    private StructDefinitionNode BindFieldXToDeclaration(List<IdNode> idNodes){
+        IdNode structId = idNodes.get(0);
+        for (int i = symbolTable.size() - 1; i >= 0; i--) {
+            if(symbolTable.get(i).containsKey(structId.id)){
+                ASTNode astNode = symbolTable.get(i).get(structId.id);
+                DeclarationNode declarationNode = (DeclarationNode) astNode;
+                if(declarationNode.structDefinitionNode != null) {
+                    return declarationNode.structDefinitionNode;
+                }
+            }
+        }
+        return null;
+    }
+
     private void BindFieldIdToDeclaration(FieldIdNode fieldIdNode) {
         boolean isDeclared = false;
         IdNode structId = fieldIdNode.idNodes.get(0);
         for (int i = symbolTable.size() - 1; i >= 0; i--) {
             if(symbolTable.get(i).containsKey(structId.id)){
-                ASTNode astNode = symbolTable.get(i).get(structId.id);
-                DeclarationNode declarationNode = (DeclarationNode) astNode;
+                DeclarationNode declarationNode = (DeclarationNode) symbolTable.get(i).get(structId.id);
                 if(declarationNode.structDefinitionNode != null) {
                     fieldIdNode.structDefinitionNode = declarationNode.structDefinitionNode;
                     isDeclared = true;
@@ -242,16 +257,22 @@ public class BindingVisitor extends Visitor {
     @Override
     public void visit(FieldIdNode node) {
         if(!hasFunctionsBeenDeclared) {
-            BindFieldIdToDeclaration(node);
+            node.structDefinitionNode = BindFieldXToDeclaration(node.idNodes);
+            if (node.structDefinitionNode == null) {
+                PrintNotDeclaredError("struct", node.idNodes.get(0).id, node);
+            }
         }
     }
 
-   /* @Override
+   @Override
     public void visit(FieldValueNode node) {
         if(!hasFunctionsBeenDeclared) {
-            BindFieldIdToDeclaration(node);
+            node.structDefinitionNode = BindFieldXToDeclaration(node.idNodes);
+            if (node.structDefinitionNode == null) {
+                PrintNotDeclaredError("struct", node.idNodes.get(0).id, node);
+            }
         }
-    }*/
+    }
 
 
     private boolean isParamsVisisted = false;
