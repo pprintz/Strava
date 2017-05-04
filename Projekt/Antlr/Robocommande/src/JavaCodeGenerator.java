@@ -79,17 +79,22 @@ public class JavaCodeGenerator extends Visitor {
                 ".\n */", 2);
     }
 
-	private void EmitChangeStrategy() {
-	    Emit("public void changeStrategy(String strategyName) {", 1);
+	private void EmitChangeStrategyDefinition() {
+	    Emit("private void changeStrategy(String strategyName) {", 1);
 	    indentationLevel++;
 	    Emit("Strategy newStrategy = strategies.get(strategyName);", 1);
-	    Emit("if(newStrategy != null) {", 1);
+	    Emit("if (newStrategy != null) {", 1);
+//        Emit("if (strategies.containsKey(newStrategy.toString())) {", 1);
 	    indentationLevel++;
 	    Emit("System.out.println(\"Changing to: \" + strategyName);", 1);
 	    Emit("currentStrategy = newStrategy;", 1);
 	    indentationLevel--;
-	    Emit("}", 1);
+	    Emit("} else {", 1);
+	    indentationLevel++;
+	    Emit("System.out.println(\"NOT HAPPENING!\");", 1);
 	    indentationLevel--;
+        Emit("}", 1);
+        indentationLevel--;
 	    Emit("}", 2);
     }
 
@@ -166,12 +171,6 @@ public class JavaCodeGenerator extends Visitor {
 	public void visit(DefaultStrategyNode node) {
 		Emit("class defaultStrategy implements Strategy {", 1);
 		indentationLevel++;
-		Emit(className + " self;", 2);
-		Emit("public " + node.toString() + "(" + className + " self)", 1);
-		indentationLevel++;
-		Emit("this.self = self;", 1);
-		indentationLevel--;
-		Emit("}", 2);
 		super.visit(node);
 		indentationLevel--;
 		Emit("}", 2);
@@ -209,25 +208,29 @@ public class JavaCodeGenerator extends Visitor {
 		}
 	}
 
+	private void EmitEvent(String event) {
+        Emit("public void on" + event + "(" + event + "Event e) {", 1);
+        indentationLevel++;
+        Emit("currentStrategy.on" + event + "(e);", 1);
+        indentationLevel--;
+        Emit("}", 2);
+    }
+
 	@Override
 	public void visit(ProgNode node) {
-
-
         EmitAutoGenDoc();
-
 		Emit("package Robocommande;", 2);
-
 		EmitImports();
 
         Emit("interface Strategy {", 1);
 		indentationLevel++;
 		Emit("public void run();", 1);
-//        Emit("public void onHitByBullet(HitByBulletEvent e);", 1);
-//        Emit("public void onScannedRobot(ScannedRobotEvent e);", 1);
+        Emit("public void onHitByBullet(HitByBulletEvent e);", 1);
+        Emit("public void onScannedRobot(ScannedRobotEvent e);", 1);
 		indentationLevel--;
 		Emit("}", 2);
 
-		Emit("public class " + className + " extends AdvancedRobot {", 1);
+		Emit("public class " + className + " extends AdvancedRobot implements Strategy {", 1);
 		indentationLevel++;
 
 		Emit("public HashMap<String, Strategy> strategies;", 1);
@@ -238,21 +241,23 @@ public class JavaCodeGenerator extends Visitor {
 		if(node.setupNode != null) {
             Emit("setup();", 1);
         }
-        Emit("currentStrategy = new defaultStrategy();", 2);
+        Emit("currentStrategy = new defaultStrategy();", 1);
         Emit("strategies = new HashMap<String, Strategy>();", 1);
         for (String strategy : strategies) {
             if (!strategy.startsWith("default")) {
-                Emit("strategies.put(\"" + strategy + "Strategy\", " + "new (Strategy)" + strategy + "Strategy(this));", 1);
+                Emit("strategies.put(\"" + strategy + "\", " + "new " + strategy + "Strategy());", 1);
             } else {
-                Emit("strategies.put(\"" + strategy + "Strategy\", currentStrategy);", 1);
+                Emit("strategies.put(\"" + strategy + "\", currentStrategy);", 1);
             }
         }
         indentationLevel--;
         Emit("}", 2);
 
+        EmitEvent("ScannedRobot");
+        EmitEvent("HitByBullet");
+
 		Emit("public void run() {", 1);
 		indentationLevel++;
-
 
 		Emit("while (true) {", 1);
 		indentationLevel++;
@@ -263,7 +268,7 @@ public class JavaCodeGenerator extends Visitor {
 		indentationLevel--;
 		Emit("}", 2);
 
-		EmitChangeStrategy();
+		EmitChangeStrategyDefinition();
 		super.visit(node);
 		indentationLevel--;
 		Emit("}", 1);

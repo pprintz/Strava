@@ -11,6 +11,9 @@ strategy default:
         changeStrategy("defensive")
     ;
 
+    behavior onScannedRobot(scannedRobotEvent e) :
+        changeStrategy("aggressive")
+    ;
 ;
 
 strategy aggressive :

@@ -23,7 +23,6 @@ public class StrategyRobot extends AdvancedRobot implements Strategy {
         strategies.put("DefaultStrategy", currentStrategy);
         strategies.put("DefensiveStrategy", new DefensiveStrategy(this));
         strategies.put("AggressiveStrategy", new AggressiveStrategy(this));
-
     }
 
     public void run(){
