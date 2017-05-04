@@ -101,7 +101,9 @@ public class JavaCodeGenerator extends Visitor {
 	// TODO: Not really sure if this is a good idea
 	@Deprecated
 	@Override
-	public void visit(TypeNode node) {}
+	public void visit(TypeNode node) {
+		EmitNoIndent(RoboToJavaType(node.type));
+	}
 
 	@Override
 	public void visit(StmtNode node) {
@@ -120,12 +122,14 @@ public class JavaCodeGenerator extends Visitor {
 			visit(stmtNode);
 		}
 		indentationLevel--;
-		Emit("}", 1);
+		Emit("}", 2);
 	}
 
 	@Override
 	public void visit(BinaryExprNode node) {
-		super.visit(node);
+		visit(node.leftNode);
+		EmitNoIndent(BinaryOperatorToJavaOperator(node.binaryOperator));
+		visit(node.rightNode);
 	}
 
 	// Capitalizes first letter
@@ -285,7 +289,9 @@ public class JavaCodeGenerator extends Visitor {
 	// TODO: Not really sure if this is a good idea
 	@Deprecated
 	@Override
-	public void visit(IdNode node) {}
+	public void visit(IdNode node) {
+		EmitNoIndent(node.id);
+	}
 
 	@Override
 	public void visit(LiteralNode node) {
@@ -315,7 +321,7 @@ public class JavaCodeGenerator extends Visitor {
 		visit(node.idNode, false);
 		EmitNoIndent("Strategy extends defaultStrategy { \n");
 		indentationLevel++;
-		super.visit(node);
+		visit(node.strategyDefinition);
 		indentationLevel--;
 		Emit("}", 2);
 	}
@@ -344,7 +350,8 @@ public class JavaCodeGenerator extends Visitor {
 
     @Override
     public void visit(ElseIfStatementNode node) {
-        throw new NotImplementedException();
+        Emit("else if ", 0);
+		super.visit(node);
     }
 
     @Override
@@ -359,7 +366,10 @@ public class JavaCodeGenerator extends Visitor {
 
     @Override
     public void visit(FormalParamsNode node) {
-        throw new NotImplementedException();
+		for (int i = 0; i < node.idNodes.size(); i++) {
+			visit(node.typeNodes.get(i), false);
+			visit(node.idNodes.get(i), false);
+		}
     }
 
     @Override
@@ -369,12 +379,24 @@ public class JavaCodeGenerator extends Visitor {
 
     @Override
     public void visit(IfStatementNode node) {
-        throw new NotImplementedException();
+        Emit("if ", 0);
+        EmitNoIndent("(");
+        visit(node.predicate);
+		EmitNoIndent(")");
+        visit(node.ifBlockNode);
+        for (ElseIfStatementNode elif : node.elseIfNodes) {
+			visit(elif);
+		}
+		if(node.elseBlockNode != null) {
+			Emit("else ", 0);
+		}
+        visit(node.elseBlockNode);
+
     }
 
     @Override
     public void visit(ExprFunctionCallNode node) {
-        throw new NotImplementedException();
+        super.visit(node);
     }
 
     @Override
@@ -416,4 +438,39 @@ public class JavaCodeGenerator extends Visitor {
     public void visit(StructInitializationNode node) {
         throw new NotImplementedException();
     }
+
+    public String BinaryOperatorToJavaOperator(BinaryOperator binaryOperator) {
+		switch (binaryOperator) {
+			case PLUS:
+				return " + ";
+			case MINUS:
+				return " - ";
+			case MULTIPLY:
+				return " * ";
+			case DIVISION:
+				return " / ";
+			case MODULO:
+				return " % ";
+			case LESSTHANEQUAL:
+				return " <= ";
+			case GREATERTHANEQUAL:
+				return " >= ";
+			case POWER:
+				throw new NotImplementedException();
+			case AND:
+				return " && ";
+			case OR:
+				return " || ";
+			case LESSTHAN:
+				return " < ";
+			case GREATERTHAN:
+				return " > ";
+			case EQUAL:
+				return " == ";
+			case NOTEQUAL:
+				return " != ";
+			default:
+				throw new RuntimeException("This should NEVER happen!");
+		}
+	}
 }
