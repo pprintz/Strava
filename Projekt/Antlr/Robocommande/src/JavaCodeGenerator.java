@@ -96,7 +96,9 @@ public class JavaCodeGenerator extends Visitor {
 	// TODO: Not really sure if this is a good idea
 	@Deprecated
 	@Override
-	public void visit(TypeNode node) {}
+	public void visit(TypeNode node) {
+		EmitNoIndent(RoboToJavaType(node.type));
+	}
 
 	@Override
 	public void visit(StmtNode node) {
@@ -314,7 +316,7 @@ public class JavaCodeGenerator extends Visitor {
 		visit(node.idNode, false);
 		EmitNoIndent("Strategy extends defaultStrategy { \n");
 		indentationLevel++;
-		super.visit(node);
+		visit(node.strategyDefinition);
 		indentationLevel--;
 		Emit("}", 2);
 	}
@@ -343,7 +345,7 @@ public class JavaCodeGenerator extends Visitor {
 
     @Override
     public void visit(ElseIfStatementNode node) {
-        Emit("else if", 0);
+        Emit("else if ", 0);
 		super.visit(node);
     }
 
@@ -379,6 +381,9 @@ public class JavaCodeGenerator extends Visitor {
         visit(node.ifBlockNode);
         for (ElseIfStatementNode elif : node.elseIfNodes) {
 			visit(elif);
+		}
+		if(node.elseBlockNode != null) {
+			Emit("else ", 0);
 		}
         visit(node.elseBlockNode);
 
