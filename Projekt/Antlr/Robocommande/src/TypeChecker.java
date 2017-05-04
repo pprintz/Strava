@@ -176,7 +176,7 @@ public class TypeChecker extends Visitor {
     }
 
     public void visit(AssignmentNode node) {
-        visit(node.exprNode);
+        /*visit(node.exprNode);
         if (node.exprNode.Type != Type.STRUCT) {
             if (!(node.idNode.declarationNode.Type == node.exprNode.Type)) {
                 TypeErrorOccured(node, node.exprNode.Type, node.idNode.declarationNode.Type);
@@ -184,7 +184,7 @@ public class TypeChecker extends Visitor {
         }
         else{
             System.out.println("we did it. woo");
-        }
+        }*/
     }
 
     public void visit(IdNode node){
@@ -199,22 +199,17 @@ public class TypeChecker extends Visitor {
 
     }
 
-    /*public void visit(StructInitializationNode node){
-        for(AssignmentNode aNode : node.assignments){
-            visit(aNode);
-        }
-    }*/
-
-    public void visit(StructDefinitionNode node){
-        for(DeclarationNode dNode : node.declarationNodes){
-         //   visit(dNode);
-        }
+    public void visit(StructInitializationNode node){
+        System.out.println("I am visited. woo");
+        node.assignments.forEach(this::visit);
     }
 
-    public void visit(StructInitializationNode node){
-        for(AssignmentNode aNode : node.assignments){
-            visit(aNode);
-        }
+    public void visit(FieldValueNode node){
+        int lastIdIndex = node.idNodes.size() - 1;
+        IdNode lastIdNode = node.idNodes.get(lastIdIndex);
+        visit(lastIdNode);
+
+        node.Type = lastIdNode.Type;
     }
 
 

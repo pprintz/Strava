@@ -263,8 +263,17 @@ class DeclarationNode extends StmtNode {
     public StructDefinitionNode structDefinitionNode;
     public Type Type;
 
+    public DeclarationNode(TypeNode typeNode, IdNode idNode, RobocommandeParser.StructDefinitionContext ctx) {
+        super(ctx);
+        this.typeNode = typeNode;
+        this.idNode = idNode;
+        this.exprNode = null;
+
+
+
+    }
     public DeclarationNode(TypeNode typeNode, IdNode idNode, ExprNode exprNode, RobocommandeParser.DeclarationContext ctx) {
-        super(ctx); // TODO what does this do?
+        super(ctx);
         this.typeNode = typeNode;
         this.idNode = idNode;
         this.exprNode = exprNode;
@@ -504,6 +513,19 @@ class FieldIdNode extends ASTNode {
 
 }
 
+class FieldValueNode extends ExprNode {
+    public List<IdNode> idNodes;
+    public StructDefinitionNode structDefinitionNode;
+
+    public FieldValueNode(List<IdNode> idNodes, RobocommandeParser.FieldValueContext ctx) {
+        super(ctx);
+        this.idNodes = idNodes;
+    }
+
+    @Override
+    public void accept(Visitor v) { v.visit(this); }
+}
+
 class TypeNode extends ASTNode{
     public String type;
     public Type Type;
@@ -513,12 +535,16 @@ class TypeNode extends ASTNode{
         switch(this.type){
             case "num":
                 this.Type = Type.NUM;
+                break;
             case "text":
                 this.Type = Type.TEXT;
+                break;
             case "bool":
                 this.Type = Type.BOOL;
+                break;
             default:
                 this.Type = Type.STRUCT;
+                break;
         }
 
     }

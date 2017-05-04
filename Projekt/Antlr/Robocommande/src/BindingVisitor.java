@@ -89,34 +89,48 @@ public class BindingVisitor extends Visitor {
             if (symbolTable.get(i).containsKey(structInitializationNode.typeNode.type)) {
                 structInitializationNode.structDefinitionNode = (StructDefinitionNode) symbolTable.get(i).get(structInitializationNode.typeNode.type);
                 isStructDefined = true;
-                if(!getStructInitValidity(structInitializationNode)){
-                    System.out.println("Struct initialization does not match struct field declaration");
-                }
+                checkStruckInitValidity(structInitializationNode);
             }
         }
         if (!isStructDefined) {
-            //PrintNotDeclaredError("struct", structInitializationNode.structDefinitionNode.structIdNode.id);
             PrintNotDeclaredError("struct", structInitializationNode.typeNode.type, structInitializationNode);
         }
     }
 
-    private boolean getStructInitValidity(StructInitializationNode structInitializationNode) {
-        boolean doesInitMatchFields = false;
-        for(AssignmentNode assignmentNode : structInitializationNode.assignments){
+    private class DeclBoolTuple{
+        DeclarationNode declarationNode;
+        Boolean isBound;
+        public DeclBoolTuple(DeclarationNode node){
+            declarationNode = node;
+            isBound = false;
+        }
+    }
+
+    private void checkStruckInitValidity(StructInitializationNode structInitializationNode) {
+        HashMap<String, DeclBoolTuple> oneToOneDeclAssMap = new HashMap<>();
+
+        structInitializationNode.structDefinitionNode.declarationNodes.forEach((d) -> oneToOneDeclAssMap.put(d.idNode.id, new DeclBoolTuple(d)));
+
+        for(AssignmentNode assignmentNode : structInitializationNode.assignments) {
             boolean doesAssigmentMatchFieldDecl = false;
-            for(DeclarationNode dclNode : structInitializationNode.structDefinitionNode.declarationNodes){
-                doesAssigmentMatchFieldDecl = false;
-                if(assignmentNode.idNode.equals(dclNode.idNode)){
-                    doesAssigmentMatchFieldDecl = true;
-                    break;
-                }
-            }
-            if(doesAssigmentMatchFieldDecl) doesInitMatchFields = true; else{
-                doesInitMatchFields = false;
-                System.out.print("There is no field with name : " + assignmentNode.idNode);
+            DeclBoolTuple tuple = oneToOneDeclAssMap.get(assignmentNode.idNode.id);
+            if (tuple != null && !tuple.isBound) {
+                assignmentNode.idNode.declarationNode = tuple.declarationNode;
+                tuple.isBound = true;
+            } else if (tuple != null) {
+                System.out.println("The field '" + tuple.declarationNode.idNode.id + "' cannot be initialized multiple times.");
+                break;
+            } else {
+                System.out.println("The field '" + assignmentNode.idNode.id + "' does not exist in the definition of struct '" + structInitializationNode.structDefinitionNode.typeNode.type + "'.");
+                break;
             }
         }
-        return doesInitMatchFields;
+
+        for(DeclBoolTuple tuple : oneToOneDeclAssMap.values()){
+            if( ! tuple.isBound){
+                System.out.println("The field '" + tuple.declarationNode.idNode.id + "' needs to be initialized.");
+            }
+        }
     }
 
     private void BindStructDeclarationToDefinition(DeclarationNode node) {
@@ -170,6 +184,9 @@ public class BindingVisitor extends Visitor {
                     default:
                         BindStructDeclarationToDefinition(node);
                         symbolTable.peek().put(node.idNode.id, node);
+                        if(node.exprNode != null){
+                            visit(node.exprNode);
+                        }
                 }
             } else hasBindingErrorOccured = true;
         }
@@ -229,12 +246,16 @@ public class BindingVisitor extends Visitor {
         }
     }
 
+   /* @Override
+    public void visit(FieldValueNode node) {
+        if(!hasFunctionsBeenDeclared) {
+            BindFieldIdToDeclaration(node);
+        }
+    }*/
+
+
     private boolean isParamsVisisted = false;
     private FormalParamsNode formalParamsNode = null;
-
-    @Override
-    public void visit(TypeNode node) {
-    }
 
     @Override
     public void visit(BlockNode node) {

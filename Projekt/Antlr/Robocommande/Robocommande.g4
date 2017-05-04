@@ -35,7 +35,7 @@ generalStmtPart : declaration
                 | loop
                 ;
 
-structDefinition : ID '{' declaration (',' declaration)* '}' ;
+structDefinition : ID '{' type ID (',' type ID)* '}' ;
 declaration: type ID (':=' expr)? ;
 type: 'num'
     | 'text'
@@ -48,7 +48,7 @@ fieldAssignment : fieldId ':=' expr ;
 assignment : ID ':=' expr ;
 ifStatement: 'if' expr block ('else if' expr block)* ('else' block)? ;
 functionCall: (fieldId | ID) '(' actualParams? ')' ;
-structInitialization: 'new' ID '(' assignment? (',' assignment)* ')' ;
+structInitialization: ID '[' assignment? (',' assignment)* ']' ;
 loop: 'loop' ('while' expr)? block ;
 returnStatement : 'return' expr ;
 
@@ -56,7 +56,7 @@ expr :     ('true' | 'false')               # literalBool
           | ID                              # idRef
           | NUM                             # literalNum
           | STRING                          # literalString
-          | fieldId                         # fieldIdentifier
+          | fieldId                         # fieldValue
           | functionCall                    # fCall
           | structInitialization            # structInit
           |'(' expr ')'                     # unaryExpr

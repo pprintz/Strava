@@ -1,12 +1,15 @@
 behavior onSetup():
-    num a
-    num b := 3
+    //valStruct {num value}
+    //valStruct myNext := valStruct[value := 10]
 
-    myStruct {num fA, num fB }
+    //myStruct {valStruct next, num value }
+    //myStruct head := myStruct[next := myNext, value := 2]
 
-    myStruct k := myStruct(2, 3)
+    myStruct {num a, num b}
 
+    myStruct lo := myStruct[b := 123, a := 2]
 
+    num tal := lo.a
 ;
 strategy default:
 ;
