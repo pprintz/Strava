@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Stack;
 
@@ -5,6 +6,7 @@ import java.util.Stack;
  * Created by pprintz on 4/4/17.
  */
 public class BindingVisitor extends Visitor {
+    ArrayList<String> roboFunctions;
 
     public static boolean hasFunctionsBeenDeclared = false;
     Stack<HashMap<IdNode, ASTNode>> symbolTable;
@@ -12,6 +14,12 @@ public class BindingVisitor extends Visitor {
     public BindingVisitor() {
         symbolTable = new Stack<>();
         symbolTable.push(new HashMap<>());
+        roboFunctions = new ArrayList<>();
+        roboFunctions.add("ahead");
+        roboFunctions.add("turnGunRight");
+        roboFunctions.add("back");
+        roboFunctions.add("changeStrategy");
+
     }
     private void OpenScope(){
         symbolTable.push(new HashMap<>());
@@ -54,6 +62,9 @@ public class BindingVisitor extends Visitor {
     public static boolean hasBindingErrorOccured = false;
     private void BindFunctionCallToDeclaration(FunctionCallNode fCallNode) {
         boolean isDeclared = false;
+        if (roboFunctions.contains(fCallNode.idNode.id)) {
+            isDeclared = true;
+        }
         if(hasFunctionsBeenDeclared) {
             for (int i = symbolTable.size() - 1; i >= 0; i--) {
                 if (symbolTable.get(i).containsKey(fCallNode.idNode)) {

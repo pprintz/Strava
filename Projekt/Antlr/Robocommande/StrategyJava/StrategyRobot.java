@@ -13,23 +13,22 @@ import java.util.Map;
  */
 public class StrategyRobot extends AdvancedRobot implements Strategy {
 
-    private Strategy strategy;
+    private Strategy currentStrategy;
     private Map<String, Strategy> strategies;
 
 
     public StrategyRobot(){
         strategies = new HashMap<>();
-        strategy = new DefaultStrategy(this);
-        strategies.put("DefaultStrategy", strategy);
+        currentStrategy = new DefaultStrategy(this);
+        strategies.put("DefaultStrategy", currentStrategy);
         strategies.put("DefensiveStrategy", new DefensiveStrategy(this));
         strategies.put("AggressiveStrategy", new AggressiveStrategy(this));
-
     }
 
     public void run(){
         while(true){
-            System.out.println("Run: " + strategy.toString());
-            strategy.run();
+            System.out.println("Run: " + currentStrategy.toString());
+            currentStrategy.run();
             execute();
         }
 
@@ -39,16 +38,16 @@ public class StrategyRobot extends AdvancedRobot implements Strategy {
         Strategy newStrategy = strategies.get(strategyName);
         if(newStrategy != null){
             System.out.println("Changing to: " + strategyName);
-            strategy = newStrategy;
+            currentStrategy = newStrategy;
         }
     }
 
     public void onHitByBullet(HitByBulletEvent e){
-        strategy.onHitByBullet(e);
+        currentStrategy.onHitByBullet(e);
     }
 
     public void onScannedRobot(ScannedRobotEvent e){
-        strategy.onScannedRobot(e);
+        currentStrategy.onScannedRobot(e);
     }
 }
 

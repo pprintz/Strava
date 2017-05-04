@@ -71,4 +71,3 @@ strategy theWinningOne:
         a := b
     ;
 ;
->>>>>>> master

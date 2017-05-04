@@ -1,34 +1,139 @@
-//behavior onSetup () :
-
-//;
+behavior onSetup () :
+    text b
+;
 
 strategy default:
 	behavior onRun () :
-
+        ahead(10)
     ;
 
-    //behavior onHitByBullet(hitByBulletEvent e) :
+    behavior onHitByBullet(hitByBulletEvent e) :
+        changeStrategy("defensive")
+    ;
 
-   // ;
+    behavior onScannedRobot(scannedRobotEvent e) :
+        changeStrategy("aggressive")
+    ;
+;
+
+define bool returnsTrue() :
+	return true
+;
+
+define num ReturnsBestNumber(text someRandomInput) :
+	if someRandomInput = 42 :
+		return "42"
+	;
+
+	if returnsTrue() :
+		return "a"
+	;
+
+	return "14"
 ;
 
 strategy aggressive :
 	behavior onRun () :
-		num a := 1
-		bool b
-		text c
 	;
 
-	//behavior onHitByBullet(hitByBulletEvent e):
+	define text yourMom() :
+		return "your mom"
+	;
 
-	//;
+//    behavior onHitByBullet(hitByBulletEvent e):
+//        changeStrategy("defensive")
+//    ;
+
+//    behavior onScannedRobot(scannedRobotEvent e) :
+//    ;
 ;
 
-define text ds() :
-
+strategy defensive :
+    behavior onRun() :
+    	turnGunRight(360)
+    ;
 ;
-
 
 // rotate
 // move
 // changeStrat
+
+
+
+
+///////////////////////
+
+// grammar Robocommande ;
+//
+// prog : NEWLINE* setup? defaultStrategy (strategy | defineFunction)* EOF ;
+//
+// setup: 'behavior' 'onSetup' '('')' setupBlock;
+// run: 'behavior' 'onRun' '('')' block;
+//
+// functions : (defineFunction | behaviorFunction)* ;
+// defineFunction : 'define' type ID '(' formalParams? ')' block;
+// behaviorFunction : 'behavior' ID '(' ID ID ')' block;
+// formalParams: type ID (',' type ID)* ;
+// actualParams: expr (',' expr)* ;
+//
+// strategy : 'strategy' ID strategyDefinition;
+// defaultStrategy : 'strategy' 'default' strategyDefinition;
+// strategyDefinition : ':' NEWLINE+ run? functions? ';' NEWLINE*;
+//
+// setupBlock : ':' (setupStmt)* ';' NEWLINE* ;
+// block : ':' (stmt)* ';' NEWLINE* ;
+//
+// setupStmt : NEWLINE+ ( generalStmtPart
+                 // | newEvent )? NEWLINE*
+                 // ;
+//
+// stmt : NEWLINE+ (  generalStmtPart
+                 // | returnStatement )? NEWLINE*
+                 // ;
+//
+// generalStmtPart : declaration
+                // | structDefinition
+                // | assignment
+                // | fieldAssignment
+                // | ifStatement
+                // | functionCall
+                // | loop
+                // ;
+//
+// structDefinition : ID '{' declaration (',' declaration)* '}' ;
+// declaration: type ID (':=' expr)? ;
+// type: 'num'
+    // | 'text'
+    // | 'bool'
+    // | ID
+    // ;
+//
+// newEvent : 'new' 'event' ID block ;
+// fieldAssignment : fieldId ':=' expr ;
+// assignment : ID ':=' expr ;
+// ifStatement: 'if' expr block ('else if' expr block)* ('else' block)? ;
+// functionCall: (fieldId | ID) '(' actualParams? ')' ;
+// structInitialization: ID '(' assignment? (',' assignment)* ')' ;
+// loop: 'loop' ('while' expr)? block ;
+// returnStatement : 'return' expr ;
+//
+// expr :     ('true' | 'false')               # literalBool
+          // | ID                              # idRef
+          // | NUM                             # literalNum
+          // | STRING                          # literalString
+          // | fieldId                         # fieldIdentifier
+          // | functionCall                    # fCall
+          // | structInitialization            # structInit
+          // |'(' expr ')'                     # unaryExpr
+          // | 'not' expr                      # unaryExpr
+          // | '-' expr                        # unaryExpr
+          // | <assoc=right> expr '^' expr     # binaryExpr
+          // | expr ('*'|'/'|'%') expr         # binaryExpr
+          // | expr ('+'|'-') expr             # binaryExpr
+          // | expr ('<='|'>='|'<'|'>') expr   # binaryExpr
+          // | expr ('!='|'=') expr            # binaryExpr
+          // | expr 'and' expr                 # binaryExpr
+          // | expr 'or' expr                  # binaryExpr
+          // ;
+//
+// fieldId : ID ('.' ID)+ ;
