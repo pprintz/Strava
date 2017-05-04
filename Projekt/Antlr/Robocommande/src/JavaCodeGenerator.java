@@ -162,7 +162,7 @@ public class JavaCodeGenerator extends Visitor {
 
 	@Override
 	public void visit(DefaultStrategyNode node) {
-		Emit("class defaultStrategy extends AdvancedRobot implements Strategy {", 1);
+		Emit("class defaultStrategy implements Strategy {", 1);
 		indentationLevel++;
 		super.visit(node);
 		indentationLevel--;
@@ -297,11 +297,7 @@ public class JavaCodeGenerator extends Visitor {
 		visit(node.idNode, false);
 		EmitNoIndent("Strategy extends defaultStrategy { \n");
 		indentationLevel++;
-		if (node.strategyDefinition.runNode != null) {
-		    visit(node.strategyDefinition.runNode);
-        } else {
-		    visit(node.strategyDefinition);
-        }
+		super.visit(node);
 		indentationLevel--;
 		Emit("}", 2);
 	}
@@ -384,6 +380,7 @@ public class JavaCodeGenerator extends Visitor {
 
     @Override
     public void visit(SetupStmtNode node) {
+
         throw new NotImplementedException();
     }
 

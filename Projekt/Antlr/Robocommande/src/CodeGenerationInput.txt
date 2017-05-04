@@ -17,6 +17,10 @@ strategy aggressive :
 	behavior onRun () :
 	;
 
+	define text yourMom() :
+		return "your mom"
+	;
+
 //    behavior onHitByBullet(hitByBulletEvent e):
 //        changeStrategy("defensive")
 //    ;
