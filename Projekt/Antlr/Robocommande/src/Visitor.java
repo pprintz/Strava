@@ -122,8 +122,10 @@ public abstract class Visitor {
         for(ElseIfStatementNode elifNode : node.elseIfNodes){
             elifNode.accept(this);
         }
-        node.elseBlockNode.accept(this);
-    }
+        if(node.elseBlockNode != null) {
+			node.elseBlockNode.accept(this);
+		}
+	}
     public void visit(ExprFunctionCallNode node){
         if(node.fieldIdNode != null)
             node.fieldIdNode.accept(this);

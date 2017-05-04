@@ -13,6 +13,26 @@ strategy default:
 
 ;
 
+define bool DEFINEFUNC() :
+	return true
+;
+
+define num ReturnsBestNumber(text someRandomInput) :
+	if someRandomInput = 42 :
+		return "42"
+	;
+
+	if 42 :
+		return "a"
+	; else if DEFINEFUNC() :
+		return "b"
+	; else :
+		return "c"
+	;
+
+	return "14"
+;
+
 strategy aggressive :
 	behavior onRun () :
 	;
