@@ -1,3 +1,5 @@
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
+
 import java.io.FileOutputStream;
 import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
@@ -103,6 +105,8 @@ public class JavaCodeGenerator extends Visitor {
 
 	@Override
 	public void visit(BlockNode node) {
+		if (node == null) return;
+
 		EmitNoIndent(" {\n");
 		indentationLevel++;
 		for (StmtNode stmtNode : node.functionStmtNodes) {
@@ -162,7 +166,7 @@ public class JavaCodeGenerator extends Visitor {
 		indentationLevel++;
 		super.visit(node);
 		indentationLevel--;
-		Emit("}", 1);
+		Emit("}", 2);
 	}
 
 	@Override
@@ -210,8 +214,8 @@ public class JavaCodeGenerator extends Visitor {
         Emit("interface Strategy {", 1);
 		indentationLevel++;
 		Emit("public void run();", 1);
-        Emit("public void onHitByBullet(HitByBulletEvent e);", 1);
-        Emit("public void onScannedRobot(ScannedRobotEvent e);", 1);
+//        Emit("public void onHitByBullet(HitByBulletEvent e);", 1);
+//        Emit("public void onScannedRobot(ScannedRobotEvent e);", 1);
 		indentationLevel--;
 		Emit("}", 2);
 
@@ -225,7 +229,6 @@ public class JavaCodeGenerator extends Visitor {
 		indentationLevel++;
         Emit("currentStrategy = new defaultStrategy();", 2);
         Emit("strategies = new HashMap<String, Strategy>();", 1);
-        Emit("strategies.put(currentStrategy.getClass().getName(), currentStrategy);", 1);
         for (String strategy : strategies) {
             Emit("strategies.put(\"" + strategy + "Strategy\", " + "new " + strategy + "Strategy());", 1);
         }
@@ -258,7 +261,7 @@ public class JavaCodeGenerator extends Visitor {
     @Override
 	public void visit(RunNode node) {
 		Emit("public void run()", 0);
-		visit(node.blockNode);
+		super.visit(node);
 	}
 
 	// TODO: Not really sure if this is a good idea
@@ -292,7 +295,7 @@ public class JavaCodeGenerator extends Visitor {
 	public void visit(StrategyNode node) {
 		Emit("class", 0);
 		visit(node.idNode, false);
-		EmitNoIndent("Strategy extends AdvancedRobot implements Strategy { \n");
+		EmitNoIndent("Strategy extends defaultStrategy { \n");
 		indentationLevel++;
 		if (node.strategyDefinition.runNode != null) {
 		    visit(node.strategyDefinition.runNode);
@@ -305,99 +308,97 @@ public class JavaCodeGenerator extends Visitor {
 
 	/////////////
 
+    @Override
+    public void visit(ActualParamsNode node) {
+        super.visit(node);
+    }
 
-//    @Override
-//    public void visit(ActualParamsNode node) {
-//        throw new NotImplementedException();
-//    }
-//
-//    @Override
-//    public void visit(ASTNode node) {
-//        throw new NotImplementedException();
-//    }
-//
-//    @Override
-//    public void visit(FunctionStmtNode node) {
-//        throw new NotImplementedException();
-//    }
-//
-//    @Override
-//    public void visit(GeneralStmtNode node) {
-//        throw new NotImplementedException();
-//    }
-//
-//    @Override
-//    public void visit(AssignmentNode node) {
-//        throw new NotImplementedException();
-//    }
-//
-//    @Override
-//    public void visit(ElseIfStatementNode node) {
-//        throw new NotImplementedException();
-//    }
-//
-//    @Override
-//    public void visit(FieldAssignmentNode node) {
-//        throw new NotImplementedException();
-//    }
-//
-//    @Override
-//    public void visit(FieldIdNode node) {
-//        throw new NotImplementedException();
-//    }
-//
-//    @Override
-//    public void visit(FormalParamsNode node) {
-//        throw new NotImplementedException();
-//    }
-//
-//    @Override
-//    public void visit(FunctionsNode node) {
-//        throw new NotImplementedException();
-//    }
-//
-//    @Override
-//    public void visit(IfStatementNode node) {
-//        throw new NotImplementedException();
-//    }
-//
-//    @Override
-//    public void visit(ExprFunctionCallNode node) {
-//        throw new NotImplementedException();
-//    }
-//
-//    @Override
-//    public void visit(LoopNode node) {
-//        throw new NotImplementedException();
-//    }
-//
-//    @Override
-//    public void visit(NewEventNode node) {
-//        throw new NotImplementedException();
-//    }
-//
-//    @Override
-//    public void visit(SetupBlockNode node) {
-//        throw new NotImplementedException();
-//    }
-//
-//    @Override
-//    public void visit(SetupStmtNode node) {
-//        throw new NotImplementedException();
-//    }
-//
-//    @Override
-//    public void visit(StrategyDefinitionNode node) {
-//            Emit("public void run() { }", 1);
-//    }
-//
-//    @Override
-//    public void visit(StructDefinitionNode node) {
-//        throw new NotImplementedException();
-//    }
-//
-//    @Override
-//    public void visit(StructInitializationNode node) {
-//        throw new NotImplementedException();
-//    }
+    @Override
+    public void visit(FunctionStmtNode node) {
+        throw new NotImplementedException();
+    }
+
+    @Override
+    public void visit(GeneralStmtNode node) {
+        throw new NotImplementedException();
+    }
+
+    @Override
+    public void visit(AssignmentNode node) {
+        throw new NotImplementedException();
+    }
+
+    @Override
+    public void visit(ElseIfStatementNode node) {
+        throw new NotImplementedException();
+    }
+
+    @Override
+    public void visit(FieldAssignmentNode node) {
+        throw new NotImplementedException();
+    }
+
+    @Override
+    public void visit(FieldIdNode node) {
+        throw new NotImplementedException();
+    }
+
+    @Override
+    public void visit(FormalParamsNode node) {
+        throw new NotImplementedException();
+    }
+
+    @Override
+    public void visit(FunctionsNode node) {
+        super.visit(node);
+    }
+
+    @Override
+    public void visit(IfStatementNode node) {
+        throw new NotImplementedException();
+    }
+
+    @Override
+    public void visit(ExprFunctionCallNode node) {
+        throw new NotImplementedException();
+    }
+
+    @Override
+    public void visit(LoopNode node) {
+        throw new NotImplementedException();
+    }
+
+    @Override
+    public void visit(NewEventNode node) {
+//        Emit("new event ", 0);
+//        EmitNoIndent(node.idNode.id);
+//        Emit(" ", 0);
+//        visit(node.blockNode);
+		throw new NotImplementedException();
+    }
+
+    @Override
+    public void visit(SetupBlockNode node) {
+		super.visit(node);
+    }
+
+    @Override
+    public void visit(SetupStmtNode node) {
+        throw new NotImplementedException();
+    }
+
+    @Override
+    public void visit(StrategyDefinitionNode node) {
+		super.visit(node);
+    }
+
+    @Override
+    public void visit(StructDefinitionNode node) {
+        throw new NotImplementedException();
+    }
+
+    @Override
+    public void visit(StructInitializationNode node) {
+        throw new NotImplementedException();
+    }
 }

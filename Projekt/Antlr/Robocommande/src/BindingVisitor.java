@@ -19,6 +19,7 @@ public class BindingVisitor extends Visitor {
         roboFunctions.add("turnGunRight");
         roboFunctions.add("back");
         roboFunctions.add("changeStrategy");
+
     }
     private void OpenScope(){
         symbolTable.push(new HashMap<>());

@@ -8,8 +8,9 @@ strategy default:
     ;
 
     behavior onHitByBullet(hitByBulletEvent e) :
-        back(45)
+        changeStrategy("defensive")
     ;
+
 ;
 
 strategy aggressive :
@@ -25,8 +26,9 @@ strategy aggressive :
 ;
 
 strategy defensive :
-    //behavior onRun() :
-    //;
+    behavior onRun() :
+    	turnGunRight(360)
+    ;
 ;
 
 //define text ds() :
