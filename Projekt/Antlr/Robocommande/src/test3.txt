@@ -7,9 +7,14 @@ behavior onSetup():
 
     myStruct {num a, num b}
 
-    myStruct lo := myStruct[b := 123, a := 2]
+    myStruct lo := myStruct[b := 123, a := 2, a := 3]
 
-    num tal := lo.a
+    text aaa := global()
 ;
 strategy default:
+
+;
+
+define num global():
+    return 1000000
 ;

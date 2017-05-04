@@ -26,9 +26,10 @@ public class Main {
 
         ASTBuilder astBuilder = new ASTBuilder();
         ASTNode ast = astBuilder.visit(cst);
-        BindingVisitor bindingVisitor = new BindingVisitor();
-        bindingVisitor.visit(ast);
-        BindingVisitor.hasFunctionsBeenDeclared = true;
+
+        FunctionBindingVisitor functionBindingVisitor = new FunctionBindingVisitor();
+        functionBindingVisitor.visit(ast);
+        BindingVisitor bindingVisitor = new BindingVisitor(functionBindingVisitor.getSymbolTable());
         bindingVisitor.visit(ast);
 
         if(BindingVisitor.hasBindingErrorOccured){
