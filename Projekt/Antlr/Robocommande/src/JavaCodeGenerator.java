@@ -10,6 +10,7 @@ import java.util.Date;
 public class JavaCodeGenerator extends Visitor {
 	private int indentationLevel = 0;
 
+    private String className;
 	private ArrayList<String> strategies;
 	private PrintWriter writer;
 
@@ -22,7 +23,8 @@ public class JavaCodeGenerator extends Visitor {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-	}
+        className = "MyRobot";
+    }
 
     @Override
     public void visit(FunctionCallNode node) {
@@ -164,6 +166,12 @@ public class JavaCodeGenerator extends Visitor {
 	public void visit(DefaultStrategyNode node) {
 		Emit("class defaultStrategy implements Strategy {", 1);
 		indentationLevel++;
+		Emit(className + " self;", 2);
+		Emit("public " + node.toString() + "(" + className + " self)", 1);
+		indentationLevel++;
+		Emit("this.self = self;", 1);
+		indentationLevel--;
+		Emit("}", 2);
 		super.visit(node);
 		indentationLevel--;
 		Emit("}", 2);
@@ -203,7 +211,7 @@ public class JavaCodeGenerator extends Visitor {
 
 	@Override
 	public void visit(ProgNode node) {
-		String className = "MyRobot";
+
 
         EmitAutoGenDoc();
 
@@ -227,23 +235,28 @@ public class JavaCodeGenerator extends Visitor {
 
 		Emit("public " + className + "() {", 1);
 		indentationLevel++;
+		if(node.setupNode != null) {
+            Emit("setup();", 1);
+        }
         Emit("currentStrategy = new defaultStrategy();", 2);
         Emit("strategies = new HashMap<String, Strategy>();", 1);
         for (String strategy : strategies) {
-            Emit("strategies.put(\"" + strategy + "Strategy\", " + "new " + strategy + "Strategy());", 1);
+            if (!strategy.startsWith("default")) {
+                Emit("strategies.put(\"" + strategy + "Strategy\", " + "new (Strategy)" + strategy + "Strategy(this));", 1);
+            } else {
+                Emit("strategies.put(\"" + strategy + "Strategy\", currentStrategy);", 1);
+            }
         }
         indentationLevel--;
         Emit("}", 2);
 
 		Emit("public void run() {", 1);
 		indentationLevel++;
-        if(node.setupNode != null) {
-            Emit("setup();", 1);
-        }
-        Emit("\n", 0);
+
 
 		Emit("while (true) {", 1);
 		indentationLevel++;
+		Emit("System.out.println(\"Run: \" + currentStrategy.toString());", 1);
 		Emit("currentStrategy.run();", 1);
 		indentationLevel--;
 		Emit("}", 1);
