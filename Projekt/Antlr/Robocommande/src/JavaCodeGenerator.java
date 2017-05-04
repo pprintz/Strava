@@ -121,7 +121,7 @@ public class JavaCodeGenerator extends Visitor {
 	@Override
 	public void visit(BinaryExprNode node) {
 		visit(node.leftNode);
-		EmitNoIndent(node.binaryOperator.toString());
+		EmitNoIndent(BinaryOperatorToJava(node.binaryOperator));
 		visit(node.rightNode);
 	}
 
@@ -428,4 +428,37 @@ public class JavaCodeGenerator extends Visitor {
     public void visit(StructInitializationNode node) {
         throw new NotImplementedException();
     }
+
+    public String BinaryOperatorToJava(BinaryOperator binaryOperator) {
+		switch (binaryOperator) {
+			case PLUS:
+				return " + ";
+			case MINUS:
+				return " - ";
+			case MULTIPLY:
+				return " * ";
+			case DIVISION:
+				return " / ";
+			case MODULO:
+				return " % ";
+			case LESSTHANEQUAL:
+				return " <= ";
+			case GREATERTHANEQUAL:
+				return " >= ";
+			case POWER:
+				throw new NotImplementedException();
+			case AND:
+				return " && ";
+			case OR:
+				return " || ";
+			case LESSTHAN:
+				return " < ";
+			case GREATERTHAN:
+				return " > ";
+			case EQUAL:
+				return " == ";
+			case NOTEQUAL:
+				return " != ";
+		}
+	}
 }
