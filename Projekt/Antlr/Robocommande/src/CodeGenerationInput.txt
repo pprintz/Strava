@@ -14,6 +14,10 @@ strategy default:
     behavior onScannedRobot(scannedRobotEvent e) :
         changeStrategy("aggressive")
     ;
+
+    behavior onBulletHit(bulletHitEvent e) :
+        num a := 5
+    ;
 ;
 
 define bool returnsTrue() :

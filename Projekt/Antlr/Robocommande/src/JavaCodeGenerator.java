@@ -13,11 +13,13 @@ public class JavaCodeGenerator extends Visitor {
     private String className;
 	private ArrayList<String> strategies;
 	private PrintWriter writer;
-
+    private ArrayList<String> events;
 
 	JavaCodeGenerator(ArrayList<String> strategies) {
 		super();
 		this.strategies = strategies;
+		events = new ArrayList<>(14);
+		AddAllEventsToList();
 		try {
 			writer = new PrintWriter(new FileOutputStream("./out/JavaCodeGeneratorOutput.java", false));
 		} catch (Exception e) {
@@ -69,7 +71,7 @@ public class JavaCodeGenerator extends Visitor {
         Emit("import robocode.*; \n" +
                 "import java.awt.Color; \n" +
                 "import java.lang.Math; \n" +
-                "import java.util.HashMap;\n", 2);
+                "import java.util.HashMap;", 2);
     }
 
     private void EmitAutoGenDoc() {
@@ -84,7 +86,6 @@ public class JavaCodeGenerator extends Visitor {
 	    indentationLevel++;
 	    Emit("Strategy newStrategy = strategies.get(strategyName);", 1);
 	    Emit("if (newStrategy != null) {", 1);
-//        Emit("if (strategies.containsKey(newStrategy.toString())) {", 1);
 	    indentationLevel++;
 	    Emit("System.out.println(\"Changing to: \" + strategyName);", 1);
 	    Emit("currentStrategy = newStrategy;", 1);
@@ -171,11 +172,30 @@ public class JavaCodeGenerator extends Visitor {
 		EmitNoIndent("; \n");
 	}
 
+    /**
+     * Check if user wants to specifically implement an event in default strategy.
+     * If not, implement an empty event.
+     */
 	@Override
 	public void visit(DefaultStrategyNode node) {
 		Emit("class defaultStrategy implements Strategy {", 1);
 		indentationLevel++;
-		super.visit(node);
+
+        String fullEventName;
+        for (String event : events) {
+            fullEventName = "on" + event;
+            boolean isImplemented = false;
+            for (BehaviorFunctionNode behavior : node.strategyDefinition.functionsNode.behaviorFunctions) {
+                if (fullEventName.equals(behavior.idNode.id)) {
+                    isImplemented = true;
+                    visit(behavior);
+                    break;
+                }
+            }
+            if (!isImplemented) {
+                EmitDefaultInterfaceEventImplementation(event);
+            }
+        }
 		indentationLevel--;
 		Emit("}", 2);
 	}
@@ -220,6 +240,49 @@ public class JavaCodeGenerator extends Visitor {
         Emit("}", 2);
     }
 
+    // Missing keyboard and mouse clicks, but those are not normal events
+//    private void EmitAllInterfaceEventDefinitions() {
+//	    EmitInterfaceEvent("BattleEnded");
+//	    EmitInterfaceEvent("BulletHit");
+//	    EmitInterfaceEvent("BulletHitBullet");
+//	    EmitInterfaceEvent("BulletMissed");
+//	    EmitInterfaceEvent("Death");
+//	    EmitInterfaceEvent("HitByBullet");
+//	    EmitInterfaceEvent("HitRobot");
+//	    EmitInterfaceEvent("HitWall");
+//	    Emit("public void onPaint(Graphics2D g", 1);
+//	    EmitInterfaceEvent("RobotDeath");
+//	    EmitInterfaceEvent("RoundEnded");
+//	    EmitInterfaceEvent("ScannedRobot");
+//	    EmitInterfaceEvent("Status");
+//	    EmitInterfaceEvent("Win");
+//    }
+
+    private void AddAllEventsToList() {
+        events.add("BattleEnded");
+        events.add("BulletHit");
+        events.add("BulletHitBullet");
+        events.add("BulletMissed");
+        events.add("Death");
+        events.add("HitByBullet");
+        events.add("HitRobot");
+        events.add("HitWall");
+        events.add("Paint");
+        events.add("RobotDeath");
+        events.add("RoundEnded");
+        events.add("ScannedRobot");
+        events.add("Status");
+        events.add("Win");
+    }
+
+    private void EmitInterfaceEvent(String event) {
+	    Emit("public void on" + event + "(" + event + "Event e);", 1);
+    }
+
+    private void EmitDefaultInterfaceEventImplementation(String event) {
+	    Emit("public void on" + event + "(" + event + "Event e) { }", 2);
+    }
+
 	@Override
 	public void visit(ProgNode node) {
         EmitAutoGenDoc();
@@ -229,8 +292,7 @@ public class JavaCodeGenerator extends Visitor {
         Emit("interface Strategy {", 1);
 		indentationLevel++;
 		Emit("public void run();", 1);
-        Emit("public void onHitByBullet(HitByBulletEvent e);", 1);
-        Emit("public void onScannedRobot(ScannedRobotEvent e);", 1);
+//        EmitAllInterfaceEventDefinitions();
 		indentationLevel--;
 		Emit("}", 2);
 
@@ -256,9 +318,6 @@ public class JavaCodeGenerator extends Visitor {
         }
         indentationLevel--;
         Emit("}", 2);
-
-        EmitEvent("ScannedRobot");
-        EmitEvent("HitByBullet");
 
 		Emit("public void run() {", 1);
 		indentationLevel++;
