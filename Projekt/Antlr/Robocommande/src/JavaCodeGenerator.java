@@ -92,7 +92,7 @@ public class JavaCodeGenerator extends Visitor {
 	    indentationLevel--;
 	    Emit("} else {", 1);
 	    indentationLevel++;
-	    Emit("System.out.println(\"NOT HAPPENING!\");", 1);
+	    Emit("throw new RuntimeException(\"Cannot find strategy!\");", 1);
 	    indentationLevel--;
         Emit("}", 1);
         indentationLevel--;
@@ -232,14 +232,6 @@ public class JavaCodeGenerator extends Visitor {
 		}
 	}
 
-	private void EmitEvent(String event) {
-        Emit("public void on" + event + "(" + event + "Event e) {", 1);
-        indentationLevel++;
-        Emit("currentStrategy.on" + event + "(e);", 1);
-        indentationLevel--;
-        Emit("}", 2);
-    }
-
     private void AddAllEventsToList() {
         events.add("BattleEnded");
         events.add("BulletHit");
@@ -256,6 +248,12 @@ public class JavaCodeGenerator extends Visitor {
         events.add("Win");
     }
 
+    private void EmitAllInterfaceEventDefinitions() {
+	    for (String eventString : events) {
+	        Emit("public void on" + eventString + "(" + eventString + "Event e);", 1);
+        }
+    }
+
     private void EmitDefaultInterfaceEventImplementation(String event) {
 	    Emit("public void on" + event + "(" + event + "Event e) { }", 1);
     }
@@ -269,7 +267,7 @@ public class JavaCodeGenerator extends Visitor {
         Emit("interface Strategy {", 1);
 		indentationLevel++;
 		Emit("public void run();", 1);
-//        EmitAllInterfaceEventDefinitions();
+        EmitAllInterfaceEventDefinitions();
 		indentationLevel--;
 		Emit("}", 2);
 
@@ -298,10 +296,9 @@ public class JavaCodeGenerator extends Visitor {
 
 		Emit("public void run() {", 1);
 		indentationLevel++;
-
-		Emit("while (true) {", 1);
+        Emit("System.out.println(\"Run: \" + currentStrategy.toString());", 1);
+        Emit("while (true) {", 1);
 		indentationLevel++;
-		Emit("System.out.println(\"Run: \" + currentStrategy.toString());", 1);
 		Emit("currentStrategy.run();", 1);
 		indentationLevel--;
 		Emit("}", 1);
@@ -309,6 +306,14 @@ public class JavaCodeGenerator extends Visitor {
 		Emit("}", 2);
 
 		EmitChangeStrategyDefinition();
+
+		String behaviorName;
+		for (BehaviorFunctionNode behavior : node.defaultStrategyNode.strategyDefinition.functionsNode.behaviorFunctions) {
+		    behaviorName = behavior.idNode.id;
+            Emit("public void " + behaviorName + "(" + behaviorName.replace("on", "") + "Event e) { currentStrategy." + behaviorName + "(e); }", 1);
+        }
+        Emit("", 1);
+
 		super.visit(node);
 		indentationLevel--;
 		Emit("}", 1);
