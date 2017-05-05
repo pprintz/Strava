@@ -3,8 +3,8 @@ behavior onSetup () :
 ;
 
 strategy default:
-	behavior onRun () :
-        ahead(10)
+    behavior onRun () :
+                ahead(10)
     ;
 
     behavior onHitByBullet(hitByBulletEvent e) :

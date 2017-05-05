@@ -180,7 +180,7 @@ public class JavaCodeGenerator extends Visitor {
 	public void visit(DefaultStrategyNode node) {
 		Emit("class defaultStrategy implements Strategy {", 1);
 		indentationLevel++;
-
+        visit(node.strategyDefinition.runNode);
         String fullEventName;
         for (String event : events) {
             fullEventName = "on" + event;
@@ -240,24 +240,6 @@ public class JavaCodeGenerator extends Visitor {
         Emit("}", 2);
     }
 
-    // Missing keyboard and mouse clicks, but those are not normal events
-//    private void EmitAllInterfaceEventDefinitions() {
-//	    EmitInterfaceEvent("BattleEnded");
-//	    EmitInterfaceEvent("BulletHit");
-//	    EmitInterfaceEvent("BulletHitBullet");
-//	    EmitInterfaceEvent("BulletMissed");
-//	    EmitInterfaceEvent("Death");
-//	    EmitInterfaceEvent("HitByBullet");
-//	    EmitInterfaceEvent("HitRobot");
-//	    EmitInterfaceEvent("HitWall");
-//	    Emit("public void onPaint(Graphics2D g", 1);
-//	    EmitInterfaceEvent("RobotDeath");
-//	    EmitInterfaceEvent("RoundEnded");
-//	    EmitInterfaceEvent("ScannedRobot");
-//	    EmitInterfaceEvent("Status");
-//	    EmitInterfaceEvent("Win");
-//    }
-
     private void AddAllEventsToList() {
         events.add("BattleEnded");
         events.add("BulletHit");
@@ -267,7 +249,6 @@ public class JavaCodeGenerator extends Visitor {
         events.add("HitByBullet");
         events.add("HitRobot");
         events.add("HitWall");
-        events.add("Paint");
         events.add("RobotDeath");
         events.add("RoundEnded");
         events.add("ScannedRobot");
@@ -275,12 +256,8 @@ public class JavaCodeGenerator extends Visitor {
         events.add("Win");
     }
 
-    private void EmitInterfaceEvent(String event) {
-	    Emit("public void on" + event + "(" + event + "Event e);", 1);
-    }
-
     private void EmitDefaultInterfaceEventImplementation(String event) {
-	    Emit("public void on" + event + "(" + event + "Event e) { }", 2);
+	    Emit("public void on" + event + "(" + event + "Event e) { }", 1);
     }
 
 	@Override
