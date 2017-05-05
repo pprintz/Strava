@@ -124,6 +124,26 @@ public class TypeChecker extends Visitor {
         }
     }
 
+
+
+    public void visit(ExprFunctionCallNode node){
+
+        node.Type = node.defineFunctionNode.typeNode.Type;
+
+        int actualParamsCount = node.actualParams.exprs.size();
+
+        if(actualParamsCount == node.defineFunctionNode.formalParamsNode.typeNodes.size()){
+            for(int i = 0; i < actualParamsCount; i++){
+                node.defineFunctionNode.idNode.Type = node.defineFunctionNode.formalParamsNode.typeNodes.get(i).Type;
+
+                AssignmentNode assNode = new AssignmentNode(node.defineFunctionNode.formalParamsNode.idNodes.get(i), node.actualParams.exprs.get(i));
+                visit(assNode);
+            }
+        }else{
+            System.out.println("Mismatch between number of formal and actual params");
+        }
+    }
+
     private boolean checkExpectedType(BinaryExprNode binaryExprNode, Type expectedType) {
         if(expectedType == Type.STRUCT){
             System.out.println("Don't call checkExpectedType with expectedType STRUCT");
@@ -198,9 +218,14 @@ public class TypeChecker extends Visitor {
 
         if(node.idNode.Type == Type.STRUCT || node.exprNode.Type == Type.STRUCT){
             if(node.idNode.Type == Type.STRUCT && node.exprNode.Type == Type.STRUCT){
-                StructInitializationNode rightSide = (StructInitializationNode) node.exprNode;
-                if( ! node.idNode.declarationNode.typeNode.type.equals(rightSide.typeNode.type)){
-                    TypeErrorOccured(node, rightSide.typeNode.type, node.idNode.declarationNode.typeNode.type );
+                String rightSideTypeString;
+                if(node.exprNode instanceof IdNode){
+                    rightSideTypeString = ((IdNode) node.exprNode).declarationNode.typeNode.type;
+                } else{
+                    rightSideTypeString = ((StructInitializationNode) node.exprNode).typeNode.type;
+                }
+                if( ! node.idNode.declarationNode.typeNode.type.equals(rightSideTypeString)){
+                    TypeErrorOccured(node, rightSideTypeString, node.idNode.declarationNode.typeNode.type );
                 }
             } else if(node.idNode.Type == Type.STRUCT){
                 TypeErrorOccured(node, node.exprNode.Type.toString(), node.idNode.declarationNode.typeNode.type);
@@ -214,21 +239,11 @@ public class TypeChecker extends Visitor {
 
     }
 
-
-
-
     public void visit(IdNode node){
         node.Type = node.declarationNode.Type;
 
     }
 
-    public void visit(BlockNode node){
-
-    }
-
-    public void visit(DefineFunctionNode node){
-
-    }
 
     public void visit(StructInitializationNode node){
         node.Type = Type.STRUCT;

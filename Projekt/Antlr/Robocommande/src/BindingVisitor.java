@@ -73,6 +73,7 @@ public class BindingVisitor extends Visitor {
 
         for (int i = symbolTable.size() - 1; i >= 0; i--) {
             if (symbolTable.get(i).containsKey(fCallNode.idNode.id)) {
+                ;
                 fCallNode.defineFunctionNode = (DefineFunctionNode) symbolTable.get(i).get(fCallNode.idNode.id);
                 isDeclared = true;
             }
@@ -169,16 +170,12 @@ public class BindingVisitor extends Visitor {
 
     @Override
     public void visit(FunctionCallNode node) {
-
         BindFunctionCallToDeclaration(node);
-
     }
 
     @Override
     public void visit(ExprFunctionCallNode node) {
-
         BindExprFunctionCallToDeclaration(node);
-
     }
 
     @Override
@@ -208,20 +205,22 @@ public class BindingVisitor extends Visitor {
                 default:
                     BindStructDeclarationToDefinition(node);
                     symbolTable.peek().put(node.idNode.id, node);
-                    if (node.exprNode != null) {
-                        visit(node.exprNode);
-                    }
+            }
+            if (node.exprNode != null) {
+                visit(node.exprNode);
             }
         } else hasBindingErrorOccured = true;
 
     }
+
+    // TODO : fields with same names in different struct definit
 
     private boolean doesDeclExistLocally(DeclarationNode node) {
         for (int i = symbolTable.size() - 1; i >= 0; i--) {
             if (symbolTable.get(i).containsKey(node.idNode.id)) {
                 DeclarationNode declNodeFound = (DeclarationNode) symbolTable.get(i).get(node.idNode.id);
                 if (!declNodeFound.IsGlobal) {
-                    System.out.println("Already declared variable with name: " + node.idNode.id + " LINE" + declNodeFound.lineNumber);
+                    System.out.println("Already declared variable with name: " + node.idNode.id + " LINE " + declNodeFound.lineNumber);
                     return true;
                 } else {
                     if (i == symbolTable.size() - 1) {

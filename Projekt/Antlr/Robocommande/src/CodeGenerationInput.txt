@@ -1,13 +1,14 @@
 behavior onSetup():
-    myStruct {num b}
-    //myStruct a := new myStruct(b := 10)
+    num b := global()
+;
 
-
+strategy default:
+    behavior onRun():
+        num b := global(3000) + 2
+    ;
 ;
 
 
-strategy default :
-
-
-
+define num global(num setNum):
+    return setNum
 ;
