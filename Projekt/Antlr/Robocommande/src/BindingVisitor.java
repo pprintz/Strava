@@ -137,6 +137,7 @@ public class BindingVisitor extends Visitor {
             if (tuple != null && !tuple.isBound) {
                 assignmentNode.idNode.declarationNode = tuple.declarationNode;
                 tuple.isBound = true;
+                visit(assignmentNode.exprNode);
             } else if (tuple != null) {
                 System.out.println("The field '" + tuple.declarationNode.idNode.id + "' cannot be initialized multiple times.");
                 break;
@@ -257,6 +258,7 @@ public class BindingVisitor extends Visitor {
     @Override
     public void visit(StructDefinitionNode node) {
         symbolTable.peek().put(node.typeNode.type, node);
+        node.declarationNodes.forEach((d) -> visit(d));
     }
 
     @Override

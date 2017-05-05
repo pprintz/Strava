@@ -1,15 +1,13 @@
 behavior onSetup():
-    //valStruct {num value}
-    //valStruct myNext := valStruct[value := 10]
 
-    //myStruct {valStruct next, num value }
-    //myStruct head := myStruct[next := myNext, value := 2]
+    mS{num val}
+    nS{mS head}
 
-    myStruct {num a, num b}
+    mS s1 := mS[val := 10]
 
-    myStruct lo := myStruct[b := 123, a := 2, a := 3]
+    nS s2 := nS[head := s1]
 
-    text aaa := global()
+
 ;
 strategy default:
 

@@ -16,6 +16,11 @@ public class TypeChecker extends Visitor {
         System.out.format("[%d:%d] Type error: expected %s, got %s\n", node.lineNumber, node.columnNumber, expectedType, actualType);
     }
 
+    private void TypeErrorOccured(ASTNode node, String actualTypeString, String expectedTypeString){
+        programHasTypeErrors = true;
+        System.out.format("[%d:%d] Type error: expected %s, got %s\n", node.lineNumber, node.columnNumber, expectedTypeString, actualTypeString);
+    }
+
     private void TypeErrorOccured(ASTNode node, Type typeOne, Type typeTwo, Type expectedType){
         programHasTypeErrors = true;
 
@@ -175,19 +180,45 @@ public class TypeChecker extends Visitor {
     public void visit(LiteralNode node){
     }
 
+    // a := 2
+    // a := lol
+
+    // struct != struct
+    // struct != else
+    // else != struct
+    // else1 != else2
+
+
+
     public void visit(AssignmentNode node) {
-        /*visit(node.exprNode);
-        if (node.exprNode.Type != Type.STRUCT) {
-            if (!(node.idNode.declarationNode.Type == node.exprNode.Type)) {
-                TypeErrorOccured(node, node.exprNode.Type, node.idNode.declarationNode.Type);
-            }
+        visit(node.exprNode);
+        if(node.idNode.Type == null){
+            node.idNode.Type = node.idNode.declarationNode.Type;
         }
-        else{
-            System.out.println("we did it. woo");
-        }*/
+
+        if(node.idNode.Type == Type.STRUCT || node.exprNode.Type == Type.STRUCT){
+            if(node.idNode.Type == Type.STRUCT && node.exprNode.Type == Type.STRUCT){
+                StructInitializationNode rightSide = (StructInitializationNode) node.exprNode;
+                if( ! node.idNode.declarationNode.typeNode.type.equals(rightSide.typeNode.type)){
+                    TypeErrorOccured(node, rightSide.typeNode.type, node.idNode.declarationNode.typeNode.type );
+                }
+            } else if(node.idNode.Type == Type.STRUCT){
+                TypeErrorOccured(node, node.exprNode.Type.toString(), node.idNode.declarationNode.typeNode.type);
+            } else {
+                StructInitializationNode rightSide = (StructInitializationNode) node.exprNode;
+                TypeErrorOccured(node, rightSide.typeNode.type, node.idNode.Type.toString());
+            }
+        } else if(node.idNode.Type != node.exprNode.Type) {
+            TypeErrorOccured(node, node.exprNode.Type, node.idNode.Type);
+        }
+
     }
 
+
+
+
     public void visit(IdNode node){
+        node.Type = node.declarationNode.Type;
 
     }
 
@@ -200,7 +231,7 @@ public class TypeChecker extends Visitor {
     }
 
     public void visit(StructInitializationNode node){
-        System.out.println("I am visited. woo");
+        node.Type = Type.STRUCT;
         node.assignments.forEach(this::visit);
     }
 
@@ -215,14 +246,38 @@ public class TypeChecker extends Visitor {
 
     public void visit(DeclarationNode node){
         node.Type = node.typeNode.Type;
-        if(node.exprNode != null) {
+        if(node.exprNode != null){
             visit(node.exprNode);
-            if(node.Type != node.exprNode.Type ){
+            if(node.Type == Type.STRUCT || node.exprNode.Type == Type.STRUCT){
+                if(node.Type == Type.STRUCT && node.exprNode.Type == Type.STRUCT){
+                    StructInitializationNode rightSide = (StructInitializationNode) node.exprNode;
+                    if ( ! node.typeNode.type.equals(rightSide.typeNode.type)) {
+                        TypeErrorOccured(node, rightSide.typeNode.type, node.typeNode.type);
+                    } else{
+                        node.idNode.Type = node.exprNode.Type; // Struct and Struct
+                    }
+                } else if(node.Type == Type.STRUCT){
+                    TypeErrorOccured(node, node.exprNode.Type.toString(), node.typeNode.type);
+
+                    node.Type = Type.ERROR;
+                    node.idNode.Type = Type.ERROR;
+                } else { // right side is struct
+                    StructInitializationNode rightSide = (StructInitializationNode) node.exprNode;
+                    TypeErrorOccured(node, rightSide.typeNode.type, node.Type.toString());
+
+                    node.Type = Type.ERROR;
+                    node.idNode.Type = Type.ERROR;
+                }
+            }
+
+            else if(node.Type != node.exprNode.Type) {
                 TypeErrorOccured(node, node.exprNode.Type, node.Type);
+                node.Type = Type.ERROR;
+                node.idNode.Type = Type.ERROR;
             }
-            else{
-                node.idNode.Type = node.Type;
-            }
+        }
+        else {
+            node.idNode.Type = node.typeNode.Type;
         }
     }
 
