@@ -17,14 +17,12 @@ strategy default:
         a := a + 2
     ;
 
-    myStruct { num a }
-
     behavior onHitByBullet(hitByBulletEvent e) :
-        //changeStrategy("defensive")
+        changeStrategy("defensive")
     ;
 
     behavior onScannedRobot(scannedRobotEvent e) :
-        //changeStrategy("aggressive")
+        changeStrategy("aggressive")
     ;
 
     behavior onBulletHit(bulletHitEvent e) :
@@ -32,7 +30,7 @@ strategy default:
     ;
 
     behavior onHitWall(HitWallEvent e) :
-        //ahead(50)
+        ahead(50)
     ;
 ;
 
