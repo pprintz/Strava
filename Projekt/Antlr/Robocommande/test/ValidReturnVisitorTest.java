@@ -24,6 +24,7 @@ public class ValidReturnVisitorTest {
     private ASTNode astGood4;
     private ASTNode astBad1;
     private ASTNode astBad2;
+    private ASTNode astBad3;
     @Before
     public void Before() throws Exception{
 
@@ -33,6 +34,7 @@ public class ValidReturnVisitorTest {
         astGood4 = generateAST("testFiles/good04");
         astBad1 = generateAST("testFiles/bad01");
         astBad2 = generateAST("testFiles/bad02");
+        astBad3 = generateAST("testFiles/bad03");
 
     }
     private ASTNode generateAST(String path) throws Exception{
@@ -85,6 +87,11 @@ public class ValidReturnVisitorTest {
         validReturnVisitor.visit(astBad2);
         assertTrue(validReturnVisitor.hasReturnError);
         System.out.println("... Bad02 passed\n");
+
+        System.out.println("Running test on Bad03...");
+        validReturnVisitor.visit(astBad3);
+        assertTrue(validReturnVisitor.hasReturnError);
+        System.out.println("... Bad03 passed\n");
     }
 
 }
