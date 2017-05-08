@@ -373,6 +373,10 @@ public class JavaCodeGenerator extends Visitor {
 
 	@Override
 	public void visit(SetupNode node) {
+	    for (StmtNode decl : node.setupBlockNode.setupStmts) {
+            visit(decl);
+            node.setupBlockNode.setupStmts.remove(decl);
+        }
 		Emit("public void setup() {", 1);
         indentationLevel++;
 		super.visit(node);
