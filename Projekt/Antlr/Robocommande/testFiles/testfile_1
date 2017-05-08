@@ -1,5 +1,42 @@
 behavior onSetup():
+
 ;
 
 strategy default:
 ;
+
+
+define num Teitur():
+num = 2
+
+if num > 3:
+    return 3
+    ;
+;
+
+
+define num Teitur2():
+if true:
+
+;
+else :
+    return 3
+    ;
+;
+
+define num Teitur3():
+    while true:
+    return 4
+    ;
+;
+
+define num Teitur4():
+    text = Mystring
+
+    return Mystring
+;
+
+define num Teitur5():
+    return 1
+;
+
