@@ -1,0 +1,5 @@
+behavior onSetup():
+;
+
+strategy default:
+;
