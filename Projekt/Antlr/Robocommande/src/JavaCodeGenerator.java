@@ -1,3 +1,4 @@
+import org.antlr.v4.codegen.model.decl.Decl;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.io.FileOutputStream;
@@ -6,7 +7,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
-@SuppressWarnings("Duplicates")
 public class JavaCodeGenerator extends Visitor {
 	private int indentationLevel = 0;
 
@@ -378,10 +378,16 @@ public class JavaCodeGenerator extends Visitor {
 
 	@Override
 	public void visit(SetupNode node) {
-	    for (StmtNode decl : node.setupBlockNode.setupStmts) {
-            visit(decl);
-            node.setupBlockNode.setupStmts.remove(decl);
+//	    for (StmtNode decl : node.setupBlockNode.setupStmts) {
+//            visit();
+//            node.setupBlockNode.setupStmts.remove(decl);
+//        }
+        for (StmtNode decl : node.setupBlockNode.setupStmts) {
+            if (decl instanceof DeclarationNode) {
+                visit(decl);
+            }
         }
+
 		Emit("public void setup() {", 1);
         indentationLevel++;
 		super.visit(node);
