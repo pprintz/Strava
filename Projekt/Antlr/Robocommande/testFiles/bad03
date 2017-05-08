@@ -1,0 +1,37 @@
+strategy default:
+;
+
+define num Foo():
+    if false:
+    ;
+    else if false  :
+
+    ;
+    else if false  :
+
+    ;
+    else if false  :
+
+    ;
+    else if false  :
+
+    ;
+    else if false  :
+
+    ;
+    else if false  :
+
+    ;
+    else if false  :
+
+    ;
+    else if false  :
+
+    ;
+    else if false  :
+
+    ;
+    else if true  :
+        return 2
+    ;
+;
