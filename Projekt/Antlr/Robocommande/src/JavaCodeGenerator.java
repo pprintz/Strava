@@ -131,6 +131,7 @@ public class JavaCodeGenerator extends Visitor {
 		visit(node.leftNode);
 		EmitNoIndent(BinaryOperatorToJavaOperator(node.binaryOperator));
 		visit(node.rightNode);
+//		EmitNoIndent(";");
 	}
 
 	// Capitalizes first letter
@@ -230,6 +231,7 @@ public class JavaCodeGenerator extends Visitor {
 				Emit(")", 0);
 				break;
 		}
+//		EmitNoIndent(";");
 	}
 
     private void AddAllEventsToList() {
@@ -386,7 +388,10 @@ public class JavaCodeGenerator extends Visitor {
 
     @Override
     public void visit(AssignmentNode node) {
-        throw new NotImplementedException();
+		visit(node.idNode, true);
+		EmitNoIndent(" = ");
+		visit(node.exprNode);
+		EmitNoIndent(";\n");
     }
 
     @Override
@@ -459,7 +464,7 @@ public class JavaCodeGenerator extends Visitor {
 
     @Override
     public void visit(SetupBlockNode node) {
-		super.visit(node);
+		super.visit(node);/**/
     }
 
     @Override
