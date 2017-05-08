@@ -1,10 +1,17 @@
 behavior onSetup () :
-    text b
+    num a := 5
 ;
 
 strategy default:
     behavior onRun () :
-                ahead(10)
+        if 1 < a :
+            ahead(10)
+        ; else if 5 < 3 :
+            a := 4
+        ; else :
+            back(10)
+        ;
+        a := a + 3
     ;
 
     behavior onHitByBullet(hitByBulletEvent e) :
@@ -18,49 +25,34 @@ strategy default:
     behavior onBulletHit(bulletHitEvent e) :
         num a := 5
     ;
+
+    behavior onHitWall(HitWallEvent e) :
+        ahead(50)
+    ;
 ;
 
-define bool returnsTrue() :
-	return true
-;
-
-define num ReturnsBestNumber(text someRandomInput) :
-	if someRandomInput = 42 :
-		return "42"
-	;
-
-	if returnsTrue() :
-		return "a"
-	;
-
-	return "14"
-;
 
 strategy aggressive :
 	behavior onRun () :
+	    turnGunRight(360)
 	;
 
-	define text yourMom() :
-		return "your mom"
-	;
-
-//    behavior onHitByBullet(hitByBulletEvent e):
-//        changeStrategy("defensive")
-//    ;
-
-//    behavior onScannedRobot(scannedRobotEvent e) :
-//    ;
+    behavior onHitByBullet(hitByBulletEvent e):
+        changeStrategy("defensive")
+    ;
 ;
 
 strategy defensive :
     behavior onRun() :
-    	turnGunRight(360)
+    	back(100)
+    ;
+
+    behavior onScannedRobot(scannedRobotEvent e) :
+        changeStrategy("aggressive")
     ;
 ;
 
-// rotate
-// move
-// changeStrat
+
 
 
 
