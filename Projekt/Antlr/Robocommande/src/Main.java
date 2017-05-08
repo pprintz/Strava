@@ -20,7 +20,6 @@ public class Main {
             ast = GenerateAST(System.in);
         }
 
-
         FunctionBindingVisitor functionBindingVisitor = new FunctionBindingVisitor();
         functionBindingVisitor.visit(ast);
         BindingVisitor bindingVisitor = new BindingVisitor(functionBindingVisitor.getSymbolTable());
@@ -32,17 +31,21 @@ public class Main {
 
         TypeChecker typeChecker = new TypeChecker();
         typeChecker.visit(ast);
+		System.out.println("Type checking done.");
 
-        if (BindingVisitor.hasBindingErrorOccured || typeChecker.programHasTypeErrors || vrv.hasReturnError) {
+
+		if (BindingVisitor.hasBindingErrorOccured || typeChecker.programHasTypeErrors || vrv.hasReturnError) {
             for(Error e : Main.CompileErrors){
                 System.out.println(e.toString());
             }
             System.exit(0);
         }
+        StrategyVisitor strategyVisitor = new StrategyVisitor();
+		strategyVisitor.visit(ast);
+		JavaCodeGenerator codeGenerator = new JavaCodeGenerator(strategyVisitor.strategies);
+		codeGenerator.visit(ast);
 
-        System.out.println("Everything went okay.");
-
-
+		System.out.println("Code generation done.");
         System.out.println("Everything went okay.");
     }
 
@@ -57,9 +60,7 @@ public class Main {
         RobocommandeParser parser = new RobocommandeParser(tokens);
 
         ParseTree cst = parser.prog();
-
         ASTBuilder astBuilder = new ASTBuilder();
-
         return astBuilder.visit(cst);
     }
 }

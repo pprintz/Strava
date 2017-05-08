@@ -391,9 +391,12 @@ public class JavaCodeGenerator extends Visitor {
 
     @Override
     public void visit(ElseIfStatementNode node) {
-        Emit("else if ", 0);
-		super.visit(node);
-    }
+		Emit("else if ", 0);
+		EmitNoIndent("(");
+		visit(node.predicate);
+		EmitNoIndent(")");
+		visit(node.blockNode);
+	}
 
     @Override
     public void visit(FieldAssignmentNode node) {
