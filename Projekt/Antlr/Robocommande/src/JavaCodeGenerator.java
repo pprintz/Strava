@@ -188,13 +188,16 @@ public class JavaCodeGenerator extends Visitor {
         for (String event : events) {
             fullEventName = "on" + event;
             boolean isImplemented = false;
-            for (BehaviorFunctionNode behavior : node.strategyDefinition.functionsNode.behaviorFunctions) {
-                if (fullEventName.equals(behavior.idNode.id)) {
-                    isImplemented = true;
-                    visit(behavior);
-                    break;
+            if (node.strategyDefinition.functionsNode != null) {
+                for (BehaviorFunctionNode behavior : node.strategyDefinition.functionsNode.behaviorFunctions) {
+                    if (fullEventName.equals(behavior.idNode.id)) {
+                        isImplemented = true;
+                        visit(behavior);
+                        break;
+                    }
                 }
             }
+
             if (!isImplemented) {
                 EmitDefaultInterfaceEventImplementation(event);
             }
@@ -332,11 +335,13 @@ public class JavaCodeGenerator extends Visitor {
 		EmitChangeStrategyDefinition();
 
 		String behaviorName;
-		for (BehaviorFunctionNode behavior : node.defaultStrategyNode.strategyDefinition.functionsNode.behaviorFunctions) {
-		    behaviorName = behavior.idNode.id;
-            Emit("public void " + behaviorName + "(" + behaviorName.replace("on", "") + "Event e) { currentStrategy." + behaviorName + "(e); }", 1);
+		if (node.defaultStrategyNode.strategyDefinition.functionsNode != null) {
+            for (BehaviorFunctionNode behavior : node.defaultStrategyNode.strategyDefinition.functionsNode.behaviorFunctions) {
+                behaviorName = behavior.idNode.id;
+                Emit("public void " + behaviorName + "(" + behaviorName.replace("on", "") + "Event e) { currentStrategy." + behaviorName + "(e); }", 1);
+            }
+            Emit("", 1);
         }
-        Emit("", 1);
 
 		super.visit(node);
 		indentationLevel--;
@@ -490,7 +495,7 @@ public class JavaCodeGenerator extends Visitor {
 
     @Override
     public void visit(SetupBlockNode node) {
-		super.visit(node);/**/
+		super.visit(node);
     }
 
     @Override
@@ -501,7 +506,11 @@ public class JavaCodeGenerator extends Visitor {
 
     @Override
     public void visit(StrategyDefinitionNode node) {
-		super.visit(node);
+        for (BehaviorFunctionNode behavior : node.functionsNode.behaviorFunctions) {
+            if (!events.contains(behavior.idNode.id)) {
+                visit(behavior);
+            }
+        }
     }
 
     @Override
