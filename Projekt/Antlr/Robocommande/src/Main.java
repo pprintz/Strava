@@ -42,7 +42,8 @@ public class Main {
         }
         StrategyVisitor strategyVisitor = new StrategyVisitor();
 		strategyVisitor.visit(ast);
-		JavaCodeGenerator codeGenerator = new JavaCodeGenerator(strategyVisitor.strategies);
+		JavaCodeGenerator codeGenerator = new JavaCodeGenerator(strategyVisitor.strategies, strategyVisitor.customNewEvents);
+
 		codeGenerator.visit(ast);
 
 		System.out.println("Code generation done.");
