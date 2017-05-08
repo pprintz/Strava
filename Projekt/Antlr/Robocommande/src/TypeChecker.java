@@ -127,22 +127,28 @@ public class TypeChecker extends Visitor {
 
 
     public void visit(ExprFunctionCallNode node){
-
         node.Type = node.defineFunctionNode.typeNode.Type;
+        CompareActualToFormalParams(node, node.actualParams, node.defineFunctionNode.formalParamsNode);
+    }
 
-        int actualParamsCount = node.actualParams.exprs.size();
+    public void visit(FunctionCallNode node){
+        CompareActualToFormalParams(node, node.actualParams, node.defineFunctionNode.formalParamsNode);
+    }
 
-        if(actualParamsCount == node.defineFunctionNode.formalParamsNode.typeNodes.size()){
+    private void CompareActualToFormalParams(ASTNode node, ActualParamsNode actualParamsNode, FormalParamsNode formalParamsNode){
+        int actualParamsCount = actualParamsNode.exprs.size();
+
+        if(actualParamsCount == formalParamsNode.typeNodes.size()){
             for(int i = 0; i < actualParamsCount; i++){
-                node.defineFunctionNode.idNode.Type = node.defineFunctionNode.formalParamsNode.typeNodes.get(i).Type;
-
-                AssignmentNode assNode = new AssignmentNode(node.defineFunctionNode.formalParamsNode.idNodes.get(i), node.actualParams.exprs.get(i));
-                visit(assNode);
+                TypeNode currentFormalTypeNode = formalParamsNode.typeNodes.get(i);
+                ExprNode currentActualExprNode = actualParamsNode.exprs.get(i);
+                CheckTypeAndExprMatch(node, currentFormalTypeNode, currentActualExprNode);
             }
         }else{
             System.out.println("Mismatch between number of formal and actual params");
         }
     }
+
 
     private boolean checkExpectedType(BinaryExprNode binaryExprNode, Type expectedType) {
         if(expectedType == Type.STRUCT){
@@ -211,43 +217,36 @@ public class TypeChecker extends Visitor {
 
 
     public void visit(AssignmentNode node) {
-        visit(node.exprNode);
-        if(node.idNode.Type == null){
-            node.idNode.Type = node.idNode.declarationNode.Type;
-        }
+        CheckTypeAndExprMatch(node, node.idNode.declarationNode.typeNode, node.exprNode);
+    }
 
-        if(node.idNode.Type == Type.STRUCT || node.exprNode.Type == Type.STRUCT){
-            if(node.idNode.Type == Type.STRUCT && node.exprNode.Type == Type.STRUCT){
+    private void CheckTypeAndExprMatch(ASTNode node, TypeNode typeNode, ExprNode exprNode){
+        visit(exprNode);
+        if(typeNode.Type == Type.STRUCT || exprNode.Type == Type.STRUCT){
+            if(typeNode.Type == Type.STRUCT && exprNode.Type == Type.STRUCT){
                 String rightSideTypeString;
-                if(node.exprNode instanceof IdNode){
-                    rightSideTypeString = ((IdNode) node.exprNode).declarationNode.typeNode.type;
+                if(exprNode instanceof IdNode){
+                    rightSideTypeString = ((IdNode) exprNode).declarationNode.typeNode.type;
                 } else{
-                    rightSideTypeString = ((StructInitializationNode) node.exprNode).typeNode.type;
+                    rightSideTypeString = ((StructInitializationNode) exprNode).typeNode.type;
                 }
-                if( ! node.idNode.declarationNode.typeNode.type.equals(rightSideTypeString)){
-                    TypeErrorOccured(node, rightSideTypeString, node.idNode.declarationNode.typeNode.type );
+                if( ! typeNode.type.equals(rightSideTypeString)){
+                    TypeErrorOccured(node, rightSideTypeString, typeNode.type );
                 }
-            } else if(node.idNode.Type == Type.STRUCT){
-                TypeErrorOccured(node, node.exprNode.Type.toString(), node.idNode.declarationNode.typeNode.type);
+            } else if(typeNode.Type == Type.STRUCT){
+                TypeErrorOccured(node, exprNode.Type.toString(), typeNode.type);
             } else {
-                StructInitializationNode rightSide = (StructInitializationNode) node.exprNode;
-                TypeErrorOccured(node, rightSide.typeNode.type, node.idNode.Type.toString());
+                StructInitializationNode rightSide = (StructInitializationNode) exprNode;
+                TypeErrorOccured(node, rightSide.typeNode.type, typeNode.Type.toString());
             }
-        } else if(node.idNode.Type != node.exprNode.Type) {
-            TypeErrorOccured(node, node.exprNode.Type, node.idNode.Type);
+        } else if(typeNode.Type != exprNode.Type) {
+            TypeErrorOccured(node, exprNode.Type, typeNode.Type);
         }
-
     }
-
-    public void visit(IdNode node){
-        node.Type = node.declarationNode.Type;
-
-    }
-
 
     public void visit(StructInitializationNode node){
         node.Type = Type.STRUCT;
-        node.assignments.forEach(this::visit);
+        node.assignments.forEach((a) -> visit(a));
     }
 
     public void visit(FieldValueNode node){
@@ -256,6 +255,12 @@ public class TypeChecker extends Visitor {
         visit(lastIdNode);
 
         node.Type = lastIdNode.Type;
+    }
+
+    public void visit(IdNode node){
+        if( ! node.isDeclaration){
+            node.Type = node.declarationNode.typeNode.Type;
+        }
     }
 
 
@@ -294,6 +299,17 @@ public class TypeChecker extends Visitor {
         else {
             node.idNode.Type = node.typeNode.Type;
         }
+    }
+
+
+    public void visit(DefineFunctionNode node){
+        for(StmtNode stmtNode : node.blockNode.functionStmtNodes){
+            if(stmtNode instanceof ReturnStatementNode){
+                ReturnStatementNode returnStmt = (ReturnStatementNode) stmtNode;
+                CheckTypeAndExprMatch(returnStmt, node.typeNode, returnStmt.exprNode);
+            }
+        }
+
     }
 
 }

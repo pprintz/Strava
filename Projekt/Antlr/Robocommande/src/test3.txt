@@ -1,18 +1,13 @@
 behavior onSetup():
 
-    mS{num val}
-    nS{mS head}
-
-    mS s1 := mS[val := 10]
-
-    nS s2 := nS[head := s1]
-
+    global(2)
 
 ;
 strategy default:
 
 ;
 
-define num global():
-    return 1000000
+define num global(num a):
+    num b := a
+    return true
 ;
