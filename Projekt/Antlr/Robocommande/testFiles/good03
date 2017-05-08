@@ -1,0 +1,20 @@
+strategy default:
+;
+define num Foo():
+    if true:
+        if true:
+           return 10
+        ;
+        else:
+            return 10
+        ;
+    ;
+    else :
+        if true:
+            return 10
+        ;
+        else :
+            return 10
+        ;
+    ;
+;

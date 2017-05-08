@@ -1,0 +1,17 @@
+strategy default:
+;
+
+define text Foo():
+    if true:
+        return 42
+    ;
+    else if true:
+        return 33
+    ;
+    else if true:
+        return 10
+    ;
+    else :
+        return 32
+    ;
+;

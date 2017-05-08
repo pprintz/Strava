@@ -5,20 +5,14 @@ strategy default:
 define num Foo(num a, num b):
     if true :
         return 23
-        if true:
-
-        ;
-        else:
+     ;
+     else if true:
+        return 33
+     ;
+     else if true:
+        return 42
+     ;
+     else :
         return 32
-        ;
-    ;
-    else:
-    return 33
-    ;
-
-    if true:
-    ;
-    else :
-       return 33
-    ;
+     ;
 ;

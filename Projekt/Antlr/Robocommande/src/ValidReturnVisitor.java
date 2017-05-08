@@ -30,7 +30,7 @@ public class ValidReturnVisitor extends Visitor {
             }
         }
 
-        while (ifStatementNodeQueue.peek() != null) {
+        nodeQueueLoop: while (ifStatementNodeQueue.peek() != null) {
             boolean isReturning;
             IfStatementNode ifNode = ifStatementNodeQueue.poll();
 
@@ -39,7 +39,7 @@ public class ValidReturnVisitor extends Visitor {
             if (ifNode.elseIfNodes != null) {
                 for (ElseIfStatementNode elif : ifNode.elseIfNodes) {
                     isReturning = isBranchReturning(elif.blockNode);
-                    if(!isReturning) continue;
+                    if(!isReturning) continue nodeQueueLoop;
                 }
             }
             if (ifNode.elseBlockNode != null) {
