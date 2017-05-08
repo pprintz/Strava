@@ -390,6 +390,7 @@ class StructInitializationNode extends ExprNode {
         this.assignments = assignments;
         this.Type = typeNode.Type;
     }
+
     @Override
     public void accept(Visitor v) {
         v.visit(this);
