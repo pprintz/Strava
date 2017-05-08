@@ -29,14 +29,14 @@ public class TypeChecker extends Visitor {
 
     private void TypeErrorOccured(ASTNode node, Type typeOne, Type typeTwo, Type expectedType, Type expectedTypeAlternative){
         programHasTypeErrors = true;
-
         System.out.format("[%d:%d] Type error: expected two of %s OR %s, got %s and %s\n", node.lineNumber, node.columnNumber, expectedType, expectedTypeAlternative, typeOne, typeTwo);
     }
 
     public void visit(UnaryExprNode unaryExprNode){
         switch (unaryExprNode.unaryOperator) {
             case PARANTHESIS:
-                // empty since PARANTHESIS has nothing to do with types
+                visit(unaryExprNode.exprNode);
+                unaryExprNode.Type = unaryExprNode.exprNode.Type;
                 break;
             case NEGATEBOOL:
                 if(checkExpectedType(unaryExprNode, Type.BOOL)){
@@ -301,15 +301,32 @@ public class TypeChecker extends Visitor {
         }
     }
 
+    private TypeNode currentBlockTypeNode;
 
-    public void visit(DefineFunctionNode node){
-        for(StmtNode stmtNode : node.blockNode.functionStmtNodes){
-            if(stmtNode instanceof ReturnStatementNode){
-                ReturnStatementNode returnStmt = (ReturnStatementNode) stmtNode;
-                CheckTypeAndExprMatch(returnStmt, node.typeNode, returnStmt.exprNode);
-            }
-        }
-
+    public void visit(ReturnStatementNode node){
+        CheckTypeAndExprMatch(node, currentBlockTypeNode, node.exprNode);
     }
 
+    public void visit(DefineFunctionNode node){
+        currentBlockTypeNode = node.typeNode;
+        super.visit(node);
+    }
+
+    public void visit(IfStatementNode node){
+        visit(node.predicate);
+        checkPredicate(node, node.predicate);
+        super.visit(node);
+    }
+
+    public void visit(LoopNode node){
+        visit(node.predicate);
+        checkPredicate(node, node.predicate);
+        super.visit(node);
+    }
+
+    private void checkPredicate(ASTNode node, ExprNode predicate){
+        if(predicate.Type != Type.BOOL){
+            TypeErrorOccured(node, predicate.Type, Type.BOOL);
+        }
+    }
 }

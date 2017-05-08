@@ -9,5 +9,19 @@ strategy default:
 
 define num global(num a):
     num b := a
-    return true
+    if(2 = 3):
+        return 2
+        bool xx := 2 != "ok"
+    ;
+    else:
+        return "lol man"
+    ;
+    if ( 2 = 2):
+        if(4 = 4):
+            loop while( 2 * 2 ):
+                //num nesting := "lol"
+            ;
+        ;
+    ;
+
 ;
