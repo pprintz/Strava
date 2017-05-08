@@ -38,14 +38,14 @@ public class Main {
 		StrategyVisitor strategyVisitor = new StrategyVisitor();
         strategyVisitor.visit(ast);
 
-        JavaCodeGenerator codeGenerator = new JavaCodeGenerator(strategyVisitor.strategies);
-        codeGenerator.visit(ast);
+        ValidReturnVisitor vrv = new ValidReturnVisitor();
+        vrv.visit(ast);
+
+        //JavaCodeGenerator codeGenerator = new JavaCodeGenerator(strategyVisitor.strategies);
+        //codeGenerator.visit(ast);
 
 		System.out.println("Everything went okay.");
 
-
-        TypeChecker typeChecker = new TypeChecker();
-        typeChecker.visit(ast);
 
         System.out.println("Everything went okay.");
     }
