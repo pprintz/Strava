@@ -1,5 +1,8 @@
 behavior onSetup () :
     num a := 5
+    new event myCustomEvent :
+    	return false
+    ;
 ;
 
 strategy default:

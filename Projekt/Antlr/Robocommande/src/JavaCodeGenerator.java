@@ -12,12 +12,14 @@ public class JavaCodeGenerator extends Visitor {
 
     private String className;
 	private ArrayList<String> strategies;
+	private ArrayList<String> newCustomEvents;
 	private PrintWriter writer;
     private ArrayList<String> events;
 
-	JavaCodeGenerator(ArrayList<String> strategies) {
+	JavaCodeGenerator(ArrayList<String> strategies, ArrayList<String> newCustomEvents) {
 		super();
 		this.strategies = strategies;
+		this.newCustomEvents = newCustomEvents;
 		events = new ArrayList<>(14);
 		AddAllEventsToList();
 		try {
@@ -260,6 +262,7 @@ public class JavaCodeGenerator extends Visitor {
 	    Emit("public void on" + event + "(" + event + "Event e) { }", 1);
     }
 
+    // TODO: Split this marvelous monster intro sub-functions
 	@Override
 	public void visit(ProgNode node) {
         EmitAutoGenDoc();
@@ -299,7 +302,26 @@ public class JavaCodeGenerator extends Visitor {
 		Emit("public void run() {", 1);
 		indentationLevel++;
         Emit("System.out.println(\"Run: \" + currentStrategy.toString());", 1);
-        Emit("while (true) {", 1);
+
+        // TODO: Custom Events
+//        for	(String customEvent : newCustomEvents) {
+//			Emit("addCustomEvent(new Condition(" + customEvent + ") {", 1);
+//			indentationLevel++;
+//			Emit("public boolean test() {", 1);
+//			indentationLevel++;
+//			visit(node.)
+//
+//			indentationLevel--;
+//			indentationLevel--;
+//;		}
+
+//		addCustomEvent(new Condition("triggerhit") {
+//			public boolean test() {
+//				return (getEnergy() <= trigger);
+//			}
+//		});
+
+		Emit("while (true) {", 1);
 		indentationLevel++;
 		Emit("currentStrategy.run();", 1);
 		indentationLevel--;
