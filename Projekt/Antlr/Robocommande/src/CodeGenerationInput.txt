@@ -3,6 +3,10 @@ behavior onSetup () :
     // new event myCustomEvent :
 	//return false
     //;
+    ahead(50)
+    if a < 5 :
+        ahead(10)
+    ;
 ;
 
 strategy default:
