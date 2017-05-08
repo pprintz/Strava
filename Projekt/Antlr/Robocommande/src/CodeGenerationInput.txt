@@ -1,8 +1,8 @@
-behavior onSetup () :git
+behavior onSetup () :
     num a := 1
-    new event myCustomEvent :
-    	return false
-    ;
+    // new event myCustomEvent :
+    	//return false
+    //;
 ;
 
 strategy default:
@@ -16,6 +16,8 @@ strategy default:
         ;
         a := a + 2
     ;
+
+    myStruct { num a }
 
     behavior onHitByBullet(hitByBulletEvent e) :
         //changeStrategy("defensive")
