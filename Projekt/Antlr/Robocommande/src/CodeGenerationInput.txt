@@ -1,5 +1,8 @@
-behavior onSetup () :
+behavior onSetup () :git
     num a := 1
+    new event myCustomEvent :
+    	return false
+    ;
 ;
 
 strategy default:

@@ -57,7 +57,7 @@ public class Main {
 
 		System.out.println("Type checking done.");
 
-		JavaCodeGenerator codeGenerator = new JavaCodeGenerator(strategyVisitor.strategies);
+		JavaCodeGenerator codeGenerator = new JavaCodeGenerator(strategyVisitor.strategies, strategyVisitor.customNewEvents);
 		codeGenerator.visit(ast);
 
         System.out.println("Code generation done.");
