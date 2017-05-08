@@ -1,25 +1,25 @@
 behavior onSetup () :
-    num a := 5
+    num a := 1
 ;
 
 strategy default:
     behavior onRun () :
-        if 1 < a :
+        if a < 5 :
             ahead(10)
         ; else if 5 < 3 :
             a := 4
         ; else :
             back(10)
         ;
-        a := a + 3
+        a := a + 2
     ;
 
     behavior onHitByBullet(hitByBulletEvent e) :
-        changeStrategy("defensive")
+        //changeStrategy("defensive")
     ;
 
     behavior onScannedRobot(scannedRobotEvent e) :
-        changeStrategy("aggressive")
+        //changeStrategy("aggressive")
     ;
 
     behavior onBulletHit(bulletHitEvent e) :
@@ -27,7 +27,7 @@ strategy default:
     ;
 
     behavior onHitWall(HitWallEvent e) :
-        ahead(50)
+        //ahead(50)
     ;
 ;
 
