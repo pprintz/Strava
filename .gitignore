@@ -99,4 +99,6 @@ xcuserdata
 # VSCode Java plugin temporary files
 javac-services.0.log
 javac-services.0.log.lck
-src/CodeGenerationInput.txt
+Projekt/Antlr
+Projekt/Antlr/Robocommande/src/CodeGenerationInput.txt
+# *.txt
