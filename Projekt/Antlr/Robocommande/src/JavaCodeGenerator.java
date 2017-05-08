@@ -390,7 +390,12 @@ public class JavaCodeGenerator extends Visitor {
 
 		Emit("public void setup() {", 1);
         indentationLevel++;
-		super.visit(node);
+//		super.visit(node);
+        for (StmtNode decl : node.setupBlockNode.setupStmts) {
+            if (!(decl instanceof DeclarationNode)) {
+                visit(decl);
+            }
+        }
 		indentationLevel--;
 		Emit("}", 2);
 	}
