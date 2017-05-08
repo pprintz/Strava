@@ -1,4 +1,3 @@
-import org.antlr.v4.codegen.model.decl.Decl;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.io.FileOutputStream;
@@ -345,12 +344,41 @@ public class JavaCodeGenerator extends Visitor {
 
 		super.visit(node);
 		indentationLevel--;
-		Emit("}", 1);
+		Emit("}", 2);
+
+		EmitStructDefinitions(node);
 
 		writer.close();
 	}
 
-    @Override
+	@Override
+	public void visit(StructDefinitionNode node) {
+		// This method is intentionally empty
+	}
+
+	private void EmitStructDefinitions(ProgNode node) {
+		if(node.setupNode == null) return;
+
+		node.setupNode.setupBlockNode.setupStmts.forEach(st -> {
+			if(st instanceof StructDefinitionNode){
+				Emit("public class " + ((StructDefinitionNode) st).structIdNode.id + "() {", 1);
+				indentationLevel++;
+				((StructDefinitionNode) st).declarationNodes.forEach(dn -> visit(dn));
+				indentationLevel--;
+				Emit("}", 2);
+			}
+
+		});
+
+
+//		Emit("public class " + node.structIdNode.id + "() {", 1);
+//		indentationLevel++;
+//		node.declarationNodes.forEach(n -> visit(n));
+//		indentationLevel--;
+//		Emit("}", 2);
+	}
+
+	@Override
 	public void visit(RunNode node) {
 		Emit("public void run()", 0);
 		super.visit(node);
@@ -522,11 +550,6 @@ public class JavaCodeGenerator extends Visitor {
                 visit(behavior);
             }
         }
-    }
-
-    @Override
-    public void visit(StructDefinitionNode node) {
-        throw new NotImplementedException();
     }
 
     @Override
