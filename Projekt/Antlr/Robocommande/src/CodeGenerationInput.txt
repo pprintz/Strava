@@ -1,10 +1,17 @@
 behavior onSetup () :
-    text b
+    num a := 5
 ;
 
 strategy default:
     behavior onRun () :
-        ahead(10)
+        if 1 < a :
+            ahead(10)
+        ; else if 5 < 3 :
+            a := 4
+        ; else :
+            back(10)
+        ;
+        a := a + 3
     ;
 
     behavior onHitByBullet(hitByBulletEvent e) :
