@@ -52,11 +52,14 @@ public class Main {
 		StrategyVisitor strategyVisitor = new StrategyVisitor();
         strategyVisitor.visit(ast);
 
-        JavaCodeGenerator codeGenerator = new JavaCodeGenerator(strategyVisitor.strategies);
-        codeGenerator.visit(ast);
+//        TypeChecker typeChecker = new TypeChecker();
+//        typeChecker.visit(ast);
 
-		System.out.println("Everything went okay.");
+		System.out.println("Type checking done.");
 
+		JavaCodeGenerator codeGenerator = new JavaCodeGenerator(strategyVisitor.strategies);
+		codeGenerator.visit(ast);
 
+        System.out.println("Code generation done.");
     }
 }
