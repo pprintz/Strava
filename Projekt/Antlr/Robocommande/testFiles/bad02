@@ -1,0 +1,8 @@
+strategy default:
+;
+
+define num Foo():
+    loop while true:
+        return 200
+    ;
+;

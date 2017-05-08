@@ -6,6 +6,7 @@ import java.util.Queue;
  */
 public class ValidReturnVisitor extends Visitor {
 
+    public boolean hasReturnError = false;
     @Override
     public void visit(DefineFunctionNode node) {
         boolean hasReturn = false;
@@ -13,6 +14,7 @@ public class ValidReturnVisitor extends Visitor {
             hasReturn = isBranchReturning(node.blockNode);
         }
         if (!hasReturn) {
+            hasReturnError = true;
             PrintReturnError(node);
         }
     }
@@ -27,24 +29,25 @@ public class ValidReturnVisitor extends Visitor {
                 ifStatementNodeQueue.add(ifStatementNode);
             }
         }
+
         while (ifStatementNodeQueue.peek() != null) {
-            boolean hasReturn;
+            boolean isReturning;
             IfStatementNode ifNode = ifStatementNodeQueue.poll();
 
-            hasReturn = isBranchReturning(ifNode.ifBlockNode);
-            if(!hasReturn) continue;
+            isReturning = isBranchReturning(ifNode.ifBlockNode);
+            if(!isReturning) continue;
             if (ifNode.elseIfNodes != null) {
                 for (ElseIfStatementNode elif : ifNode.elseIfNodes) {
-                    hasReturn = isBranchReturning(elif.blockNode);
-                    if(!hasReturn) continue;
+                    isReturning = isBranchReturning(elif.blockNode);
+                    if(!isReturning) continue;
                 }
             }
             if (ifNode.elseBlockNode != null) {
-                hasReturn = isBranchReturning(ifNode.elseBlockNode);
-                if(!hasReturn) continue;
+                isReturning = isBranchReturning(ifNode.elseBlockNode);
+                if(!isReturning) continue;
             }
             else return false;
-            return hasReturn;
+            return isReturning;
         }
         return false;
     }

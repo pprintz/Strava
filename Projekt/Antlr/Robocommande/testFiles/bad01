@@ -1,0 +1,13 @@
+
+strategy default:
+;
+
+
+define num Foo():
+    if true:
+
+    ;
+    else:
+        return 3
+    ;
+;
