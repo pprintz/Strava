@@ -1,3 +1,5 @@
+import com.sun.deploy.security.ValidationState;
+
 /**
  * Created by Teitur on 10-04-2017.
  */
@@ -90,6 +92,12 @@ public class TypeChecker extends Visitor {
             case LESSTHANEQUAL:
             case GREATERTHANEQUAL:
             case LESSTHAN:
+                if(checkExpectedType(binaryExprNode, Type.TEXT)) {
+                    binaryExprNode.Type = Type.BOOL;
+                }else{
+                    TypeErrorOccured(binaryExprNode, binaryExprNode.leftNode.Type, binaryExprNode.rightNode.Type, Type.TEXT, Type.TEXT);
+                }
+
                 if(checkExpectedType(binaryExprNode, Type.NUM)){
                     binaryExprNode.Type = Type.BOOL;
                 }
@@ -110,10 +118,17 @@ public class TypeChecker extends Visitor {
                 break;
             case EQUAL:
             case NOTEQUAL:
+                if(checkExpectedType(binaryExprNode, Type.TEXT)){
+                        binaryExprNode.Type = Type.TEXT;
+                }else{
+                    TypeErrorOccured(binaryExprNode, binaryExprNode.leftNode.Type, binaryExprNode.rightNode.Type, Type.TEXT, Type.TEXT);
+                }
                 if(checkExpectedType(binaryExprNode, Type.BOOL)
                         || checkExpectedType(binaryExprNode, Type.NUM)) {
                     binaryExprNode.Type = Type.BOOL;
-                }else{
+                }else if(checkExpectedType(binaryExprNode, Type.TEXT)) {
+                    binaryExprNode.Type = Type.BOOL;
+                }else {
                     binaryExprNode.Type = Type.ERROR;
                     TypeErrorOccured(binaryExprNode, binaryExprNode.leftNode.Type, binaryExprNode.rightNode.Type, Type.NUM, Type.BOOL);
                 }
