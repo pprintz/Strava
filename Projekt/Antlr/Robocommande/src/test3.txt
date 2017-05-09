@@ -1,13 +1,14 @@
 behavior onSetup():
+    myStruct{num value}
 
-    global(2)
+    myStruct a := myStruct[value := 10]
+
+    num q := a.value
 
 ;
 strategy default:
 
 ;
 
-define num global(num a):
-    num b := a
-    return true
-;
+
+

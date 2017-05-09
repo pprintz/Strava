@@ -29,14 +29,14 @@ public class TypeChecker extends Visitor {
 
     private void TypeErrorOccured(ASTNode node, Type typeOne, Type typeTwo, Type expectedType, Type expectedTypeAlternative){
         programHasTypeErrors = true;
-
         System.out.format("[%d:%d] Type error: expected two of %s OR %s, got %s and %s\n", node.lineNumber, node.columnNumber, expectedType, expectedTypeAlternative, typeOne, typeTwo);
     }
 
     public void visit(UnaryExprNode unaryExprNode){
         switch (unaryExprNode.unaryOperator) {
             case PARANTHESIS:
-                // empty since PARANTHESIS has nothing to do with types
+                visit(unaryExprNode.exprNode);
+                unaryExprNode.Type = unaryExprNode.exprNode.Type;
                 break;
             case NEGATEBOOL:
                 if(checkExpectedType(unaryExprNode, Type.BOOL)){
@@ -136,15 +136,20 @@ public class TypeChecker extends Visitor {
     }
 
     private void CompareActualToFormalParams(ASTNode node, ActualParamsNode actualParamsNode, FormalParamsNode formalParamsNode){
-        int actualParamsCount = actualParamsNode.exprs.size();
-
-        if(actualParamsCount == formalParamsNode.typeNodes.size()){
-            for(int i = 0; i < actualParamsCount; i++){
-                TypeNode currentFormalTypeNode = formalParamsNode.typeNodes.get(i);
-                ExprNode currentActualExprNode = actualParamsNode.exprs.get(i);
-                CheckTypeAndExprMatch(node, currentFormalTypeNode, currentActualExprNode);
+        if(actualParamsNode != null && formalParamsNode != null){
+            int actualParamsCount = actualParamsNode.exprs.size();
+            if(actualParamsCount == formalParamsNode.typeNodes.size()){
+                if(actualParamsCount != 0){
+                    for(int i = 0; i < actualParamsCount; i++){
+                        TypeNode currentFormalTypeNode = formalParamsNode.typeNodes.get(i);
+                        ExprNode currentActualExprNode = actualParamsNode.exprs.get(i);
+                        TypeAndExprMatches(node, currentFormalTypeNode, currentActualExprNode);
+                    }
+                }
+            }else{
+                System.out.println("Mismatch between number of formal and actual params");
             }
-        }else{
+        } else if (actualParamsNode != null || formalParamsNode != null){
             System.out.println("Mismatch between number of formal and actual params");
         }
     }
@@ -217,36 +222,46 @@ public class TypeChecker extends Visitor {
 
 
     public void visit(AssignmentNode node) {
-        CheckTypeAndExprMatch(node, node.idNode.declarationNode.typeNode, node.exprNode);
+        TypeAndExprMatches(node, node.idNode.declarationNode.typeNode, node.exprNode);
     }
 
-    private void CheckTypeAndExprMatch(ASTNode node, TypeNode typeNode, ExprNode exprNode){
+    private Boolean TypeAndExprMatches(ASTNode node, TypeNode typeNode, ExprNode exprNode){
+        Boolean isAMatch = true;
         visit(exprNode);
         if(typeNode.Type == Type.STRUCT || exprNode.Type == Type.STRUCT){
+            String rightSideTypeString;
             if(typeNode.Type == Type.STRUCT && exprNode.Type == Type.STRUCT){
-                String rightSideTypeString;
                 if(exprNode instanceof IdNode){
                     rightSideTypeString = ((IdNode) exprNode).declarationNode.typeNode.type;
                 } else{
-                    rightSideTypeString = ((StructInitializationNode) exprNode).typeNode.type;
+                    rightSideTypeString = GetTypeStringOfStructInitOrFuncCall(exprNode);
                 }
                 if( ! typeNode.type.equals(rightSideTypeString)){
+                    isAMatch = false;
                     TypeErrorOccured(node, rightSideTypeString, typeNode.type );
                 }
             } else if(typeNode.Type == Type.STRUCT){
+                isAMatch = false;
                 TypeErrorOccured(node, exprNode.Type.toString(), typeNode.type);
             } else {
-                StructInitializationNode rightSide = (StructInitializationNode) exprNode;
-                TypeErrorOccured(node, rightSide.typeNode.type, typeNode.Type.toString());
+                isAMatch = false;
+                rightSideTypeString = GetTypeStringOfStructInitOrFuncCall(exprNode);
+                TypeErrorOccured(node, rightSideTypeString, typeNode.Type.toString());
             }
         } else if(typeNode.Type != exprNode.Type) {
+            isAMatch = false;
             TypeErrorOccured(node, exprNode.Type, typeNode.Type);
         }
+        return isAMatch;
     }
 
     public void visit(StructInitializationNode node){
         node.Type = Type.STRUCT;
-        node.assignments.forEach((a) -> visit(a));
+        for(AssignmentNode assignment : node.assignments){
+            if(assignment.idNode.declarationNode != null){
+                visit(assignment);
+            } // If not, there has been an error in binding, and it has already been logged
+        }
     }
 
     public void visit(FieldValueNode node){
@@ -265,51 +280,51 @@ public class TypeChecker extends Visitor {
 
 
     public void visit(DeclarationNode node){
-        node.Type = node.typeNode.Type;
-        if(node.exprNode != null){
-            visit(node.exprNode);
-            if(node.Type == Type.STRUCT || node.exprNode.Type == Type.STRUCT){
-                if(node.Type == Type.STRUCT && node.exprNode.Type == Type.STRUCT){
-                    StructInitializationNode rightSide = (StructInitializationNode) node.exprNode;
-                    if ( ! node.typeNode.type.equals(rightSide.typeNode.type)) {
-                        TypeErrorOccured(node, rightSide.typeNode.type, node.typeNode.type);
-                    } else{
-                        node.idNode.Type = node.exprNode.Type; // Struct and Struct
-                    }
-                } else if(node.Type == Type.STRUCT){
-                    TypeErrorOccured(node, node.exprNode.Type.toString(), node.typeNode.type);
-
-                    node.Type = Type.ERROR;
-                    node.idNode.Type = Type.ERROR;
-                } else { // right side is struct
-                    StructInitializationNode rightSide = (StructInitializationNode) node.exprNode;
-                    TypeErrorOccured(node, rightSide.typeNode.type, node.Type.toString());
-
-                    node.Type = Type.ERROR;
-                    node.idNode.Type = Type.ERROR;
-                }
-            }
-
-            else if(node.Type != node.exprNode.Type) {
-                TypeErrorOccured(node, node.exprNode.Type, node.Type);
-                node.Type = Type.ERROR;
-                node.idNode.Type = Type.ERROR;
-            }
-        }
-        else {
+        if(node.exprNode != null && ! TypeAndExprMatches(node, node.typeNode, node.exprNode)){
+            node.Type = Type.ERROR;
+            node.idNode.Type = Type.ERROR;
+        } else{
+            node.Type = node.typeNode.Type;
             node.idNode.Type = node.typeNode.Type;
+
         }
     }
 
+    private String GetTypeStringOfStructInitOrFuncCall(ExprNode node){
+        if(node instanceof ExprFunctionCallNode){
+            return ((ExprFunctionCallNode) node).defineFunctionNode.typeNode.type;
+        }else if(node instanceof StructInitializationNode){
+            return ((StructInitializationNode) node).typeNode.type;
+        }
+        return "ERROR";
+    }
+
+    private TypeNode currentBlockTypeNode;
+
+    public void visit(ReturnStatementNode node){
+        TypeAndExprMatches(node, currentBlockTypeNode, node.exprNode);
+    }
 
     public void visit(DefineFunctionNode node){
-        for(StmtNode stmtNode : node.blockNode.functionStmtNodes){
-            if(stmtNode instanceof ReturnStatementNode){
-                ReturnStatementNode returnStmt = (ReturnStatementNode) stmtNode;
-                CheckTypeAndExprMatch(returnStmt, node.typeNode, returnStmt.exprNode);
-            }
-        }
-
+        currentBlockTypeNode = node.typeNode;
+        super.visit(node);
     }
 
+    public void visit(IfStatementNode node){
+        visit(node.predicate);
+        checkPredicate(node, node.predicate);
+        super.visit(node);
+    }
+
+    public void visit(LoopNode node){
+        visit(node.predicate);
+        checkPredicate(node, node.predicate);
+        super.visit(node);
+    }
+
+    private void checkPredicate(ASTNode node, ExprNode predicate){
+        if(predicate.Type != Type.BOOL){
+            TypeErrorOccured(node, predicate.Type, Type.BOOL);
+        }
+    }
 }

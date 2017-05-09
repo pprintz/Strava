@@ -278,8 +278,8 @@ public class PrettyPrintVisitor extends Visitor {
     @Override
     public void visit(LoopNode node) {
         System.out.print(indent() + "LOOP ");
-        if(node.exprNode != null) System.out.print("WHILE ");
-        visit(node.exprNode);
+        if(node.predicate != null) System.out.print("WHILE ");
+        visit(node.predicate);
         System.out.println();
         visit(node.block);
     }
