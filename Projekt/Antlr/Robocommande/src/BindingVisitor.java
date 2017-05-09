@@ -68,36 +68,26 @@ public class BindingVisitor extends Visitor {
 
     public static boolean hasBindingErrorOccured = false;
 
-    private void BindFunctionCallToDeclaration(FunctionCallNode fCallNode) {
+    private DefineFunctionNode BindFunctionCallToDeclaration(ASTNode node, String idName, ActualParamsNode actualParams){
+        DefineFunctionNode defineFunctionNode = null;
         boolean isDeclared = false;
-
         for (int i = symbolTable.size() - 1; i >= 0; i--) {
-            if (symbolTable.get(i).containsKey(fCallNode.idNode.id)) {
-                ;
-                fCallNode.defineFunctionNode = (DefineFunctionNode) symbolTable.get(i).get(fCallNode.idNode.id);
+            if (symbolTable.get(i).containsKey(idName)) {
+                defineFunctionNode = (DefineFunctionNode) symbolTable.get(i).get(idName);
                 isDeclared = true;
+                if(actualParams != null){
+                    actualParams.exprs.forEach(this::visit);
+                }
             }
         }
         if (!isDeclared) {
             hasBindingErrorOccured = true;
-            PrintNotDeclaredError("function", fCallNode.idNode.id, fCallNode);
+            PrintNotDeclaredError(" function ", idName, node);
         }
-
+        return defineFunctionNode;
     }
 
-    private void BindExprFunctionCallToDeclaration(ExprFunctionCallNode fCallNode) {
-        boolean isDeclared = false;
-        for (int i = symbolTable.size() - 1; i >= 0; i--) {
-            if (symbolTable.get(i).containsKey(fCallNode.idNode.id)) {
-                fCallNode.defineFunctionNode = (DefineFunctionNode) symbolTable.get(i).get(fCallNode.idNode.id);
-                isDeclared = true;
-            }
-        }
-        if (!isDeclared) {
-            hasBindingErrorOccured = true;
-            PrintNotDeclaredError(" function ", fCallNode.idNode.id, fCallNode);
-        }
-    }
+
 
     private void PrintNotDeclaredError(String type, String id, ASTNode node) {
         System.out.println("There is no " + type + " named: " + id + node.toString());
@@ -170,17 +160,16 @@ public class BindingVisitor extends Visitor {
 
     @Override
     public void visit(FunctionCallNode node) {
-        BindFunctionCallToDeclaration(node);
+        node.defineFunctionNode = BindFunctionCallToDeclaration(node, node.idNode.id, node.actualParams);
     }
 
     @Override
     public void visit(ExprFunctionCallNode node) {
-        BindExprFunctionCallToDeclaration(node);
+        node.defineFunctionNode = BindFunctionCallToDeclaration(node, node.idNode.id, node.actualParams);
     }
 
     @Override
     public void visit(IdNode node) {
-
         if (!node.isDeclaration)
             BindIdToDeclaration(node);
     }
