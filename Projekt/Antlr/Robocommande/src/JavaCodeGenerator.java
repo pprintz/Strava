@@ -561,6 +561,10 @@ public class JavaCodeGenerator extends Visitor {
 
     @Override
     public void visit(StrategyDefinitionNode node) {
+		if(node.runNode != null) {
+			visit(node.runNode);
+		}
+
         for (BehaviorFunctionNode behavior : node.functionsNode.behaviorFunctions) {
             if (!events.contains(behavior.idNode.id)) {
                 visit(behavior);

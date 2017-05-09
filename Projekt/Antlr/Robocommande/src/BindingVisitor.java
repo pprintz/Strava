@@ -45,6 +45,7 @@ public class BindingVisitor extends Visitor {
         roboFunctions.put("getY", "getY"); // void -> double
         roboFunctions.put("log", "System.out.println"); // String --
         roboFunctions.put("resume", "resume"); // void -> void
+        roboFunctions.put("rotate", "turnGunRight"); // double -> void
         roboFunctions.put("scan", "scan"); // void -> void
         roboFunctions.put("setAdjustGunForRobotTurn", "setAdjustGunForRobotTurn"); // bool -> void
         roboFunctions.put("setAdjustRadarForGunTurn", "setAdjustRadarForGunTurn"); // bool -> void
