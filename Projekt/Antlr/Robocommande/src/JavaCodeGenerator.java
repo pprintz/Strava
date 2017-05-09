@@ -22,7 +22,7 @@ public class JavaCodeGenerator extends Visitor {
 		events = new ArrayList<>(14);
 		AddAllEventsToList();
 		try {
-			writer = new PrintWriter(new FileOutputStream("./out/JavaCodeGeneratorOutput.java", false));
+			writer = new PrintWriter(new FileOutputStream("./StrategyJava/JavaCodeGeneratorOutput.java", false));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -369,7 +369,6 @@ public class JavaCodeGenerator extends Visitor {
 
 	private void EmitStructDefinitions(ProgNode node) {
 		if(node.setupNode == null) return;
-
 		node.setupNode.setupBlockNode.setupStmts.forEach(st -> {
 			if(st instanceof StructDefinitionNode){
 				Emit("class " + ((StructDefinitionNode) st).structIdNode.id + " {", 1);
@@ -378,15 +377,7 @@ public class JavaCodeGenerator extends Visitor {
 				indentationLevel--;
 				Emit("}", 2);
 			}
-
 		});
-
-
-//		Emit("public class " + node.structIdNode.id + "() {", 1);
-//		indentationLevel++;
-//		node.declarationNodes.forEach(n -> visit(n));
-//		indentationLevel--;
-//		Emit("}", 2);
 	}
 
 	@Override
@@ -447,7 +438,12 @@ public class JavaCodeGenerator extends Visitor {
 
     @Override
     public void visit(ActualParamsNode node) {
-        super.visit(node);
+		for (int i = 0; i < node.exprs.size(); i++) {
+			visit(node.exprs.get(i));
+			if(i != node.exprs.size() - 1) {
+				EmitNoIndent(", ");
+			}
+		}
     }
 
     @Override
@@ -504,6 +500,10 @@ public class JavaCodeGenerator extends Visitor {
 		for (int i = 0; i < node.idNodes.size(); i++) {
 			visit(node.typeNodes.get(i), false);
 			visit(node.idNodes.get(i), false);
+
+			if(i != node.idNodes.size() - 1) {
+				EmitNoIndent(", ");
+			}
 		}
     }
 
