@@ -4,7 +4,7 @@ behavior onSetup():
 
 strategy default:
     behavior onRun():
-        num b := global(3000) + 2
+        num c := global(3000) + 2
     ;
 ;
 
