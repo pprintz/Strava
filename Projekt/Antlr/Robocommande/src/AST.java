@@ -486,7 +486,7 @@ class ReturnStatementNode extends StmtNode {
     }
 }
 
-class FieldIdNode extends ASTNode {
+class FieldIdNode extends ExprNode {
     public List<IdNode> idNodes;
     public StructDefinitionNode structDefinitionNode;
 
