@@ -1,6 +1,7 @@
 behavior onSetup():
 ;
 strategy default:
+
 ;
 define num Foo(num a, num b):
     if true :
@@ -16,3 +17,6 @@ define num Foo(num a, num b):
         return 32
      ;
 ;
+
+
+

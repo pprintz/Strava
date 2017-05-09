@@ -165,14 +165,20 @@ public class ASTBuilder extends RobocommandeBaseVisitor<ASTNode> {
 
     @Override
     public ASTNode visitStructDefinition(RobocommandeParser.StructDefinitionContext ctx) {
-        IdNode name = new IdNode(ctx.ID().getText());
-        name.isDeclaration = true;
+        TypeNode structName = new TypeNode(ctx.ID(0).getText());
+
         List<DeclarationNode> declarationNodes = new ArrayList<>();
 
-        for(RobocommandeParser.DeclarationContext declaration : ctx.declaration()){
-            declarationNodes.add((DeclarationNode) visit(declaration));
+        int countOfFields = ctx.type().size();
+
+        for(int i = 0; i < countOfFields; i++){
+            TypeNode typeNode = new TypeNode(ctx.type().get(i).getText());
+            IdNode idNode = new IdNode(ctx.ID().get(i+1).getText());
+            DeclarationNode declNode = new DeclarationNode(typeNode, idNode, ctx);
+            declarationNodes.add(declNode);
+
         }
-        return new StructDefinitionNode(name, declarationNodes, ctx);
+        return new StructDefinitionNode(structName, declarationNodes, ctx);
     }
 
     @Override
@@ -247,13 +253,13 @@ public class ASTBuilder extends RobocommandeBaseVisitor<ASTNode> {
 
     @Override
     public ASTNode visitStructInitialization(RobocommandeParser.StructInitializationContext ctx) {
-        IdNode idNode = new IdNode(ctx.ID().getText());
+        TypeNode typeNode = new TypeNode(ctx.ID().getText());
         List<AssignmentNode> assignments = new ArrayList<>();
 
         for(RobocommandeParser.AssignmentContext assignment : ctx.assignment()){
             assignments.add((AssignmentNode)visit(assignment));
         }
-        return new StructInitializationNode(idNode, assignments);
+        return new StructInitializationNode(typeNode, assignments);
     }
 
     @Override
@@ -269,8 +275,11 @@ public class ASTBuilder extends RobocommandeBaseVisitor<ASTNode> {
     }
 
     @Override
-    public ASTNode visitFieldIdentifier(RobocommandeParser.FieldIdentifierContext ctx) {
-        return visit(ctx.fieldId());
+    public ASTNode visitFieldValue(RobocommandeParser.FieldValueContext ctx) {
+        List<String> idsToBeConverted = Arrays.asList(ctx.getText().split(Pattern.quote(".")));
+        List<IdNode> idNodes = new ArrayList<IdNode>();
+        idsToBeConverted.forEach(node -> idNodes.add(new IdNode(node)));
+        return new FieldValueNode(idNodes, ctx);
     }
 
     @Override

@@ -26,17 +26,18 @@ public class Main {
 
         ASTBuilder astBuilder = new ASTBuilder();
         ASTNode ast = astBuilder.visit(cst);
-        BindingVisitor bindingVisitor = new BindingVisitor();
-        bindingVisitor.visit(ast);
-        BindingVisitor.hasFunctionsBeenDeclared = true;
+
+        FunctionBindingVisitor functionBindingVisitor = new FunctionBindingVisitor();
+        functionBindingVisitor.visit(ast);
+        BindingVisitor bindingVisitor = new BindingVisitor(functionBindingVisitor.getSymbolTable());
         bindingVisitor.visit(ast);
 
         if(BindingVisitor.hasBindingErrorOccured){
             System.exit(0);
         }
 
-		StrategyVisitor strategyVisitor = new StrategyVisitor();
-        strategyVisitor.visit(ast);
+		//StrategyVisitor strategyVisitor = new StrategyVisitor();
+        //strategyVisitor.visit(ast);
 
         ValidReturnVisitor vrv = new ValidReturnVisitor();
         vrv.visit(ast);

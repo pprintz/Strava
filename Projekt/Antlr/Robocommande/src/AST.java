@@ -235,13 +235,13 @@ abstract class StmtNode extends ASTNode {
 }
 
 class StructDefinitionNode extends StmtNode {
-    public IdNode structIdNode;
+    public TypeNode typeNode;
     public List<DeclarationNode> declarationNodes;
 
-    public StructDefinitionNode(IdNode structIdNode, List<DeclarationNode> declarationNodes,
+    public StructDefinitionNode(TypeNode typeNode, List<DeclarationNode> declarationNodes,
                                 RobocommandeParser.StructDefinitionContext ctx) {
         super(ctx);
-        this.structIdNode = structIdNode;
+        this.typeNode = typeNode;
         this.declarationNodes = declarationNodes;
     }
 
@@ -261,7 +261,17 @@ class DeclarationNode extends StmtNode {
     public boolean IsGlobal;
     public ExprNode exprNode;
     public StructDefinitionNode structDefinitionNode;
+    public Type Type;
 
+    public DeclarationNode(TypeNode typeNode, IdNode idNode, RobocommandeParser.StructDefinitionContext ctx) {
+        super(ctx);
+        this.typeNode = typeNode;
+        this.idNode = idNode;
+        this.exprNode = null;
+
+
+
+    }
     public DeclarationNode(TypeNode typeNode, IdNode idNode, ExprNode exprNode, RobocommandeParser.DeclarationContext ctx) {
         super(ctx);
         this.typeNode = typeNode;
@@ -371,14 +381,16 @@ class FunctionCallNode extends StmtNode {
 }
 
 class StructInitializationNode extends ExprNode {
-    public IdNode idNode;
+    public TypeNode typeNode;
     public List<AssignmentNode> assignments;
     public StructDefinitionNode structDefinitionNode;
 
-    public StructInitializationNode(IdNode idNode, List<AssignmentNode> assignments) {
-        this.idNode = idNode;
+    public StructInitializationNode(TypeNode typeNode, List<AssignmentNode> assignments) {
+        this.typeNode = typeNode;
         this.assignments = assignments;
+        this.Type = typeNode.Type;
     }
+
     @Override
     public void accept(Visitor v) {
         v.visit(this);
@@ -403,11 +415,11 @@ class ExprFunctionCallNode extends ExprNode {
 }
 
 class LoopNode extends StmtNode {
-    public ExprNode exprNode;
+    public ExprNode predicate;
     public BlockNode block;
 
-    public LoopNode(ExprNode exprNode, BlockNode block) {
-        this.exprNode = exprNode;
+    public LoopNode(ExprNode predicate, BlockNode block) {
+        this.predicate = predicate;
         this.block = block;
     }
 
@@ -502,11 +514,40 @@ class FieldIdNode extends ASTNode {
 
 }
 
+class FieldValueNode extends ExprNode {
+    public List<IdNode> idNodes;
+    public StructDefinitionNode structDefinitionNode;
+
+    public FieldValueNode(List<IdNode> idNodes, RobocommandeParser.FieldValueContext ctx) {
+        super(ctx);
+        this.idNodes = idNodes;
+    }
+
+    @Override
+    public void accept(Visitor v) { v.visit(this); }
+}
+
 class TypeNode extends ASTNode{
     public String type;
+    public Type Type;
 
     public TypeNode(String type) {
         this.type = type;
+        switch(this.type){
+            case "num":
+                this.Type = Type.NUM;
+                break;
+            case "text":
+                this.Type = Type.TEXT;
+                break;
+            case "bool":
+                this.Type = Type.BOOL;
+                break;
+            default:
+                this.Type = Type.STRUCT;
+                break;
+        }
+
     }
     @Override
     public void accept(Visitor v) {
@@ -553,7 +594,6 @@ class IdNode extends ExprNode {
             this.exprNode = exprNode;
             this.unaryOperator = unaryOperator;
         }
-
         public UnaryExprNode(ExprNode exprNode) {
             this.exprNode = exprNode;
         }
@@ -619,6 +659,7 @@ class IdNode extends ExprNode {
         NUM,
         TEXT,
         BOOL,
-        STRUCT
+        STRUCT,
+        ERROR
     }
 
