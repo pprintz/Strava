@@ -1,10 +1,6 @@
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Stack;
 
-/**
- * Created by pprintz on 4/4/17.
- */
 public class BindingVisitor extends Visitor {
     public static HashMap<String, String> roboFunctions;
 
