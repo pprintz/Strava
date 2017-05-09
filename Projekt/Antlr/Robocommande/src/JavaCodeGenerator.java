@@ -60,6 +60,10 @@ public class JavaCodeGenerator extends Visitor {
 		}
 	}
 
+	private void Emit(String emitString){
+		writer.print(indent() + emitString);
+	}
+
 	private void Emit(String emitString, int numberOfNewLines){
 		writer.print(indent() + emitString + new String(new char[numberOfNewLines]).replace("\0", "\n"));
 	}
@@ -136,7 +140,6 @@ public class JavaCodeGenerator extends Visitor {
 		visit(node.leftNode);
 		EmitNoIndent(BinaryOperatorToJavaOperator(node.binaryOperator));
 		visit(node.rightNode);
-//		EmitNoIndent(";");
 	}
 
 	// Capitalizes first letter
@@ -175,7 +178,12 @@ public class JavaCodeGenerator extends Visitor {
 			EmitNoIndent(" = ");
 			visit(node.exprNode);
 		}
-		EmitNoIndent("; \n");
+		// This fucks up structInit
+		if(node.exprNode instanceof StructInitializationNode) {
+			Emit("", 1);
+		} else {
+			EmitNoIndent("; \n");
+		}
 	}
 
     /**
@@ -239,7 +247,6 @@ public class JavaCodeGenerator extends Visitor {
 				Emit(")", 0);
 				break;
 		}
-//		EmitNoIndent(";");
 	}
 
     private void AddAllEventsToList() {
@@ -388,8 +395,6 @@ public class JavaCodeGenerator extends Visitor {
 		super.visit(node);
 	}
 
-	// TODO: Not really sure if this is a good idea
-	@Deprecated
 	@Override
 	public void visit(IdNode node) {
 		EmitNoIndent(node.id);
@@ -474,13 +479,25 @@ public class JavaCodeGenerator extends Visitor {
 
     @Override
     public void visit(FieldAssignmentNode node) {
-        throw new NotImplementedException();
+		visit(node.fieldIdNode);
+		EmitNoIndent(" = ");
+		visit(node.exprNode);
+		Emit("", 1);
     }
 
     @Override
     public void visit(FieldIdNode node) {
-        throw new NotImplementedException();
-    }
+		// Needed for indentatation
+		Emit("");
+
+		for (int i = 0; i < node.idNodes.size(); i++) {
+			visit(node.idNodes.get(i));
+
+			if(i != node.idNodes.size() - 1) {
+				EmitNoIndent(".");
+			}
+		}
+	}
 
     @Override
     public void visit(FormalParamsNode node) {
@@ -552,9 +569,16 @@ public class JavaCodeGenerator extends Visitor {
     }
 
     @Override
+	// TODO: Make sure this can handle a struct init with no assignments
     public void visit(StructInitializationNode node) {
-        throw new NotImplementedException();
-    }
+		EmitNoIndent("new ");
+		visit(node.idNode);
+		EmitNoIndent(" {\n");
+		indentationLevel++;
+		node.assignments.forEach(n -> visit(n));
+		indentationLevel--;
+		Emit("}", 1);
+	}
 
     public String BinaryOperatorToJavaOperator(BinaryOperator binaryOperator) {
 		switch (binaryOperator) {
