@@ -296,9 +296,9 @@ public class TypeChecker extends Visitor {
     }
 
     public void visit(FieldAssignmentNode node){
-
-
-        //TypeAndExprMatches(node, node.fieldIdNode.idNodes.get(node.fieldIdNode.idNodes.size()-1).declarationNode.typeNode, node.exprNode);
+        int lastFieldIndex = node.fieldIdNode.idNodes.size() - 1;
+        IdNode lastField = node.fieldIdNode.idNodes.get(lastFieldIndex);
+        TypeAndExprMatches(node, lastField.declarationNode.typeNode, node.exprNode);
     }
     public void visit(DeclarationNode node){
         if(node.exprNode != null && ! TypeAndExprMatches(node, node.typeNode, node.exprNode)){
