@@ -7,7 +7,7 @@ import java.util.Stack;
  */
 public class BindingVisitor extends Visitor {
 
-    Stack<HashMap<String, ASTNode>> symbolTable;
+    private Stack<HashMap<String, ASTNode>> symbolTable;
 
     public BindingVisitor(Stack<HashMap<String, ASTNode>> symbolTableWithFunctions) {
         symbolTable = symbolTableWithFunctions;

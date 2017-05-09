@@ -1,9 +1,13 @@
 behavior onSetup():
-    myStruct{num value}
+    innerStruct{num val}
+    outerStruct{innerStruct inner}
+    outerMostStruct{outerStruct outer}
+    innerStruct i := innerStruct[val := 10]
+    outerStruct o := outerStruct[inner := i]
+    outerMostStruct om := outerMostStruct[outer := o]
 
-    myStruct a := myStruct[value := 10]
 
-    num q := a.value
+    i.val := 20
 
 ;
 strategy default:
