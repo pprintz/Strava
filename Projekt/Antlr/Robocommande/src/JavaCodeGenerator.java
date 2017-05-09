@@ -371,7 +371,7 @@ public class JavaCodeGenerator extends Visitor {
 		if(node.setupNode == null) return;
 		node.setupNode.setupBlockNode.setupStmts.forEach(st -> {
 			if(st instanceof StructDefinitionNode){
-				Emit("class " + ((StructDefinitionNode) st).structIdNode.id + " {", 1);
+				Emit("class " + ((StructDefinitionNode) st).typeNode.type + " {", 1);
 				indentationLevel++;
 				((StructDefinitionNode) st).declarationNodes.forEach(dn -> visit(dn));
 				indentationLevel--;
@@ -433,8 +433,6 @@ public class JavaCodeGenerator extends Visitor {
 		indentationLevel--;
 		Emit("}", 2);
 	}
-
-	/////////////
 
     @Override
     public void visit(ActualParamsNode node) {
@@ -583,7 +581,7 @@ public class JavaCodeGenerator extends Visitor {
 	// TODO: Make sure this can handle a struct init with no assignments
     public void visit(StructInitializationNode node) {
 		EmitNoIndent("new ");
-		visit(node.idNode);
+		visit(node.typeNode);
 		EmitNoIndent(" {\n");
 		indentationLevel++;
 		node.assignments.forEach(n -> visit(n));

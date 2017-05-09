@@ -416,11 +416,11 @@ class ExprFunctionCallNode extends ExprNode {
 }
 
 class LoopNode extends StmtNode {
-    public ExprNode predicate;
+    public ExprNode exprNode;
     public BlockNode block;
 
     public LoopNode(ExprNode predicate, BlockNode block) {
-        this.predicate = predicate;
+        this.exprNode = predicate;
         this.block = block;
     }
 

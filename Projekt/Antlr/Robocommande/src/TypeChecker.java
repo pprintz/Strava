@@ -384,8 +384,8 @@ public class TypeChecker extends Visitor {
     }
 
     public void visit(LoopNode node){
-        visit(node.predicate);
-        checkPredicate(node, node.predicate);
+        visit(node.exprNode);
+        checkPredicate(node, node.exprNode);
         super.visit(node);
     }
 
