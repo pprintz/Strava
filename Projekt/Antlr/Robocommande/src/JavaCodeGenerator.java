@@ -536,7 +536,14 @@ public class JavaCodeGenerator extends Visitor {
 
     @Override
     public void visit(LoopNode node) {
-        throw new NotImplementedException();
+		if(node.exprNode == null) {
+			Emit("while (true)");
+		} else {
+			Emit("while (");
+			visit(node.exprNode);
+			EmitNoIndent(")");
+		}
+		visit(node.block);
     }
 
     @Override
