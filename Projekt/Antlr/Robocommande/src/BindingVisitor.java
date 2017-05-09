@@ -6,7 +6,7 @@ import java.util.Stack;
  * Created by pprintz on 4/4/17.
  */
 public class BindingVisitor extends Visitor {
-    ArrayList<String> roboFunctions;
+    HashMap<String, String> roboFunctions;
 
     public static boolean hasFunctionsBeenDeclared = false;
     Stack<HashMap<IdNode, ASTNode>> symbolTable;
@@ -14,12 +14,8 @@ public class BindingVisitor extends Visitor {
     public BindingVisitor() {
         symbolTable = new Stack<>();
         symbolTable.push(new HashMap<>());
-        roboFunctions = new ArrayList<>();
-        roboFunctions.add("ahead");
-        roboFunctions.add("turnGunRight");
-        roboFunctions.add("back");
-        roboFunctions.add("changeStrategy");
-
+        roboFunctions = new HashMap<>();
+        AddRoboFunctionsToHashMap();
     }
     private void OpenScope(){
         symbolTable.push(new HashMap<>());
@@ -28,6 +24,48 @@ public class BindingVisitor extends Visitor {
         symbolTable.pop();
     }
 
+    private void AddRoboFunctionsToHashMap() {
+        roboFunctions.put("ahead", "ahead"); // void -> void
+        roboFunctions.put("back", "back"); // double -> void
+        roboFunctions.put("changeStrategy", "changeStrategy"); // String
+        roboFunctions.put("doNothing", "doNothing"); // void -> void
+        roboFunctions.put("fire", "fireBullet"); // double -> Bullet
+        roboFunctions.put("getBattleFieldHeight", "getBattleFieldHeight"); // void -> double
+        roboFunctions.put("getBattleFieldWidth", "getBattleFieldWidth"); // void -> double
+        roboFunctions.put("getEnergy", "getEnergy"); // void -> double
+        roboFunctions.put("getGunCoolingRate", "getGunCoolingRate"); // void -> double
+        roboFunctions.put("getGunHeading", "getGunHeading"); // void -> double
+        roboFunctions.put("getGunHeat", "getGunHeat"); // void -> double
+        roboFunctions.put("getHeading", "getHeading"); // void -> double
+        roboFunctions.put("getName", "getName"); // void -> String
+        roboFunctions.put("getNumRounds", "getNumRounds"); // void -> int
+        roboFunctions.put("getOthers", "getOthers"); // void -> int
+        roboFunctions.put("getRadarHeading", "getRadarHeading"); // void -> double
+        roboFunctions.put("getRoundNum", "getRoundNum"); // void -> int
+        roboFunctions.put("getTime", "getTime"); // void -> long
+        roboFunctions.put("getVelocity", "getVelocity"); // void -> double
+        roboFunctions.put("getX", "getX"); // void -> double
+        roboFunctions.put("getY", "getY"); // void -> double
+        roboFunctions.put("resume", "resume"); // void -> void
+        roboFunctions.put("scan", "scan"); // void -> void
+        roboFunctions.put("setAdjustGunForRobotTurn", "setAdjustGunForRobotTurn"); // bool -> void
+        roboFunctions.put("setAdjustRadarForGunTurn", "setAdjustRadarForGunTurn"); // bool -> void
+        roboFunctions.put("setAdjustRadarForRobotTurn", "setAdjustRadarForRobotTurn"); // bool -> void
+        roboFunctions.put("setAllColors", "setAllColors"); // Color -> void
+        roboFunctions.put("setBodyColor", "setBodyColor"); // Color -> void
+        roboFunctions.put("setBulletColor", "setBulletColor"); // Color -> void
+        roboFunctions.put("setColors", "setColors"); // Color, Color, Color, Color, Color -> void
+        roboFunctions.put("setGunColor", "setGunColor"); // Color -> void
+        roboFunctions.put("setRadarColor", "setRadarColor"); // Color -> void
+        roboFunctions.put("setScanColor", "setScanColor"); // Color -> void
+        roboFunctions.put("stop", "stop"); // void -> void
+        roboFunctions.put("turnGunLeft", "turnGunLeft"); // double -> void
+        roboFunctions.put("turnGunRight", "turnGunRight"); // double -> void
+        roboFunctions.put("turnLeft", "turnLeft"); // double -> void
+        roboFunctions.put("turnRadarLeft", "turnRadarLeft"); // double -> void
+        roboFunctions.put("turnRadarRight", "turnRadarRight"); // double -> void
+        roboFunctions.put("turnRight", "turnRight"); // double -> void
+    }
     private void BindIdToDeclaration(IdNode idNode) {
         boolean isDeclared = false;
         for (int i = symbolTable.size() - 1; i >= 0; i--) {
@@ -41,6 +79,7 @@ public class BindingVisitor extends Visitor {
             PrintNotDeclaredError("id", idNode.id, idNode);
         }
     }
+
     private void BindFieldIdToDeclaration(FieldIdNode fieldIdNode) {
         boolean isDeclared = false;
         IdNode structId = fieldIdNode.idNodes.get(0);
@@ -59,10 +98,10 @@ public class BindingVisitor extends Visitor {
         }
     }
 
-    public static boolean hasBindingErrorOccured = false;
+    static boolean hasBindingErrorOccured = false;
     private void BindFunctionCallToDeclaration(FunctionCallNode fCallNode) {
         boolean isDeclared = false;
-        if (roboFunctions.contains(fCallNode.idNode.id)) {
+        if (roboFunctions.containsKey(fCallNode.idNode.id)) {
             isDeclared = true;
         }
         if(hasFunctionsBeenDeclared) {
@@ -78,6 +117,7 @@ public class BindingVisitor extends Visitor {
             }
         }
     }
+    
     private void BindExprFunctionCallToDeclaration(ExprFunctionCallNode fCallNode) {
         boolean isDeclared = false;
         for (int i = symbolTable.size() - 1; i >= 0; i--) {
@@ -94,6 +134,7 @@ public class BindingVisitor extends Visitor {
     private void PrintNotDeclaredError(String type, String id, ASTNode node){
         System.out.println("There is no " + type + " named: " + id + node.toString());
     }
+
     private void BindStructInitializationToDefinition(StructInitializationNode structInitializationNode) {
         boolean isStructDefined = false;
         for (int i = symbolTable.size() - 1; i >= 0; i--) {
@@ -167,7 +208,7 @@ public class BindingVisitor extends Visitor {
         }
     }
 
-     @Override
+    @Override
     public void visit(DeclarationNode node) {
         if(!hasFunctionsBeenDeclared) {
             if (!doesDeclExistLocally(node)) {
@@ -184,6 +225,7 @@ public class BindingVisitor extends Visitor {
             } else hasBindingErrorOccured = true;
         }
     }
+
     private boolean doesDeclExistLocally(DeclarationNode node){
         for(int i = symbolTable.size()-1; i >= 0; i--){
             if(symbolTable.get(i).containsKey(node.idNode)){
@@ -203,7 +245,6 @@ public class BindingVisitor extends Visitor {
         }
         return false;
     }
-
 
     @Override
     public void visit(DefineFunctionNode node) {
