@@ -265,11 +265,24 @@ public class TypeChecker extends Visitor {
     }
 
     public void visit(FieldValueNode node){
-        int lastIdIndex = node.idNodes.size() - 1;
-        IdNode lastIdNode = node.idNodes.get(lastIdIndex);
-        visit(lastIdNode);
+        StructDefinitionNode currentSubStruct = node.structDefinitionNode;
 
-        node.Type = lastIdNode.Type;
+        int nestingLevel = node.idNodes.size() - 1;
+
+        for(int index = 1; index < nestingLevel ; index++)   {
+            String currentSubField = node.idNodes.get(index).id;
+            for(DeclarationNode declNode : currentSubStruct.declarationNodes){
+                if(declNode.idNode.id.equals(currentSubField)){
+                    currentSubStruct = declNode.structDefinitionNode;
+                    break;
+                }
+            }
+        }
+        for(DeclarationNode declNode : currentSubStruct.declarationNodes){
+            if(declNode.idNode.id.equals(node.idNodes.get(nestingLevel).id)){
+                node.Type = declNode.Type;
+            }
+        }
     }
 
     public void visit(IdNode node){
@@ -278,6 +291,9 @@ public class TypeChecker extends Visitor {
         }
     }
 
+    public void visit(FieldIdNode node){
+
+    }
 
     public void visit(DeclarationNode node){
         if(node.exprNode != null && ! TypeAndExprMatches(node, node.typeNode, node.exprNode)){
