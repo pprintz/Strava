@@ -481,9 +481,6 @@ public class JavaCodeGenerator extends Visitor {
 
     @Override
     public void visit(FieldIdNode node) {
-		// Needed for indentatation
-		Emit("");
-
 		for (int i = 0; i < node.idNodes.size(); i++) {
 			visit(node.idNodes.get(i));
 
