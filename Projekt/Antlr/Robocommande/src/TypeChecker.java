@@ -153,7 +153,7 @@ public class TypeChecker extends Visitor {
             System.out.println("Mismatch between number of formal and actual params");
         }
     }
-
+    //TypeSystem GIT TEST
 
     private boolean checkExpectedType(BinaryExprNode binaryExprNode, Type expectedType) {
         if(expectedType == Type.STRUCT){
