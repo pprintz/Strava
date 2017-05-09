@@ -295,6 +295,11 @@ public class TypeChecker extends Visitor {
 
     }
 
+    public void visit(FieldAssignmentNode node){
+
+
+        //TypeAndExprMatches(node, node.fieldIdNode.idNodes.get(node.fieldIdNode.idNodes.size()-1).declarationNode.typeNode, node.exprNode);
+    }
     public void visit(DeclarationNode node){
         if(node.exprNode != null && ! TypeAndExprMatches(node, node.typeNode, node.exprNode)){
             node.Type = Type.ERROR;

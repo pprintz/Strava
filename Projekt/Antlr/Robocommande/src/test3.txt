@@ -7,7 +7,7 @@ behavior onSetup():
     outerMostStruct om := outerMostStruct[outer := o]
 
 
-    i.val := 20
+    i.val := "lol"
 
 ;
 strategy default:
