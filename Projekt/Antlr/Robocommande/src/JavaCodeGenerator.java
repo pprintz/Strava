@@ -372,7 +372,7 @@ public class JavaCodeGenerator extends Visitor {
 
 		node.setupNode.setupBlockNode.setupStmts.forEach(st -> {
 			if(st instanceof StructDefinitionNode){
-				Emit("public class " + ((StructDefinitionNode) st).structIdNode.id + "() {", 1);
+				Emit("class " + ((StructDefinitionNode) st).structIdNode.id + " {", 1);
 				indentationLevel++;
 				((StructDefinitionNode) st).declarationNodes.forEach(dn -> visit(dn));
 				indentationLevel--;
