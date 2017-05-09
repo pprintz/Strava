@@ -83,24 +83,6 @@ public class BindingVisitor extends Visitor {
     private DefineFunctionNode BindFunctionCallToDeclaration(ASTNode node, String idName, ActualParamsNode actualParams){
         DefineFunctionNode defineFunctionNode = null;
         boolean isDeclared = false;
-        if (roboFunctions.contains(fCallNode.idNode.id)) {
-            isDeclared = true;
-        }
-        if(hasFunctionsBeenDeclared) {
-            for (int i = symbolTable.size() - 1; i >= 0; i--) {
-                if (symbolTable.get(i).containsKey(fCallNode.idNode)) {
-                    fCallNode.defineFunctionNode = (DefineFunctionNode) symbolTable.get(i).get(fCallNode.idNode);
-                    isDeclared = true;
-                }
-            }
-            if (!isDeclared) {
-                hasBindingErrorOccured = true;
-                PrintNotDeclaredError("function", fCallNode.idNode.id, fCallNode);
-            }
-        }
-    }
-    private void BindExprFunctionCallToDeclaration(ExprFunctionCallNode fCallNode) {
-        boolean isDeclared = false;
         for (int i = symbolTable.size() - 1; i >= 0; i--) {
             if (symbolTable.get(i).containsKey(idName)) {
                 defineFunctionNode = (DefineFunctionNode) symbolTable.get(i).get(idName);
@@ -116,7 +98,6 @@ public class BindingVisitor extends Visitor {
         }
         return defineFunctionNode;
     }
-
 
 
     private void PrintNotDeclaredError(String type, String id, ASTNode node) {

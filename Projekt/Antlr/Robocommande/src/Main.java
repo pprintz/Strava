@@ -42,6 +42,9 @@ public class Main {
         ValidReturnVisitor vrv = new ValidReturnVisitor();
         vrv.visit(ast);
 
+        TypeChecker typeChecker = new TypeChecker();
+        typeChecker.visit(ast);
+
         //JavaCodeGenerator codeGenerator = new JavaCodeGenerator(strategyVisitor.strategies);
         //codeGenerator.visit(ast);
 
