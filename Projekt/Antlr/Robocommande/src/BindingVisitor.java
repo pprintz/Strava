@@ -1,12 +1,11 @@
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Stack;
 
 public class BindingVisitor extends Visitor {
-    HashMap<String, String> roboFunctions;
     private Stack<HashMap<String, ASTNode>> symbolTable;
 	public static boolean hasBindingErrorOccured = false;
+    public static HashMap<String, String> roboFunctions;
 
 	public BindingVisitor(Stack<HashMap<String, ASTNode>> symbolTableWithFunctions) {
         symbolTable = symbolTableWithFunctions;
@@ -44,6 +43,7 @@ public class BindingVisitor extends Visitor {
         roboFunctions.put("getVelocity", "getVelocity"); // void -> double
         roboFunctions.put("getX", "getX"); // void -> double
         roboFunctions.put("getY", "getY"); // void -> double
+        roboFunctions.put("log", "System.out.println"); // String --
         roboFunctions.put("resume", "resume"); // void -> void
         roboFunctions.put("scan", "scan"); // void -> void
         roboFunctions.put("setAdjustGunForRobotTurn", "setAdjustGunForRobotTurn"); // bool -> void
@@ -113,7 +113,21 @@ public class BindingVisitor extends Visitor {
 		return defineFunctionNode;
     }
 
-    private void PrintNotDeclaredError(String type, String id, ASTNode node) {
+    private void BindExprFunctionCallToDeclaration(ExprFunctionCallNode fCallNode) {
+        boolean isDeclared = false;
+        for (int i = symbolTable.size() - 1; i >= 0; i--) {
+            if (symbolTable.get(i).containsKey(fCallNode.idNode)) {
+                fCallNode.defineFunctionNode = (DefineFunctionNode) symbolTable.get(i).get(fCallNode.idNode);
+                isDeclared = true;
+            }
+        }
+        if (!isDeclared) {
+            hasBindingErrorOccured = true;
+            PrintNotDeclaredError(" function ", fCallNode.idNode.id, fCallNode);
+        }
+    }
+
+    private void PrintNotDeclaredError(String type, String id, ASTNode node){
         System.out.println("There is no " + type + " named: " + id + node.toString());
     }
 
