@@ -31,7 +31,11 @@ public class JavaCodeGenerator extends Visitor {
 
     @Override
     public void visit(FunctionCallNode node) {
-        Emit(node.idNode.id + "(", 0);
+	    if (BindingVisitor.roboFunctions.containsKey(node.idNode.id)) {
+            Emit(BindingVisitor.roboFunctions.get(node.idNode.id) + "(", 0);
+        } else {
+	        Emit(node.idNode.id + "(", 0);
+        }
         visit(node.actualParams);
         EmitNoIndent(");\n");
     }

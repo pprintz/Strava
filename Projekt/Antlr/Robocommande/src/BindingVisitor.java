@@ -6,7 +6,7 @@ import java.util.Stack;
  * Created by pprintz on 4/4/17.
  */
 public class BindingVisitor extends Visitor {
-    HashMap<String, String> roboFunctions;
+    public static HashMap<String, String> roboFunctions;
 
     public static boolean hasFunctionsBeenDeclared = false;
     Stack<HashMap<IdNode, ASTNode>> symbolTable;
@@ -46,6 +46,7 @@ public class BindingVisitor extends Visitor {
         roboFunctions.put("getVelocity", "getVelocity"); // void -> double
         roboFunctions.put("getX", "getX"); // void -> double
         roboFunctions.put("getY", "getY"); // void -> double
+        roboFunctions.put("log", "System.out.println"); // String --
         roboFunctions.put("resume", "resume"); // void -> void
         roboFunctions.put("scan", "scan"); // void -> void
         roboFunctions.put("setAdjustGunForRobotTurn", "setAdjustGunForRobotTurn"); // bool -> void
@@ -117,7 +118,7 @@ public class BindingVisitor extends Visitor {
             }
         }
     }
-    
+
     private void BindExprFunctionCallToDeclaration(ExprFunctionCallNode fCallNode) {
         boolean isDeclared = false;
         for (int i = symbolTable.size() - 1; i >= 0; i--) {
