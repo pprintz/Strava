@@ -28,32 +28,14 @@ public class ValidReturnVisitorTest {
     @Before
     public void Before() throws Exception{
 
-        astGood1 = generateAST("testFiles/good01");
-        astGood2 = generateAST("testFiles/good02");
-        astGood3 = generateAST("testFiles/good03");
-        astGood4 = generateAST("testFiles/good04");
-        astBad1 = generateAST("testFiles/bad01");
-        astBad2 = generateAST("testFiles/bad02");
-        astBad3 = generateAST("testFiles/bad03");
+        astGood1 = Main.GenerateAST(new FileInputStream("testFiles/good01"));
+        astGood2 = Main.GenerateAST(new FileInputStream("testFiles/good02"));
+        astGood3 = Main.GenerateAST(new FileInputStream("testFiles/good03"));
+        astGood4 = Main.GenerateAST(new FileInputStream("testFiles/good04"));
+        astBad1 = Main.GenerateAST(new FileInputStream("testFiles/bad01"));
+        astBad2 = Main.GenerateAST(new FileInputStream("testFiles/bad02"));
+        astBad3 = Main.GenerateAST(new FileInputStream("testFiles/bad03"));
 
-    }
-    private ASTNode generateAST(String path) throws Exception{
-
-        InputStream is = new FileInputStream(path);
-
-        ANTLRInputStream input = new ANTLRInputStream(is);
-
-        RobocommandeLexer lexer = new RobocommandeLexer(input);
-
-        CommonTokenStream tokens = new CommonTokenStream(lexer);
-
-        RobocommandeParser parser = new RobocommandeParser(tokens);
-
-        ParseTree cst = parser.prog();
-
-        ASTBuilder astBuilder = new ASTBuilder();
-
-        return astBuilder.visit(cst);
     }
     @Test
     public void ValidReturnTest(){

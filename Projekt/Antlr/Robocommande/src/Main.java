@@ -7,9 +7,41 @@ import java.io.InputStream;
 public class Main {
     public static void main(String[] args) throws Exception {
         String inputFile = null;
-        if ( args.length>0 ) inputFile = args[0];
-        InputStream is = System.in;
-        if ( inputFile!=null ) is = new FileInputStream(inputFile);
+        ASTNode ast = null;
+        if (args.length > 0) {
+            inputFile = args[0];
+        }
+        if (inputFile != null) {
+            ast = GenerateAST(new FileInputStream(inputFile));
+        } else {
+            ast = GenerateAST(System.in);
+        }
+
+
+        FunctionBindingVisitor functionBindingVisitor = new FunctionBindingVisitor();
+        functionBindingVisitor.visit(ast);
+        BindingVisitor bindingVisitor = new BindingVisitor(functionBindingVisitor.getSymbolTable());
+        bindingVisitor.visit(ast);
+
+        if (BindingVisitor.hasBindingErrorOccured) {
+            System.exit(0);
+        }
+
+        ValidReturnVisitor vrv = new ValidReturnVisitor();
+        vrv.visit(ast);
+
+        TypeChecker typeChecker = new TypeChecker();
+        typeChecker.visit(ast);
+
+
+        System.out.println("Everything went okay.");
+
+
+        System.out.println("Everything went okay.");
+    }
+
+    public static ASTNode GenerateAST(InputStream is) throws Exception {
+
         ANTLRInputStream input = new ANTLRInputStream(is);
 
         RobocommandeLexer lexer = new RobocommandeLexer(input);
@@ -20,37 +52,8 @@ public class Main {
 
         ParseTree cst = parser.prog();
 
-        //System.out.println(tree.toStringTree(parser));
-        //PrettyPrinter prettyPrinter = new PrettyPrinter();
-        //System.out.println(prettyPrinter.visit(tree));
-
         ASTBuilder astBuilder = new ASTBuilder();
-        ASTNode ast = astBuilder.visit(cst);
 
-        FunctionBindingVisitor functionBindingVisitor = new FunctionBindingVisitor();
-        functionBindingVisitor.visit(ast);
-        BindingVisitor bindingVisitor = new BindingVisitor(functionBindingVisitor.getSymbolTable());
-        bindingVisitor.visit(ast);
-
-        if(BindingVisitor.hasBindingErrorOccured){
-            System.exit(0);
-        }
-
-		//StrategyVisitor strategyVisitor = new StrategyVisitor();
-        //strategyVisitor.visit(ast);
-
-        ValidReturnVisitor vrv = new ValidReturnVisitor();
-        vrv.visit(ast);
-
-        TypeChecker typeChecker = new TypeChecker();
-        typeChecker.visit(ast);
-
-        //JavaCodeGenerator codeGenerator = new JavaCodeGenerator(strategyVisitor.strategies);
-        //codeGenerator.visit(ast);
-
-		System.out.println("Everything went okay.");
-
-
-        System.out.println("Everything went okay.");
+        return astBuilder.visit(cst);
     }
 }
