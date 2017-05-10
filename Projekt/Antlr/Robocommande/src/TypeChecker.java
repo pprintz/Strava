@@ -1,5 +1,7 @@
 import com.sun.deploy.security.ValidationState;
 
+import java.util.List;
+
 /**
  * Created by Teitur on 10-04-2017.
  */
@@ -168,7 +170,7 @@ public class TypeChecker extends Visitor {
             System.out.println("Mismatch between number of formal and actual params");
         }
     }
-
+    //TypeSystem GIT TEST
 
     private boolean checkExpectedType(BinaryExprNode binaryExprNode, Type expectedType) {
         if(expectedType == Type.STRUCT){
@@ -280,17 +282,58 @@ public class TypeChecker extends Visitor {
     }
 
     public void visit(FieldValueNode node){
-        int lastIdIndex = node.idNodes.size() - 1;
-        IdNode lastIdNode = node.idNodes.get(lastIdIndex);
-        visit(lastIdNode);
+        DeclarationNode declarationNode = GetLastFieldIdDecl(node.structDefinitionNode, node.idNodes);
+        if(declarationNode != null){
+            node.Type = declarationNode.Type;
+        } else{
+            node.Type = Type.ERROR;
+        }
+    }
 
-        node.Type = lastIdNode.Type;
+    public void visit(FieldAssignmentNode node){
+        DeclarationNode declarationNode = GetLastFieldIdDecl(node.fieldIdNode.structDefinitionNode, node.fieldIdNode.idNodes);
+        if(declarationNode != null){
+            TypeAndExprMatches(node, declarationNode.typeNode, node.exprNode);
+        }else
+        {
+            System.out.println("There exists no ");
+        }
     }
 
     public void visit(IdNode node){
         if( ! node.isDeclaration){
             node.Type = node.declarationNode.typeNode.Type;
+        } else{
+            node.Type = Type.ERROR;
         }
+    }
+
+    private DeclarationNode GetLastFieldIdDecl(StructDefinitionNode structDefinitionNode, List<IdNode> idNodes){
+        StructDefinitionNode currentSubStruct = structDefinitionNode;
+
+        int nestingLevel = idNodes.size() - 1;
+
+        for(int index = 1; index < nestingLevel ; index++)   {
+            String currentSubField = idNodes.get(index).id;
+            Boolean fieldIsValid = false;
+            for(DeclarationNode declNode : currentSubStruct.declarationNodes){
+                if(declNode.idNode.id.equals(currentSubField)){
+                    currentSubStruct = declNode.structDefinitionNode;
+                    fieldIsValid = true;
+                    break;
+                }
+            }
+            if( ! fieldIsValid){
+                System.out.format("Field %s does not exist in the struct %s.\n", currentSubField, currentSubStruct.typeNode.type);
+                return null;
+            }
+        }
+        for(DeclarationNode declNode : currentSubStruct.declarationNodes){
+            if(declNode.idNode.id.equals(idNodes.get(nestingLevel).id)){
+                return declNode;
+            }
+        }
+        return null;
     }
 
 

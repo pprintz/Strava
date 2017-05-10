@@ -9,7 +9,7 @@ import java.util.Stack;
 public class BindingVisitor extends Visitor {
     ArrayList<String> roboFunctions;
 
-    Stack<HashMap<String, ASTNode>> symbolTable;
+    private Stack<HashMap<String, ASTNode>> symbolTable;
 
     public BindingVisitor() {
         symbolTable = new Stack<>();

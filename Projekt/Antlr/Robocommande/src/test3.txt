@@ -1,4 +1,14 @@
 behavior onSetup():
+    innerStruct{num val}
+    outerStruct{innerStruct inner}
+    outerMostStruct{outerStruct outer}
+    innerStruct i := innerStruct[val := 10]
+    outerStruct o := outerStruct[inner := i]
+    outerMostStruct om := outerMostStruct[outer := o]
+
+
+    num a := om.outder.i.val
+
 ;
 strategy default:
 
