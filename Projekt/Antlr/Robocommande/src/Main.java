@@ -3,8 +3,11 @@ import org.antlr.v4.runtime.tree.*;
 
 import java.io.FileInputStream;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Main {
+    public static List<Error> CompileErrors = new ArrayList<>();
     public static void main(String[] args) throws Exception {
         String inputFile = null;
         ASTNode ast = null;
@@ -23,9 +26,6 @@ public class Main {
         BindingVisitor bindingVisitor = new BindingVisitor(functionBindingVisitor.getSymbolTable());
         bindingVisitor.visit(ast);
 
-        if (BindingVisitor.hasBindingErrorOccured) {
-            System.exit(0);
-        }
 
         ValidReturnVisitor vrv = new ValidReturnVisitor();
         vrv.visit(ast);
@@ -33,6 +33,12 @@ public class Main {
         TypeChecker typeChecker = new TypeChecker();
         typeChecker.visit(ast);
 
+        if (BindingVisitor.hasBindingErrorOccured || typeChecker.programHasTypeErrors || vrv.hasReturnError) {
+            for(Error e : Main.CompileErrors){
+                System.out.println(e.toString());
+            }
+            System.exit(0);
+        }
 
         System.out.println("Everything went okay.");
 

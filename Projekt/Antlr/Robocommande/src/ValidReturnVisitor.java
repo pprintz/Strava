@@ -9,13 +9,13 @@ public class ValidReturnVisitor extends Visitor {
     public boolean hasReturnError = false;
     @Override
     public void visit(DefineFunctionNode node) {
-        boolean hasReturn = false;
+        boolean isReturning = false;
         if (!node.typeNode.type.equals("void")) {
-            hasReturn = isBranchReturning(node.blockNode);
+            isReturning = isBranchReturning(node.blockNode);
         }
-        if (!hasReturn) {
+        if (!isReturning) {
             hasReturnError = true;
-            PrintReturnError(node);
+            Main.CompileErrors.add(new MissingReturnError(node.columnNumber, node.lineNumber, node.typeNode.type));
         }
     }
 
@@ -50,9 +50,5 @@ public class ValidReturnVisitor extends Visitor {
             return isReturning;
         }
         return false;
-    }
-
-    public void PrintReturnError(DefineFunctionNode node){
-        System.out.println(node.lineNumber + ": " + "Missing return in function " + node.idNode.id);
     }
 }

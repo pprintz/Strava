@@ -9,6 +9,6 @@ public class MissingReturnError extends Error{
 
     @Override
     public String toString() {
-        return lineNumber + "/" + columnNumber + ": " + "Missing return in " + functionName;
+        return lineNumber + ": " + "Missing return in " + functionName;
     }
 }

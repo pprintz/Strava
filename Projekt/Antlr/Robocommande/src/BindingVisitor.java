@@ -61,22 +61,6 @@ public class BindingVisitor extends Visitor {
         return null;
     }
 
-    private void BindFieldIdToDeclaration(FieldIdNode fieldIdNode) {
-        boolean isDeclared = false;
-        IdNode structId = fieldIdNode.idNodes.get(0);
-        for (int i = symbolTable.size() - 1; i >= 0; i--) {
-            if (symbolTable.get(i).containsKey(structId.id)) {
-                DeclarationNode declarationNode = (DeclarationNode) symbolTable.get(i).get(structId.id);
-                if (declarationNode.structDefinitionNode != null) {
-                    fieldIdNode.structDefinitionNode = declarationNode.structDefinitionNode;
-                    isDeclared = true;
-                }
-            }
-        }
-        if (!isDeclared) {
-            PrintNotDeclaredError("struct", structId.id, fieldIdNode);
-        }
-    }
 
     public static boolean hasBindingErrorOccured = false;
 

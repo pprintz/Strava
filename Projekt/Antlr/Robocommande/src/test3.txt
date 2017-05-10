@@ -15,7 +15,6 @@ strategy default:
 ;
 define num Foo(num a, num b):
     if true :
-        return 23
      ;
      else if true:
         return 33
