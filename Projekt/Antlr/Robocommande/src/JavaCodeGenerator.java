@@ -17,7 +17,7 @@ public class JavaCodeGenerator extends Visitor {
 		super();
 		this.strategies = strategies;
 		this.newCustomEvents = newCustomEvents;
-		events = new ArrayList<>(14);
+		events = new ArrayList<>();
 		AddAllEventsToList();
 		try {
 			writer = new PrintWriter(new FileOutputStream("./StrategyJava/JavaCodeGeneratorOutput.java", false));
@@ -171,8 +171,10 @@ public class JavaCodeGenerator extends Visitor {
     public void visit(BehaviorFunctionNode node) {
 	    Emit("\n", 0);
         Emit("public void " + node.idNode.id + "(", 0);
-        visit(node.eventType, false);
-        EmitNoIndent(" e");
+        if(node.eventType != null) {
+			visit(node.eventType, false);
+			EmitNoIndent(" e");
+		}
         EmitNoIndent(")");
         visit(node.blockNode);
     }
@@ -201,7 +203,9 @@ public class JavaCodeGenerator extends Visitor {
 	public void visit(DefaultStrategyNode node) {
 		Emit("class defaultStrategy implements Strategy {", 1);
 		indentationLevel++;
-        visit(node.strategyDefinition.runNode);
+		if (node.strategyDefinition.runNode != null) {
+			visit(node.strategyDefinition.runNode);
+		}
         String fullEventName;
         for (String event : events) {
             fullEventName = "on" + event;
@@ -285,7 +289,7 @@ public class JavaCodeGenerator extends Visitor {
 	    Emit("public void on" + event + "(" + event + "Event e) { }", 1);
     }
 
-    // TODO: Split this marvelous monster intro sub-functions
+    // TODO: Split this marvelous monster into sub-functions
 	@Override
 	public void visit(ProgNode node) {
         EmitAutoGenDoc();
@@ -333,7 +337,7 @@ public class JavaCodeGenerator extends Visitor {
 			Emit("public boolean test()");
 			visit(newCustomEvent.blockNode);
 			indentationLevel--;
-			Emit("}", 1); // end addCustomEvent
+			Emit("});", 1); // end addCustomEvent
 
 		}
 
@@ -353,7 +357,9 @@ public class JavaCodeGenerator extends Visitor {
 		if (node.defaultStrategyNode.strategyDefinition.functionsNode != null) {
             for (BehaviorFunctionNode behavior : node.defaultStrategyNode.strategyDefinition.functionsNode.behaviorFunctions) {
                 behaviorName = behavior.idNode.id;
-                Emit("public void " + behaviorName + "(" + behaviorName.replace("on", "") + "Event e) { currentStrategy." + behaviorName + "(e); }", 1);
+                if(behavior.eventType != null) {
+					Emit("public void " + behaviorName + "(" + behaviorName.replace("on", "") + "Event e) { currentStrategy." + behaviorName + "(e); }", 1);
+				}
             }
             Emit("", 1);
         }
