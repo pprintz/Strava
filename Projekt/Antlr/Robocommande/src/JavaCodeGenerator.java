@@ -334,6 +334,7 @@ public class JavaCodeGenerator extends Visitor {
 			visit(newCustomEvent.blockNode);
 			indentationLevel--;
 			Emit("}", 1); // end addCustomEvent
+
 		}
 
 		Emit("while (true) {", 1);

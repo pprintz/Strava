@@ -79,7 +79,10 @@ public class ASTBuilder extends RobocommandeBaseVisitor<ASTNode> {
     public ASTNode visitBehaviorFunction(RobocommandeParser.BehaviorFunctionContext ctx) {
         IdNode idNode = new IdNode(ctx.ID(0).getText());
         idNode.isDeclaration = true;
-        TypeNode eventType = new TypeNode(ctx.ID(1).getText());
+		TypeNode eventType = null;
+        if (ctx.ID(1) != null) {
+			eventType = new TypeNode(ctx.ID(1).getText());
+		}
         BlockNode blockNode = (BlockNode) visit((ctx.block()));
 
         return new BehaviorFunctionNode(idNode, eventType, blockNode,ctx);
