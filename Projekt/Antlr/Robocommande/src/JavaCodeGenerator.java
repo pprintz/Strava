@@ -137,9 +137,18 @@ public class JavaCodeGenerator extends Visitor {
 
 	@Override
 	public void visit(BinaryExprNode node) {
-		visit(node.leftNode);
-		EmitNoIndent(BinaryOperatorToJavaOperator(node.binaryOperator));
-		visit(node.rightNode);
+		if (node.binaryOperator == BinaryOperator.POWER) {
+			EmitNoIndent("Math.pow(");
+			visit(node.leftNode);
+			EmitNoIndent(", ");
+			visit(node.rightNode);
+			EmitNoIndent(")");
+		} else {
+			visit(node.leftNode);
+			EmitNoIndent(BinaryOperatorToJavaOperator(node.binaryOperator));
+			visit(node.rightNode);
+		}
+
 	}
 
 	// Capitalizes first letter
@@ -447,13 +456,15 @@ public class JavaCodeGenerator extends Visitor {
     }
 
     @Override
+	// TODO: Don't think this function is needed
     public void visit(FunctionStmtNode node) {
-        throw new NotImplementedException();
+		throw new RuntimeException("Point fingers at Lau");
     }
 
     @Override
-    public void visit(GeneralStmtNode node) {
-        throw new NotImplementedException();
+	// TODO: Don't think this function is needed
+	public void visit(GeneralStmtNode node) {
+		throw new RuntimeException("Point fingers at Lau");
     }
 
     @Override
@@ -558,9 +569,9 @@ public class JavaCodeGenerator extends Visitor {
     }
 
     @Override
+	// TODO: Don't think this function is needed
     public void visit(SetupStmtNode node) {
-
-        throw new NotImplementedException();
+        throw new RuntimeException("Point fingers at Lau");
     }
 
     @Override
@@ -604,8 +615,6 @@ public class JavaCodeGenerator extends Visitor {
 				return " <= ";
 			case GREATERTHANEQUAL:
 				return " >= ";
-			case POWER:
-				throw new NotImplementedException();
 			case AND:
 				return " && ";
 			case OR:
