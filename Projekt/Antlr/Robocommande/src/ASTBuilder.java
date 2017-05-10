@@ -185,8 +185,7 @@ public class ASTBuilder extends RobocommandeBaseVisitor<ASTNode> {
         return declarationNode;
     }
     private boolean isDeclarationInSetupBlock(RobocommandeParser.DeclarationContext declCtx){
-        if(declCtx.parent.parent.parent instanceof RobocommandeParser.SetupBlockContext) return true;
-        else return false;
+		return declCtx.parent.parent.parent instanceof RobocommandeParser.SetupBlockContext;
     }
 
     @Override

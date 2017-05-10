@@ -3,11 +3,11 @@ import java.util.ArrayList;
 public class StrategyVisitor extends Visitor {
 
 	public ArrayList<String> strategies;
-	public ArrayList<String> customNewEvents;
+	public ArrayList<NewEventNode> newCustomEvents;
 
 	public StrategyVisitor() {
 		strategies = new ArrayList<>();
-		customNewEvents = new ArrayList<>();
+		newCustomEvents = new ArrayList<>();
 	}
 
 	@Override
@@ -23,7 +23,7 @@ public class StrategyVisitor extends Visitor {
 	}
 
 	public void visit(NewEventNode node) {
-		customNewEvents.add(node.idNode.id);
+		newCustomEvents.add(node);
 	}
 
 
