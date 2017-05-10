@@ -106,8 +106,6 @@ public class JavaCodeGenerator extends Visitor {
 	    Emit("}", 2);
     }
 
-	// TODO: Not really sure if this is a good idea
-	@Deprecated
 	@Override
 	public void visit(TypeNode node) {
 		EmitNoIndent(RoboToJavaType(node.type));
@@ -182,7 +180,6 @@ public class JavaCodeGenerator extends Visitor {
     @Override
 	public void visit(DeclarationNode node) {
 		visit(node.typeNode, true);
-		visit(node.idNode, false);
 		if (node.exprNode != null) {
 			EmitNoIndent(" = ");
 			visit(node.exprNode);
@@ -231,8 +228,7 @@ public class JavaCodeGenerator extends Visitor {
 	@Override
 	public void visit(DefineFunctionNode node) {
 		Emit("public ", 0);
-		visit(node.typeNode, false);
-		visit(node.idNode, false);
+		visit(node.typeNode);
 		EmitNoIndent("(");
 		if (node.formalParamsNode != null) {
 			visit(node.formalParamsNode);

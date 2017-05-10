@@ -267,10 +267,9 @@ public class ASTBuilder extends RobocommandeBaseVisitor<ASTNode> {
     @Override
     public ASTNode visitLoop(RobocommandeParser.LoopContext ctx) {
 		BlockNode blockNode = (BlockNode)visit(ctx.block());
-	if(ctx.expr() == null) {
+		if(ctx.expr() == null) {
 			return new LoopNode(null, blockNode);
 		}
-
         ExprNode exprNode = (ExprNode)visit(ctx.expr());
         return new LoopNode(exprNode, blockNode);
     }

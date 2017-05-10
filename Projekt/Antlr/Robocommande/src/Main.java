@@ -50,15 +50,10 @@ public class Main {
     }
 
     public static ASTNode GenerateAST(InputStream is) throws Exception {
-
         ANTLRInputStream input = new ANTLRInputStream(is);
-
         RobocommandeLexer lexer = new RobocommandeLexer(input);
-
         CommonTokenStream tokens = new CommonTokenStream(lexer);
-
         RobocommandeParser parser = new RobocommandeParser(tokens);
-
         ParseTree cst = parser.prog();
         ASTBuilder astBuilder = new ASTBuilder();
         return astBuilder.visit(cst);

@@ -145,7 +145,7 @@ public abstract class Visitor {
     }
 
     public void visit(LoopNode node){
-	if(node.exprNode != null) {
+    	if(node.exprNode != null) {
 			node.exprNode.accept(this);
 		}
         node.block.accept(this);

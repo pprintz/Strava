@@ -8,10 +8,10 @@ public class BindingVisitor extends Visitor {
     public static HashMap<String, String> roboFunctions;
 
 	public BindingVisitor(Stack<HashMap<String, ASTNode>> symbolTableWithFunctions) {
-        symbolTable = symbolTableWithFunctions;
-        roboFunctions = new HashMap<>();
-        AddRoboFunctionsToHashMap();
-    }
+		symbolTable = symbolTableWithFunctions;
+		roboFunctions = new HashMap<>();
+		AddRoboFunctionsToHashMap();
+	}
 
     private void OpenScope() {
         symbolTable.push(new HashMap<>());
@@ -21,50 +21,50 @@ public class BindingVisitor extends Visitor {
         symbolTable.pop();
     }
 
-    private void AddRoboFunctionsToHashMap() {
-        roboFunctions.put("ahead", "ahead"); // void -> void
-        roboFunctions.put("back", "back"); // double -> void
-        roboFunctions.put("changeStrategy", "changeStrategy"); // String
-        roboFunctions.put("doNothing", "doNothing"); // void -> void
-        roboFunctions.put("fire", "fireBullet"); // double -> Bullet
-        roboFunctions.put("getBattleFieldHeight", "getBattleFieldHeight"); // void -> double
-        roboFunctions.put("getBattleFieldWidth", "getBattleFieldWidth"); // void -> double
-        roboFunctions.put("getEnergy", "getEnergy"); // void -> double
-        roboFunctions.put("getGunCoolingRate", "getGunCoolingRate"); // void -> double
-        roboFunctions.put("getGunHeading", "getGunHeading"); // void -> double
-        roboFunctions.put("getGunHeat", "getGunHeat"); // void -> double
-        roboFunctions.put("getHeading", "getHeading"); // void -> double
-        roboFunctions.put("getName", "getName"); // void -> String
-        roboFunctions.put("getNumRounds", "getNumRounds"); // void -> int
-        roboFunctions.put("getOthers", "getOthers"); // void -> int
-        roboFunctions.put("getRadarHeading", "getRadarHeading"); // void -> double
-        roboFunctions.put("getRoundNum", "getRoundNum"); // void -> int
-        roboFunctions.put("getTime", "getTime"); // void -> long
-        roboFunctions.put("getVelocity", "getVelocity"); // void -> double
-        roboFunctions.put("getX", "getX"); // void -> double
-        roboFunctions.put("getY", "getY"); // void -> double
-        roboFunctions.put("log", "System.out.println"); // String --
-        roboFunctions.put("resume", "resume"); // void -> void
-        roboFunctions.put("rotate", "turnGunRight"); // double -> void
-        roboFunctions.put("scan", "scan"); // void -> void
-        roboFunctions.put("setAdjustGunForRobotTurn", "setAdjustGunForRobotTurn"); // bool -> void
-        roboFunctions.put("setAdjustRadarForGunTurn", "setAdjustRadarForGunTurn"); // bool -> void
-        roboFunctions.put("setAdjustRadarForRobotTurn", "setAdjustRadarForRobotTurn"); // bool -> void
-        roboFunctions.put("setAllColors", "setAllColors"); // Color -> void
-        roboFunctions.put("setBodyColor", "setBodyColor"); // Color -> void
-        roboFunctions.put("setBulletColor", "setBulletColor"); // Color -> void
-        roboFunctions.put("setColors", "setColors"); // Color, Color, Color, Color, Color -> void
-        roboFunctions.put("setGunColor", "setGunColor"); // Color -> void
-        roboFunctions.put("setRadarColor", "setRadarColor"); // Color -> void
-        roboFunctions.put("setScanColor", "setScanColor"); // Color -> void
-        roboFunctions.put("stop", "stop"); // void -> void
-        roboFunctions.put("turnGunLeft", "turnGunLeft"); // double -> void
-        roboFunctions.put("turnGunRight", "turnGunRight"); // double -> void
-        roboFunctions.put("turnLeft", "turnLeft"); // double -> void
-        roboFunctions.put("turnRadarLeft", "turnRadarLeft"); // double -> void
-        roboFunctions.put("turnRadarRight", "turnRadarRight"); // double -> void
-        roboFunctions.put("turnRight", "turnRight"); // double -> void
-    }
+	private void AddRoboFunctionsToHashMap() {
+		roboFunctions.put("ahead", "ahead"); // void -> void
+		roboFunctions.put("back", "back"); // double -> void
+		roboFunctions.put("changeStrategy", "changeStrategy"); // String
+		roboFunctions.put("doNothing", "doNothing"); // void -> void
+		roboFunctions.put("fire", "fireBullet"); // double -> Bullet
+		roboFunctions.put("getBattleFieldHeight", "getBattleFieldHeight"); // void -> double
+		roboFunctions.put("getBattleFieldWidth", "getBattleFieldWidth"); // void -> double
+		roboFunctions.put("getEnergy", "getEnergy"); // void -> double
+		roboFunctions.put("getGunCoolingRate", "getGunCoolingRate"); // void -> double
+		roboFunctions.put("getGunHeading", "getGunHeading"); // void -> double
+		roboFunctions.put("getGunHeat", "getGunHeat"); // void -> double
+		roboFunctions.put("getHeading", "getHeading"); // void -> double
+		roboFunctions.put("getName", "getName"); // void -> String
+		roboFunctions.put("getNumRounds", "getNumRounds"); // void -> int
+		roboFunctions.put("getOthers", "getOthers"); // void -> int
+		roboFunctions.put("getRadarHeading", "getRadarHeading"); // void -> double
+		roboFunctions.put("getRoundNum", "getRoundNum"); // void -> int
+		roboFunctions.put("getTime", "getTime"); // void -> long
+		roboFunctions.put("getVelocity", "getVelocity"); // void -> double
+		roboFunctions.put("getX", "getX"); // void -> double
+		roboFunctions.put("getY", "getY"); // void -> double
+		roboFunctions.put("log", "System.out.println"); // String --
+		roboFunctions.put("resume", "resume"); // void -> void
+		roboFunctions.put("rotate", "turnGunRight"); // double -> void
+		roboFunctions.put("scan", "scan"); // void -> void
+		roboFunctions.put("setAdjustGunForRobotTurn", "setAdjustGunForRobotTurn"); // bool -> void
+		roboFunctions.put("setAdjustRadarForGunTurn", "setAdjustRadarForGunTurn"); // bool -> void
+		roboFunctions.put("setAdjustRadarForRobotTurn", "setAdjustRadarForRobotTurn"); // bool -> void
+		roboFunctions.put("setAllColors", "setAllColors"); // Color -> void
+		roboFunctions.put("setBodyColor", "setBodyColor"); // Color -> void
+		roboFunctions.put("setBulletColor", "setBulletColor"); // Color -> void
+		roboFunctions.put("setColors", "setColors"); // Color, Color, Color, Color, Color -> void
+		roboFunctions.put("setGunColor", "setGunColor"); // Color -> void
+		roboFunctions.put("setRadarColor", "setRadarColor"); // Color -> void
+		roboFunctions.put("setScanColor", "setScanColor"); // Color -> void
+		roboFunctions.put("stop", "stop"); // void -> void
+		roboFunctions.put("turnGunLeft", "turnGunLeft"); // double -> void
+		roboFunctions.put("turnGunRight", "turnGunRight"); // double -> void
+		roboFunctions.put("turnLeft", "turnLeft"); // double -> void
+		roboFunctions.put("turnRadarLeft", "turnRadarLeft"); // double -> void
+		roboFunctions.put("turnRadarRight", "turnRadarRight"); // double -> void
+		roboFunctions.put("turnRight", "turnRight"); // double -> void
+	}
 
     private void BindIdToDeclaration(IdNode idNode) {
         boolean isDeclared = false;
@@ -94,11 +94,10 @@ public class BindingVisitor extends Visitor {
         return null;
     }
 
-
     private DefineFunctionNode BindFunctionCallToDeclaration(ASTNode node, String idName, ActualParamsNode actualParams){
         DefineFunctionNode defineFunctionNode = null;
-        boolean isDeclared = false;
-        if (roboFunctions.containsKey(idName)) {
+		boolean isDeclared = false;
+		if (roboFunctions.containsKey(idName)) {
             isDeclared = true;
         }
 		for (int i = symbolTable.size() - 1; i >= 0; i--) {
@@ -222,7 +221,6 @@ public class BindingVisitor extends Visitor {
 
     @Override
     public void visit(DeclarationNode node) {
-
         if (!doesDeclExistLocally(node)) {
             switch (node.typeNode.type) {
                 case "num":
@@ -233,13 +231,13 @@ public class BindingVisitor extends Visitor {
                 default:
                     BindStructDeclarationToDefinition(node);
                     symbolTable.peek().put(node.idNode.id, node);
-            }
-            if (node.exprNode != null) {
-                visit(node.exprNode);
-            }
-        } else hasBindingErrorOccured = true;
+			}
+			if (node.exprNode != null) {
+				visit(node.exprNode);
+			}
+		} else hasBindingErrorOccured = true;
 
-    }
+	}
 
     // TODO : fields with same names in different struct definit
 	private boolean doesDeclExistLocally(DeclarationNode node) {
