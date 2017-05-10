@@ -1,5 +1,3 @@
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
-
 import java.io.FileOutputStream;
 import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
@@ -11,11 +9,11 @@ public class JavaCodeGenerator extends Visitor {
 
     private String className;
 	private ArrayList<String> strategies;
-	private ArrayList<String> newCustomEvents;
+	private ArrayList<NewEventNode> newCustomEvents;
 	private PrintWriter writer;
     private ArrayList<String> events;
 
-	JavaCodeGenerator(ArrayList<String> strategies, ArrayList<String> newCustomEvents) {
+	JavaCodeGenerator(ArrayList<String> strategies, ArrayList<NewEventNode> newCustomEvents) {
 		super();
 		this.strategies = strategies;
 		this.newCustomEvents = newCustomEvents;
@@ -132,7 +130,7 @@ public class JavaCodeGenerator extends Visitor {
 			visit(stmtNode);
 		}
 		indentationLevel--;
-		Emit("}", 2);
+		Emit("}", 1);
 	}
 
 	@Override
@@ -278,7 +276,10 @@ public class JavaCodeGenerator extends Visitor {
 	    for (String eventString : events) {
 	        Emit("public void on" + eventString + "(" + eventString + "Event e);", 1);
         }
-    }
+		for (NewEventNode newCustomEvent : newCustomEvents) {
+			Emit("public void " + newCustomEvent.idNode.id + "(); // new custom event", 1);
+		}
+	}
 
     private void EmitDefaultInterfaceEventImplementation(String event) {
 	    Emit("public void on" + event + "(" + event + "Event e) { }", 1);
@@ -326,32 +327,26 @@ public class JavaCodeGenerator extends Visitor {
         Emit("System.out.println(\"Run: \" + currentStrategy.toString());", 1);
 
         // TODO: Custom Events
-//        for	(String customEvent : newCustomEvents) {
-//			Emit("addCustomEvent(new Condition(" + customEvent + ") {", 1);
-//			indentationLevel++;
-//			Emit("public boolean test() {", 1);
-//			indentationLevel++;
-//			visit(node.)
-//
-//			indentationLevel--;
-//			indentationLevel--;
-//;		}
-
-//		addCustomEvent(new Condition("triggerhit") {
-//			public boolean test() {
-//				return (getEnergy() <= trigger);
-//			}
-//		});
+        for	(NewEventNode newCustomEvent : newCustomEvents) {
+			Emit("addCustomEvent(new Condition(\"" + newCustomEvent.idNode.id + "\") {", 1);
+			indentationLevel++;
+			Emit("public boolean test()");
+			visit(newCustomEvent.blockNode);
+			indentationLevel--;
+			Emit("}", 1); // end addCustomEvent
+		}
 
 		Emit("while (true) {", 1);
 		indentationLevel++;
 		Emit("currentStrategy.run();", 1);
 		indentationLevel--;
-		Emit("}", 1);
+		Emit("}", 1); // end while true
 		indentationLevel--;
-		Emit("}", 2);
+		Emit("}", 2); // end run
 
 		EmitChangeStrategyDefinition();
+		// TODO: onCustomEvent()
+		EmitOnCustomEvent();
 
 		String behaviorName;
 		if (node.defaultStrategyNode.strategyDefinition.functionsNode != null) {
@@ -369,6 +364,21 @@ public class JavaCodeGenerator extends Visitor {
 		EmitStructDefinitions(node);
 
 		writer.close();
+	}
+
+	private void EmitOnCustomEvent() {
+		Emit("public void onCustomEvent(CustomEvent e) {", 1);
+		indentationLevel++;
+		for (NewEventNode newCustomEvent : newCustomEvents) {
+			Emit("if (e.getCondition().getName().equals(\"" + newCustomEvent.idNode.id + "\")) {", 1);
+			indentationLevel++;
+			Emit("currentStrategy." + newCustomEvent.idNode.id + "();", 1);
+			// trigger -= 20;
+			indentationLevel--;
+			Emit("}", 1);
+		}
+		indentationLevel--;
+		Emit("}", 2); // end onCustomEvent
 	}
 
 	@Override
@@ -554,11 +564,7 @@ public class JavaCodeGenerator extends Visitor {
 
     @Override
     public void visit(NewEventNode node) {
-//        Emit("new event ", 0);
-//        EmitNoIndent(node.idNode.id);
-//        Emit(" ", 0);
-//        visit(node.blockNode);
-		throw new NotImplementedException();
+		// This method is intentionally empty
     }
 
     @Override
