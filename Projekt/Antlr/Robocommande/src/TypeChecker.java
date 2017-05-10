@@ -1,3 +1,5 @@
+import java.util.List;
+
 /**
  * Created by Teitur on 10-04-2017.
  */
@@ -265,41 +267,61 @@ public class TypeChecker extends Visitor {
     }
 
     public void visit(FieldValueNode node){
-        StructDefinitionNode currentSubStruct = node.structDefinitionNode;
-
-        int nestingLevel = node.idNodes.size() - 1;
-
-        for(int index = 1; index < nestingLevel ; index++)   {
-            String currentSubField = node.idNodes.get(index).id;
-            for(DeclarationNode declNode : currentSubStruct.declarationNodes){
-                if(declNode.idNode.id.equals(currentSubField)){
-                    currentSubStruct = declNode.structDefinitionNode;
-                    break;
-                }
-            }
+        DeclarationNode declarationNode = GetLastFieldIdDecl(node.structDefinitionNode, node.idNodes);
+        if(declarationNode != null){
+            node.Type = declarationNode.Type;
+        } else{
+            node.Type = Type.ERROR;
         }
-        for(DeclarationNode declNode : currentSubStruct.declarationNodes){
-            if(declNode.idNode.id.equals(node.idNodes.get(nestingLevel).id)){
-                node.Type = declNode.Type;
-            }
+    }
+
+    public void visit(FieldAssignmentNode node){
+        DeclarationNode declarationNode = GetLastFieldIdDecl(node.fieldIdNode.structDefinitionNode, node.fieldIdNode.idNodes);
+        if(declarationNode != null){
+            TypeAndExprMatches(node, declarationNode.typeNode, node.exprNode);
+        }else
+        {
+            System.out.println("There exists no ");
         }
     }
 
     public void visit(IdNode node){
         if( ! node.isDeclaration){
             node.Type = node.declarationNode.typeNode.Type;
+        } else{
+            node.Type = Type.ERROR;
         }
     }
 
-    public void visit(FieldIdNode node){
+    private DeclarationNode GetLastFieldIdDecl(StructDefinitionNode structDefinitionNode, List<IdNode> idNodes){
+        StructDefinitionNode currentSubStruct = structDefinitionNode;
 
+        int nestingLevel = idNodes.size() - 1;
+
+        for(int index = 1; index < nestingLevel ; index++)   {
+            String currentSubField = idNodes.get(index).id;
+            Boolean fieldIsValid = false;
+            for(DeclarationNode declNode : currentSubStruct.declarationNodes){
+                if(declNode.idNode.id.equals(currentSubField)){
+                    currentSubStruct = declNode.structDefinitionNode;
+                    fieldIsValid = true;
+                    break;
+                }
+            }
+            if( ! fieldIsValid){
+                System.out.format("Field %s does not exist in the struct %s.\n", currentSubField, currentSubStruct.typeNode.type);
+                return null;
+            }
+        }
+        for(DeclarationNode declNode : currentSubStruct.declarationNodes){
+            if(declNode.idNode.id.equals(idNodes.get(nestingLevel).id)){
+                return declNode;
+            }
+        }
+        return null;
     }
 
-    public void visit(FieldAssignmentNode node){
-        int lastFieldIndex = node.fieldIdNode.idNodes.size() - 1;
-        IdNode lastField = node.fieldIdNode.idNodes.get(lastFieldIndex);
-        TypeAndExprMatches(node, lastField.declarationNode.typeNode, node.exprNode);
-    }
+
     public void visit(DeclarationNode node){
         if(node.exprNode != null && ! TypeAndExprMatches(node, node.typeNode, node.exprNode)){
             node.Type = Type.ERROR;
