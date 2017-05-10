@@ -7,7 +7,7 @@ run: 'behavior' 'onRun' '('')' block;
 
 functions : (defineFunction | behaviorFunction)* ;
 defineFunction : 'define' type ID '(' formalParams? ')' block;
-behaviorFunction : 'behavior' ID '(' ID ID ')' block;
+behaviorFunction : 'behavior' ID '(' (type ID)? ')' block;
 formalParams: type ID (',' type ID)* ;
 actualParams: expr (',' expr)* ;
 
