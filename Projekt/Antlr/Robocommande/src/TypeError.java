@@ -11,9 +11,8 @@ public class TypeError extends Error {
         this.actualType = actualType;
         this.expectedType = expectedType;
     }
-
     @Override
     public String toString() {
-        return lineNumber + ": " + " the actual type " + actualType + " doesn't match whit the expected type " + expectedType;
+        return lineNumber + ": " + "expected type " + expectedType + ", got " + actualType;
     }
 }

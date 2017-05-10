@@ -1,30 +1,28 @@
 behavior onSetup():
-    innerStruct{num val}
-    outerStruct{innerStruct inner}
-    outerMostStruct{outerStruct outer}
-    innerStruct i := innerStruct[val := 10]
-    outerStruct o := outerStruct[inner := i]
-    outerMostStruct om := outerMostStruct[outer := o]
-
-
-    text a := om.outer.inner.val
+    my{num val}
+    ny{num bb}
+    my x
+    x.val := 2
+    ny y
+    bool xyz := true = true
+    x := x = y
+    x := y
+    num a
+    a := true + true
+    a := 123 and 22
+    a := true
+    a := not 123
+    a := Foo(2,2)
 
 ;
 strategy default:
 
 ;
 define num Foo(num a, num b):
-    if true :
-     ;
-     else if true:
-        return 33
-     ;
-     else if true:
-        return 42
-     ;
-     else :
-        return 32
-     ;
+    num lol := Bar()
+;
+define num Bar():
+    return 42
 ;
 
 

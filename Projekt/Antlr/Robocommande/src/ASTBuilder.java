@@ -214,7 +214,7 @@ public class ASTBuilder extends RobocommandeBaseVisitor<ASTNode> {
         ExprNode exprNode = (ExprNode)visit(ctx.expr());
         if(exprNode instanceof StructInitializationNode)
             return null;
-        return new AssignmentNode(idNode, exprNode);
+        return new AssignmentNode(idNode, exprNode, ctx);
     }
 
     @Override

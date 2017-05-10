@@ -1,5 +1,4 @@
-import com.sun.deploy.security.ValidationState;
-
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -16,24 +15,39 @@ public class TypeChecker extends Visitor {
 
     private void TypeErrorOccured(ASTNode node, Type actualType, Type expectedType){
         programHasTypeErrors = true;
-
-        System.out.format("[%d:%d] Type error: expected %s, got %s\n", node.lineNumber, node.columnNumber, expectedType, actualType);
+        if(actualType != Type.ERROR) {
+            Main.CompileErrors.add(new TypeError(node.columnNumber, node.lineNumber, actualType.toString(), expectedType.toString()));
+        }
     }
 
     private void TypeErrorOccured(ASTNode node, String actualTypeString, String expectedTypeString){
         programHasTypeErrors = true;
-        System.out.format("[%d:%d] Type error: expected %s, got %s\n", node.lineNumber, node.columnNumber, expectedTypeString, actualTypeString);
+        Main.CompileErrors.add(new TypeError(node.columnNumber, node.lineNumber, actualTypeString, expectedTypeString));
+    }
+    private void TypeErrorOccured(ASTNode node, String typeOne, Type expectedType, UnaryOperator unaryOperator){
+        programHasTypeErrors = true;
+        Main.CompileErrors.add(new UndefinedUnaryOperationError(node.columnNumber, node.lineNumber, typeOne, unaryOperator, expectedType.toString()));
+    }
+    private void TypeErrorOccured(ASTNode node, Type typeOne, Type typeTwo, Type expectedType, BinaryOperator binaryOperator){
+        programHasTypeErrors = true;
+        Main.CompileErrors.add(new UndefinedBinaryOperationError(node.columnNumber, node.lineNumber,
+                                                           typeOne.toString(), typeTwo.toString(),
+                                                           binaryOperator, expectedType.toString()));
     }
 
-    private void TypeErrorOccured(ASTNode node, Type typeOne, Type typeTwo, Type expectedType){
+    private void TypeErrorOccured(ASTNode node, Type typeOne, Type typeTwo, BinaryOperator binaryOperator,
+                                  Type... expectedTypes){
         programHasTypeErrors = true;
+        List<String> expectedTypesAsStrings = new ArrayList<>();
+        String[] a = new String[expectedTypes.length];
+        int i = 0;
+        for(Type t : expectedTypes){
+            a[i++] = t.toString();
+        }
 
-        System.out.format("[%d:%d] Type error: expected two %s, got %s and %s\n", node.lineNumber, node.columnNumber, expectedType, typeOne, typeTwo);
-    }
-
-    private void TypeErrorOccured(ASTNode node, Type typeOne, Type typeTwo, Type expectedType, Type expectedTypeAlternative){
-        programHasTypeErrors = true;
-        System.out.format("[%d:%d] Type error: expected two of %s OR %s, got %s and %s\n", node.lineNumber, node.columnNumber, expectedType, expectedTypeAlternative, typeOne, typeTwo);
+        Main.CompileErrors.add(new UndefinedBinaryOperationError(node.columnNumber, node.lineNumber,
+                                                           typeOne.toString(), typeTwo.toString(),
+                                                           binaryOperator, a));
     }
 
     public void visit(UnaryExprNode unaryExprNode){
@@ -48,7 +62,7 @@ public class TypeChecker extends Visitor {
                 }
                 else{
                     unaryExprNode.Type = Type.ERROR;
-                    TypeErrorOccured(unaryExprNode, unaryExprNode.exprNode.Type, Type.BOOL);
+                    TypeErrorOccured(unaryExprNode, unaryExprNode.exprNode.Type.toString(), Type.BOOL, unaryExprNode.unaryOperator);
                 }
                 break;
             case NEGATE:
@@ -57,7 +71,7 @@ public class TypeChecker extends Visitor {
                 }
                 else {
                     unaryExprNode.Type = Type.ERROR;
-                    TypeErrorOccured(unaryExprNode, unaryExprNode.exprNode.Type, Type.NUM);
+                    TypeErrorOccured(unaryExprNode, unaryExprNode.exprNode.Type.toString(), Type.NUM, unaryExprNode.unaryOperator);
                 }
                 break;
             default:
@@ -86,7 +100,7 @@ public class TypeChecker extends Visitor {
                 }
                 else {
                     binaryExprNode.Type = Type.ERROR;
-                    TypeErrorOccured(binaryExprNode, binaryExprNode.leftNode.Type, binaryExprNode.rightNode.Type, Type.NUM, Type.TEXT);
+                    TypeErrorOccured(binaryExprNode, binaryExprNode.leftNode.Type, binaryExprNode.rightNode.Type, binaryExprNode.binaryOperator, Type.NUM, Type.TEXT);
                 }
                 break;
 
@@ -97,7 +111,7 @@ public class TypeChecker extends Visitor {
                 if(checkExpectedType(binaryExprNode, Type.TEXT)) {
                     binaryExprNode.Type = Type.BOOL;
                 }else{
-                    TypeErrorOccured(binaryExprNode, binaryExprNode.leftNode.Type, binaryExprNode.rightNode.Type, Type.TEXT, Type.TEXT);
+                    TypeErrorOccured(binaryExprNode, binaryExprNode.leftNode.Type, binaryExprNode.rightNode.Type, binaryExprNode.binaryOperator, Type.TEXT, Type.TEXT);
                 }
 
                 if(checkExpectedType(binaryExprNode, Type.NUM)){
@@ -105,7 +119,7 @@ public class TypeChecker extends Visitor {
                 }
                 else{
                     binaryExprNode.Type = Type.ERROR;
-                    TypeErrorOccured(binaryExprNode, binaryExprNode.leftNode.Type, binaryExprNode.rightNode.Type, Type.NUM, Type.TEXT);
+                    TypeErrorOccured(binaryExprNode, binaryExprNode.leftNode.Type, binaryExprNode.rightNode.Type, binaryExprNode.binaryOperator, Type.NUM, Type.TEXT);
                 }
                 break;
             case AND:
@@ -115,16 +129,11 @@ public class TypeChecker extends Visitor {
                 }
                 else{
                     binaryExprNode.Type = Type.ERROR;
-                    TypeErrorOccured(binaryExprNode, binaryExprNode.leftNode.Type, binaryExprNode.rightNode.Type, Type.BOOL);
+                    TypeErrorOccured(binaryExprNode, binaryExprNode.leftNode.Type, binaryExprNode.rightNode.Type, Type.BOOL, binaryExprNode.binaryOperator);
                 }
                 break;
             case EQUAL:
             case NOTEQUAL:
-                if(checkExpectedType(binaryExprNode, Type.TEXT)){
-                        binaryExprNode.Type = Type.TEXT;
-                }else{
-                    TypeErrorOccured(binaryExprNode, binaryExprNode.leftNode.Type, binaryExprNode.rightNode.Type, Type.TEXT, Type.TEXT);
-                }
                 if(checkExpectedType(binaryExprNode, Type.BOOL)
                         || checkExpectedType(binaryExprNode, Type.NUM)) {
                     binaryExprNode.Type = Type.BOOL;
@@ -132,7 +141,7 @@ public class TypeChecker extends Visitor {
                     binaryExprNode.Type = Type.BOOL;
                 }else {
                     binaryExprNode.Type = Type.ERROR;
-                    TypeErrorOccured(binaryExprNode, binaryExprNode.leftNode.Type, binaryExprNode.rightNode.Type, Type.NUM, Type.BOOL);
+                    TypeErrorOccured(binaryExprNode, binaryExprNode.leftNode.Type, binaryExprNode.rightNode.Type, binaryExprNode.binaryOperator, Type.NUM, Type.BOOL, Type.TEXT);
                 }
                 break;
             default:
