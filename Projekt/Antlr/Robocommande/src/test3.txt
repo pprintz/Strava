@@ -20,9 +20,9 @@ strategy default:
 
 ;
 define void Foo(num a, num b):
-    num lol := Bar()
+    num lol := Bar("asdasdad", 32, 42 , 2202002)
 ;
-define num Bar(num a):
+define num Bar():
     return 42
 ;
 

@@ -184,15 +184,11 @@ public class TypeChecker extends Visitor {
                                                                     expectedSignature, actualSignature));
             }
         } else if (actualParamsNode != null || formalParamsNode != null) {
-            int count;
-            if(actualParamsNode == null){
-                count = 0;
-            }
-            else {
-                count = actualParamsNode.exprs.size();
-            }
-            String actualSignature = paramsTypesToString(actualParamsNode, count);
-            String expectedSignature = paramsTypesToString(formalParamsNode, formalParamsNode.typeNodes.size());
+            int actualParamsCount = actualParamsNode == null ? 0 : actualParamsNode.exprs.size();
+            int formalParamsCount = formalParamsNode == null ? 0 : formalParamsNode.typeNodes.size();
+
+            String actualSignature = paramsTypesToString(actualParamsNode, actualParamsCount);
+            String expectedSignature = paramsTypesToString(formalParamsNode, formalParamsCount);
             Main.CompileErrors.add(new ParameterMismatchError(node.columnNumber, node.lineNumber,
                     expectedSignature, actualSignature));
         }
@@ -206,7 +202,7 @@ public class TypeChecker extends Visitor {
                 if (i == count - 1) {
                     stringRep += formalParamsNode.typeNodes.get(i).Type.toString();
                 } else {
-                    stringRep += formalParamsNode.typeNodes.get(1).Type.toString() + ", ";
+                    stringRep += formalParamsNode.typeNodes.get(i).Type.toString() + ", ";
                 }
             }
         }
@@ -221,7 +217,7 @@ public class TypeChecker extends Visitor {
                 if (i == count - 1) {
                     stringRep += actualParamsNode.exprs.get(i).Type.toString();
                 } else {
-                    stringRep += actualParamsNode.exprs.get(1).Type.toString() + ", ";
+                    stringRep += actualParamsNode.exprs.get(i).Type.toString() + ", ";
                 }
             }
         }
