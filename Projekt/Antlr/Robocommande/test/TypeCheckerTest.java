@@ -14,13 +14,8 @@ import static org.junit.Assert.assertTrue;
  * Created by pprintz on 5/10/17.
  */
 public class TypeCheckerTest {
-    private ASTNode astGood1;
-    private ASTNode astGood2;
-    private ASTNode astGood3;
-    private ASTNode astGood4;
     private ASTNode astBad1;
-    private ASTNode astBad2;
-    private ASTNode astBad3;
+
     @Before
     public void Before() throws Exception{
 
@@ -31,6 +26,10 @@ public class TypeCheckerTest {
     public void TypeCheckerTest(){
         TypeChecker typeChecker = new TypeChecker();
         System.out.println("running bad1");
+        FunctionBindingVisitor functionBindingVisitor = new FunctionBindingVisitor();
+        functionBindingVisitor.visit(astBad1);
+        BindingVisitor bindingVisitor = new BindingVisitor(functionBindingVisitor.getSymbolTable());
+        bindingVisitor.visit(astBad1);
         typeChecker.visit(astBad1);
         assertFalse(typeChecker.programHasTypeErrors);
         System.out.println("... bad01 passed\n");
