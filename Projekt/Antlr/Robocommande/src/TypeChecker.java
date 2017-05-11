@@ -110,11 +110,8 @@ public class TypeChecker extends Visitor {
             case LESSTHAN:
                 if(checkExpectedType(binaryExprNode, Type.TEXT)) {
                     binaryExprNode.Type = Type.BOOL;
-                }else{
-                    TypeErrorOccured(binaryExprNode, binaryExprNode.leftNode.Type, binaryExprNode.rightNode.Type, binaryExprNode.binaryOperator, Type.TEXT, Type.TEXT);
                 }
-
-                if(checkExpectedType(binaryExprNode, Type.NUM)){
+                else if(checkExpectedType(binaryExprNode, Type.NUM)){
                     binaryExprNode.Type = Type.BOOL;
                 }
                 else{
@@ -380,6 +377,11 @@ public class TypeChecker extends Visitor {
         TypeAndExprMatches(node, currentBlockTypeNode, node.exprNode);
     }
 
+    public void visit(NewEventNode node){
+    	currentBlockTypeNode = node.typeNode;
+    	super.visit(node);
+	}
+
     public void visit(DefineFunctionNode node){
         currentBlockTypeNode = node.typeNode;
         super.visit(node);
@@ -391,9 +393,11 @@ public class TypeChecker extends Visitor {
         super.visit(node);
     }
 
-    public void visit(LoopNode node){
-        visit(node.exprNode);
-        checkPredicate(node, node.exprNode);
+    public void visit(LoopNode node){ // TODO: Move to earlier
+    	if(node.exprNode != null){
+			visit(node.exprNode);
+			checkPredicate(node, node.exprNode);
+		}
         super.visit(node);
     }
 
