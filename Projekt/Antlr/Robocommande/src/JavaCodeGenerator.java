@@ -274,10 +274,10 @@ public class JavaCodeGenerator extends Visitor {
 
     private void EmitAllInterfaceEventDefinitions() {
 	    for (String eventString : events) {
-	        Emit("public void on" + eventString + "(" + eventString + "Event e);", 1);
+	        Emit("void on" + eventString + "(" + eventString + "Event e);", 1);
         }
 		for (NewEventNode newCustomEvent : newCustomEvents) {
-			Emit("public void " + newCustomEvent.idNode.id + "(); // new custom event", 1);
+			Emit("void " + newCustomEvent.idNode.id + "(); // new custom event", 1);
 		}
 	}
 
@@ -294,7 +294,7 @@ public class JavaCodeGenerator extends Visitor {
 
         Emit("interface Strategy {", 1);
 		indentationLevel++;
-		Emit("public void run();", 1);
+		Emit("void run();", 1);
         EmitAllInterfaceEventDefinitions();
 		indentationLevel--;
 		Emit("}", 2);
