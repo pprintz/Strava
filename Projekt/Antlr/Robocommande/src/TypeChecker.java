@@ -153,12 +153,20 @@ public class TypeChecker extends Visitor {
 
 
     public void visit(ExprFunctionCallNode node){
-        node.Type = node.defineFunctionNode.typeNode.Type;
-        CompareActualToFormalParams(node, node.actualParams, node.defineFunctionNode.formalParamsNode);
+    	if (node.defineFunctionNode == null) {
+			CompareActualToFormalParams(node, node.actualParams, null);
+		} else {
+			node.Type = node.defineFunctionNode.typeNode.Type;
+			CompareActualToFormalParams(node, node.actualParams, node.defineFunctionNode.formalParamsNode);
+		}
     }
 
     public void visit(FunctionCallNode node){
-        CompareActualToFormalParams(node, node.actualParams, node.defineFunctionNode.formalParamsNode);
+    	if (node.defineFunctionNode == null) {
+			CompareActualToFormalParams(node, node.actualParams, null);
+		} else {
+			CompareActualToFormalParams(node, node.actualParams, node.defineFunctionNode.formalParamsNode);
+		}
     }
 
     private void CompareActualToFormalParams(ASTNode node, ActualParamsNode actualParamsNode, FormalParamsNode formalParamsNode){
