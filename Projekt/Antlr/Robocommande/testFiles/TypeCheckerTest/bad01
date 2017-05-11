@@ -1,0 +1,20 @@
+strategy default:
+;
+
+
+define void Bar():
+    num newNewNum := Foo()
+
+    if newNewNum = 42:
+            ;
+
+;
+
+define num Foo():
+    num first := 2
+    num next := 40
+
+    num newNum := first + next
+
+    return newNum
+;
