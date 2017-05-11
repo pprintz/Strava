@@ -286,11 +286,13 @@ class DeclarationNode extends StmtNode {
 class NewEventNode extends StmtNode {
     public IdNode idNode;
     public BlockNode blockNode;
+	public TypeNode typeNode;
 
     public NewEventNode(IdNode idNode, BlockNode blockNode, RobocommandeParser.NewEventContext ctx) {
         super(ctx);
         this.idNode = idNode;
         this.blockNode = blockNode;
+        this.typeNode = new TypeNode("bool");
     }
     @Override
     public void accept(Visitor v) {
