@@ -1,0 +1,8 @@
+behavior onSetup():
+    struct person{text fname, text lname}
+;
+strategy default:
+;
+define text personToString(person p){
+
+}

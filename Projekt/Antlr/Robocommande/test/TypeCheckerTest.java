@@ -26,6 +26,7 @@ public class TypeCheckerTest {
 
 
           astBad1 = Main.GenerateAST(new FileInputStream("testFiles/TypeCheckerTest/bad01"));
+          astGood1 = Main.GenerateAST(new FileInputStream("testFiles/TypeCheckerTest/bad01"));
     }
     @Test
     public void TypeCheckerTest(){
