@@ -1,8 +1,10 @@
 behavior onSetup():
-    struct person{text fname, text lname}
+    person{text fname, text lname}
+    person p := person [fname := "Tony", lname := "Hoare"]
+    text t := personToString(p)
 ;
 strategy default:
 ;
-define text personToString(person p){
-
-}
+define text personToString(person p):
+    return "asd"
+;
