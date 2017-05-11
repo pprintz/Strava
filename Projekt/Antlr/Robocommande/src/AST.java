@@ -370,7 +370,8 @@ class FunctionCallNode extends StmtNode {
     public ActualParamsNode actualParams;
     public DefineFunctionNode defineFunctionNode;
 
-    public FunctionCallNode(FieldIdNode fieldIdNode, IdNode idNode, ActualParamsNode actualParams) {
+    public FunctionCallNode(FieldIdNode fieldIdNode, IdNode idNode, ActualParamsNode actualParams, RobocommandeParser.FunctionCallContext ctx) {
+        super(ctx);
         this.fieldIdNode = fieldIdNode;
         this.idNode = idNode;
         this.actualParams = actualParams;
@@ -404,7 +405,8 @@ class ExprFunctionCallNode extends ExprNode {
     public ActualParamsNode actualParams;
     public DefineFunctionNode defineFunctionNode;
 
-    public ExprFunctionCallNode(FieldIdNode fieldIdNode, IdNode idNode, ActualParamsNode actualParams) {
+    public ExprFunctionCallNode(FieldIdNode fieldIdNode, IdNode idNode, ActualParamsNode actualParams, RobocommandeParser.FCallContext ctx) {
+        super(ctx);
         this.fieldIdNode = fieldIdNode;
         this.idNode = idNode;
         this.actualParams = actualParams;

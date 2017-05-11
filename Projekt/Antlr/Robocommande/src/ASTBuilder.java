@@ -250,7 +250,7 @@ public class ASTBuilder extends RobocommandeBaseVisitor<ASTNode> {
 
         ActualParamsNode actualParamsNode = ctx.actualParams() != null ? (ActualParamsNode)visit(ctx.actualParams()) : null;
 
-        return new FunctionCallNode(fieldIdNode, idNode, actualParamsNode);
+        return new FunctionCallNode(fieldIdNode, idNode, actualParamsNode, ctx);
     }
 
     @Override
@@ -299,7 +299,7 @@ public class ASTBuilder extends RobocommandeBaseVisitor<ASTNode> {
 
         ActualParamsNode actualParamsNode = ctx.functionCall().actualParams() != null ? (ActualParamsNode)visit(ctx.functionCall().actualParams()) : null;
 
-        return new ExprFunctionCallNode(fieldIdNode, idNode, actualParamsNode);
+        return new ExprFunctionCallNode(fieldIdNode, idNode, actualParamsNode, ctx);
     }
 
     @Override

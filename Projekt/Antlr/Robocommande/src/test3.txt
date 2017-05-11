@@ -1,4 +1,5 @@
 behavior onSetup():
+    Foo(true,true)
     my{num val}
     ny{num bb}
     my x
@@ -12,16 +13,16 @@ behavior onSetup():
     a := 123 and 22
     a := true
     a := not 123
-    a := Foo(2,2)
+    a := Foo(true,2)
 
 ;
 strategy default:
 
 ;
-define num Foo(num a, num b):
+define void Foo(num a, num b):
     num lol := Bar()
 ;
-define num Bar():
+define num Bar(num a):
     return 42
 ;
 
