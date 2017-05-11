@@ -2,7 +2,7 @@ behavior onSetup () :
 	myStruct { num a }
 	//myStruct something := myStruct[  ]
 	// myStruct.a := 42
-	num a := 1
+	num ax := 1
 	num b := 2
 	// a.b := 3
 	log("\t180008238")
@@ -18,14 +18,14 @@ behavior onSetup () :
 
 strategy default:
 	behavior onRun () :
-		if a < 5 :
+		if ax < 5 :
 			ahead(10)
 		; else if 5 < 3 :
-			a := 4
+			ax := 4
 		; else :
 			back(10)
 		;
-		a := a + 2
+		ax := ax + 2
 	;
 
 	behavior onAlwaysTrue () :
@@ -67,14 +67,14 @@ strategy aggressive :
 	;
 ;
 
-define void printStuff(text a, num b) :
-	log(a + b)
+define void printStuff(text aq, text b) :
+	log(aq + b)
 ;
 
 strategy defensive :
 	behavior onRun() :
 		rotate(360)
-		printStuff("mama mia", 4)
+		printStuff("i", "hlo")
 	;
 
 	behavior onScannedRobot(scannedRobotEvent e) :

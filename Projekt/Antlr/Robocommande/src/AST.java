@@ -548,6 +548,9 @@ class TypeNode extends ASTNode{
             case "bool":
                 this.Type = Type.BOOL;
                 break;
+			case "void":
+				this.Type = Type.VOID;
+				break;
             default:
                 this.Type = Type.STRUCT;
                 break;
@@ -730,6 +733,7 @@ class IdNode extends ExprNode {
         NUM,
         TEXT,
         BOOL,
+		VOID,
         STRUCT,
         ERROR
     }

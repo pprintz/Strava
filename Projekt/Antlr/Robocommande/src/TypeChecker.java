@@ -176,6 +176,9 @@ public class TypeChecker extends Visitor {
                     }
                 }
             } else {
+				if(actualParamsCount != 0){
+					actualParamsNode.exprs.forEach(this::visit);
+				}
                 String actualSignature = paramsTypesToString(actualParamsNode, actualParamsCount);
                 String expectedSignature = paramsTypesToString(formalParamsNode, formalParamsNode.typeNodes.size());
                 Main.CompileErrors.add(new ParameterMismatchError(node.columnNumber, node.lineNumber,
@@ -184,7 +187,9 @@ public class TypeChecker extends Visitor {
         } else if (actualParamsNode != null || formalParamsNode != null) {
             int actualParamsCount = actualParamsNode == null ? 0 : actualParamsNode.exprs.size();
             int formalParamsCount = formalParamsNode == null ? 0 : formalParamsNode.typeNodes.size();
-
+            if(actualParamsCount != 0){
+            	actualParamsNode.exprs.forEach(this::visit);
+			}
             String actualSignature = paramsTypesToString(actualParamsNode, actualParamsCount);
             String expectedSignature = paramsTypesToString(formalParamsNode, formalParamsCount);
             Main.CompileErrors.add(new ParameterMismatchError(node.columnNumber, node.lineNumber,
@@ -347,7 +352,7 @@ public class TypeChecker extends Visitor {
 
     public void visit(IdNode node) {
         if (!node.isDeclaration) {
-            node.Type = node.declarationNode.typeNode.Type;
+			node.Type = node.declarationNode.typeNode.Type;
         } else {
             node.Type = Type.ERROR;
         }
