@@ -1,0 +1,6 @@
+strategy default:
+;
+
+define num Foo():
+    bool number := 1
+;

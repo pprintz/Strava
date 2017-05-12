@@ -1,0 +1,9 @@
+strategy default:
+;
+
+define num Foo():
+
+    LauStruct{num a, num b, text lau, num teitur}
+
+    LauStruct structTing := LauStruct[a := 1, b := 47, lau := "HelloLau", teitur := 42]
+;
