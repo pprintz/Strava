@@ -261,7 +261,7 @@ public class ASTBuilder extends RobocommandeBaseVisitor<ASTNode> {
         for(RobocommandeParser.AssignmentContext assignment : ctx.assignment()){
             assignments.add((AssignmentNode)visit(assignment));
         }
-        return new StructInitializationNode(typeNode, assignments);
+        return new StructInitializationNode(typeNode, assignments, ctx);
     }
 
     @Override
@@ -311,7 +311,7 @@ public class ASTBuilder extends RobocommandeBaseVisitor<ASTNode> {
     @Override
     public ASTNode visitUnaryExpr(RobocommandeParser.UnaryExprContext ctx) {
 
-        UnaryExprNode unaryExprNode = new UnaryExprNode((ExprNode) visit(ctx.expr()));
+        UnaryExprNode unaryExprNode = new UnaryExprNode((ExprNode) visit(ctx.expr()), ctx);
 
         switch (getOperatorSymbol(ctx.children, "(", "not", "-")) {
             case "(":

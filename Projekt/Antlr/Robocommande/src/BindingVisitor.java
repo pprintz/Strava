@@ -76,7 +76,7 @@ public class BindingVisitor extends Visitor {
         }
         if (!isDeclared) {
             hasBindingErrorOccured = true;
-            PrintNotDeclaredError("id", idNode.id, idNode);
+            Main.CompileErrors.add(new UndefinedError(idNode.columnNumber, idNode.lineNumber, idNode.id));
         }
     }
 
@@ -108,7 +108,13 @@ public class BindingVisitor extends Visitor {
 		}
 		if (!isDeclared) {
 			hasBindingErrorOccured = true;
-			PrintNotDeclaredError(" function", idName, node);
+			String funcName = "";
+			if(node instanceof FunctionCallNode) {
+                funcName = ((FunctionCallNode) node).idNode.id;
+            }else if(node instanceof ExprFunctionCallNode){
+			    funcName = ((ExprFunctionCallNode)node).idNode.id;
+            }
+            Main.CompileErrors.add(new UndefinedError(node.columnNumber, node.lineNumber, funcName));
 		}
 		return defineFunctionNode;
     }
@@ -123,12 +129,8 @@ public class BindingVisitor extends Visitor {
         }
         if (!isDeclared) {
             hasBindingErrorOccured = true;
-            PrintNotDeclaredError(" function ", fCallNode.idNode.id, fCallNode);
+            Main.CompileErrors.add(new UndefinedError(fCallNode.columnNumber, fCallNode.lineNumber, fCallNode.idNode.id));
         }
-    }
-
-    private void PrintNotDeclaredError(String type, String id, ASTNode node){
-        System.out.println("There is no " + type + " named: " + id + node.toString());
     }
 
     private void BindStructInitializationToDefinition(StructInitializationNode structInitializationNode) {
@@ -141,7 +143,9 @@ public class BindingVisitor extends Visitor {
             }
         }
         if (!isStructDefined) {
-            PrintNotDeclaredError("struct", structInitializationNode.typeNode.type, structInitializationNode);
+            Main.CompileErrors.add(new UndefinedError(structInitializationNode.columnNumber,
+                structInitializationNode.lineNumber,
+                structInitializationNode.typeNode.type));
         }
     }
 
@@ -161,7 +165,6 @@ public class BindingVisitor extends Visitor {
         structInitializationNode.structDefinitionNode.declarationNodes.forEach((d) -> oneToOneDeclAssMap.put(d.idNode.id, new DeclBoolTuple(d)));
 
         for (AssignmentNode assignmentNode : structInitializationNode.assignments) {
-            boolean doesAssigmentMatchFieldDecl = false;
             DeclBoolTuple tuple = oneToOneDeclAssMap.get(assignmentNode.idNode.id);
             if (tuple != null && !tuple.isBound) {
                 assignmentNode.idNode.declarationNode = tuple.declarationNode;
@@ -183,7 +186,7 @@ public class BindingVisitor extends Visitor {
         }
     }
 
-    private void BindStructDeclarationToDefinition(DeclarationNode node) {
+    private void BindInstantiatedStructToDef(DeclarationNode node) {
         boolean isStructDefined = false;
         for (int i = symbolTable.size() - 1; i >= 0; i--) {
             if (symbolTable.get(i).containsKey(node.typeNode.type)) {
@@ -192,13 +195,14 @@ public class BindingVisitor extends Visitor {
             }
         }
         if (!isStructDefined) {
-            PrintNotDeclaredError("struct", node.typeNode.type, node);
+            Main.CompileErrors.add(new UndefinedError(node.columnNumber, node.lineNumber, node.typeNode.type));
         }
     }
 
     @Override
     public void visit(FunctionCallNode node) {
         node.defineFunctionNode = BindFunctionCallToDeclaration(node, node.idNode.id, node.actualParams);
+        visit(node.actualParams);
     }
 
     @Override
@@ -229,7 +233,7 @@ public class BindingVisitor extends Visitor {
                     symbolTable.peek().put(node.idNode.id, node);
                     break;
                 default:
-                    BindStructDeclarationToDefinition(node);
+                    BindInstantiatedStructToDef(node);
                     symbolTable.peek().put(node.idNode.id, node);
 			}
 			if (node.exprNode != null) {
@@ -288,7 +292,7 @@ public class BindingVisitor extends Visitor {
     public void visit(FieldIdNode node) {
         node.structDefinitionNode = BindFieldXToDeclaration(node.idNodes);
         if (node.structDefinitionNode == null) {
-            PrintNotDeclaredError("struct", node.idNodes.get(0).id, node);
+            Main.CompileErrors.add(new UndefinedError(node.columnNumber, node.lineNumber, node.idNodes.get(0).id));
         }
     }
 
@@ -296,7 +300,7 @@ public class BindingVisitor extends Visitor {
     public void visit(FieldValueNode node) {
         node.structDefinitionNode = BindFieldXToDeclaration(node.idNodes);
         if (node.structDefinitionNode == null) {
-            PrintNotDeclaredError("struct", node.idNodes.get(0).id, node);
+            Main.CompileErrors.add(new UndefinedError(node.columnNumber, node.lineNumber, node.idNodes.get(0).id));
         }
     }
 

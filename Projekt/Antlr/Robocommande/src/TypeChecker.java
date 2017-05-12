@@ -22,7 +22,9 @@ public class TypeChecker extends Visitor {
 
     private void TypeErrorOccured(ASTNode node, String actualTypeString, String expectedTypeString) {
         programHasTypeErrors = true;
-        Main.CompileErrors.add(new TypeError(node.columnNumber, node.lineNumber, actualTypeString, expectedTypeString));
+        if(!actualTypeString.equals("ERROR")) {
+            Main.CompileErrors.add(new TypeError(node.columnNumber, node.lineNumber, actualTypeString, expectedTypeString));
+        }
     }
 
     private void TypeErrorOccured(ASTNode node, String typeOne, Type expectedType, UnaryOperator unaryOperator) {
@@ -33,8 +35,8 @@ public class TypeChecker extends Visitor {
     private void TypeErrorOccured(ASTNode node, Type typeOne, Type typeTwo, Type expectedType, BinaryOperator binaryOperator) {
         programHasTypeErrors = true;
         Main.CompileErrors.add(new UndefinedBinaryOperationError(node.columnNumber, node.lineNumber,
-                typeOne.toString(), typeTwo.toString(),
-                binaryOperator, expectedType.toString()));
+            typeOne.toString(), typeTwo.toString(),
+            binaryOperator, expectedType.toString()));
     }
 
     private void TypeErrorOccured(ASTNode node, Type typeOne, Type typeTwo, BinaryOperator binaryOperator,
@@ -48,8 +50,8 @@ public class TypeChecker extends Visitor {
         }
 
         Main.CompileErrors.add(new UndefinedBinaryOperationError(node.columnNumber, node.lineNumber,
-                typeOne.toString(), typeTwo.toString(),
-                binaryOperator, a));
+            typeOne.toString(), typeTwo.toString(),
+            binaryOperator, a));
     }
 
     public void visit(UnaryExprNode unaryExprNode) {
@@ -109,9 +111,7 @@ public class TypeChecker extends Visitor {
             case LESSTHAN:
                 if (checkExpectedType(binaryExprNode, Type.TEXT)) {
                     binaryExprNode.Type = Type.BOOL;
-                }
-
-                else if(checkExpectedType(binaryExprNode, Type.NUM)){
+                } else if (checkExpectedType(binaryExprNode, Type.NUM)) {
                     binaryExprNode.Type = Type.BOOL;
                 } else {
                     binaryExprNode.Type = Type.ERROR;
@@ -130,7 +130,7 @@ public class TypeChecker extends Visitor {
             case EQUAL:
             case NOTEQUAL:
                 if (checkExpectedType(binaryExprNode, Type.BOOL)
-                        || checkExpectedType(binaryExprNode, Type.NUM)) {
+                    || checkExpectedType(binaryExprNode, Type.NUM)) {
                     binaryExprNode.Type = Type.BOOL;
                 } else if (checkExpectedType(binaryExprNode, Type.TEXT)) {
                     binaryExprNode.Type = Type.BOOL;
@@ -172,35 +172,37 @@ public class TypeChecker extends Visitor {
                     for (int i = 0; i < actualParamsCount; i++) {
                         TypeNode currentFormalTypeNode = formalParamsNode.typeNodes.get(i);
                         ExprNode currentActualExprNode = actualParamsNode.exprs.get(i);
+                        if(currentActualExprNode.Type == Type.STRUCT && currentActualExprNode instanceof IdNode){
+                        }
                         TypeAndExprMatches(node, currentFormalTypeNode, currentActualExprNode);
                     }
                 }
             } else {
-				if(actualParamsCount != 0){
-					actualParamsNode.exprs.forEach(this::visit);
-				}
+                if (actualParamsCount != 0) {
+                    actualParamsNode.exprs.forEach(this::visit);
+                }
                 String actualSignature = paramsTypesToString(actualParamsNode, actualParamsCount);
                 String expectedSignature = paramsTypesToString(formalParamsNode, formalParamsNode.typeNodes.size());
                 Main.CompileErrors.add(new ParameterMismatchError(node.columnNumber, node.lineNumber,
-                                                                    expectedSignature, actualSignature));
+                    expectedSignature, actualSignature));
             }
         } else if (actualParamsNode != null || formalParamsNode != null) {
             int actualParamsCount = actualParamsNode == null ? 0 : actualParamsNode.exprs.size();
             int formalParamsCount = formalParamsNode == null ? 0 : formalParamsNode.typeNodes.size();
-            if(actualParamsCount != 0){
-            	actualParamsNode.exprs.forEach(this::visit);
-			}
+            if (actualParamsCount != 0) {
+                actualParamsNode.exprs.forEach(this::visit);
+            }
             String actualSignature = paramsTypesToString(actualParamsNode, actualParamsCount);
             String expectedSignature = paramsTypesToString(formalParamsNode, formalParamsCount);
             Main.CompileErrors.add(new ParameterMismatchError(node.columnNumber, node.lineNumber,
-                    expectedSignature, actualSignature));
+                expectedSignature, actualSignature));
         }
     }
 
     //TypeSystem GIT TEST
     private String paramsTypesToString(FormalParamsNode formalParamsNode, int count) {
         String stringRep = "(";
-        if(formalParamsNode != null) {
+        if (formalParamsNode != null) {
             for (int i = 0; i < count; i++) {
                 if (i == count - 1) {
                     stringRep += formalParamsNode.typeNodes.get(i).Type.toString();
@@ -215,7 +217,7 @@ public class TypeChecker extends Visitor {
 
     private String paramsTypesToString(ActualParamsNode actualParamsNode, int count) {
         String stringRep = "(";
-        if(actualParamsNode != null) {
+        if (actualParamsNode != null) {
             for (int i = 0; i < count; i++) {
                 if (i == count - 1) {
                     stringRep += actualParamsNode.exprs.get(i).Type.toString();
@@ -280,15 +282,6 @@ public class TypeChecker extends Visitor {
     public void visit(LiteralNode node) {
     }
 
-    // a := 2
-    // a := lol
-
-    // struct != struct
-    // struct != else
-    // else != struct
-    // else1 != else2
-
-
     public void visit(AssignmentNode node) {
         TypeAndExprMatches(node, node.idNode.declarationNode.typeNode, node.exprNode);
     }
@@ -352,7 +345,7 @@ public class TypeChecker extends Visitor {
 
     public void visit(IdNode node) {
         if (!node.isDeclaration) {
-			node.Type = node.declarationNode.typeNode.Type;
+            node.Type = node.declarationNode.typeNode.Type;
         } else {
             node.Type = Type.ERROR;
         }
@@ -413,12 +406,12 @@ public class TypeChecker extends Visitor {
         TypeAndExprMatches(node, currentBlockTypeNode, node.exprNode);
     }
 
-    public void visit(NewEventNode node){
-    	currentBlockTypeNode = node.typeNode;
-    	super.visit(node);
-	}
+    public void visit(NewEventNode node) {
+        currentBlockTypeNode = node.typeNode;
+        super.visit(node);
+    }
 
-    public void visit(DefineFunctionNode node){
+    public void visit(DefineFunctionNode node) {
         currentBlockTypeNode = node.typeNode;
         super.visit(node);
     }
@@ -429,11 +422,11 @@ public class TypeChecker extends Visitor {
         super.visit(node);
     }
 
-    public void visit(LoopNode node){ // TODO: Move to earlier
-    	if(node.exprNode != null){
-			visit(node.exprNode);
-			checkPredicate(node, node.exprNode);
-		}
+    public void visit(LoopNode node) { // TODO: Move to earlier
+        if (node.exprNode != null) {
+            visit(node.exprNode);
+            checkPredicate(node, node.exprNode);
+        }
         super.visit(node);
     }
 

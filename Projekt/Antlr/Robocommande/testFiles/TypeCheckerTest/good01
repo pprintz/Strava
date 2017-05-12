@@ -1,7 +1,8 @@
 behavior onSetup():
     person{text fname, text lname}
-    person p := person [fname := "Tony", lname := "Hoare"]
-    text t := personToString(p)
+    person a
+    num b := 23
+    personToString(a)
 ;
 strategy default:
 ;

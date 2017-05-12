@@ -268,9 +268,6 @@ class DeclarationNode extends StmtNode {
         this.typeNode = typeNode;
         this.idNode = idNode;
         this.exprNode = null;
-
-
-
     }
     public DeclarationNode(TypeNode typeNode, IdNode idNode, ExprNode exprNode, RobocommandeParser.DeclarationContext ctx) {
         super(ctx);
@@ -389,7 +386,8 @@ class StructInitializationNode extends ExprNode {
     public List<AssignmentNode> assignments;
     public StructDefinitionNode structDefinitionNode;
 
-    public StructInitializationNode(TypeNode typeNode, List<AssignmentNode> assignments) {
+    public StructInitializationNode(TypeNode typeNode, List<AssignmentNode> assignments, RobocommandeParser.StructInitializationContext ctx) {
+        super(ctx);
         this.typeNode = typeNode;
         this.assignments = assignments;
         this.Type = typeNode.Type;
@@ -602,7 +600,8 @@ class IdNode extends ExprNode {
             this.exprNode = exprNode;
             this.unaryOperator = unaryOperator;
         }
-        public UnaryExprNode(ExprNode exprNode) {
+        public UnaryExprNode(ExprNode exprNode, RobocommandeParser.UnaryExprContext ctx) {
+            super(ctx);
             this.exprNode = exprNode;
         }
 

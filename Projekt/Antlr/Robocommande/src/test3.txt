@@ -3,6 +3,8 @@ behavior onSetup():
     my{num val}
     ny{num bb}
     my x
+    tis v := tis[]
+    Lol()
     x.val := 2
     ny y
     bool xyz := true = true

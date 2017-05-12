@@ -12,6 +12,6 @@ public class UndefinedError extends Error {
 
     @Override
     public String toString() {
-        return lineNumber + "/" + columnNumber + ": " + referenceName + " not defined";
+        return lineNumber +  ": " + referenceName + " not defined";
     }
 }
