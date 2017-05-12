@@ -1,6 +1,4 @@
-import java.util.HashMap;
-import java.util.List;
-import java.util.Stack;
+import java.util.*;
 
 public class BindingVisitor extends Visitor {
     private Stack<HashMap<String, ASTNode>> symbolTable;
@@ -10,15 +8,54 @@ public class BindingVisitor extends Visitor {
 	public BindingVisitor(Stack<HashMap<String, ASTNode>> symbolTableWithFunctions) {
 		symbolTable = symbolTableWithFunctions;
 		roboFunctions = new HashMap<>();
-		AddRoboFunctionsToHashMap();
-	}
+		AddRoboFunctionToSymbolTable("void", "log", new String[]{"text"}, new String[]{"message"});
+        AddRoboFunctionsToHashMap();
+    }
 
     private void OpenScope() {
+
         symbolTable.push(new HashMap<>());
     }
 
     private void CloseScope() {
         symbolTable.pop();
+    }
+
+    /**
+     * Adds a function specific to Robocommande to the symbol table so that TypeChecker doesn't complain.
+     * @param returnTypeString The function return type. Must be either "num", "text", or "bool".
+     * @param functionId The name of the function.
+     * @param paramTypes A list of parameter types as an array of String. Amount must match with amount of paramIds.
+     * @param paramIds A list of parameter IDs as an array of String. Amount must match with amount of paramTypes.
+     */
+    private void AddRoboFunctionToSymbolTable(String returnTypeString, String functionId, String[] paramTypes, String[] paramIds) {
+	    ArrayList<TypeNode> typeNodes = new ArrayList<>();
+	    ArrayList<IdNode> paramNodes = new ArrayList<>();
+
+	    switch (returnTypeString) {
+            case "void": case "num": case "text": case "bool":
+                break;  // TODO: Add struct allowance
+            default:
+                throw new IllegalArgumentException("Only types of void, num, text, bool are allowed.");
+        }
+
+	    for (String paramType : paramTypes) {
+            typeNodes.add(new TypeNode(paramType));
+        }
+        for (String paramId : paramIds) {
+	        paramNodes.add(new IdNode(paramId));
+        }
+        if (typeNodes.size() != paramNodes.size()) {
+	        throw new IllegalArgumentException("Mismatch between number of parameter types and parameter IDs in function definition.");
+        }
+
+        DefineFunctionNode defFuncNode = new DefineFunctionNode(
+            new TypeNode(returnTypeString),
+            new IdNode(functionId),
+            new FormalParamsNode(typeNodes, paramNodes)
+        );
+
+        symbolTable.peek().put(functionId, defFuncNode);
     }
 
 	private void AddRoboFunctionsToHashMap() {
@@ -106,6 +143,7 @@ public class BindingVisitor extends Visitor {
 				isDeclared = true;
 			}
 		}
+
 		if (!isDeclared) {
 			hasBindingErrorOccured = true;
 			String funcName = "";
@@ -241,7 +279,7 @@ public class BindingVisitor extends Visitor {
 			}
 		} else hasBindingErrorOccured = true;
 
-	}
+    }
 
     // TODO : fields with same names in different struct definit
 	private boolean doesDeclExistLocally(DeclarationNode node) {
