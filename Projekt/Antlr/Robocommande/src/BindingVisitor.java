@@ -59,7 +59,7 @@ public class BindingVisitor extends Visitor {
     }
 
 	private void AddRoboFunctionsToHashMap() {
-		roboFunctions.put("ahead", "ahead"); // void -> void
+		roboFunctions.put("ahead", "ahead"); // double -> void
 		roboFunctions.put("back", "back"); // double -> void
 		roboFunctions.put("changeStrategy", "changeStrategy"); // String
 		roboFunctions.put("doNothing", "doNothing"); // void -> void
@@ -240,7 +240,9 @@ public class BindingVisitor extends Visitor {
     @Override
     public void visit(FunctionCallNode node) {
         node.defineFunctionNode = BindFunctionCallToDeclaration(node, node.idNode.id, node.actualParams);
-        visit(node.actualParams);
+        if(node.actualParams != null) {
+            visit(node.actualParams);
+        }
     }
 
     @Override
@@ -287,12 +289,11 @@ public class BindingVisitor extends Visitor {
 			if (symbolTable.get(i).containsKey(node.idNode.id)) {
 				DeclarationNode declNodeFound = (DeclarationNode) symbolTable.get(i).get(node.idNode.id);
 				if (!declNodeFound.IsGlobal) {
-					System.out.println("Already declared variable with name: " + node.idNode.id + " LINE " + declNodeFound.lineNumber);
+                    Main.CompileErrors.add(new RedeclarationError(node.columnNumber, node.lineNumber, node.idNode.id));
 					return true;
 				} else {
 					if (i == symbolTable.size() - 1) {
-						System.out.println("Already declared variable with name: " + node.idNode.id +
-								" LINE " + declNodeFound.lineNumber + " COLUMN " + declNodeFound.columnNumber);
+					    Main.CompileErrors.add(new RedeclarationError(node.columnNumber, node.lineNumber, node.idNode.id));
 						return true;
 					}
 				}

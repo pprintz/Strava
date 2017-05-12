@@ -1,0 +1,11 @@
+behavior onSetup():
+    person{text fname, text lname}
+    foo(person[fname := "Peter", lname := "Naur"])
+;
+strategy default:
+;
+
+define bool foo(person p):
+
+;
+

@@ -1,12 +1,13 @@
 behavior onSetup():
-    Foo(true,true)
     my{num val}
     ny{num bb}
+    my x
     my x
     tis v := tis[]
     Lol()
     x.val := 2
     ny y
+    x.pik := 2
     bool xyz := true = true
     x := x = y
     x := y

@@ -2,5 +2,5 @@ strategy default:
 ;
 
 define num Foo():
-    num boolian := true
+    num boolean := true
 ;
