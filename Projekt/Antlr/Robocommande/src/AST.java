@@ -198,6 +198,12 @@ class DefineFunctionNode extends ASTNode {
         this.blockNode = blockNode;
     }
 
+    public DefineFunctionNode(TypeNode typeNode, IdNode idNode, FormalParamsNode formalParamsNode) {
+        this.typeNode = typeNode;
+        this.idNode = idNode;
+        this.formalParamsNode = formalParamsNode;
+    }
+
     @Override
     public void accept(Visitor v) {
         v.visit(this);
@@ -268,10 +274,8 @@ class DeclarationNode extends StmtNode {
         this.typeNode = typeNode;
         this.idNode = idNode;
         this.exprNode = null;
-
-
-
     }
+
     public DeclarationNode(TypeNode typeNode, IdNode idNode, ExprNode exprNode, RobocommandeParser.DeclarationContext ctx) {
         super(ctx);
         this.typeNode = typeNode;
