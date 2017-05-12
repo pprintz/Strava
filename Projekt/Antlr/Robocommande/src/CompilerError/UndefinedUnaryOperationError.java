@@ -1,7 +1,13 @@
+package CompilerError;
+
+import Enums.UnaryOperator;
+
+import java.lang.*;
+
 /**
  * Created by pprintz on 5/10/17.
  */
-public class UndefinedUnaryOperationError extends Error{
+public class UndefinedUnaryOperationError extends Error {
     private String operand;
     private UnaryOperator unaryOperator;
     private String validType;

@@ -4,6 +4,7 @@ behavior onSetup():
     my x
     my x
     tis v := tis[]
+    my babe := my[babe := 20, val := 33]
     Lol()
     x.val := 2
     ny y

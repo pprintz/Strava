@@ -1,3 +1,7 @@
+package CompilerError;
+
+import java.lang.*;
+
 /**
  * Created by Teitur on 08-05-2017.
  */

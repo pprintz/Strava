@@ -1,5 +1,6 @@
 import java.util.LinkedList;
 import java.util.Queue;
+import CompilerError.*;
 
 /**
  * Created by pprintz on 5/8/17.

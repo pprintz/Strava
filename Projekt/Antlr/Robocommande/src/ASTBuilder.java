@@ -1,3 +1,5 @@
+import Enums.BinaryOperator;
+import Enums.UnaryOperator;
 import org.antlr.v4.runtime.tree.ParseTree;
 
 import java.util.ArrayList;
@@ -324,7 +326,7 @@ public class ASTBuilder extends RobocommandeBaseVisitor<ASTNode> {
                 unaryExprNode.unaryOperator = UnaryOperator.NEGATE;
                 break;
             default:
-                // TODO Error handling?
+                // TODO Error.Error handling?
                 return null;
         }
 
@@ -388,7 +390,7 @@ public class ASTBuilder extends RobocommandeBaseVisitor<ASTNode> {
                 binaryExprNode.binaryOperator = BinaryOperator.NOTEQUAL;
                 break;
             default:
-                // TODO Error handling?
+                // TODO Error.Error handling?
                 return null;
         }
         return binaryExprNode;

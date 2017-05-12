@@ -1,7 +1,13 @@
+package CompilerError;
+
+import Enums.BinaryOperator;
+
+import java.lang.*;
+
 /**
  * Created by pprintz on 5/10/17.
  */
-public class UndefinedBinaryOperationError extends Error{
+public class UndefinedBinaryOperationError extends Error {
     private String leftOperandType;
     private String rightOperandType;
     private BinaryOperator binaryOperator;

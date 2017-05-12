@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Main {
-    public static List<Error> CompileErrors = new ArrayList<>();
+    public static List<Error.Error> CompileErrors = new ArrayList<>();
     public static void main(String[] args) throws Exception {
         String inputFile = null;
         ASTNode ast = null;
@@ -34,7 +34,7 @@ public class Main {
         typeChecker.visit(ast);
 
         if (BindingVisitor.hasBindingErrorOccured || typeChecker.programHasTypeErrors || vrv.hasReturnError) {
-            for(Error e : Main.CompileErrors){
+            for(Error.Error e : Main.CompileErrors){
                 System.out.println(e.toString());
             }
             System.exit(0);

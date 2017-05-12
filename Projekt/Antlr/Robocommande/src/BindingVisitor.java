@@ -1,4 +1,5 @@
 import java.util.*;
+import CompilerError.*;
 
 public class BindingVisitor extends Visitor {
     private Stack<HashMap<String, ASTNode>> symbolTable;
@@ -152,23 +153,9 @@ public class BindingVisitor extends Visitor {
             }else if(node instanceof ExprFunctionCallNode){
 			    funcName = ((ExprFunctionCallNode)node).idNode.id;
             }
-            Main.CompileErrors.add(new UndefinedError(node.columnNumber, node.lineNumber, funcName));
+            Main.CompileErrors.add(new CompilerError.UndefinedError(node.columnNumber, node.lineNumber, funcName));
 		}
 		return defineFunctionNode;
-    }
-
-    private void BindExprFunctionCallToDeclaration(ExprFunctionCallNode fCallNode) {
-        boolean isDeclared = false;
-        for (int i = symbolTable.size() - 1; i >= 0; i--) {
-            if (symbolTable.get(i).containsKey(fCallNode.idNode)) {
-                fCallNode.defineFunctionNode = (DefineFunctionNode) symbolTable.get(i).get(fCallNode.idNode);
-                isDeclared = true;
-            }
-        }
-        if (!isDeclared) {
-            hasBindingErrorOccured = true;
-            Main.CompileErrors.add(new UndefinedError(fCallNode.columnNumber, fCallNode.lineNumber, fCallNode.idNode.id));
-        }
     }
 
     private void BindStructInitializationToDefinition(StructInitializationNode structInitializationNode) {
@@ -181,7 +168,7 @@ public class BindingVisitor extends Visitor {
             }
         }
         if (!isStructDefined) {
-            Main.CompileErrors.add(new UndefinedError(structInitializationNode.columnNumber,
+            Main.CompileErrors.add(new CompilerError.UndefinedError(structInitializationNode.columnNumber,
                 structInitializationNode.lineNumber,
                 structInitializationNode.typeNode.type));
         }
@@ -201,7 +188,7 @@ public class BindingVisitor extends Visitor {
         HashMap<String, DeclBoolTuple> oneToOneDeclAssMap = new HashMap<>();
 
         structInitializationNode.structDefinitionNode.declarationNodes.forEach((d) -> oneToOneDeclAssMap.put(d.idNode.id, new DeclBoolTuple(d)));
-
+        boolean structLiteralErrorOccured = false;
         for (AssignmentNode assignmentNode : structInitializationNode.assignments) {
             DeclBoolTuple tuple = oneToOneDeclAssMap.get(assignmentNode.idNode.id);
             if (tuple != null && !tuple.isBound) {
@@ -209,21 +196,52 @@ public class BindingVisitor extends Visitor {
                 tuple.isBound = true;
                 visit(assignmentNode.exprNode);
             } else if (tuple != null) {
-                System.out.println("The field '" + tuple.declarationNode.idNode.id + "' cannot be initialized multiple times.");
+                Main.CompileErrors.add(new CompilerError.DuplicateFieldAssignmentInStructLitteralError(assignmentNode.columnNumber, assignmentNode.lineNumber, assignmentNode.idNode.id));
                 break;
             } else {
-                System.out.println("The field '" + assignmentNode.idNode.id + "' does not exist in the definition of struct '" + structInitializationNode.structDefinitionNode.typeNode.type + "'.");
+                structLiteralErrorOccured = true;
+                Main.CompileErrors.add(new CompilerError.InvalidStructLitteralError(structInitializationNode.columnNumber,
+                    structInitializationNode.lineNumber, getExpectedStructLitteralSignature(structInitializationNode.structDefinitionNode.declarationNodes),
+                    getActualStructLitteralSignature(structInitializationNode.assignments)));
                 break;
             }
         }
 
         for (DeclBoolTuple tuple : oneToOneDeclAssMap.values()) {
-            if (!tuple.isBound) {
-                System.out.println("The field '" + tuple.declarationNode.idNode.id + "' needs to be initialized.");
+            if (!tuple.isBound && !structLiteralErrorOccured) {
+                Main.CompileErrors.add(new CompilerError.InvalidStructLitteralError(structInitializationNode.columnNumber,
+                    structInitializationNode.lineNumber, getExpectedStructLitteralSignature(structInitializationNode.structDefinitionNode.declarationNodes),
+                    getActualStructLitteralSignature(structInitializationNode.assignments)));
             }
         }
     }
+    private String getActualStructLitteralSignature(List<AssignmentNode> assignmentNodes){
+        int lenght = assignmentNodes.size();
+        String stringRep = "[";
+        for(int i = 0; i < lenght; i++){
+            if(i == lenght-1) {
+                stringRep += assignmentNodes.get(i).idNode.id + " := expression]";
+            }
+            else {
+                stringRep += assignmentNodes.get(i).idNode.id + " := expression, ";
+            }
+        }
+        return stringRep;
+    }
 
+    private String getExpectedStructLitteralSignature(List<DeclarationNode> declarationNodes){
+        int lenght = declarationNodes.size();
+        String stringRep = "[";
+        for(int i = 0; i < lenght; i++){
+            if(i == lenght-1) {
+                stringRep += declarationNodes.get(i).idNode.id + " := expression]";
+            }
+            else {
+                stringRep += declarationNodes.get(i).idNode.id + " := expression, ";
+            }
+        }
+        return stringRep;
+    }
     private void BindInstantiatedStructToDef(DeclarationNode node) {
         boolean isStructDefined = false;
         for (int i = symbolTable.size() - 1; i >= 0; i--) {
@@ -233,7 +251,7 @@ public class BindingVisitor extends Visitor {
             }
         }
         if (!isStructDefined) {
-            Main.CompileErrors.add(new UndefinedError(node.columnNumber, node.lineNumber, node.typeNode.type));
+            Main.CompileErrors.add(new CompilerError.UndefinedError(node.columnNumber, node.lineNumber, node.typeNode.type));
         }
     }
 
@@ -289,11 +307,11 @@ public class BindingVisitor extends Visitor {
 			if (symbolTable.get(i).containsKey(node.idNode.id)) {
 				DeclarationNode declNodeFound = (DeclarationNode) symbolTable.get(i).get(node.idNode.id);
 				if (!declNodeFound.IsGlobal) {
-                    Main.CompileErrors.add(new RedeclarationError(node.columnNumber, node.lineNumber, node.idNode.id));
+                    Main.CompileErrors.add(new CompilerError.RedeclarationError(node.columnNumber, node.lineNumber, node.idNode.id));
 					return true;
 				} else {
 					if (i == symbolTable.size() - 1) {
-					    Main.CompileErrors.add(new RedeclarationError(node.columnNumber, node.lineNumber, node.idNode.id));
+					    Main.CompileErrors.add(new CompilerError.RedeclarationError(node.columnNumber, node.lineNumber, node.idNode.id));
 						return true;
 					}
 				}
@@ -331,7 +349,7 @@ public class BindingVisitor extends Visitor {
     public void visit(FieldIdNode node) {
         node.structDefinitionNode = BindFieldXToDeclaration(node.idNodes);
         if (node.structDefinitionNode == null) {
-            Main.CompileErrors.add(new UndefinedError(node.columnNumber, node.lineNumber, node.idNodes.get(0).id));
+            Main.CompileErrors.add(new CompilerError.UndefinedError(node.columnNumber, node.lineNumber, node.idNodes.get(0).id));
         }
     }
 
@@ -339,7 +357,7 @@ public class BindingVisitor extends Visitor {
     public void visit(FieldValueNode node) {
         node.structDefinitionNode = BindFieldXToDeclaration(node.idNodes);
         if (node.structDefinitionNode == null) {
-            Main.CompileErrors.add(new UndefinedError(node.columnNumber, node.lineNumber, node.idNodes.get(0).id));
+            Main.CompileErrors.add(new CompilerError.UndefinedError(node.columnNumber, node.lineNumber, node.idNodes.get(0).id));
         }
     }
 

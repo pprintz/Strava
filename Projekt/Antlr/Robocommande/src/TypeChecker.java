@@ -1,3 +1,8 @@
+import CompilerError.UndefinedBinaryOperationError;
+import Enums.BinaryOperator;
+import Enums.UnaryOperator;
+import CompilerError.*;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -339,7 +344,9 @@ public class TypeChecker extends Visitor {
         if (declarationNode != null) {
             TypeAndExprMatches(node, declarationNode.typeNode, node.exprNode);
         } else {
-            System.out.println("There exists no ");
+            Main.CompileErrors.add(new UndefinedError(node.columnNumber, node.lineNumber,
+                "field " + node.fieldIdNode.idNodes.
+                    get(node.fieldIdNode.idNodes.size()-1).id));
         }
     }
 

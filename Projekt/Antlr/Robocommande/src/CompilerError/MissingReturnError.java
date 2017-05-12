@@ -1,4 +1,8 @@
-public class MissingReturnError extends Error{
+package CompilerError;
+
+import java.lang.*;
+
+public class MissingReturnError extends Error {
 
     private String functionName;
 
