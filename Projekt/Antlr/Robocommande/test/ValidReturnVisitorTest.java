@@ -32,7 +32,7 @@ public class ValidReturnVisitorTest {
         astGood2 = Main.GenerateAST(new FileInputStream("testFiles/ValidReturnVisitorTest/good02"));
         astGood3 = Main.GenerateAST(new FileInputStream("testFiles/ValidReturnVisitorTest/good03"));
         astGood4 = Main.GenerateAST(new FileInputStream("testFiles/ValidReturnVisitorTest/good04"));
-        astBad1 = Main.GenerateAST(new FileInputStream("testFiles/ValidReturnVisitorTest/bad01"));
+        astBad1 = Main.GenerateAST(new FileInputStream("testFiles/ValidReturnVisitorTest/good03"));
         astBad2 = Main.GenerateAST(new FileInputStream("testFiles/ValidReturnVisitorTest/bad02"));
         astBad3 = Main.GenerateAST(new FileInputStream("testFiles/ValidReturnVisitorTest/bad03"));
 

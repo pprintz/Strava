@@ -6,6 +6,7 @@ behavior onSetup():
 ;
 strategy default:
 ;
+
 define text personToString(person p):
     return "asd"
 ;
