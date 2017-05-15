@@ -637,7 +637,7 @@ public class JavaCodeGenerator extends Visitor {
 			case NOTEQUAL:
 				return " != ";
 			default:
-				throw new RuntimeException("This should NEVER happen!");
+				throw new RuntimeException("Unknown binary operator. This should NEVER happen!");
 		}
 	}
 }
