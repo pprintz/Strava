@@ -172,8 +172,7 @@ public class JavaCodeGenerator extends Visitor {
 	    Emit("\n", 0);
         Emit("public void " + node.idNode.id + "(", 0);
         if(node.eventType != null) {
-			visit(node.eventType, false);
-			EmitNoIndent(" e");
+            EmitNoIndent(node.idNode.id.replace("on", "") + "Event e");
 		}
         EmitNoIndent(")");
         visit(node.blockNode);
@@ -243,17 +242,17 @@ public class JavaCodeGenerator extends Visitor {
 	public void visit(UnaryExprNode node) {
 		switch(node.unaryOperator){
 			case NEGATEBOOL:
-				Emit("!", 0);
+				EmitNoIndent("!");
 				visit(node.exprNode);
 				break;
 			case NEGATE:
-				Emit("-", 0);
+				EmitNoIndent("-");
 				visit(node.exprNode);
 				break;
 			case PARANTHESIS:
-				Emit("(", 0);
+				EmitNoIndent("(");
 				visit(node.exprNode);
-				Emit(")", 0);
+				EmitNoIndent(")");
 				break;
 		}
 	}
@@ -637,7 +636,7 @@ public class JavaCodeGenerator extends Visitor {
 			case NOTEQUAL:
 				return " != ";
 			default:
-				throw new RuntimeException("This should NEVER happen!");
+				throw new RuntimeException("Unknown binary operator. This should NEVER happen!");
 		}
 	}
 }
