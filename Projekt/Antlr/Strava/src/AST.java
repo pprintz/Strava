@@ -4,10 +4,6 @@ import org.antlr.v4.runtime.ParserRuleContext;
 
 import java.util.List;
 
-/**
- * Created by pprintz & kukucumber on 3/24/17.
- */
-
 abstract class ASTNode {
     public ASTNode() {
 
@@ -642,10 +638,10 @@ class IdNode extends ExprNode {
             this.binaryOperator = binaryOperator;
         }
 
-        public BinaryExprNode(ExprNode leftNode, ExprNode rigthNode, StravaParser.BinaryExprContext ctx) {
+        public BinaryExprNode(ExprNode leftNode, ExprNode rightNode, StravaParser.BinaryExprContext ctx) {
             super(ctx);
             this.leftNode = leftNode;
-            this.rightNode = rigthNode;
+            this.rightNode = rightNode;
             this.binaryOperator = binaryOperator;
         }
     }
