@@ -29,6 +29,3 @@ define void Foo(num a, num b):
 define num Bar():
     return 42
 ;
-
-
-
