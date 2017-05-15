@@ -242,17 +242,17 @@ public class JavaCodeGenerator extends Visitor {
 	public void visit(UnaryExprNode node) {
 		switch(node.unaryOperator){
 			case NEGATEBOOL:
-				Emit("!", 0);
+				EmitNoIndent("!");
 				visit(node.exprNode);
 				break;
 			case NEGATE:
-				Emit("-", 0);
+				EmitNoIndent("-");
 				visit(node.exprNode);
 				break;
 			case PARANTHESIS:
-				Emit("(", 0);
+				EmitNoIndent("(");
 				visit(node.exprNode);
-				Emit(")", 0);
+				EmitNoIndent(")");
 				break;
 		}
 	}
