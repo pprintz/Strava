@@ -1,11 +1,10 @@
-import org.antlr.v4.runtime.*;
-import org.antlr.v4.runtime.tree.*;
-import CompilerError.*;
+import org.antlr.v4.runtime.ANTLRInputStream;
+import org.antlr.v4.runtime.CommonTokenStream;
+import org.antlr.v4.runtime.tree.ParseTree;
 
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 public class Main {
@@ -53,9 +52,9 @@ public class Main {
 
     public static ASTNode GenerateAST(InputStream is) throws Exception {
         ANTLRInputStream input = new ANTLRInputStream(is);
-        RobocommandeLexer lexer = new RobocommandeLexer(input);
+        StravaLexer lexer = new StravaLexer(input);
         CommonTokenStream tokens = new CommonTokenStream(lexer);
-        RobocommandeParser parser = new RobocommandeParser(tokens);
+        StravaParser parser = new StravaParser(tokens);
         ParseTree cst = parser.prog();
         ASTBuilder astBuilder = new ASTBuilder();
         return astBuilder.visit(cst);

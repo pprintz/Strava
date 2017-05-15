@@ -53,7 +53,7 @@ class ProgNode extends ASTNode {
 class SetupNode extends ASTNode {
     public SetupBlockNode setupBlockNode;
 
-    public SetupNode(SetupBlockNode setupBlockNode, RobocommandeParser.SetupContext ctx) {
+    public SetupNode(SetupBlockNode setupBlockNode, StravaParser.SetupContext ctx) {
         super(ctx);
         this.setupBlockNode = setupBlockNode;
     }
@@ -82,7 +82,7 @@ class StrategyNode extends ASTNode {
     public StrategyDefinitionNode strategyDefinition;
 
     public StrategyNode(IdNode idNode,
-                        StrategyDefinitionNode strategyDefinition, RobocommandeParser.StrategyContext ctx) {
+                        StrategyDefinitionNode strategyDefinition, StravaParser.StrategyContext ctx) {
         super(ctx);
         this.idNode = idNode;
         this.strategyDefinition = strategyDefinition;
@@ -96,7 +96,7 @@ class StrategyNode extends ASTNode {
 class DefaultStrategyNode extends ASTNode {
     public StrategyDefinitionNode strategyDefinition;
 
-    public DefaultStrategyNode(StrategyDefinitionNode strategyDefinition, RobocommandeParser.DefaultStrategyContext ctx) {
+    public DefaultStrategyNode(StrategyDefinitionNode strategyDefinition, StravaParser.DefaultStrategyContext ctx) {
         super(ctx);
         this.strategyDefinition = strategyDefinition;
     }
@@ -115,7 +115,7 @@ class StrategyDefinitionNode extends ASTNode {
     public RunNode runNode;
     public FunctionsNode functionsNode;
 
-    public StrategyDefinitionNode(RunNode runNode, FunctionsNode functionsNode, RobocommandeParser.StrategyDefinitionContext ctx) {
+    public StrategyDefinitionNode(RunNode runNode, FunctionsNode functionsNode, StravaParser.StrategyDefinitionContext ctx) {
         super(ctx);
         this.runNode = runNode;
         this.functionsNode = functionsNode;
@@ -129,7 +129,7 @@ class StrategyDefinitionNode extends ASTNode {
 class RunNode extends ASTNode {
     public BlockNode blockNode;
 
-    public RunNode(BlockNode blockNode, RobocommandeParser.RunContext ctx) {
+    public RunNode(BlockNode blockNode, StravaParser.RunContext ctx) {
         super(ctx);
         this.blockNode = blockNode;
     }
@@ -143,7 +143,7 @@ class SetupBlockNode extends ASTNode {
     public List<StmtNode> setupStmts;
 
 
-    public SetupBlockNode(List<StmtNode> setupStmts, RobocommandeParser.SetupBlockContext ctx) {
+    public SetupBlockNode(List<StmtNode> setupStmts, StravaParser.SetupBlockContext ctx) {
         super(ctx);
         this.setupStmts = setupStmts;
     }
@@ -156,7 +156,7 @@ class SetupBlockNode extends ASTNode {
 class BlockNode extends ASTNode {
     public List<StmtNode> functionStmtNodes;
 
-    public BlockNode(List<StmtNode> functionStmtNodes, RobocommandeParser.BlockContext ctx) {
+    public BlockNode(List<StmtNode> functionStmtNodes, StravaParser.BlockContext ctx) {
         super(ctx);
         this.functionStmtNodes = functionStmtNodes;
     }
@@ -192,7 +192,7 @@ class DefineFunctionNode extends ASTNode {
     public BlockNode blockNode;
 
     public DefineFunctionNode(TypeNode typeNode, IdNode idNode, FormalParamsNode formalParamsNode,
-                              BlockNode blockNode, RobocommandeParser.DefineFunctionContext ctx) {
+                              BlockNode blockNode, StravaParser.DefineFunctionContext ctx) {
         super(ctx);
         this.typeNode = typeNode;
         this.idNode = idNode;
@@ -218,7 +218,7 @@ class BehaviorFunctionNode extends ASTNode {
     public BlockNode blockNode;
 
     public BehaviorFunctionNode(IdNode idNode, TypeNode eventType, BlockNode blockNode,
-                                RobocommandeParser.BehaviorFunctionContext ctx) {
+                                StravaParser.BehaviorFunctionContext ctx) {
         super(ctx);
         this.idNode = idNode;
         this.eventType = eventType;
@@ -247,7 +247,7 @@ class StructDefinitionNode extends StmtNode {
     public List<DeclarationNode> declarationNodes;
 
     public StructDefinitionNode(TypeNode typeNode, List<DeclarationNode> declarationNodes,
-                                RobocommandeParser.StructDefinitionContext ctx) {
+                                StravaParser.StructDefinitionContext ctx) {
         super(ctx);
         this.typeNode = typeNode;
         this.declarationNodes = declarationNodes;
@@ -271,14 +271,14 @@ class DeclarationNode extends StmtNode {
     public StructDefinitionNode structDefinitionNode;
     public Type Type;
 
-    public DeclarationNode(TypeNode typeNode, IdNode idNode, RobocommandeParser.StructDefinitionContext ctx) {
+    public DeclarationNode(TypeNode typeNode, IdNode idNode, StravaParser.StructDefinitionContext ctx) {
         super(ctx);
         this.typeNode = typeNode;
         this.idNode = idNode;
         this.exprNode = null;
     }
 
-    public DeclarationNode(TypeNode typeNode, IdNode idNode, ExprNode exprNode, RobocommandeParser.DeclarationContext ctx) {
+    public DeclarationNode(TypeNode typeNode, IdNode idNode, ExprNode exprNode, StravaParser.DeclarationContext ctx) {
         super(ctx);
         this.typeNode = typeNode;
         this.idNode = idNode;
@@ -294,7 +294,7 @@ class NewEventNode extends StmtNode {
     public BlockNode blockNode;
 	public TypeNode typeNode;
 
-    public NewEventNode(IdNode idNode, BlockNode blockNode, RobocommandeParser.NewEventContext ctx) {
+    public NewEventNode(IdNode idNode, BlockNode blockNode, StravaParser.NewEventContext ctx) {
         super(ctx);
         this.idNode = idNode;
         this.blockNode = blockNode;
@@ -310,7 +310,7 @@ class FieldAssignmentNode extends StmtNode {
     public FieldIdNode fieldIdNode;
     public ExprNode exprNode;
 
-    public FieldAssignmentNode(FieldIdNode fieldIdNode, ExprNode exprNode, RobocommandeParser.FieldAssignmentContext ctx) {
+    public FieldAssignmentNode(FieldIdNode fieldIdNode, ExprNode exprNode, StravaParser.FieldAssignmentContext ctx) {
         super(ctx);
         this.fieldIdNode = fieldIdNode;
         this.exprNode = exprNode;
@@ -326,7 +326,7 @@ class AssignmentNode extends StmtNode {
     public IdNode idNode;
     public ExprNode exprNode;
 
-    public AssignmentNode(IdNode idNode, ExprNode exprNode, RobocommandeParser.AssignmentContext ctx) {
+    public AssignmentNode(IdNode idNode, ExprNode exprNode, StravaParser.AssignmentContext ctx) {
         super(ctx);
         this.idNode = idNode;
         this.exprNode = exprNode;
@@ -378,7 +378,7 @@ class FunctionCallNode extends StmtNode {
     public ActualParamsNode actualParams;
     public DefineFunctionNode defineFunctionNode;
 
-    public FunctionCallNode(FieldIdNode fieldIdNode, IdNode idNode, ActualParamsNode actualParams, RobocommandeParser.FunctionCallContext ctx) {
+    public FunctionCallNode(FieldIdNode fieldIdNode, IdNode idNode, ActualParamsNode actualParams, StravaParser.FunctionCallContext ctx) {
         super(ctx);
         this.fieldIdNode = fieldIdNode;
         this.idNode = idNode;
@@ -395,7 +395,7 @@ class StructInitializationNode extends ExprNode {
     public List<AssignmentNode> assignments;
     public StructDefinitionNode structDefinitionNode;
 
-    public StructInitializationNode(TypeNode typeNode, List<AssignmentNode> assignments, RobocommandeParser.StructInitializationContext ctx) {
+    public StructInitializationNode(TypeNode typeNode, List<AssignmentNode> assignments, StravaParser.StructInitializationContext ctx) {
         super(ctx);
         this.typeNode = typeNode;
         this.assignments = assignments;
@@ -414,7 +414,7 @@ class ExprFunctionCallNode extends ExprNode {
     public ActualParamsNode actualParams;
     public DefineFunctionNode defineFunctionNode;
 
-    public ExprFunctionCallNode(FieldIdNode fieldIdNode, IdNode idNode, ActualParamsNode actualParams, RobocommandeParser.FCallContext ctx) {
+    public ExprFunctionCallNode(FieldIdNode fieldIdNode, IdNode idNode, ActualParamsNode actualParams, StravaParser.FCallContext ctx) {
         super(ctx);
         this.fieldIdNode = fieldIdNode;
         this.idNode = idNode;
@@ -499,7 +499,7 @@ class LiteralNode extends ExprNode {
 class ReturnStatementNode extends StmtNode {
     public ExprNode exprNode;
 
-    public ReturnStatementNode(ExprNode exprNode, RobocommandeParser.ReturnStatementContext ctx) {
+    public ReturnStatementNode(ExprNode exprNode, StravaParser.ReturnStatementContext ctx) {
         super(ctx);
         this.exprNode = exprNode;
     }
@@ -514,7 +514,7 @@ class FieldIdNode extends ExprNode {
     public List<IdNode> idNodes;
     public StructDefinitionNode structDefinitionNode;
 
-    public FieldIdNode(List<IdNode> idNodes, RobocommandeParser.FieldIdContext ctx) {
+    public FieldIdNode(List<IdNode> idNodes, StravaParser.FieldIdContext ctx) {
         super(ctx);
         this.idNodes = idNodes;
     }
@@ -530,7 +530,7 @@ class FieldValueNode extends ExprNode {
     public List<IdNode> idNodes;
     public StructDefinitionNode structDefinitionNode;
 
-    public FieldValueNode(List<IdNode> idNodes, RobocommandeParser.FieldValueContext ctx) {
+    public FieldValueNode(List<IdNode> idNodes, StravaParser.FieldValueContext ctx) {
         super(ctx);
         this.idNodes = idNodes;
     }
@@ -604,12 +604,12 @@ class IdNode extends ExprNode {
 }
     class UnaryExprNode extends ExprNode{
 
-        public UnaryExprNode(ExprNode exprNode, UnaryOperator unaryOperator, RobocommandeParser.UnaryExprContext ctx) {
+        public UnaryExprNode(ExprNode exprNode, UnaryOperator unaryOperator, StravaParser.UnaryExprContext ctx) {
             super(ctx);
             this.exprNode = exprNode;
             this.unaryOperator = unaryOperator;
         }
-        public UnaryExprNode(ExprNode exprNode, RobocommandeParser.UnaryExprContext ctx) {
+        public UnaryExprNode(ExprNode exprNode, StravaParser.UnaryExprContext ctx) {
             super(ctx);
             this.exprNode = exprNode;
         }
@@ -635,14 +635,14 @@ class IdNode extends ExprNode {
         public ExprNode rightNode;
 
         public BinaryOperator binaryOperator;
-        public BinaryExprNode(ExprNode leftNode, ExprNode rigthNode, BinaryOperator binaryOperator, RobocommandeParser.BinaryExprContext ctx) {
+        public BinaryExprNode(ExprNode leftNode, ExprNode rigthNode, BinaryOperator binaryOperator, StravaParser.BinaryExprContext ctx) {
             super(ctx);
             this.leftNode = leftNode;
             this.rightNode = rigthNode;
             this.binaryOperator = binaryOperator;
         }
 
-        public BinaryExprNode(ExprNode leftNode, ExprNode rigthNode, RobocommandeParser.BinaryExprContext ctx) {
+        public BinaryExprNode(ExprNode leftNode, ExprNode rigthNode, StravaParser.BinaryExprContext ctx) {
             super(ctx);
             this.leftNode = leftNode;
             this.rightNode = rigthNode;
