@@ -172,8 +172,7 @@ public class JavaCodeGenerator extends Visitor {
 	    Emit("\n", 0);
         Emit("public void " + node.idNode.id + "(", 0);
         if(node.eventType != null) {
-			visit(node.eventType, false);
-			EmitNoIndent(" e");
+            EmitNoIndent(node.idNode.id.replace("on", "") + "Event e");
 		}
         EmitNoIndent(")");
         visit(node.blockNode);
