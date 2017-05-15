@@ -374,7 +374,9 @@ public class TypeChecker extends Visitor {
                 }
             }
             if (!fieldIsValid) {
-                System.out.format("Field %s does not exist in the struct %s.\n", currentSubField, currentSubStruct.typeNode.type);
+                Main.CompileErrors.add(new UndefinedError(structDefinitionNode.columnNumber,
+                    structDefinitionNode.lineNumber,
+                    "Field " + currentSubField.toString() + "in " + currentSubStruct.typeNode.type));
                 return null;
             }
         }

@@ -32,7 +32,7 @@ public class ValidReturnVisitorTest {
         astGood2 = Main.GenerateAST(new FileInputStream("testFiles/ValidReturnVisitorTest/good02"));
         astGood3 = Main.GenerateAST(new FileInputStream("testFiles/ValidReturnVisitorTest/good03"));
         astGood4 = Main.GenerateAST(new FileInputStream("testFiles/ValidReturnVisitorTest/good04"));
-        astBad1 = Main.GenerateAST(new FileInputStream("testFiles/ValidReturnVisitorTest/good03"));
+        astBad1 = Main.GenerateAST(new FileInputStream("testFiles/ValidReturnVisitorTest/bad01"));
         astBad2 = Main.GenerateAST(new FileInputStream("testFiles/ValidReturnVisitorTest/bad02"));
         astBad3 = Main.GenerateAST(new FileInputStream("testFiles/ValidReturnVisitorTest/bad03"));
 
@@ -45,31 +45,37 @@ public class ValidReturnVisitorTest {
         assertFalse(validReturnVisitor.hasReturnError);
         System.out.println("... good01 passed\n");
 
+        validReturnVisitor.hasReturnError = false;
         System.out.println("Running test on Good02...");
         validReturnVisitor.visit(astGood2);
         assertFalse(validReturnVisitor.hasReturnError);
         System.out.println("... good02 passed\n");
 
+        validReturnVisitor.hasReturnError = false;
         System.out.println("Running test on Good03...");
         validReturnVisitor.visit(astGood3);
         assertFalse(validReturnVisitor.hasReturnError);
         System.out.println("... good03 passed\n");
 
+        validReturnVisitor.hasReturnError = false;
         System.out.println("Running test on Good04...");
         validReturnVisitor.visit(astGood4);
         assertFalse(validReturnVisitor.hasReturnError);
         System.out.println("... good04 passed\n");
 
+        validReturnVisitor.hasReturnError = false;
         System.out.println("Running test on Bad01...");
         validReturnVisitor.visit(astBad1);
         assertTrue(validReturnVisitor.hasReturnError);
         System.out.println("... Bad01 passed\n");
 
+        validReturnVisitor.hasReturnError = false;
         System.out.println("Running test on Bad02...");
         validReturnVisitor.visit(astBad2);
         assertTrue(validReturnVisitor.hasReturnError);
         System.out.println("... Bad02 passed\n");
 
+        validReturnVisitor.hasReturnError = false;
         System.out.println("Running test on Bad03...");
         validReturnVisitor.visit(astBad3);
         assertTrue(validReturnVisitor.hasReturnError);
