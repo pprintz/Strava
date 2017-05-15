@@ -8,9 +8,9 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.regex.Pattern;
 
-public class ASTBuilder extends RobocommandeBaseVisitor<ASTNode> {
+public class ASTBuilder extends StravaBaseVisitor<ASTNode> {
     @Override
-    public ASTNode visitProg(RobocommandeParser.ProgContext ctx) {
+    public ASTNode visitProg(StravaParser.ProgContext ctx) {
         SetupNode setupNode = null;
         if(ctx.setup() != null) {
             setupNode = (SetupNode) visit(ctx.setup());
@@ -18,36 +18,36 @@ public class ASTBuilder extends RobocommandeBaseVisitor<ASTNode> {
         DefaultStrategyNode defaultStrategyNode = (DefaultStrategyNode)visit(ctx.defaultStrategy());
         List<StrategyNode> strategyNodes = new LinkedList<>();
         List<DefineFunctionNode> defineFunctionNodes = new LinkedList<>();
-        for(RobocommandeParser.StrategyContext strategy : ctx.strategy()){
+        for(StravaParser.StrategyContext strategy : ctx.strategy()){
             strategyNodes.add((StrategyNode)visit(strategy));
         }
-        for(RobocommandeParser.DefineFunctionContext defFunc : ctx.defineFunction()){
+        for(StravaParser.DefineFunctionContext defFunc : ctx.defineFunction()){
             defineFunctionNodes.add((DefineFunctionNode)visit(defFunc));
         }
         return new ProgNode(setupNode, defaultStrategyNode, strategyNodes, defineFunctionNodes);
     }
 
     @Override
-    public ASTNode visitSetup(RobocommandeParser.SetupContext ctx) {
+    public ASTNode visitSetup(StravaParser.SetupContext ctx) {
         return new SetupNode((SetupBlockNode)visit(ctx.setupBlock()), ctx);
     }
 
 
     @Override
-    public ASTNode visitRun(RobocommandeParser.RunContext ctx) {
+    public ASTNode visitRun(StravaParser.RunContext ctx) {
         return new RunNode((BlockNode)visit(ctx.block()), ctx);
     }
 
     @Override
-    public ASTNode visitFunctions(RobocommandeParser.FunctionsContext ctx) {
+    public ASTNode visitFunctions(StravaParser.FunctionsContext ctx) {
         List<BehaviorFunctionNode> behaviorFunctions = new LinkedList<>();
         List<DefineFunctionNode> defineFunctions = new LinkedList<>();
 
-        for(RobocommandeParser.BehaviorFunctionContext behaFunc : ctx.behaviorFunction()) {
+        for(StravaParser.BehaviorFunctionContext behaFunc : ctx.behaviorFunction()) {
             behaviorFunctions.add((BehaviorFunctionNode) visit(behaFunc));
         }
 
-        for(RobocommandeParser.DefineFunctionContext defFunc : ctx.defineFunction()) {
+        for(StravaParser.DefineFunctionContext defFunc : ctx.defineFunction()) {
             defineFunctions.add((DefineFunctionNode) visit(defFunc));
         }
 
@@ -55,7 +55,7 @@ public class ASTBuilder extends RobocommandeBaseVisitor<ASTNode> {
     }
 
     @Override
-    public ASTNode visitDefineFunction(RobocommandeParser.DefineFunctionContext ctx) {
+    public ASTNode visitDefineFunction(StravaParser.DefineFunctionContext ctx) {
         TypeNode typeNode = new TypeNode(ctx.type().getText());
         IdNode idNode = new IdNode(ctx.ID().getText());
         idNode.isDeclaration = true;
@@ -69,7 +69,7 @@ public class ASTBuilder extends RobocommandeBaseVisitor<ASTNode> {
     }
 
     @Override
-    public ASTNode visitFormalParams(RobocommandeParser.FormalParamsContext ctx) {
+    public ASTNode visitFormalParams(StravaParser.FormalParamsContext ctx) {
         List<IdNode> idNodes = new ArrayList<>();
         ctx.ID().forEach(idNode -> idNodes.add(new IdNode(idNode.getText()){{isDeclaration = true;}}));
         List<TypeNode> typeNodes = new ArrayList<>();
@@ -78,7 +78,7 @@ public class ASTBuilder extends RobocommandeBaseVisitor<ASTNode> {
     }
 
     @Override
-    public ASTNode visitBehaviorFunction(RobocommandeParser.BehaviorFunctionContext ctx) {
+    public ASTNode visitBehaviorFunction(StravaParser.BehaviorFunctionContext ctx) {
         IdNode idNode = new IdNode(ctx.ID(0).getText());
         idNode.isDeclaration = true;
 		TypeNode eventType = null;
@@ -91,25 +91,25 @@ public class ASTBuilder extends RobocommandeBaseVisitor<ASTNode> {
     }
 
     @Override
-    public ASTNode visitActualParams(RobocommandeParser.ActualParamsContext ctx) {
+    public ASTNode visitActualParams(StravaParser.ActualParamsContext ctx) {
         List<ExprNode> exprNodes = new ArrayList<>();
         ctx.expr().forEach(exprNode -> exprNodes.add((ExprNode)visit(exprNode)));
         return new ActualParamsNode(exprNodes);
     }
 
     @Override
-    public ASTNode visitStrategy(RobocommandeParser.StrategyContext ctx) {
+    public ASTNode visitStrategy(StravaParser.StrategyContext ctx) {
         return new StrategyNode(new IdNode(ctx.ID().getText()){{isDeclaration = true;}},
                 (StrategyDefinitionNode) visit(ctx.strategyDefinition()),ctx);
     }
 
     @Override
-    public ASTNode visitDefaultStrategy(RobocommandeParser.DefaultStrategyContext ctx) {
+    public ASTNode visitDefaultStrategy(StravaParser.DefaultStrategyContext ctx) {
         return new DefaultStrategyNode((StrategyDefinitionNode) visit(ctx.strategyDefinition()),ctx);
     }
 
     @Override
-    public ASTNode visitStrategyDefinition(RobocommandeParser.StrategyDefinitionContext ctx) {
+    public ASTNode visitStrategyDefinition(StravaParser.StrategyDefinitionContext ctx) {
         RunNode runNode = null;
         if(ctx.run() != null)
             runNode = (RunNode) visit(ctx.run());
@@ -122,17 +122,17 @@ public class ASTBuilder extends RobocommandeBaseVisitor<ASTNode> {
     }
 
     @Override
-    public ASTNode visitSetupBlock(RobocommandeParser.SetupBlockContext ctx) {
+    public ASTNode visitSetupBlock(StravaParser.SetupBlockContext ctx) {
         List<StmtNode> setupStmts = new LinkedList<>();
         ctx.setupStmt().forEach(stmt -> setupStmts.add((StmtNode) visit(stmt)));
         return new SetupBlockNode(setupStmts,ctx);
     }
 
     @Override
-    public ASTNode visitBlock(RobocommandeParser.BlockContext ctx) {
+    public ASTNode visitBlock(StravaParser.BlockContext ctx) {
 
         List<StmtNode> stmtNodes = new ArrayList<>();
-        for(RobocommandeParser.StmtContext stmt : ctx.stmt()){
+        for(StravaParser.StmtContext stmt : ctx.stmt()){
             stmtNodes.add((StmtNode)visit(stmt));
         }
         return new BlockNode(stmtNodes,ctx);
@@ -140,14 +140,14 @@ public class ASTBuilder extends RobocommandeBaseVisitor<ASTNode> {
 
 
     @Override
-    public ASTNode visitSetupStmt(RobocommandeParser.SetupStmtContext ctx) {
+    public ASTNode visitSetupStmt(StravaParser.SetupStmtContext ctx) {
         if(ctx.generalStmtPart() != null){ return visit(ctx.generalStmtPart()); }
         else if(ctx.newEvent() != null){ return visit(ctx.newEvent()); }
         return  null;
     }
 
     @Override
-    public ASTNode visitStmt(RobocommandeParser.StmtContext ctx) {
+    public ASTNode visitStmt(StravaParser.StmtContext ctx) {
         if(ctx.generalStmtPart() != null){ return visit(ctx.generalStmtPart()); }
         else if(ctx.returnStatement() != null){ return visit(ctx.returnStatement()); }
 
@@ -155,7 +155,7 @@ public class ASTBuilder extends RobocommandeBaseVisitor<ASTNode> {
     }
 
     @Override
-    public  ASTNode visitGeneralStmtPart(RobocommandeParser.GeneralStmtPartContext ctx){
+    public  ASTNode visitGeneralStmtPart(StravaParser.GeneralStmtPartContext ctx){
         if(ctx.declaration() != null){ return visit(ctx.declaration()); }
         else if(ctx.structDefinition() != null){ return visit(ctx.structDefinition()); }
         else if(ctx.assignment() != null){ return visit(ctx.assignment()); }
@@ -169,7 +169,7 @@ public class ASTBuilder extends RobocommandeBaseVisitor<ASTNode> {
     }
 
     @Override
-    public ASTNode visitStructDefinition(RobocommandeParser.StructDefinitionContext ctx) {
+    public ASTNode visitStructDefinition(StravaParser.StructDefinitionContext ctx) {
         TypeNode structName = new TypeNode(ctx.ID(0).getText());
 
         List<DeclarationNode> declarationNodes = new ArrayList<>();
@@ -187,7 +187,7 @@ public class ASTBuilder extends RobocommandeBaseVisitor<ASTNode> {
     }
 
     @Override
-    public ASTNode visitDeclaration(RobocommandeParser.DeclarationContext ctx) {
+    public ASTNode visitDeclaration(StravaParser.DeclarationContext ctx) {
         ExprNode exprNode = ctx.expr() != null ? (ExprNode)visit(ctx.expr()) : null;
         TypeNode typeNode = new TypeNode(ctx.type().getText());
         IdNode idNode = new IdNode(ctx.ID().getText()){{isDeclaration = true;}};
@@ -195,17 +195,17 @@ public class ASTBuilder extends RobocommandeBaseVisitor<ASTNode> {
         declarationNode.IsGlobal = isDeclarationInSetupBlock(ctx);
         return declarationNode;
     }
-    private boolean isDeclarationInSetupBlock(RobocommandeParser.DeclarationContext declCtx){
-		return declCtx.parent.parent.parent instanceof RobocommandeParser.SetupBlockContext;
+    private boolean isDeclarationInSetupBlock(StravaParser.DeclarationContext declCtx){
+		return declCtx.parent.parent.parent instanceof StravaParser.SetupBlockContext;
     }
 
     @Override
-    public ASTNode visitNewEvent(RobocommandeParser.NewEventContext ctx) {
+    public ASTNode visitNewEvent(StravaParser.NewEventContext ctx) {
         return new NewEventNode(new IdNode(ctx.ID().getText()){{isDeclaration = true;}}, (BlockNode)visit(ctx.block()),ctx);
     }
 
     @Override
-    public ASTNode visitFieldAssignment(RobocommandeParser.FieldAssignmentContext ctx) {
+    public ASTNode visitFieldAssignment(StravaParser.FieldAssignmentContext ctx) {
         FieldIdNode fieldIdNode = (FieldIdNode)visit(ctx.fieldId());
         ExprNode exprNode = (ExprNode)visit(ctx.expr());
 
@@ -213,7 +213,7 @@ public class ASTBuilder extends RobocommandeBaseVisitor<ASTNode> {
     }
 
     @Override
-    public ASTNode visitAssignment(RobocommandeParser.AssignmentContext ctx) {
+    public ASTNode visitAssignment(StravaParser.AssignmentContext ctx) {
         IdNode idNode = new IdNode(ctx.ID().getText());
         ExprNode exprNode = (ExprNode)visit(ctx.expr());
         if(exprNode instanceof StructInitializationNode)
@@ -222,7 +222,7 @@ public class ASTBuilder extends RobocommandeBaseVisitor<ASTNode> {
     }
 
     @Override
-    public ASTNode visitIfStatement(RobocommandeParser.IfStatementContext ctx) {
+    public ASTNode visitIfStatement(StravaParser.IfStatementContext ctx) {
         ExprNode predicate = null;
         BlockNode ifBlockNode = null;
         List<ElseIfStatementNode> elseIfNodes = new ArrayList<>();
@@ -246,7 +246,7 @@ public class ASTBuilder extends RobocommandeBaseVisitor<ASTNode> {
     }
 
     @Override
-    public ASTNode visitFunctionCall(RobocommandeParser.FunctionCallContext ctx) {
+    public ASTNode visitFunctionCall(StravaParser.FunctionCallContext ctx) {
         IdNode idNode = ctx.ID() != null ? new IdNode(ctx.ID().getText()) : null;
         FieldIdNode fieldIdNode = ctx.fieldId() != null ? (FieldIdNode)visit(ctx.fieldId()) : null;
 
@@ -256,18 +256,18 @@ public class ASTBuilder extends RobocommandeBaseVisitor<ASTNode> {
     }
 
     @Override
-    public ASTNode visitStructInitialization(RobocommandeParser.StructInitializationContext ctx) {
+    public ASTNode visitStructInitialization(StravaParser.StructInitializationContext ctx) {
         TypeNode typeNode = new TypeNode(ctx.ID().getText());
         List<AssignmentNode> assignments = new ArrayList<>();
 
-        for(RobocommandeParser.AssignmentContext assignment : ctx.assignment()){
+        for(StravaParser.AssignmentContext assignment : ctx.assignment()){
             assignments.add((AssignmentNode)visit(assignment));
         }
         return new StructInitializationNode(typeNode, assignments, ctx);
     }
 
     @Override
-    public ASTNode visitLoop(RobocommandeParser.LoopContext ctx) {
+    public ASTNode visitLoop(StravaParser.LoopContext ctx) {
 		BlockNode blockNode = (BlockNode)visit(ctx.block());
 		if(ctx.expr() == null) {
 			return new LoopNode(null, blockNode);
@@ -277,12 +277,12 @@ public class ASTBuilder extends RobocommandeBaseVisitor<ASTNode> {
     }
 
     @Override
-    public ASTNode visitReturnStatement(RobocommandeParser.ReturnStatementContext ctx) {
+    public ASTNode visitReturnStatement(StravaParser.ReturnStatementContext ctx) {
         return new ReturnStatementNode((ExprNode)visit(ctx.expr()), ctx);
     }
 
     @Override
-    public ASTNode visitFieldValue(RobocommandeParser.FieldValueContext ctx) {
+    public ASTNode visitFieldValue(StravaParser.FieldValueContext ctx) {
         List<String> idsToBeConverted = Arrays.asList(ctx.getText().split(Pattern.quote(".")));
         List<IdNode> idNodes = new ArrayList<IdNode>();
         idsToBeConverted.forEach(node -> idNodes.add(new IdNode(node)));
@@ -290,12 +290,12 @@ public class ASTBuilder extends RobocommandeBaseVisitor<ASTNode> {
     }
 
     @Override
-    public ASTNode visitLiteralBool(RobocommandeParser.LiteralBoolContext ctx) {
+    public ASTNode visitLiteralBool(StravaParser.LiteralBoolContext ctx) {
         return new LiteralNode(ctx.getText(), Type.BOOL);
     }
 
     @Override
-    public ASTNode visitFCall(RobocommandeParser.FCallContext ctx) {
+    public ASTNode visitFCall(StravaParser.FCallContext ctx) {
         IdNode idNode = ctx.functionCall().ID() != null ? new IdNode(ctx.functionCall().ID().getText()) : null;
         FieldIdNode fieldIdNode = ctx.functionCall().fieldId() != null ? (FieldIdNode)visit(ctx.functionCall().fieldId()) : null;
 
@@ -305,13 +305,13 @@ public class ASTBuilder extends RobocommandeBaseVisitor<ASTNode> {
     }
 
     @Override
-    public ASTNode visitStructInit(RobocommandeParser.StructInitContext ctx) {
+    public ASTNode visitStructInit(StravaParser.StructInitContext ctx) {
         return visit(ctx.structInitialization());
     }
 
 
     @Override
-    public ASTNode visitUnaryExpr(RobocommandeParser.UnaryExprContext ctx) {
+    public ASTNode visitUnaryExpr(StravaParser.UnaryExprContext ctx) {
 
         UnaryExprNode unaryExprNode = new UnaryExprNode((ExprNode) visit(ctx.expr()), ctx);
 
@@ -335,12 +335,12 @@ public class ASTBuilder extends RobocommandeBaseVisitor<ASTNode> {
     }
 
     @Override
-    public ASTNode visitLiteralString(RobocommandeParser.LiteralStringContext ctx) {
+    public ASTNode visitLiteralString(StravaParser.LiteralStringContext ctx) {
         return new LiteralNode(ctx.getText(), Type.TEXT);
     }
 
     @Override
-    public ASTNode visitBinaryExpr(RobocommandeParser.BinaryExprContext ctx) {
+    public ASTNode visitBinaryExpr(StravaParser.BinaryExprContext ctx) {
         ExprNode left = (ExprNode)visit(ctx.expr(0));
         ExprNode right = (ExprNode)visit(ctx.expr(1));
         BinaryExprNode binaryExprNode = new BinaryExprNode(left, right, ctx);
@@ -397,17 +397,17 @@ public class ASTBuilder extends RobocommandeBaseVisitor<ASTNode> {
     }
 
     @Override
-    public ASTNode visitLiteralNum(RobocommandeParser.LiteralNumContext ctx) {
+    public ASTNode visitLiteralNum(StravaParser.LiteralNumContext ctx) {
         return new LiteralNode(ctx.getText(), Type.NUM);
     }
 
     @Override
-    public ASTNode visitIdRef(RobocommandeParser.IdRefContext ctx) {
+    public ASTNode visitIdRef(StravaParser.IdRefContext ctx) {
         return new IdNode(ctx.ID().getText());
     }
 
     @Override
-    public ASTNode visitFieldId(RobocommandeParser.FieldIdContext ctx) {
+    public ASTNode visitFieldId(StravaParser.FieldIdContext ctx) {
         List<String> idsToBeConverted = Arrays.asList(ctx.getText().split(Pattern.quote(".")));
         List<IdNode> idNodes = new ArrayList<IdNode>();
         idsToBeConverted.forEach(node -> idNodes.add(new IdNode(node)));

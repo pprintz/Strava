@@ -50,12 +50,12 @@ public class Main {
 
         ANTLRInputStream input = new ANTLRInputStream(is);
 
-        RobocommandeLexer lexer = new RobocommandeLexer(input);
+        StravaLexer lexer = new StravaLexer(input);
 
         CommonTokenStream tokens = new CommonTokenStream(lexer);
 
 <<<<<<< HEAD
-        RobocommandeParser parser = new RobocommandeParser(tokens);
+        StravaParser parser = new StravaParser(tokens);
 
         ParseTree cst = parser.prog();
 

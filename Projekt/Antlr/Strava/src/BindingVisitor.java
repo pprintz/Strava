@@ -23,7 +23,7 @@ public class BindingVisitor extends Visitor {
     }
 
     /**
-     * Adds a function specific to Robocommande to the symbol table so that TypeChecker doesn't complain.
+     * Adds a function specific to Strava to the symbol table so that TypeChecker doesn't complain.
      * @param returnTypeString The function return type. Must be either "num", "text", or "bool".
      * @param functionId The name of the function.
      * @param paramTypes A list of parameter types as an array of String. Amount must match with amount of paramIds.
