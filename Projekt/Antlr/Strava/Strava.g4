@@ -1,4 +1,5 @@
-grammar Robocommande ;
+
+grammar Strava ;
 
 prog : NEWLINE* setup? defaultStrategy (strategy | defineFunction)* EOF ;
 
