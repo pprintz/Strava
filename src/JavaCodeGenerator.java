@@ -216,7 +216,7 @@ public class JavaCodeGenerator extends Visitor {
                     String eventName = behavior.eventName.id;
                     if (event.equals(eventName)) {
                         isImplemented = true;
-                        visit(behavior);
+//                        visit(behavior);
                     }
                 }
                 if (!isImplemented) {
