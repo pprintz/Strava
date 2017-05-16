@@ -293,10 +293,10 @@ public class JavaCodeGenerator extends Visitor {
         }
 
         if (isCustomEvent) {
-            Emit("public void " + event + "() { }", 1);
+            Emit("public void " + event + "();", 1);
 
         } else {
-            Emit("public void on" + event + "(" + event + "Event e) { }", 1);
+            Emit("public void on" + event + "(" + event + "Event e);", 1);
         }
     }
 
