@@ -182,6 +182,7 @@ public class JavaCodeGenerator extends Visitor {
     @Override
 	public void visit(DeclarationNode node) {
 		visit(node.typeNode, true);
+		EmitNoIndent(" " + node.idNode.id);
 		if (node.exprNode != null) {
 			EmitNoIndent(" = ");
 			visit(node.exprNode);
@@ -203,6 +204,9 @@ public class JavaCodeGenerator extends Visitor {
 		Emit("class strategy_defaultStrategy implements Strategy {", 1);
 		indentationLevel++;
         visit(node.strategyDefinition.runNode);
+        if(node.strategyDefinition.runNode == null) {
+            Emit("public void run () { }", 1);
+        }
 		visit(node.strategyDefinition.functionsNode);
 
         String fullEventName;
