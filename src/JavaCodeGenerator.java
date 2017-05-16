@@ -282,17 +282,24 @@ public class JavaCodeGenerator extends Visitor {
 	    for (String eventString : events) {
             EmitDefaultInterfaceEventImplementation(eventString);
         }
+        for (NewEventNode newCustomEvent : newCustomEvents) {
+//            if (event.equals(newCustomEvent.idNode.id)) {
+            Emit("public void on" + newCustomEvent.idNode.id + "() { }", 1);
+//            }
+        }
 	}
 
     private void EmitDefaultInterfaceEventImplementation(String event) {
-        for (NewEventNode newCustomEvent : newCustomEvents) {
-            if (event.equals(newCustomEvent.idNode.id)) {
-                Emit("public void on" + event + "() { }", 1);
-            } else {
-                Emit("public void on" + event + "(" + event + "Event e) { }", 1);
-            }
-        }
+        Emit("public void on" + event + "(" + event + "Event e) { }", 1);
     }
+
+//    private void EmitCustomEvent(String event) {
+//        for (NewEventNode newCustomEvent : newCustomEvents) {
+//            if (event.equals(newCustomEvent.idNode.id)) {
+//                Emit("public void on" + event + "() { }", 1);
+//            }
+//        }
+//    }
 
     private void EmitCurrentStrategyCalls(String event) {
         for (NewEventNode newCustomEvent : newCustomEvents) {
