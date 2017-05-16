@@ -301,7 +301,6 @@ public class JavaCodeGenerator extends Visitor {
         }
         if (isCustomEvent) {
             Emit("public void " + event + "();", 1);
-
         } else {
             Emit("public void " + event + "(" + event.replace("on", "") + "Event e);", 1);
         }
