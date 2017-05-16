@@ -84,7 +84,9 @@ strategy aggressive :
 ;
 
 define void printStuff(text aq, text b) :
-	log(aq + b)
+	//log(aq + b)
+    log(aq)
+    log(b)
 ;
 
 strategy defensive :
