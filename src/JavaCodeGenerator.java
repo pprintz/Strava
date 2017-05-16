@@ -299,21 +299,6 @@ public class JavaCodeGenerator extends Visitor {
         }
     }
 
-    private void EmitCurrentStrategyCall(String event) {
-        boolean isCustomEvent = false;
-	    for (NewEventNode newCustomEvent : newCustomEvents) {
-            if (event.equals(newCustomEvent.idNode.id))
-                isCustomEvent = true;
-        }
-
-        if (isCustomEvent) {
-            Emit("public void " + event + "() { currentStrategy." + event + "(); }", 1);
-
-        } else {
-            Emit("public void " + event + "(" + event + "Event e) { currentStrategy." + event + "(); }", 1);
-        }
-    }
-
     // TODO: Split this marvelous monster into sub-functions
 	@Override
 	public void visit(ProgNode node) {
@@ -376,17 +361,6 @@ public class JavaCodeGenerator extends Visitor {
 
 		EmitChangeStrategyDefinition();
 		EmitOnCustomEvent();
-
-//		String behaviorName;
-//		if (node.defaultStrategyNode.strategyDefinition.functionsNode != null) {
-//            for (BehaviorFunctionNode behavior : node.defaultStrategyNode.strategyDefinition.functionsNode.behaviorFunctions) {
-//                behaviorName = behavior.eventName.id;
-//                if(behavior.eventType != null) {
-//					Emit("public void " + behaviorName + "(" + behaviorName.replace("on", "") + "Event e) { currentStrategy." + behaviorName + "(e); }", 1);
-//				}
-//            }
-//            Emit("", 1);
-//        }
 
         for (String event : events) {
             Emit("public void " + event + "() { currentStrategy." + event + "(); }", 1);
