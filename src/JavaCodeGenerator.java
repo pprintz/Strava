@@ -415,7 +415,10 @@ public class JavaCodeGenerator extends Visitor {
                 List<DeclarationNode> declarationNodes = ((StructDefinitionNode) stmtNode).declarationNodes;
                 for (int i = 0; i < declarationNodes.size(); i++) {
                     DeclarationNode declarationNode = declarationNodes.get(i);
-                    EmitNoIndent(declarationNode.typeNode.type + " " + declarationNode.idNode.id);
+//                    EmitNoIndent(declarationNode.typeNode.type + " " + declarationNode.idNode.id);
+                    visit(declarationNode.typeNode);
+                    EmitNoIndent(" ");
+                    visit(declarationNode.idNode);
                     if(i + 1 != declarationNodes.size()) {
                         EmitNoIndent(", ");
                     }
