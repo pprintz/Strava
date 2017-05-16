@@ -204,26 +204,24 @@ public class JavaCodeGenerator extends Visitor {
 		indentationLevel++;
         visit(node.strategyDefinition.runNode);
 		visit(node.strategyDefinition.functionsNode);
-		// FIXME
+
         String fullEventName;
         for (String event : events) {
             fullEventName = "on" + event;
             boolean isImplemented = false;
             if (node.strategyDefinition.functionsNode != null) {
                 for (BehaviorFunctionNode behavior : node.strategyDefinition.functionsNode.behaviorFunctions) {
-                    if (fullEventName.equals(behavior.eventName.id)) {
+                    String eventName = behavior.eventName.id;
+                    if (fullEventName.equals(eventName)) {
                         isImplemented = true;
-//                        visit(behavior);
-                        break;
                     }
                 }
-            }
-
-            if (!isImplemented) {
-                EmitDefaultInterfaceEventImplementation(event);
+                if (!isImplemented) {
+                    EmitDefaultInterfaceEventImplementation(event);
+                }
             }
         }
-		indentationLevel--;
+        indentationLevel--;
 		Emit("}", 2);
 	}
 
@@ -272,19 +270,23 @@ public class JavaCodeGenerator extends Visitor {
         events.add("ScannedRobot");
         events.add("Status");
         events.add("Win");
+        newCustomEvents.forEach(x -> events.add(x.idNode.id));
     }
 
     private void EmitAllInterfaceEventDefinitions() {
 	    for (String eventString : events) {
-	        Emit("void on" + eventString + "(" + eventString + "Event e);", 1);
+            EmitDefaultInterfaceEventImplementation(eventString);
         }
-		for (NewEventNode newCustomEvent : newCustomEvents) {
-			Emit("void on" + newCustomEvent.idNode.id + "(); // new custom event", 1);
-		}
 	}
 
     private void EmitDefaultInterfaceEventImplementation(String event) {
-	    Emit("public void on" + event + "(" + event + "Event e) { }", 1);
+        for (NewEventNode newCustomEvent : newCustomEvents) {
+            if (event.equals(newCustomEvent.idNode.id)) {
+                Emit("public void on" + event + "() { }", 1);
+            } else {
+                Emit("public void on" + event + "(" + event + "Event e) { }", 1);
+            }
+        }
     }
 
     // TODO: Split this marvelous monster into sub-functions
@@ -328,7 +330,6 @@ public class JavaCodeGenerator extends Visitor {
 		indentationLevel++;
         Emit("System.out.println(\"Run: \" + currentStrategy.toString());", 1);
 
-        // TODO: Custom Events
         for	(NewEventNode newCustomEvent : newCustomEvents) {
 			Emit("addCustomEvent(new Condition(\"" + newCustomEvent.idNode.id + "\") {", 1);
 			indentationLevel++;
@@ -349,7 +350,6 @@ public class JavaCodeGenerator extends Visitor {
 		Emit("}", 2); // end run
 
 		EmitChangeStrategyDefinition();
-		// TODO: onCustomEvent()
 		EmitOnCustomEvent();
 
 		String behaviorName;
@@ -378,7 +378,7 @@ public class JavaCodeGenerator extends Visitor {
 		for (NewEventNode newCustomEvent : newCustomEvents) {
 			Emit("if (e.getCondition().getName().equals(\"" + newCustomEvent.idNode.id + "\")) {", 1);
 			indentationLevel++;
-			Emit("currentStrategy." + newCustomEvent.idNode.id + "();", 1);
+			Emit("currentStrategy.on" + newCustomEvent.idNode.id + "();", 1);
 			// trigger -= 20;
 			indentationLevel--;
 			Emit("}", 1);
@@ -469,18 +469,6 @@ public class JavaCodeGenerator extends Visitor {
 				EmitNoIndent(", ");
 			}
 		}
-    }
-
-    @Override
-	// TODO: Don't think this function is needed
-    public void visit(FunctionStmtNode node) {
-		throw new RuntimeException("Point fingers at Lau");
-    }
-
-    @Override
-	// TODO: Don't think this function is needed
-	public void visit(GeneralStmtNode node) {
-		throw new RuntimeException("Point fingers at Lau");
     }
 
     @Override
@@ -579,12 +567,6 @@ public class JavaCodeGenerator extends Visitor {
     @Override
     public void visit(SetupBlockNode node) {
 		super.visit(node);
-    }
-
-    @Override
-	// TODO: Don't think this function is needed
-    public void visit(SetupStmtNode node) {
-        throw new RuntimeException("Point fingers at Lau");
     }
 
     @Override

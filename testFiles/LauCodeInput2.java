@@ -10,10 +10,9 @@ strategy default :
     behavior onRun () :
         ahead(-5)
     ;
-
-    behavior onAlwaysFalse () :
-        log("hello from custom event")
-    ;
+//    behavior onAlwaysFalse () :
+//        log("hello from custom event")
+//    ;
 
 ;
 
