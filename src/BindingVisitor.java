@@ -1,5 +1,9 @@
-import java.util.*;
-import CompilerError.*;
+import CompilerError.UndefinedError;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Stack;
 
 public class BindingVisitor extends Visitor {
     private Stack<HashMap<String, ASTNode>> symbolTable;
@@ -65,9 +69,9 @@ public class BindingVisitor extends Visitor {
      * Very nice and reliable and pretty code. I'm lovin' it!
      */
     private void AddFunctionTokens() {
-//        AddRoboFunctionToSymbolTable("void", "ahead", new String[]{"num"}, new String[]{"distance"});
-//        AddRoboFunctionToSymbolTable("void", "back", new String[]{"num"}, new String[]{"distance"});
-        AddRoboFunctionToSymbolTable("void", "changeStrategy", new String[]{"text"}, new String[]{"strategyName"});
+        AddRoboFunctionToSymbolTable("void", "log", new String[]{"text"}, new String[]{"input"});
+        AddRoboFunctionToSymbolTable("void", "ahead", new String[]{"num"}, new String[]{"distance"});
+        AddRoboFunctionToSymbolTable("void", "back", new String[]{"num"}, new String[]{"distance"});
         AddRoboFunctionToSymbolTable("void", "doNothing", null, null);
         AddRoboFunctionToSymbolTable("void", "fire", new String[]{"num"}, new String[]{"power"});
         AddRoboFunctionToSymbolTable("Bullet", "fireBullet", new String[]{"num"}, new String[]{"power"});

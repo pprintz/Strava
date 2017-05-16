@@ -26,7 +26,7 @@ public class JavaCodeGenerator extends Visitor {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-        className = "MyRobot";
+        className = "robot_MyRobot";
     }
 
     @Override
@@ -170,9 +170,10 @@ public class JavaCodeGenerator extends Visitor {
     @Override
     public void visit(BehaviorFunctionNode node) {
 	    Emit("\n", 0);
-        Emit("public void " + node.idNode.id + "(", 0);
+        Emit("public void " + node.eventName.id + "(", 0);
         if(node.eventType != null) {
-            EmitNoIndent(node.idNode.id.replace("on", "") + "Event e");
+//            EmitNoIndent(node.eventName.id.replace("on", "") + "Event e");
+            EmitNoIndent(node.eventType.type);
 		}
         EmitNoIndent(")");
         visit(node.blockNode);
@@ -199,30 +200,28 @@ public class JavaCodeGenerator extends Visitor {
      */
 	@Override
 	public void visit(DefaultStrategyNode node) {
-		Emit("class defaultStrategy implements Strategy {", 1);
+		Emit("class strategy_defaultStrategy implements Strategy {", 1);
 		indentationLevel++;
-		if (node.strategyDefinition.runNode != null) {
-			visit(node.strategyDefinition.runNode);
-		}
+        visit(node.strategyDefinition.runNode);
+		visit(node.strategyDefinition.functionsNode);
+
         String fullEventName;
         for (String event : events) {
             fullEventName = "on" + event;
             boolean isImplemented = false;
             if (node.strategyDefinition.functionsNode != null) {
                 for (BehaviorFunctionNode behavior : node.strategyDefinition.functionsNode.behaviorFunctions) {
-                    if (fullEventName.equals(behavior.idNode.id)) {
+                    String eventName = behavior.eventName.id;
+                    if (fullEventName.equals(eventName)) {
                         isImplemented = true;
-                        visit(behavior);
-                        break;
                     }
                 }
-            }
-
-            if (!isImplemented) {
-                EmitDefaultInterfaceEventImplementation(event);
+                if (!isImplemented) {
+                    EmitDefaultInterfaceEventImplementation(event);
+                }
             }
         }
-		indentationLevel--;
+        indentationLevel--;
 		Emit("}", 2);
 	}
 
@@ -230,6 +229,7 @@ public class JavaCodeGenerator extends Visitor {
 	public void visit(DefineFunctionNode node) {
 		Emit("public ", 0);
 		visit(node.typeNode);
+		EmitNoIndent(" " + node.idNode.id);
 		EmitNoIndent("(");
 		if (node.formalParamsNode != null) {
 			visit(node.formalParamsNode);
@@ -271,19 +271,23 @@ public class JavaCodeGenerator extends Visitor {
         events.add("ScannedRobot");
         events.add("Status");
         events.add("Win");
+        newCustomEvents.forEach(x -> events.add(x.idNode.id));
     }
 
     private void EmitAllInterfaceEventDefinitions() {
 	    for (String eventString : events) {
-	        Emit("void on" + eventString + "(" + eventString + "Event e);", 1);
+            EmitDefaultInterfaceEventImplementation(eventString);
         }
-		for (NewEventNode newCustomEvent : newCustomEvents) {
-			Emit("void " + newCustomEvent.idNode.id + "(); // new custom event", 1);
-		}
 	}
 
     private void EmitDefaultInterfaceEventImplementation(String event) {
-	    Emit("public void on" + event + "(" + event + "Event e) { }", 1);
+        for (NewEventNode newCustomEvent : newCustomEvents) {
+            if (event.equals(newCustomEvent.idNode.id)) {
+                Emit("public void on" + event + "() { }", 1);
+            } else {
+                Emit("public void on" + event + "(" + event + "Event e) { }", 1);
+            }
+        }
     }
 
     // TODO: Split this marvelous monster into sub-functions
@@ -311,11 +315,11 @@ public class JavaCodeGenerator extends Visitor {
 		if(node.setupNode != null) {
             Emit("setup();", 1);
         }
-        Emit("currentStrategy = new defaultStrategy();", 1);
+        Emit("currentStrategy = new strategy_defaultStrategy();", 1);
         Emit("strategies = new HashMap<String, Strategy>();", 1);
         for (String strategy : strategies) {
             if (!strategy.startsWith("default")) {
-                Emit("strategies.put(\"" + strategy + "\", " + "new " + strategy + "Strategy());", 1);
+                Emit("strategies.put(\"" + strategy + "\", " + "new strategy_" + strategy + "Strategy());", 1);
             } else {
                 Emit("strategies.put(\"" + strategy + "\", currentStrategy);", 1);
             }
@@ -327,7 +331,6 @@ public class JavaCodeGenerator extends Visitor {
 		indentationLevel++;
         Emit("System.out.println(\"Run: \" + currentStrategy.toString());", 1);
 
-        // TODO: Custom Events
         for	(NewEventNode newCustomEvent : newCustomEvents) {
 			Emit("addCustomEvent(new Condition(\"" + newCustomEvent.idNode.id + "\") {", 1);
 			indentationLevel++;
@@ -337,6 +340,7 @@ public class JavaCodeGenerator extends Visitor {
 			Emit("});", 1); // end addCustomEvent
 
 		}
+		Emit("", 1);
 
 		Emit("while (true) {", 1);
 		indentationLevel++;
@@ -347,13 +351,12 @@ public class JavaCodeGenerator extends Visitor {
 		Emit("}", 2); // end run
 
 		EmitChangeStrategyDefinition();
-		// TODO: onCustomEvent()
 		EmitOnCustomEvent();
 
 		String behaviorName;
 		if (node.defaultStrategyNode.strategyDefinition.functionsNode != null) {
             for (BehaviorFunctionNode behavior : node.defaultStrategyNode.strategyDefinition.functionsNode.behaviorFunctions) {
-                behaviorName = behavior.idNode.id;
+                behaviorName = behavior.eventName.id;
                 if(behavior.eventType != null) {
 					Emit("public void " + behaviorName + "(" + behaviorName.replace("on", "") + "Event e) { currentStrategy." + behaviorName + "(e); }", 1);
 				}
@@ -376,7 +379,7 @@ public class JavaCodeGenerator extends Visitor {
 		for (NewEventNode newCustomEvent : newCustomEvents) {
 			Emit("if (e.getCondition().getName().equals(\"" + newCustomEvent.idNode.id + "\")) {", 1);
 			indentationLevel++;
-			Emit("currentStrategy." + newCustomEvent.idNode.id + "();", 1);
+			Emit("currentStrategy.on" + newCustomEvent.idNode.id + "();", 1);
 			// trigger -= 20;
 			indentationLevel--;
 			Emit("}", 1);
@@ -405,6 +408,8 @@ public class JavaCodeGenerator extends Visitor {
 
 	@Override
 	public void visit(RunNode node) {
+	    if(node == null) return;
+
 		Emit("public void run()", 0);
 		super.visit(node);
 	}
@@ -448,9 +453,9 @@ public class JavaCodeGenerator extends Visitor {
 
 	@Override
 	public void visit(StrategyNode node) {
-		Emit("class", 0);
-		visit(node.idNode, false);
-		EmitNoIndent("Strategy extends defaultStrategy { \n");
+		Emit("class ", 0);
+		EmitNoIndent("strategy_" + node.idNode.id);
+		EmitNoIndent("Strategy extends strategy_defaultStrategy { \n");
 		indentationLevel++;
 		visit(node.strategyDefinition);
 		indentationLevel--;
@@ -465,18 +470,6 @@ public class JavaCodeGenerator extends Visitor {
 				EmitNoIndent(", ");
 			}
 		}
-    }
-
-    @Override
-	// TODO: Don't think this function is needed
-    public void visit(FunctionStmtNode node) {
-		throw new RuntimeException("Point fingers at Lau");
-    }
-
-    @Override
-	// TODO: Don't think this function is needed
-	public void visit(GeneralStmtNode node) {
-		throw new RuntimeException("Point fingers at Lau");
     }
 
     @Override
@@ -529,6 +522,7 @@ public class JavaCodeGenerator extends Visitor {
 
     @Override
     public void visit(FunctionsNode node) {
+	    if (node == null) return;
         super.visit(node);
     }
 
@@ -577,22 +571,9 @@ public class JavaCodeGenerator extends Visitor {
     }
 
     @Override
-	// TODO: Don't think this function is needed
-    public void visit(SetupStmtNode node) {
-        throw new RuntimeException("Point fingers at Lau");
-    }
-
-    @Override
     public void visit(StrategyDefinitionNode node) {
-		if(node.runNode != null) {
-			visit(node.runNode);
-		}
-
-        for (BehaviorFunctionNode behavior : node.functionsNode.behaviorFunctions) {
-            if (!events.contains(behavior.idNode.id)) {
-                visit(behavior);
-            }
-        }
+        visit(node.runNode);
+        visit(node.functionsNode);
     }
 
     @Override

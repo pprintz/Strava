@@ -209,15 +209,17 @@ class DefineFunctionNode extends ASTNode {
 }
 
 class BehaviorFunctionNode extends ASTNode {
-    public IdNode idNode;
+    public IdNode eventName;
     public TypeNode eventType;
     public BlockNode blockNode;
+    public IdNode eventArg;
 
-    public BehaviorFunctionNode(IdNode idNode, TypeNode eventType, BlockNode blockNode,
+    public BehaviorFunctionNode(IdNode eventName, TypeNode eventType, IdNode eventArg, BlockNode blockNode,
                                 StravaParser.BehaviorFunctionContext ctx) {
         super(ctx);
-        this.idNode = idNode;
+        this.eventName = eventName;
         this.eventType = eventType;
+        this.eventArg = eventArg;
         this.blockNode = blockNode;
     }
     @Override

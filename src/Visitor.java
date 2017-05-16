@@ -26,7 +26,7 @@ public abstract class Visitor {
     }
 
     public void visit(BehaviorFunctionNode node){
-        node.idNode.accept(this);
+        node.eventName.accept(this);
         if (node.eventType != null) {
 			node.eventType.accept(this);
 		}

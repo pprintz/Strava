@@ -79,15 +79,17 @@ public class ASTBuilder extends StravaBaseVisitor<ASTNode> {
 
     @Override
     public ASTNode visitBehaviorFunction(StravaParser.BehaviorFunctionContext ctx) {
-        IdNode idNode = new IdNode(ctx.ID(0).getText());
-        idNode.isDeclaration = true;
+        IdNode eventName = new IdNode(ctx.ID(0).getText());
+        eventName.isDeclaration = true;
 		TypeNode eventType = null;
+		IdNode eventArg = null;
         if (ctx.ID(1) != null) {
-			eventType = new TypeNode(ctx.ID(1).getText());
+			eventType = new TypeNode(ctx.type().getText());
+			eventArg = new IdNode(ctx.ID(1).getText());
 		}
         BlockNode blockNode = (BlockNode) visit((ctx.block()));
 
-        return new BehaviorFunctionNode(idNode, eventType, blockNode,ctx);
+        return new BehaviorFunctionNode(eventName, eventType, eventArg, blockNode,ctx);
     }
 
     @Override
