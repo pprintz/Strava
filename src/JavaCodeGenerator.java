@@ -173,8 +173,7 @@ public class JavaCodeGenerator extends Visitor {
 	    Emit("\n", 0);
         Emit("public void " + node.eventName.id + "(", 0);
         if(node.eventType != null) {
-//            EmitNoIndent(node.eventName.id.replace("on", "") + "Event e");
-            EmitNoIndent(node.eventType.type);
+            EmitNoIndent(node.eventName.id.replace("on", "") + "Event e");
 		}
         EmitNoIndent(")");
         visit(node.blockNode);
@@ -190,7 +189,7 @@ public class JavaCodeGenerator extends Visitor {
 		}
 		// This fucks up structInit
 		if(node.exprNode instanceof StructInitializationNode) {
-			Emit("", 1);
+			EmitNewLine();
 		} else {
 			EmitNoIndent("; \n");
 		}
@@ -222,7 +221,7 @@ public class JavaCodeGenerator extends Visitor {
                     }
                 }
                 if (!isImplemented) {
-                    EmitCurrentStrategyCall(event);
+                    EmitDefaultInterfaceEventImplementation(event);
                 }
             }
         }
@@ -263,19 +262,19 @@ public class JavaCodeGenerator extends Visitor {
 	}
 
     private void AddAllEventsToList() {
-        events.add("BattleEnded");
-        events.add("BulletHit");
-        events.add("BulletHitBullet");
-        events.add("BulletMissed");
-        events.add("Death");
-        events.add("HitByBullet");
-        events.add("HitRobot");
-        events.add("HitWall");
-        events.add("RobotDeath");
-        events.add("RoundEnded");
-        events.add("ScannedRobot");
-        events.add("Status");
-        events.add("Win");
+        events.add("onBattleEnded");
+        events.add("onBulletHit");
+        events.add("onBulletHitBullet");
+        events.add("onBulletMissed");
+        events.add("onDeath");
+        events.add("onHitByBullet");
+        events.add("onHitRobot");
+        events.add("onHitWall");
+        events.add("onRobotDeath");
+        events.add("onRoundEnded");
+        events.add("onScannedRobot");
+        events.add("onStatus");
+        events.add("onWin");
         newCustomEvents.forEach(x -> events.add(x.idNode.id));
     }
 
@@ -296,7 +295,7 @@ public class JavaCodeGenerator extends Visitor {
             Emit("public void " + event + "();", 1);
 
         } else {
-            Emit("public void on" + event + "(" + event + "Event e);", 1);
+            Emit("public void " + event + "(" + event.replace("on", "") + "Event e);", 1);
         }
     }
 
@@ -311,7 +310,7 @@ public class JavaCodeGenerator extends Visitor {
             Emit("public void " + event + "() { currentStrategy." + event + "(); }", 1);
 
         } else {
-            Emit("public void on" + event + "(" + event + "Event e) { currentStrategy.on" + event + "(); }", 1);
+            Emit("public void " + event + "(" + event + "Event e) { currentStrategy." + event + "(); }", 1);
         }
     }
 
@@ -365,7 +364,7 @@ public class JavaCodeGenerator extends Visitor {
 			Emit("});", 1); // end addCustomEvent
 
 		}
-		Emit("", 1);
+		EmitNewLine();
 
 		Emit("while (true) {", 1);
 		indentationLevel++;
@@ -389,6 +388,11 @@ public class JavaCodeGenerator extends Visitor {
 //            Emit("", 1);
 //        }
 
+        for (String event : events) {
+            Emit("public void " + event + "() { currentStrategy." + event + "(); }", 1);
+        }
+        EmitNewLine();
+
 		super.visit(node);
 		indentationLevel--;
 		Emit("}", 2);
@@ -398,7 +402,12 @@ public class JavaCodeGenerator extends Visitor {
 		writer.close();
 	}
 
+	private void EmitNewLine() {
+	    Emit("", 1);
+    }
+
 	private void EmitOnCustomEvent() {
+	    if(newCustomEvents == null || newCustomEvents.size() == 0) return;
 		Emit("public void onCustomEvent(CustomEvent e) {", 1);
 		indentationLevel++;
 		for (NewEventNode newCustomEvent : newCustomEvents) {
@@ -427,7 +436,7 @@ public class JavaCodeGenerator extends Visitor {
                 indentationLevel++;
                 ((StructDefinitionNode) stmtNode).declarationNodes.forEach(dn -> visit(dn));
 
-                Emit("", 1);
+                EmitNewLine();
                 Emit("public " + ((StructDefinitionNode) stmtNode).typeNode.type + "(");
                 List<DeclarationNode> declarationNodes = ((StructDefinitionNode) stmtNode).declarationNodes;
                 for (int i = 0; i < declarationNodes.size(); i++) {
@@ -550,7 +559,7 @@ public class JavaCodeGenerator extends Visitor {
 	    visit(node.fieldIdNode);
 		EmitNoIndent(" = ");
 		visit(node.exprNode);
-		Emit("", 1);
+		EmitNewLine();
     }
 
     @Override
