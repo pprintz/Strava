@@ -1,7 +1,8 @@
 behavior onSetup () :
-//	myStruct { num a }
-//	myStruct something := myStruct[  ]
-//	 myStruct.a := 42
+	myStruct { num a, text g }
+	myStruct something := myStruct[ a := 33, g := "hello" ]
+    something.g := "test"
+    something.a := 42
 	num ax := 1
 	num b := 2
 //	 a.b := 3
@@ -41,7 +42,7 @@ strategy default:
 	;
 
 	behavior onBulletHit(bulletHitEvent e) :
-		num a := 5
+		num y := 5
 	;
 
 	behavior onHitWall(HitWallEvent e) :

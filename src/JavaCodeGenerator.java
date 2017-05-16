@@ -221,7 +221,7 @@ public class JavaCodeGenerator extends Visitor {
                     }
                 }
                 if (!isImplemented) {
-                    EmitCurrentStrategyCalls(event);
+                    EmitCurrentStrategyCall(event);
                 }
             }
         }
@@ -285,22 +285,32 @@ public class JavaCodeGenerator extends Visitor {
 	}
 
     private void EmitDefaultInterfaceEventImplementation(String event) {
-        for (NewEventNode newCustomEvent : newCustomEvents) {
-            if (event.equals(newCustomEvent.idNode.id)) {
-                Emit("public void on" + event + "() { }", 1);
-            } else {
-                Emit("public void on" + event + "(" + event + "Event e) { }", 1);
-            }
+        boolean isCustomEvent = false;
+	    for (NewEventNode newCustomEvent : newCustomEvents) {
+            if (event.equals(newCustomEvent.idNode.id))
+                isCustomEvent = true;
+        }
+
+        if (isCustomEvent) {
+            Emit("public void " + event + "() { }", 1);
+
+        } else {
+            Emit("public void on" + event + "(" + event + "Event e) { }", 1);
         }
     }
 
-    private void EmitCurrentStrategyCalls(String event) {
-        for (NewEventNode newCustomEvent : newCustomEvents) {
-            if (event.equals(newCustomEvent.idNode.id)) {
-                Emit("public void on" + event + "() { currentStrategy.on" + event + "(); }", 1);
-            } else {
-                Emit("public void on" + event + "(" + event + "Event e) { currentStrategy.on" + event + "(); }", 1);
-            }
+    private void EmitCurrentStrategyCall(String event) {
+        boolean isCustomEvent = false;
+	    for (NewEventNode newCustomEvent : newCustomEvents) {
+            if (event.equals(newCustomEvent.idNode.id))
+                isCustomEvent = true;
+        }
+
+        if (isCustomEvent) {
+            Emit("public void " + event + "() { currentStrategy." + event + "(); }", 1);
+
+        } else {
+            Emit("public void on" + event + "(" + event + "Event e) { currentStrategy.on" + event + "(); }", 1);
         }
     }
 
@@ -367,16 +377,16 @@ public class JavaCodeGenerator extends Visitor {
 		EmitChangeStrategyDefinition();
 		EmitOnCustomEvent();
 
-		String behaviorName;
-		if (node.defaultStrategyNode.strategyDefinition.functionsNode != null) {
-            for (BehaviorFunctionNode behavior : node.defaultStrategyNode.strategyDefinition.functionsNode.behaviorFunctions) {
-                behaviorName = behavior.eventName.id;
-                if(behavior.eventType != null) {
-					Emit("public void " + behaviorName + "(" + behaviorName.replace("on", "") + "Event e) { currentStrategy." + behaviorName + "(e); }", 1);
-				}
-            }
-            Emit("", 1);
-        }
+//		String behaviorName;
+//		if (node.defaultStrategyNode.strategyDefinition.functionsNode != null) {
+//            for (BehaviorFunctionNode behavior : node.defaultStrategyNode.strategyDefinition.functionsNode.behaviorFunctions) {
+//                behaviorName = behavior.eventName.id;
+//                if(behavior.eventType != null) {
+//					Emit("public void " + behaviorName + "(" + behaviorName.replace("on", "") + "Event e) { currentStrategy." + behaviorName + "(e); }", 1);
+//				}
+//            }
+//            Emit("", 1);
+//        }
 
 		super.visit(node);
 		indentationLevel--;
@@ -529,7 +539,9 @@ public class JavaCodeGenerator extends Visitor {
 
     @Override
     public void visit(FieldAssignmentNode node) {
-		visit(node.fieldIdNode);
+		// Purely for indent
+	    Emit("");
+	    visit(node.fieldIdNode);
 		EmitNoIndent(" = ");
 		visit(node.exprNode);
 		Emit("", 1);
