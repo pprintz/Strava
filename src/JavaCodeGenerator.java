@@ -395,20 +395,34 @@ public class JavaCodeGenerator extends Visitor {
 	@Override
 	public void visit(StructDefinitionNode node) {
 		// This method is intentionally empty
+        // It is handled in EmitStructDefinitions
 	}
 
 	private void EmitStructDefinitions(ProgNode node) {
 		if(node.setupNode == null) return;
-		node.setupNode.setupBlockNode.setupStmts.forEach(st -> {
-			if(st instanceof StructDefinitionNode){
-				Emit("class " + ((StructDefinitionNode) st).typeNode.type + " {", 1);
-				indentationLevel++;
-				((StructDefinitionNode) st).declarationNodes.forEach(dn -> visit(dn));
-				indentationLevel--;
-				Emit("}", 2);
-			}
-		});
-	}
+        for (StmtNode stmtNode : node.setupNode.setupBlockNode.setupStmts) {
+            if (stmtNode instanceof StructDefinitionNode) {
+                Emit("class " + ((StructDefinitionNode) stmtNode).typeNode.type + " {", 1);
+                indentationLevel++;
+                ((StructDefinitionNode) stmtNode).declarationNodes.forEach(dn -> visit(dn));
+
+                Emit("", 1);
+                Emit("public " + ((StructDefinitionNode) stmtNode).typeNode.type + "(");
+                for (DeclarationNode declarationNode : ((StructDefinitionNode) stmtNode).declarationNodes) {
+                    EmitNoIndent(declarationNode.typeNode.type + " " + declarationNode.idNode.id);
+                }
+                EmitNoIndent(") {\n");
+                indentationLevel++;
+                for (DeclarationNode declarationNode : ((StructDefinitionNode) stmtNode).declarationNodes) {
+                    Emit("this." + declarationNode.idNode.id + " = " + declarationNode.idNode.id, 1);
+                }
+                indentationLevel--;
+                Emit("}", 1);
+                indentationLevel--;
+                Emit("}", 2);
+            }
+        }
+    }
 
 	@Override
 	public void visit(RunNode node) {
@@ -478,10 +492,20 @@ public class JavaCodeGenerator extends Visitor {
 
     @Override
     public void visit(AssignmentNode node) {
-		visit(node.idNode, true);
+		Emit(node.idNode.id);
 		EmitNoIndent(" = ");
 		visit(node.exprNode);
 		EmitNoIndent(";\n");
+    }
+
+    public void visit(AssignmentNode node, boolean indent) {
+		if (indent) {
+		    Emit(node.idNode.id);
+        } else {
+		    EmitNoIndent(node.idNode.id);
+        }
+		EmitNoIndent(" = ");
+		visit(node.exprNode);
     }
 
     @Override
@@ -549,7 +573,19 @@ public class JavaCodeGenerator extends Visitor {
 
     @Override
     public void visit(ExprFunctionCallNode node) {
-        super.visit(node);
+        if(node.fieldIdNode != null)
+            visit(node.fieldIdNode);
+        else {
+            visit(node.idNode);
+        }
+
+        EmitNoIndent("(");
+
+        if(node.actualParams != null)
+            node.actualParams.accept(this);
+
+        EmitNoIndent(")");
+
     }
 
     @Override
@@ -581,15 +617,18 @@ public class JavaCodeGenerator extends Visitor {
     }
 
     @Override
-	// TODO: Make sure this can handle a struct init with no assignments
     public void visit(StructInitializationNode node) {
 		EmitNoIndent("new ");
 		visit(node.typeNode);
-		EmitNoIndent(" {\n");
-		indentationLevel++;
-		node.assignments.forEach(n -> visit(n));
-		indentationLevel--;
-		Emit("}", 1);
+		EmitNoIndent("(");
+        for (int i = 0; i < node.assignments.size(); i++) {
+            AssignmentNode n = node.assignments.get(i);
+            visit(n, false);
+            if (node.assignments.size() != 1 && i + 1 != node.assignments.size()) {
+                EmitNoIndent(", ");
+            }
+        }
+        EmitNoIndent(");\n");
 	}
 
     public String BinaryOperatorToJavaOperator(BinaryOperator binaryOperator) {
