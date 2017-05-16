@@ -5,6 +5,7 @@ import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 public class JavaCodeGenerator extends Visitor {
 	private int indentationLevel = 0;
@@ -428,8 +429,13 @@ public class JavaCodeGenerator extends Visitor {
 
                 Emit("", 1);
                 Emit("public " + ((StructDefinitionNode) stmtNode).typeNode.type + "(");
-                for (DeclarationNode declarationNode : ((StructDefinitionNode) stmtNode).declarationNodes) {
+                List<DeclarationNode> declarationNodes = ((StructDefinitionNode) stmtNode).declarationNodes;
+                for (int i = 0; i < declarationNodes.size(); i++) {
+                    DeclarationNode declarationNode = declarationNodes.get(i);
                     EmitNoIndent(declarationNode.typeNode.type + " " + declarationNode.idNode.id);
+                    if(i + 1 != declarationNodes.size()) {
+                        EmitNoIndent(", ");
+                    }
                 }
                 EmitNoIndent(") {\n");
                 indentationLevel++;
@@ -646,7 +652,8 @@ public class JavaCodeGenerator extends Visitor {
         for (int i = 0; i < node.assignments.size(); i++) {
             AssignmentNode n = node.assignments.get(i);
             visit(n.exprNode);
-            if (node.assignments.size() != 1 && i + 1 != node.assignments.size()) {
+//            if (node.assignments.size() != 1 && i + 1 != node.assignments.size()) {
+            if (i + 1 != node.assignments.size()) {
                 EmitNoIndent(", ");
             }
         }
