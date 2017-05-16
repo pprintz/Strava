@@ -555,6 +555,7 @@ public class JavaCodeGenerator extends Visitor {
 	    visit(node.fieldIdNode);
 		EmitNoIndent(" = ");
 		visit(node.exprNode);
+		EmitNoIndent(";");
 		EmitNewLine();
     }
 
