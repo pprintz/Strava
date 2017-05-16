@@ -623,7 +623,7 @@ public class JavaCodeGenerator extends Visitor {
 		EmitNoIndent("(");
         for (int i = 0; i < node.assignments.size(); i++) {
             AssignmentNode n = node.assignments.get(i);
-            visit(n, false);
+            visit(n.exprNode);
             if (node.assignments.size() != 1 && i + 1 != node.assignments.size()) {
                 EmitNoIndent(", ");
             }
