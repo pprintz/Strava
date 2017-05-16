@@ -47,6 +47,20 @@ strategy default:
 	behavior onHitWall(HitWallEvent e) :
 		ahead(50)
 	;
+
+	define void printStuff() :
+        log("stuff is getting printed")
+    ;
+	define text getText() :
+        return "hey"
+    ;
+	define num getNum() :
+        return 2
+    ;
+
+	define bool getBool() :
+        return true
+    ;
 ;
 
 define void lol(myStruct rofl) :

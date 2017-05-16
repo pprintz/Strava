@@ -26,7 +26,7 @@ public class JavaCodeGenerator extends Visitor {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-        className = "MyRobot";
+        className = "robot_MyRobot";
     }
 
     @Override
@@ -200,7 +200,7 @@ public class JavaCodeGenerator extends Visitor {
      */
 	@Override
 	public void visit(DefaultStrategyNode node) {
-		Emit("class defaultStrategy implements Strategy {", 1);
+		Emit("class strategy_defaultStrategy implements Strategy {", 1);
 		indentationLevel++;
         visit(node.strategyDefinition.runNode);
 		visit(node.strategyDefinition.functionsNode);
@@ -229,6 +229,7 @@ public class JavaCodeGenerator extends Visitor {
 	public void visit(DefineFunctionNode node) {
 		Emit("public ", 0);
 		visit(node.typeNode);
+		EmitNoIndent(" " + node.idNode.id);
 		EmitNoIndent("(");
 		if (node.formalParamsNode != null) {
 			visit(node.formalParamsNode);
@@ -314,11 +315,11 @@ public class JavaCodeGenerator extends Visitor {
 		if(node.setupNode != null) {
             Emit("setup();", 1);
         }
-        Emit("currentStrategy = new defaultStrategy();", 1);
+        Emit("currentStrategy = new strategy_defaultStrategy();", 1);
         Emit("strategies = new HashMap<String, Strategy>();", 1);
         for (String strategy : strategies) {
             if (!strategy.startsWith("default")) {
-                Emit("strategies.put(\"" + strategy + "\", " + "new " + strategy + "Strategy());", 1);
+                Emit("strategies.put(\"" + strategy + "\", " + "new strategy_" + strategy + "Strategy());", 1);
             } else {
                 Emit("strategies.put(\"" + strategy + "\", currentStrategy);", 1);
             }
@@ -452,9 +453,9 @@ public class JavaCodeGenerator extends Visitor {
 
 	@Override
 	public void visit(StrategyNode node) {
-		Emit("class", 0);
-		visit(node.idNode, false);
-		EmitNoIndent("Strategy extends defaultStrategy { \n");
+		Emit("class ", 0);
+		EmitNoIndent("strategy_" + node.idNode.id);
+		EmitNoIndent("Strategy extends strategy_defaultStrategy { \n");
 		indentationLevel++;
 		visit(node.strategyDefinition);
 		indentationLevel--;
@@ -571,15 +572,8 @@ public class JavaCodeGenerator extends Visitor {
 
     @Override
     public void visit(StrategyDefinitionNode node) {
-		if(node.runNode != null) {
-			visit(node.runNode);
-		}
-
-        for (BehaviorFunctionNode behavior : node.functionsNode.behaviorFunctions) {
-            if (!events.contains(behavior.eventName.id)) {
-                visit(behavior);
-            }
-        }
+        visit(node.runNode);
+        visit(node.functionsNode);
     }
 
     @Override
