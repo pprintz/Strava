@@ -440,7 +440,7 @@ public class JavaCodeGenerator extends Visitor {
                 EmitNoIndent(") {\n");
                 indentationLevel++;
                 for (DeclarationNode declarationNode : ((StructDefinitionNode) stmtNode).declarationNodes) {
-                    Emit("this." + declarationNode.idNode.id + " = " + declarationNode.idNode.id, 1);
+                    Emit("this." + declarationNode.idNode.id + " = " + declarationNode.idNode.id + ";", 1);
                 }
                 indentationLevel--;
                 Emit("}", 1);
