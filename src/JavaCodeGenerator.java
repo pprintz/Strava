@@ -172,7 +172,8 @@ public class JavaCodeGenerator extends Visitor {
 	    Emit("\n", 0);
         Emit("public void " + node.eventName.id + "(", 0);
         if(node.eventType != null) {
-            EmitNoIndent(node.eventName.id.replace("on", "") + "Event e");
+//            EmitNoIndent(node.eventName.id.replace("on", "") + "Event e");
+            EmitNoIndent(node.eventType.type);
 		}
         EmitNoIndent(")");
         visit(node.blockNode);
@@ -201,9 +202,9 @@ public class JavaCodeGenerator extends Visitor {
 	public void visit(DefaultStrategyNode node) {
 		Emit("class defaultStrategy implements Strategy {", 1);
 		indentationLevel++;
-		if (node.strategyDefinition.runNode != null) {
-			visit(node.strategyDefinition.runNode);
-		}
+        visit(node.strategyDefinition.runNode);
+		visit(node.strategyDefinition.functionsNode);
+		// FIXME
         String fullEventName;
         for (String event : events) {
             fullEventName = "on" + event;
@@ -212,7 +213,7 @@ public class JavaCodeGenerator extends Visitor {
                 for (BehaviorFunctionNode behavior : node.strategyDefinition.functionsNode.behaviorFunctions) {
                     if (fullEventName.equals(behavior.eventName.id)) {
                         isImplemented = true;
-                        visit(behavior);
+//                        visit(behavior);
                         break;
                     }
                 }
@@ -278,7 +279,7 @@ public class JavaCodeGenerator extends Visitor {
 	        Emit("void on" + eventString + "(" + eventString + "Event e);", 1);
         }
 		for (NewEventNode newCustomEvent : newCustomEvents) {
-			Emit("void " + newCustomEvent.idNode.id + "(); // new custom event", 1);
+			Emit("void on" + newCustomEvent.idNode.id + "(); // new custom event", 1);
 		}
 	}
 
@@ -337,6 +338,7 @@ public class JavaCodeGenerator extends Visitor {
 			Emit("});", 1); // end addCustomEvent
 
 		}
+		Emit("", 1);
 
 		Emit("while (true) {", 1);
 		indentationLevel++;
@@ -405,6 +407,8 @@ public class JavaCodeGenerator extends Visitor {
 
 	@Override
 	public void visit(RunNode node) {
+	    if(node == null) return;
+
 		Emit("public void run()", 0);
 		super.visit(node);
 	}
@@ -529,6 +533,7 @@ public class JavaCodeGenerator extends Visitor {
 
     @Override
     public void visit(FunctionsNode node) {
+	    if (node == null) return;
         super.visit(node);
     }
 
