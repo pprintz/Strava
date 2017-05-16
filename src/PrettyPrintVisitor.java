@@ -55,8 +55,8 @@ public class PrettyPrintVisitor extends Visitor {
     @Override
     public void visit(BehaviorFunctionNode node) {
         System.out.print(indent() + "BEHAVIOR ");
-        visit(node.idNode);
-        System.out.println("(" + node.eventType.type + " " + node.idNode.id + ")");
+        visit(node.eventName);
+        System.out.println("(" + node.eventType.type + " " + node.eventName.id + ")");
         indentationLevel++;
         visit(node.blockNode);
         indentationLevel--;

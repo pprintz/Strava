@@ -1,8 +1,8 @@
 behavior onSetup () :
 
-    new event AlwaysFalse :
-        return false
-    ;
+//    new event AlwaysFalse :
+//        return false
+//    ;
 ;
 
 
@@ -18,7 +18,7 @@ strategy aggressive :
         ahead(5)
     ;
 
-    behavior onAlwaysFalse :
-        turnGunRight(5)
-    ;
+//    behavior onAlwaysFalse :
+//        turnGunRight(5)
+//    ;
 ;

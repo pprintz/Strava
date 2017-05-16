@@ -170,9 +170,9 @@ public class JavaCodeGenerator extends Visitor {
     @Override
     public void visit(BehaviorFunctionNode node) {
 	    Emit("\n", 0);
-        Emit("public void " + node.idNode.id + "(", 0);
+        Emit("public void " + node.eventName.id + "(", 0);
         if(node.eventType != null) {
-            EmitNoIndent(node.idNode.id.replace("on", "") + "Event e");
+            EmitNoIndent(node.eventName.id.replace("on", "") + "Event e");
 		}
         EmitNoIndent(")");
         visit(node.blockNode);
@@ -210,7 +210,7 @@ public class JavaCodeGenerator extends Visitor {
             boolean isImplemented = false;
             if (node.strategyDefinition.functionsNode != null) {
                 for (BehaviorFunctionNode behavior : node.strategyDefinition.functionsNode.behaviorFunctions) {
-                    if (fullEventName.equals(behavior.idNode.id)) {
+                    if (fullEventName.equals(behavior.eventName.id)) {
                         isImplemented = true;
                         visit(behavior);
                         break;
@@ -353,7 +353,7 @@ public class JavaCodeGenerator extends Visitor {
 		String behaviorName;
 		if (node.defaultStrategyNode.strategyDefinition.functionsNode != null) {
             for (BehaviorFunctionNode behavior : node.defaultStrategyNode.strategyDefinition.functionsNode.behaviorFunctions) {
-                behaviorName = behavior.idNode.id;
+                behaviorName = behavior.eventName.id;
                 if(behavior.eventType != null) {
 					Emit("public void " + behaviorName + "(" + behaviorName.replace("on", "") + "Event e) { currentStrategy." + behaviorName + "(e); }", 1);
 				}
@@ -589,7 +589,7 @@ public class JavaCodeGenerator extends Visitor {
 		}
 
         for (BehaviorFunctionNode behavior : node.functionsNode.behaviorFunctions) {
-            if (!events.contains(behavior.idNode.id)) {
+            if (!events.contains(behavior.eventName.id)) {
                 visit(behavior);
             }
         }
