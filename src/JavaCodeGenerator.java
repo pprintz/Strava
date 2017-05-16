@@ -209,19 +209,28 @@ public class JavaCodeGenerator extends Visitor {
         }
 		visit(node.strategyDefinition.functionsNode);
 
-        String fullEventName;
         for (String event : events) {
-            fullEventName = "on" + event;
             boolean isImplemented = false;
             if (node.strategyDefinition.functionsNode != null) {
                 for (BehaviorFunctionNode behavior : node.strategyDefinition.functionsNode.behaviorFunctions) {
                     String eventName = behavior.eventName.id;
-                    if (fullEventName.equals(eventName)) {
+                    if (event.equals(eventName)) {
                         isImplemented = true;
+                        visit(behavior);
                     }
                 }
                 if (!isImplemented) {
-                    EmitDefaultInterfaceEventImplementation(event);
+                    boolean isCustomEvent = false;
+                    for (NewEventNode newCustomEvent : newCustomEvents) {
+                        if (event.equals(newCustomEvent.idNode.id)) {
+                            isCustomEvent = true;
+                        }
+                    }
+                    if (isCustomEvent) {
+                        Emit("public void " + event + "() { }", 1);
+                    } else {
+                        Emit("public void " + event + "(" + event.replace("on", "") + "Event e) { }", 1);
+                    }
                 }
             }
         }
@@ -229,7 +238,7 @@ public class JavaCodeGenerator extends Visitor {
 		Emit("}", 2);
 	}
 
-	@Override
+    @Override
 	public void visit(DefineFunctionNode node) {
 		Emit("public ", 0);
 		visit(node.typeNode);
@@ -363,7 +372,18 @@ public class JavaCodeGenerator extends Visitor {
 		EmitOnCustomEvent();
 
         for (String event : events) {
-            Emit("public void " + event + "() { currentStrategy." + event + "(); }", 1);
+            boolean isCustomEvent = false;
+            for (NewEventNode newCustomEvent : newCustomEvents) {
+                if (event.equals(newCustomEvent.idNode.id))
+                    isCustomEvent = true;
+            }
+            if (isCustomEvent) {
+                Emit("public void " + event + "() { currentStrategy." + event + "(); }", 1);
+
+            } else {
+                Emit("public void " + event + "(" + event.replace("on", "") + "Event e) { currentStrategy." + event + "(e); }", 1);
+
+            }
         }
         EmitNewLine();
 
@@ -387,7 +407,7 @@ public class JavaCodeGenerator extends Visitor {
 		for (NewEventNode newCustomEvent : newCustomEvents) {
 			Emit("if (e.getCondition().getName().equals(\"" + newCustomEvent.idNode.id + "\")) {", 1);
 			indentationLevel++;
-			Emit("currentStrategy.on" + newCustomEvent.idNode.id + "();", 1);
+			Emit("currentStrategy." + newCustomEvent.idNode.id + "();", 1);
 			// trigger -= 20;
 			indentationLevel--;
 			Emit("}", 1);
@@ -415,7 +435,6 @@ public class JavaCodeGenerator extends Visitor {
                 List<DeclarationNode> declarationNodes = ((StructDefinitionNode) stmtNode).declarationNodes;
                 for (int i = 0; i < declarationNodes.size(); i++) {
                     DeclarationNode declarationNode = declarationNodes.get(i);
-//                    EmitNoIndent(declarationNode.typeNode.type + " " + declarationNode.idNode.id);
                     visit(declarationNode.typeNode);
                     EmitNoIndent(" ");
                     visit(declarationNode.idNode);
