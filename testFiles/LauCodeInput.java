@@ -1,8 +1,10 @@
 behavior onSetup () :
-	myStruct { num a, text g }
-	myStruct something := myStruct[ a := 33, g := "hello" ]
-    something.g := "test"
-    something.a := 42
+    testStruct {text asd, num dfg}
+    testStruct tests := testStruct[asd := "asd", dfg := 45]
+	myStruct { num a, testStruct local, text g }
+	myStruct something := myStruct[ a := 33, local := tests, g := "hello" ]
+//    something.g := "test"
+//    something.a := 42
 	num ax := 1
 	num b := 2
 //	 a.b := 3
@@ -19,14 +21,20 @@ behavior onSetup () :
 
 strategy default:
 	behavior onRun () :
-		if ax < 5 :
-			move(10)
-		; else if 5 < 3 :
-			ax := 4
-		; else :
-			move(-10.5)
-		;
-		ax := ax + 2
+//		if ax < 5 :
+//			move(10)
+//		; else if 5 < 3 :
+//			ax := 4
+//		; else :
+//			move(-10.5)
+//		;
+//		ax := ax + 2
+        rotate(-100)
+        rotate(100)
+        rotateGun(250)
+        rotateGun(-250)
+        rotateRadar(175)
+        rotateRadar(-175)
 	;
 
 	behavior onAlwaysTrue () :
@@ -49,9 +57,9 @@ strategy default:
 		move(50)
 	;
 
-	define void printStuff() :
-        log("stuff is getting printed")
-    ;
+//	define void printStuff() :
+//        log("stuff is getting printed")
+//    ;
 	define text getText() :
         return "hey"
     ;

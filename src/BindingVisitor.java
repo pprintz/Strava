@@ -62,6 +62,9 @@ public class BindingVisitor extends Visitor {
     private void TranslateRoboFunctionsToStrava() {
         roboFunctions.put("log", "System.out.println");
         roboFunctions.put("move", "ahead");
+        roboFunctions.put("rotate", "turnRight");
+        roboFunctions.put("rotateGun", "turnGunRight");
+        roboFunctions.put("rotateRadar", "turnRadarRight");
     }
 
     /**
