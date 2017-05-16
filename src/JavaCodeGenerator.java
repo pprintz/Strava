@@ -221,7 +221,7 @@ public class JavaCodeGenerator extends Visitor {
                     }
                 }
                 if (!isImplemented) {
-                    EmitDefaultInterfaceEventImplementation(event);
+                    EmitCurrentStrategyCalls(event);
                 }
             }
         }
@@ -290,6 +290,16 @@ public class JavaCodeGenerator extends Visitor {
                 Emit("public void on" + event + "() { }", 1);
             } else {
                 Emit("public void on" + event + "(" + event + "Event e) { }", 1);
+            }
+        }
+    }
+
+    private void EmitCurrentStrategyCalls(String event) {
+        for (NewEventNode newCustomEvent : newCustomEvents) {
+            if (event.equals(newCustomEvent.idNode.id)) {
+                Emit("public void on" + event + "() { currentStrategy.on" + event + "(); }", 1);
+            } else {
+                Emit("public void on" + event + "(" + event + "Event e) { currentStrategy.on" + event + "(); }", 1);
             }
         }
     }
