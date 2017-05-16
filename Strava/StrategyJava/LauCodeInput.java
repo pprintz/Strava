@@ -1,12 +1,12 @@
 behavior onSetup () :
-	myStruct { num a }
-	//myStruct something := myStruct[  ]
-	// myStruct.a := 42
+//	myStruct { num a }
+//	myStruct something := myStruct[  ]
+//	 myStruct.a := 42
 	num ax := 1
 	num b := 2
-	// a.b := 3
+//	 a.b := 3
 	log("\t180008238")
-
+    log(5)
 	new event onAlwaysTrue :
 		return true
 	;
@@ -19,11 +19,11 @@ behavior onSetup () :
 strategy default:
 	behavior onRun () :
 		if ax < 5 :
-			ahead(10)
+			move(10)
 		; else if 5 < 3 :
 			ax := 4
 		; else :
-			back(10)
+			move(-10.5)
 		;
 		ax := ax + 2
 	;
@@ -45,21 +45,23 @@ strategy default:
 	;
 
 	behavior onHitWall(HitWallEvent e) :
-		ahead(50)
+		move(50)
 	;
 ;
 
-define void lol(myStruct rofl) :
+define void lol() :
 	loop :
 		log("hello from loop")
 		log(2^4)
+        move(5)
+        move(-5)
 	;
 ;
 
 strategy aggressive :
 	behavior onRun () :
 		turnGunRight(360)
-		helloFuckingWorld := myStruct[a := 2]
+//		helloFuckingWorld := myStruct[a := 2]
 	;
 
 	behavior onHitByBullet(hitByBulletEvent e) :

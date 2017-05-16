@@ -177,8 +177,7 @@ public class TypeChecker extends Visitor {
                     for (int i = 0; i < actualParamsCount; i++) {
                         TypeNode currentFormalTypeNode = formalParamsNode.typeNodes.get(i);
                         ExprNode currentActualExprNode = actualParamsNode.exprs.get(i);
-                        if(currentActualExprNode.Type == Type.STRUCT && currentActualExprNode instanceof IdNode){
-                        }
+
                         TypeAndExprMatches(node, currentFormalTypeNode, currentActualExprNode);
                     }
                 }
@@ -315,8 +314,13 @@ public class TypeChecker extends Visitor {
                 TypeErrorOccured(node, rightSideTypeString, typeNode.Type.toString());
             }
         } else if (typeNode.Type != exprNode.Type) {
-            isAMatch = false;
-            TypeErrorOccured(node, exprNode.Type, typeNode.Type);
+            // Num can be converted to Text (for log etc.)
+            if (typeNode.Type == Type.TEXT && exprNode.Type == Type.NUM) {
+                isAMatch = true;
+            } else {
+                isAMatch = false;
+                TypeErrorOccured(node, exprNode.Type, typeNode.Type);
+            }
         }
         return isAMatch;
     }
