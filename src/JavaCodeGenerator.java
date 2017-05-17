@@ -569,6 +569,18 @@ public class JavaCodeGenerator extends Visitor {
 	}
 
     @Override
+    public void visit(FieldValueNode node) {
+        for (int i = 0; i < node.idNodes.size(); i++) {
+            IdNode idNode = node.idNodes.get(i);
+            EmitNoIndent(idNode.id);
+            if(i + 1 != node.idNodes.size()) {
+                EmitNoIndent(".");
+            }
+
+        }
+    }
+
+    @Override
     public void visit(FormalParamsNode node) {
 		for (int i = 0; i < node.idNodes.size(); i++) {
 			visit(node.typeNodes.get(i), false);
