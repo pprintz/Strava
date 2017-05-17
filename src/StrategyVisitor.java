@@ -23,6 +23,7 @@ public class StrategyVisitor extends Visitor {
 	}
 
 	public void visit(NewEventNode node) {
+	    node.idNode.id = "on" + node.idNode.id;
 		newCustomEvents.add(node);
 	}
 
