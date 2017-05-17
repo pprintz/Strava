@@ -57,9 +57,9 @@ strategy default:
 		move(50)
 	;
 
-//	define void printStuff() :
-//        log("stuff is getting printed")
-//    ;
+	define void printStuff() :
+        log("stuff is getting printed")
+    ;
 	define text getText() :
         return "hey"
     ;
@@ -93,7 +93,7 @@ strategy aggressive :
 ;
 
 define void printStuff(text aq, text b) :
-	//log(aq + b)
+	log(aq + b)
     log(aq)
     log(b)
 ;

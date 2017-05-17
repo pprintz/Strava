@@ -1,6 +1,6 @@
 import Enums.BinaryOperator;
 
-import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -23,11 +23,11 @@ public class JavaCodeGenerator extends Visitor {
 		events = new ArrayList<>();
 		AddAllEventsToList();
 		try {
-			writer = new PrintWriter(new FileOutputStream("./StrategyJava/JavaCodeGeneratorOutput.java", false));
+            writer = new PrintWriter(new FileWriter("./StrategyJava/JavaCodeGeneratorOutput.java", false));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-        className = "robot_MyRobot";
+        className = "Robot_MyRobot";
     }
 
     @Override
