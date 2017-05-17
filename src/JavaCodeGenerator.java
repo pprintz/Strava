@@ -300,9 +300,9 @@ public class JavaCodeGenerator extends Visitor {
                 isCustomEvent = true;
         }
         if (isCustomEvent) {
-            Emit("public void " + event + "();", 1);
+            Emit("void " + event + "();", 1);
         } else {
-            Emit("public void " + event + "(" + event.replace("on", "") + "Event e);", 1);
+            Emit("void " + event + "(" + event.replace("on", "") + "Event e);", 1);
         }
     }
 

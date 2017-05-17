@@ -52,7 +52,7 @@ public class StrategyRobot extends AdvancedRobot implements Strategy {
 }
 
 
-class DefaultStrategy extends AdvancedRobot implements Strategy {
+class DefaultStrategy extends StrategyRobot implements Strategy {
 
     StrategyRobot self;
 
