@@ -2,6 +2,9 @@ behavior onSetup():
     my{num val}
     ny{num bb}
     my x
+    new event abe:
+        return 22
+    ;
     bool bb
     ny abe := ny[bb := 42]
     abe.bb := 10
@@ -19,18 +22,11 @@ define void l():
 ;
 ;
 strategy aggro:
-    define void l():
-    ;
     define void b():
     ;
-    define void Bar():
-    ;
 ;
-define void Foo(num a, num b):
+define num Foo(num a, num b):
     num lol := Bar("asdasdad", 32, 42 , 2202002)
-;
-define num Bar():
-    return 42
 ;
 define void Bar():
 ;

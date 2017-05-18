@@ -26,26 +26,37 @@ public class Main {
         BindingVisitor bindingVisitor = new BindingVisitor(functionBindingVisitor.getSymbolTable(), functionBindingVisitor.getStrategyEnvironment());
         bindingVisitor.visit(ast);
         if(!CompileErrors.isEmpty()){
-            for(CompilerError.Error e : CompileErrors){
-                System.out.println(e);
-            }
-            System.exit(0);
+            PrintErrorsAndTerminate();
         }
 
         ValidReturnVisitor vrv = new ValidReturnVisitor();
         vrv.visit(ast);
 
+        if(!CompileErrors.isEmpty()){
+            PrintErrorsAndTerminate();
+        }
+
         TypeChecker typeChecker = new TypeChecker();
         typeChecker.visit(ast);
-		System.out.println("Type checking done.");
 
-        StrategyVisitor strategyVisitor = new StrategyVisitor();
-		strategyVisitor.visit(ast);
-		JavaCodeGenerator codeGenerator = new JavaCodeGenerator(strategyVisitor.strategies, strategyVisitor.newCustomEvents);
-		codeGenerator.visit(ast);
+        if(!CompileErrors.isEmpty()){
+            PrintErrorsAndTerminate();
+        }
+		System.out.println("Type checking done.");
+//
+//        StrategyVisitor strategyVisitor = new StrategyVisitor();
+//		strategyVisitor.visit(ast);
+//		JavaCodeGenerator codeGenerator = new JavaCodeGenerator(strategyVisitor.strategies, strategyVisitor.newCustomEvents);
+//		codeGenerator.visit(ast);
 
 		System.out.println("Code generation done.");
         System.out.println("Everything went okay.");
+    }
+    private static void PrintErrorsAndTerminate() {
+        for (CompilerError.Error e : CompileErrors) {
+            System.out.println(e);
+        }
+        System.exit(0);
     }
 
     public static ASTNode GenerateAST(InputStream is) throws Exception {

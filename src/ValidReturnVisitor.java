@@ -11,12 +11,22 @@ public class ValidReturnVisitor extends Visitor {
     @Override
     public void visit(DefineFunctionNode node) {
         boolean isReturning = false;
-        if (node.typeNode.type.equals("void")) {
+        if (!node.typeNode.type.equals("void")) {
             isReturning = isBranchReturning(node.blockNode);
-            if (isReturning) {
+            if (!isReturning) {
                 hasReturnError = true;
                 Main.CompileErrors.add(new MissingReturnError(node.columnNumber, node.lineNumber, node.idNode.id));
             }
+        }
+    }
+
+    @Override
+    public void visit(NewEventNode node) {
+        boolean isReturning = false;
+        isReturning = isBranchReturning(node.blockNode);
+        if (!isReturning) {
+            hasReturnError = true;
+            Main.CompileErrors.add(new MissingReturnError(node.columnNumber, node.lineNumber, "in body of " + node.idNode.id));
         }
     }
 

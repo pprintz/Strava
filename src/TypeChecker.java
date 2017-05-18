@@ -420,7 +420,7 @@ public class TypeChecker extends Visitor {
     }
 
     public void visit(NewEventNode node) {
-        currentBlockTypeNode = node.typeNode;
+        currentBlockTypeNode = new TypeNode("bool");
         super.visit(node);
     }
 
