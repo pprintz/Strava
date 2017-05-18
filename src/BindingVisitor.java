@@ -11,6 +11,7 @@ public class BindingVisitor extends Visitor {
     public static boolean hasBindingErrorOccured = false;
     public static HashMap<String, String> roboFunctions;
 
+
     //For properly handling functions private to a strategy
     private HashMap<String, HashMap<String, DefineFunctionNode>> stategyEnvironment;
     private boolean insideStrategy;
@@ -466,7 +467,6 @@ public class BindingVisitor extends Visitor {
     @Override
     public void visit(StructDefinitionNode node) {
         symbolTable.peek().put(node.typeNode.type, node);
-        node.declarationNodes.forEach((d) -> visit(d));
     }
 
     @Override
