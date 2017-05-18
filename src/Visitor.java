@@ -99,11 +99,14 @@ public abstract class Visitor {
     }
 
     public void visit(FunctionCallNode node){
-        if(node.fieldIdNode != null)
-        node.fieldIdNode.accept(this);
-        node.idNode.accept(this);
-        if(node.actualParams != null)
-        node.actualParams.accept(this);
+        if(node.fieldIdNode != null) {
+            node.fieldIdNode.accept(this);
+        } else {
+            node.idNode.accept(this);
+        }
+        if(node.actualParams != null) {
+            node.actualParams.accept(this);
+        }
     }
 
     public void visit(FunctionsNode node){
@@ -133,11 +136,14 @@ public abstract class Visitor {
 		}
 	}
     public void visit(ExprFunctionCallNode node){
-        if(node.fieldIdNode != null)
+        if(node.fieldIdNode != null) {
             node.fieldIdNode.accept(this);
-        node.idNode.accept(this);
-        if(node.actualParams != null)
+        } else {
+            node.idNode.accept(this);
+        }
+        if(node.actualParams != null) {
             node.actualParams.accept(this);
+        }
     }
 
     public void visit(LiteralNode node){

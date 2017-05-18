@@ -32,12 +32,19 @@ public class JavaCodeGenerator extends Visitor {
 
     @Override
     public void visit(FunctionCallNode node) {
-	    if (BindingVisitor.roboFunctions.containsKey(node.idNode.id)) {
-            Emit(BindingVisitor.roboFunctions.get(node.idNode.id) + "(", 0);
+	    Emit(""); //Permanent temporary fix.
+	    if (node.idNode != null && BindingVisitor.roboFunctions.containsKey(node.idNode.id)) {
+            Emit(BindingVisitor.roboFunctions.get(node.idNode.id));
         } else {
-	        Emit(node.idNode.id + "(", 0);
+	        int lastElement = node.fieldIdNode.idNodes.size() - 1;
+	        if (BindingVisitor.roboFunctions.containsKey(node.fieldIdNode.idNodes.get(lastElement).id)) {
+                visit(node.fieldIdNode);
+            }
         }
-        visit(node.actualParams);
+        EmitNoIndent("(");
+        if (node.actualParams != null) {
+            visit(node.actualParams);
+        }
         EmitNoIndent(");\n");
     }
 
@@ -668,7 +675,6 @@ public class JavaCodeGenerator extends Visitor {
         for (int i = 0; i < node.assignments.size(); i++) {
             AssignmentNode n = node.assignments.get(i);
             visit(n.exprNode);
-//            if (node.assignments.size() != 1 && i + 1 != node.assignments.size()) {
             if (i + 1 != node.assignments.size()) {
                 EmitNoIndent(", ");
             }

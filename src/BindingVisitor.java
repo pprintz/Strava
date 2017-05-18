@@ -65,6 +65,7 @@ public class BindingVisitor extends Visitor {
         roboFunctions.put("rotate", "turnRight");
         roboFunctions.put("rotateGun", "turnGunRight");
         roboFunctions.put("rotateRadar", "turnRadarRight");
+        roboFunctions.put("getAngle", "getBearing");
     }
 
     /**
@@ -78,6 +79,7 @@ public class BindingVisitor extends Visitor {
         AddRoboFunctionToSymbolTable("void", "doNothing", null, null);
         AddRoboFunctionToSymbolTable("void", "execute", null, null);
         AddRoboFunctionToSymbolTable("void", "fire", new String[]{"num"}, new String[]{"power"});
+        AddRoboFunctionToSymbolTable("num", "getAngle", null, null);
         AddRoboFunctionToSymbolTable("num", "getBattleFieldHeight", null, null);
         AddRoboFunctionToSymbolTable("num", "getBattleFieldWidth", null, null);
         AddRoboFunctionToSymbolTable("num", "getDataQuotaAvailable", null, null);
@@ -321,15 +323,15 @@ public class BindingVisitor extends Visitor {
 
         private String getExpectedStructLitteralSignature (List < DeclarationNode > declarationNodes) {
             int lenght = declarationNodes.size();
-            String stringRep = "[";
+            StringBuilder stringRep = new StringBuilder("[");
             for (int i = 0; i < lenght; i++) {
                 if (i == lenght - 1) {
-                    stringRep += declarationNodes.get(i).idNode.id + " := expression]";
+                    stringRep.append(declarationNodes.get(i).idNode.id).append(" := expression]");
                 } else {
-                    stringRep += declarationNodes.get(i).idNode.id + " := expression, ";
+                    stringRep.append(declarationNodes.get(i).idNode.id).append(" := expression, ");
                 }
             }
-            return stringRep;
+            return stringRep.toString();
         }
         private void BindInstantiatedStructToDef (DeclarationNode node){
             boolean isStructDefined = false;
@@ -346,7 +348,12 @@ public class BindingVisitor extends Visitor {
 
         @Override
         public void visit (FunctionCallNode node){
-            node.defineFunctionNode = BindFunctionCallToDeclaration(node, node.idNode.id, node.actualParams);
+            if (node.idNode != null) {
+                node.defineFunctionNode = BindFunctionCallToDeclaration(node, node.idNode.id, node.actualParams);
+            } else {
+                int lastElement = node.fieldIdNode.idNodes.size() - 1;
+                node.defineFunctionNode = BindFunctionCallToDeclaration(node, node.fieldIdNode.idNodes.get(lastElement).id, node.actualParams);
+            }
             if (node.actualParams != null) {
                 visit(node.actualParams);
             }
@@ -354,7 +361,15 @@ public class BindingVisitor extends Visitor {
 
         @Override
         public void visit (ExprFunctionCallNode node){
-            node.defineFunctionNode = BindFunctionCallToDeclaration(node, node.idNode.id, node.actualParams);
+            if (node.idNode != null) {
+                node.defineFunctionNode = BindFunctionCallToDeclaration(node, node.idNode.id, node.actualParams);
+            } else {
+                int lastElement = node.fieldIdNode.idNodes.size() - 1;
+                node.defineFunctionNode = BindFunctionCallToDeclaration(node, node.fieldIdNode.idNodes.get(lastElement).id, node.actualParams);
+            }
+            if (node.actualParams != null) {
+                visit(node.actualParams);
+            }
         }
 
         @Override
@@ -365,9 +380,7 @@ public class BindingVisitor extends Visitor {
 
         @Override
         public void visit (StructInitializationNode node){
-
             BindStructInitializationToDefinition(node);
-
         }
 
         @Override
