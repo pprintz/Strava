@@ -1,42 +1,11 @@
-# Maven build folders
-target/
-# ... but not code generation targets
-!tool/src/org/antlr/v4/codegen/target/
-
-# Ant build folders
-build/
-dist/
-lib/
-user.build.properties
-
 .DS_Store
+Desktop.ini
+Thumbs.db
 
-# Build results
-[Dd]ebug/
-[Dd]ebugPublic/
-[Rr]elease/
-[Rr]eleases/
-x64/
-x86/
-bld/
-[Bb]in/
-[Oo]bj/
-[Ll]og/
-
-# IntelliJ projects
-*.iws
-*.iml
 .idea/
-
-# Generated files
-*.class
-*.tokens
+*.iml
 out/
 gen/
-gen3/
-gen4/
-/tool/playground/
-tmp/
 
 # *.jar
 
