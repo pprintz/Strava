@@ -1,12 +1,20 @@
+import CompilerError.RedeclarationError;
+import CompilerError.ShadowingError;
+
 import java.util.HashMap;
 import java.util.Stack;
 
-/**
- * Created by pprintz on 4/4/17.
- */
 public class FunctionBindingVisitor extends Visitor {
 
-    Stack<HashMap<String, ASTNode>> symbolTable;
+    private Stack<HashMap<String, ASTNode>> symbolTable;
+
+    public HashMap<String, HashMap<String, DefineFunctionNode>> getStrategyEnvironment() {
+        return strategyEnvironment;
+    }
+
+    private HashMap<String, HashMap<String, DefineFunctionNode>> strategyEnvironment = new HashMap<>();
+    private HashMap<String, DefineFunctionNode> funcEnvironment = null;
+    private boolean insideStrategy = false;
 
     public FunctionBindingVisitor() {
         symbolTable = new Stack<>();
@@ -18,7 +26,52 @@ public class FunctionBindingVisitor extends Visitor {
     }
 
     @Override
+    public void visit(ProgNode node) {
+        if (node.setupNode != null) {
+            node.setupNode.accept(this);
+        }
+        for (DefineFunctionNode defineFunctionsNode : node.defineFunctionNodes) {
+            defineFunctionsNode.accept(this);
+        }
+
+        node.defaultStrategyNode.accept(this);
+        for (StrategyNode strategyNode : node.strategyNodes) {
+            strategyNode.accept(this);
+        }
+    }
+
+    @Override
+    public void visit(DefaultStrategyNode node) {
+        insideStrategy = true;
+        funcEnvironment = new HashMap<>();
+        super.visit(node);
+        strategyEnvironment.put("default", funcEnvironment);
+        insideStrategy = false;
+    }
+
+    @Override
+    public void visit(StrategyNode node) {
+        insideStrategy = true;
+        funcEnvironment = new HashMap<>();
+        super.visit(node);
+        strategyEnvironment.put(node.idNode.id, funcEnvironment);
+        insideStrategy = false;
+    }
+
+    @Override
     public void visit(DefineFunctionNode node) {
-        symbolTable.peek().put(node.idNode.id, node);
+        if(!insideStrategy) {
+            if(symbolTable.peek().containsKey(node.idNode.id)){
+                Main.CompileErrors.add(new RedeclarationError(node.columnNumber, node.lineNumber, node.idNode.id));
+            }
+            symbolTable.peek().put(node.idNode.id, node);
+        }
+        else if(!symbolTable.peek().containsKey(node.idNode.id)){
+            funcEnvironment.put(node.idNode.id, node);
+        }
+        else{
+           Main.CompileErrors.add(new ShadowingError(node.columnNumber,node.lineNumber,
+               node.idNode.id, symbolTable.peek().get(node.idNode.id).lineNumber));
+        }
     }
 }

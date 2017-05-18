@@ -23,7 +23,7 @@ public class Main {
 
         FunctionBindingVisitor functionBindingVisitor = new FunctionBindingVisitor();
         functionBindingVisitor.visit(ast);
-        BindingVisitor bindingVisitor = new BindingVisitor(functionBindingVisitor.getSymbolTable());
+        BindingVisitor bindingVisitor = new BindingVisitor(functionBindingVisitor.getSymbolTable(), functionBindingVisitor.getStrategyEnvironment());
         bindingVisitor.visit(ast);
 
 

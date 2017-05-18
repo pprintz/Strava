@@ -1,11 +1,7 @@
-import org.antlr.runtime.ANTLRInputStream;
-import org.antlr.runtime.CommonTokenStream;
-import org.antlr.v4.runtime.tree.ParseTree;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.io.FileInputStream;
-import java.io.InputStream;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -38,7 +34,7 @@ public class TypeCheckerTest {
     private ASTNode DecorateAST(ASTNode ast) {
         FunctionBindingVisitor functionBindingVisitor = new FunctionBindingVisitor();
         functionBindingVisitor.visit(ast);
-        BindingVisitor bindingVisitor = new BindingVisitor(functionBindingVisitor.getSymbolTable());
+        BindingVisitor bindingVisitor = new BindingVisitor(functionBindingVisitor.getSymbolTable(), functionBindingVisitor.getStrategyEnvironment());
         bindingVisitor.visit(ast);
         return ast;
     }
