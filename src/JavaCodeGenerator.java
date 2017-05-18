@@ -35,10 +35,17 @@ public class JavaCodeGenerator extends Visitor {
 
     @Override
     public void visit(FunctionCallNode node) {
-	    if (translationMap.containsKey(node.idNode.id)) {
-            emit(translationMap.get(node.idNode.id) + "(", 0);
+        if (node.fieldIdNode != null) {
+            emit("");   // It's terrible, but it works!
+            visit(node.fieldIdNode);
+            emitNoIndent("(");
         } else {
-	        emit(node.idNode.id + "(", 0);
+            if (translationMap.containsKey(node.idNode.id)) {
+                emit(translationMap.get(node.idNode.id));
+            } else {
+                emit(node.idNode.id);
+            }
+            emitNoIndent("(");
         }
         visit(node.actualParams);
         emitNoIndent(");\n");
@@ -693,6 +700,7 @@ public class JavaCodeGenerator extends Visitor {
 
 	private void fillTranslationMap() {
 	    translationMap = new HashMap<>();
+	    translationMap.put("getAngle", "getBearing");
         translationMap.put("log", "System.out.println");
         translationMap.put("move", "ahead");
         translationMap.put("rotate", "turnRight");
