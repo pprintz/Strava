@@ -244,9 +244,14 @@ public class BindingVisitor extends Visitor {
         if (roboFunctions.containsKey(idName)) {
             isDeclared = true;
         }
-        if(insideStrategy && functionEnvironment.containsKey(idName)) {
-            defineFunctionNode = functionEnvironment.get(idName);
-            isDeclared = true;
+        if(insideStrategy) {
+            if (functionEnvironment.containsKey(idName)) {
+                defineFunctionNode = functionEnvironment.get(idName);
+                isDeclared = true;
+            } else if (stategyEnvironment.get("default").containsKey(idName)) {
+                defineFunctionNode = stategyEnvironment.get("default").get(idName);
+                isDeclared = true;
+            }
         }
         else if(symbolTable.get(0).containsKey(idName)){
             defineFunctionNode = (DefineFunctionNode)symbolTable.get(0).get(idName);

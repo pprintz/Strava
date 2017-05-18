@@ -8,8 +8,7 @@ behavior onSetup():
     ny babe := ny[bb := 33]
     babe.bb := 32
     x.val := 2
-    babe.bb := true
-    bb := 42
+
 ;
 strategy default:
 

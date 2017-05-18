@@ -1,3 +1,4 @@
+import CompilerError.OverrideDefaultFunctionError;
 import CompilerError.RedeclarationError;
 import CompilerError.ShadowingError;
 
@@ -15,6 +16,7 @@ public class FunctionBindingVisitor extends Visitor {
     private HashMap<String, HashMap<String, DefineFunctionNode>> strategyEnvironment = new HashMap<>();
     private HashMap<String, DefineFunctionNode> funcEnvironment = null;
     private boolean insideStrategy = false;
+    private boolean insideDefaultStrategy = false;
 
     public FunctionBindingVisitor() {
         symbolTable = new Stack<>();
@@ -43,9 +45,11 @@ public class FunctionBindingVisitor extends Visitor {
     @Override
     public void visit(DefaultStrategyNode node) {
         insideStrategy = true;
+        insideDefaultStrategy = true;
         funcEnvironment = new HashMap<>();
         super.visit(node);
         strategyEnvironment.put("default", funcEnvironment);
+        insideDefaultStrategy = false;
         insideStrategy = false;
     }
 
@@ -64,10 +68,26 @@ public class FunctionBindingVisitor extends Visitor {
             if(symbolTable.peek().containsKey(node.idNode.id)){
                 Main.CompileErrors.add(new RedeclarationError(node.columnNumber, node.lineNumber, node.idNode.id));
             }
-            symbolTable.peek().put(node.idNode.id, node);
+            else {
+                symbolTable.peek().put(node.idNode.id, node);
+            }
         }
         else if(!symbolTable.peek().containsKey(node.idNode.id)){
-            funcEnvironment.put(node.idNode.id, node);
+            if(!funcEnvironment.containsKey(node.idNode.id)) {
+                if(insideDefaultStrategy){
+                    funcEnvironment.put(node.idNode.id, node);
+                }
+                else if(!insideDefaultStrategy && !strategyEnvironment.get("default").containsKey(node.idNode.id)) {
+                    funcEnvironment.put(node.idNode.id, node);
+                }
+                else if (!insideDefaultStrategy && strategyEnvironment.get("default").containsKey(node.idNode.id)){
+                    Main.CompileErrors.add(new OverrideDefaultFunctionError(node.columnNumber,
+                        node.lineNumber, node.idNode.id,
+                        strategyEnvironment.get("default").get(node.idNode.id).lineNumber));
+                }
+            }else{
+                Main.CompileErrors.add(new RedeclarationError(node.columnNumber, node.lineNumber, node.idNode.id));
+            }
         }
         else{
            Main.CompileErrors.add(new ShadowingError(node.columnNumber,node.lineNumber,

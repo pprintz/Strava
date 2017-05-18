@@ -25,7 +25,12 @@ public class Main {
         functionBindingVisitor.visit(ast);
         BindingVisitor bindingVisitor = new BindingVisitor(functionBindingVisitor.getSymbolTable(), functionBindingVisitor.getStrategyEnvironment());
         bindingVisitor.visit(ast);
-
+        if(!CompileErrors.isEmpty()){
+            for(CompilerError.Error e : CompileErrors){
+                System.out.println(e);
+            }
+            System.exit(0);
+        }
 
         ValidReturnVisitor vrv = new ValidReturnVisitor();
         vrv.visit(ast);
@@ -34,13 +39,6 @@ public class Main {
         typeChecker.visit(ast);
 		System.out.println("Type checking done.");
 
-
-		if (BindingVisitor.hasBindingErrorOccured || typeChecker.programHasTypeErrors || vrv.hasReturnError) {
-            for(CompilerError.Error e : Main.CompileErrors){
-                System.out.println(e.toString());
-            }
-            System.exit(0);
-        }
         StrategyVisitor strategyVisitor = new StrategyVisitor();
 		strategyVisitor.visit(ast);
 		JavaCodeGenerator codeGenerator = new JavaCodeGenerator(strategyVisitor.strategies, strategyVisitor.newCustomEvents);
