@@ -53,6 +53,8 @@ public class Main {
 
         StrategyVisitor strategyVisitor = new StrategyVisitor();
 		strategyVisitor.visit(ast);
+
+		inputFileName = "StrategyJava/StravaOutput.java";
 		JavaCodeGenerator codeGenerator = new JavaCodeGenerator(strategyVisitor.strategies, strategyVisitor.newCustomEvents);
 		codeGenerator.visit(ast);
 

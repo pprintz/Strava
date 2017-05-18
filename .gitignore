@@ -10,3 +10,4 @@ gen/
 # *.jar
 
 JavaCodeGeneratorOutput.java
+StravaOutput.java
