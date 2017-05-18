@@ -73,8 +73,6 @@ public class BindingVisitor extends Visitor {
      */
     private void AddFunctionTokens() {
         AddRoboFunctionToSymbolTable("void", "addCustomEvent", new String[]{"Condition"}, new String[]{"condition"});
-        AddRoboFunctionToSymbolTable("void", "ahead", new String[]{"num"}, new String[]{"distance"});
-        AddRoboFunctionToSymbolTable("void", "back", new String[]{"num"}, new String[]{"distance"});
         AddRoboFunctionToSymbolTable("void", "changeStrategy", new String[]{"text"}, new String[]{"newStrategy"});
         AddRoboFunctionToSymbolTable("void", "clearAllEvents", null, null);
         AddRoboFunctionToSymbolTable("void", "doNothing", null, null);
@@ -147,6 +145,8 @@ public class BindingVisitor extends Visitor {
         AddRoboFunctionToSymbolTable("void", "removeCustomEvent", new String[]{"Condition"}, new String[]{"condition"});
         AddRoboFunctionToSymbolTable("void", "resume", null, null);
         AddRoboFunctionToSymbolTable("void", "rotate", new String[]{"num"}, new String[]{"degrees"});
+        AddRoboFunctionToSymbolTable("void", "rotateGun", new String[]{"num"}, new String[]{"degrees"});
+        AddRoboFunctionToSymbolTable("void", "rotateRadar", new String[]{"num"}, new String[]{"degrees"});
         AddRoboFunctionToSymbolTable("void", "run", null, null);
         AddRoboFunctionToSymbolTable("void", "scan", null, null);
         AddRoboFunctionToSymbolTable("void", "setAdjustGunForRobotTurn", new String[]{"bool"}, new String[]{"independent"});
@@ -183,18 +183,6 @@ public class BindingVisitor extends Visitor {
         AddRoboFunctionToSymbolTable("void", "setTurnRight", new String[]{"num"}, new String[]{"degrees"});
         AddRoboFunctionToSymbolTable("void", "setTurnRightRadians", new String[]{"num"}, new String[]{"radians"});
         AddRoboFunctionToSymbolTable("void", "stop", null, null);
-        AddRoboFunctionToSymbolTable("void", "turnGunLeft", new String[]{"num"}, new String[]{"degrees"});
-        AddRoboFunctionToSymbolTable("void", "turnGunLeftRadians", new String[]{"num"}, new String[]{"radians"});
-        AddRoboFunctionToSymbolTable("void", "turnGunRight", new String[]{"num"}, new String[]{"degrees"});
-        AddRoboFunctionToSymbolTable("void", "turnGunRightRadians", new String[]{"num"}, new String[]{"radians"});
-        AddRoboFunctionToSymbolTable("void", "turnLeft", new String[]{"num"}, new String[]{"degrees"});
-        AddRoboFunctionToSymbolTable("void", "turnLeftRadians", new String[]{"num"}, new String[]{"radians"});
-        AddRoboFunctionToSymbolTable("void", "turnRadarLeft", new String[]{"num"}, new String[]{"degrees"});
-        AddRoboFunctionToSymbolTable("void", "turnRadarLeftRadians", new String[]{"num"}, new String[]{"radians"});
-        AddRoboFunctionToSymbolTable("void", "turnRadarRight", new String[]{"num"}, new String[]{"degrees"});
-        AddRoboFunctionToSymbolTable("void", "turnRadarRightRadians", new String[]{"num"}, new String[]{"radians"});
-        AddRoboFunctionToSymbolTable("void", "turnRight", new String[]{"num"}, new String[]{"degrees"});
-        AddRoboFunctionToSymbolTable("void", "turnRightRadians", new String[]{"num"}, new String[]{"radians"});
         AddRoboFunctionToSymbolTable("void", "waitFor", new String[]{"Condition"}, new String[]{"condition"});
     }
 
