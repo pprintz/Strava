@@ -308,13 +308,13 @@ public class TypeChecker extends Visitor {
                 typeErrorOccurred(node, rightSideTypeString, typeNode.Type.toString());
             }
         } else if (typeNode.Type != exprNode.Type) {
-            // Num can be converted to Text (for log etc.)
-            if (typeNode.Type == Type.TEXT && exprNode.Type == Type.NUM) {
-                isAMatch = true;
-            } else {
+//            // Num can be converted to Text (for log etc.)
+//            if (typeNode.Type == Type.TEXT && exprNode.Type == Type.NUM) {
+//                isAMatch = true;
+//            } else {
                 isAMatch = false;
                 typeErrorOccurred(node, exprNode.Type, typeNode.Type);
-            }
+//            }
         }
         return isAMatch;
     }

@@ -349,6 +349,12 @@ public class BindingVisitor extends Visitor {
         } else {
             int lastElement = node.fieldIdNode.idNodes.size() - 1;
             node.defineFunctionNode = bindFunctionCallToDeclaration(node, node.fieldIdNode.idNodes.get(lastElement).id);
+            if (node.defineFunctionNode.formalParamsNode.typeNodes.isEmpty() &&
+                node.defineFunctionNode.formalParamsNode.idNodes.isEmpty()) {
+                node.defineFunctionNode.formalParamsNode = null;
+                // ^ Fix for the fact that TypeChecker differentiates between
+                // null and empty formalParams members.
+            }
         }
         if (node.actualParams != null) {
             visit(node.actualParams);
