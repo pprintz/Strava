@@ -23,7 +23,7 @@ public class JavaCodeGenerator extends Visitor {
 		events = new ArrayList<>();
 		AddAllEventsToList();
 		try {
-            writer = new PrintWriter(new FileWriter("../StrategyJava/JavaCodeGeneratorOutput.java", false));
+            writer = new PrintWriter(new FileWriter(Main.inputFileName + ".java",false));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

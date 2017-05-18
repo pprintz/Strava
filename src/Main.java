@@ -8,12 +8,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Main {
+    public static String inputFileName;
     public static List<CompilerError.Error> CompileErrors = new ArrayList<>();
     public static void main(String[] args) throws Exception {
         String inputFile = null;
         ASTNode ast = null;
         if (args.length > 0) {
             inputFile = args[0];
+            String[] strings = inputFile.split("/");
+            int lastSubStringIndex = strings.length -1;
+            inputFileName = strings[lastSubStringIndex];
+            String[] sub = inputFileName.split("\\.");
+            inputFileName = sub[0];
+
         }
         if (inputFile != null) {
             ast = GenerateAST(new FileInputStream(inputFile));
