@@ -23,7 +23,7 @@ public class JavaCodeGenerator extends Visitor {
 		events = new ArrayList<>();
 		AddAllEventsToList();
 		try {
-            writer = new PrintWriter(new FileWriter("./StrategyJava/JavaCodeGeneratorOutput.java", false));
+            writer = new PrintWriter(new FileWriter("../StrategyJava/JavaCodeGeneratorOutput.java", false));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -143,9 +143,23 @@ public class JavaCodeGenerator extends Visitor {
 			visit(node.rightNode);
 			EmitNoIndent(")");
 		} else {
-			visit(node.leftNode);
-			EmitNoIndent(BinaryOperatorToJavaOperator(node.binaryOperator));
-			visit(node.rightNode);
+			if(node.binaryOperator == BinaryOperator.MODULO) {
+			    EmitNoIndent("(");
+			    visit(node.leftNode);
+			    EmitNoIndent(" - (Math.floor(");
+			    visit(node.leftNode);
+			    EmitNoIndent(" / ");
+			    visit(node.rightNode);
+			    EmitNoIndent(") * ");
+			    visit(node.rightNode);
+			    EmitNoIndent(")");
+			    EmitNoIndent(")");
+            }
+            else {
+                visit(node.leftNode);
+                EmitNoIndent(BinaryOperatorToJavaOperator(node.binaryOperator));
+                visit(node.rightNode);
+            }
 		}
 
 	}
@@ -511,12 +525,14 @@ public class JavaCodeGenerator extends Visitor {
 
     @Override
     public void visit(ActualParamsNode node) {
-		for (int i = 0; i < node.exprs.size(); i++) {
-			visit(node.exprs.get(i));
-			if(i != node.exprs.size() - 1) {
-				EmitNoIndent(", ");
-			}
-		}
+	    if(node != null) {
+            for (int i = 0; i < node.exprs.size(); i++) {
+                visit(node.exprs.get(i));
+                if (i != node.exprs.size() - 1) {
+                    EmitNoIndent(", ");
+                }
+            }
+        }
     }
 
     @Override
@@ -686,8 +702,6 @@ public class JavaCodeGenerator extends Visitor {
 				return " * ";
 			case DIVISION:
 				return " / ";
-			case MODULO:
-				return " % ";
 			case LESSTHANEQUAL:
 				return " <= ";
 			case GREATERTHANEQUAL:

@@ -43,11 +43,11 @@ public class Main {
             PrintErrorsAndTerminate();
         }
 		System.out.println("Type checking done.");
-//
-//        StrategyVisitor strategyVisitor = new StrategyVisitor();
-//		strategyVisitor.visit(ast);
-//		JavaCodeGenerator codeGenerator = new JavaCodeGenerator(strategyVisitor.strategies, strategyVisitor.newCustomEvents);
-//		codeGenerator.visit(ast);
+
+        StrategyVisitor strategyVisitor = new StrategyVisitor();
+		strategyVisitor.visit(ast);
+		JavaCodeGenerator codeGenerator = new JavaCodeGenerator(strategyVisitor.strategies, strategyVisitor.newCustomEvents);
+		codeGenerator.visit(ast);
 
 		System.out.println("Code generation done.");
         System.out.println("Everything went okay.");

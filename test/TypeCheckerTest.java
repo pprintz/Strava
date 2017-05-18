@@ -21,7 +21,6 @@ public class TypeCheckerTest {
     @Before
     public void Before() throws Exception {
 
-
         astBad1 = DecorateAST(Main.GenerateAST(new FileInputStream("testFiles/TypeCheckerTest/bad02")));
         astBad2 = DecorateAST(Main.GenerateAST(new FileInputStream("testFiles/TypeCheckerTest/bad03")));
         astBad3 = DecorateAST(Main.GenerateAST(new FileInputStream("testFiles/TypeCheckerTest/bad04")));
