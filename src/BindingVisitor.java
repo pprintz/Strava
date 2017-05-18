@@ -249,7 +249,7 @@ public class BindingVisitor extends Visitor {
                 isDeclared = true;
             }
         }
-        else if(symbolTable.get(0).containsKey(idName)){
+        if(!isDeclared && symbolTable.get(0).containsKey(idName)){
             defineFunctionNode = (DefineFunctionNode)symbolTable.get(0).get(idName);
             isDeclared = true;
         }
