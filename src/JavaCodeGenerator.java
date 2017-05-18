@@ -484,7 +484,11 @@ public class JavaCodeGenerator extends Visitor {
 
 	@Override
 	public void visit(IdNode node) {
-		emitNoIndent(node.id);
+        if (translationMap.containsKey(node.id)) {
+            emitNoIndent(translationMap.get(node.id));
+        } else {
+            emitNoIndent(node.id);
+        }
 	}
 
 	@Override
