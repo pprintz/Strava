@@ -1,10 +1,8 @@
+import CompilerError.MissingReturnError;
+
 import java.util.LinkedList;
 import java.util.Queue;
-import CompilerError.*;
 
-/**
- * Created by pprintz on 5/8/17.
- */
 public class ValidReturnVisitor extends Visitor {
 
     public boolean hasReturnError = false;

@@ -77,7 +77,7 @@ public class FunctionBindingVisitor extends Visitor {
                 if(insideDefaultStrategy){
                     funcEnvironment.put(node.idNode.id, node);
                 }
-                else if(!insideDefaultStrategy && !strategyEnvironment.get("default").containsKey(node.idNode.id)) {
+                else if(!strategyEnvironment.get("default").containsKey(node.idNode.id)) {
                     funcEnvironment.put(node.idNode.id, node);
                 }
                 else if (!insideDefaultStrategy && strategyEnvironment.get("default").containsKey(node.idNode.id)){
