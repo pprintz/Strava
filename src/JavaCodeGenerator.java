@@ -5,6 +5,7 @@ import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 public class JavaCodeGenerator extends Visitor {
@@ -15,13 +16,15 @@ public class JavaCodeGenerator extends Visitor {
 	private ArrayList<NewEventNode> newCustomEvents;
 	private PrintWriter writer;
     private ArrayList<String> events;
+    private HashMap<String, String> translationMap;
 
-	JavaCodeGenerator(ArrayList<String> strategies, ArrayList<NewEventNode> newCustomEvents) {
+    JavaCodeGenerator(ArrayList<String> strategies, ArrayList<NewEventNode> newCustomEvents) {
 		super();
 		this.strategies = strategies;
 		this.newCustomEvents = newCustomEvents;
 		events = new ArrayList<>();
 		addAllEventsToList();
+		fillTranslationMap();
 		try {
             writer = new PrintWriter(new FileWriter(Main.inputFileName + ".java",false));
 		} catch (Exception e) {
@@ -32,8 +35,8 @@ public class JavaCodeGenerator extends Visitor {
 
     @Override
     public void visit(FunctionCallNode node) {
-	    if (BindingVisitor.roboFunctions.containsKey(node.idNode.id)) {
-            emit(BindingVisitor.roboFunctions.get(node.idNode.id) + "(", 0);
+	    if (translationMap.containsKey(node.idNode.id)) {
+            emit(translationMap.get(node.idNode.id) + "(", 0);
         } else {
 	        emit(node.idNode.id + "(", 0);
         }
@@ -688,5 +691,14 @@ public class JavaCodeGenerator extends Visitor {
         }
         emitNoIndent(");\n");
 	}
+
+	private void fillTranslationMap() {
+	    translationMap = new HashMap<>();
+        translationMap.put("log", "System.out.println");
+        translationMap.put("move", "ahead");
+        translationMap.put("rotate", "turnRight");
+        translationMap.put("rotateGun", "turnGunRight");
+        translationMap.put("rotateRadar", "turnRadarRight");
+    }
 
 }

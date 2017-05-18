@@ -19,7 +19,6 @@ public class BindingVisitor extends Visitor {
         this.strategyEnvironment = strategyEnvironment;
         roboFunctions = new HashMap<>();
         addFunctionTokens();
-        translateRoboFunctionsToStrava();
     }
 
     /**
@@ -56,14 +55,6 @@ public class BindingVisitor extends Visitor {
         );
 
         symbolTable.peek().put(functionId, defFuncNode);
-    }
-
-    private void translateRoboFunctionsToStrava() {
-        roboFunctions.put("log", "System.out.println");
-        roboFunctions.put("move", "ahead");
-        roboFunctions.put("rotate", "turnRight");
-        roboFunctions.put("rotateGun", "turnGunRight");
-        roboFunctions.put("rotateRadar", "turnRadarRight");
     }
 
     /**
@@ -146,6 +137,8 @@ public class BindingVisitor extends Visitor {
         addRoboFunctionToSymbolTable("void", "removeCustomEvent", new String[]{"Condition"}, new String[]{"condition"});
         addRoboFunctionToSymbolTable("void", "resume", null, null);
         addRoboFunctionToSymbolTable("void", "rotate", new String[]{"num"}, new String[]{"degrees"});
+        addRoboFunctionToSymbolTable("void", "rotateGun", new String[]{"num"}, new String[]{"x"});
+        addRoboFunctionToSymbolTable("void", "rotateRadar", new String[]{"num"}, new String[]{"x"});
         addRoboFunctionToSymbolTable("void", "run", null, null);
         addRoboFunctionToSymbolTable("void", "scan", null, null);
         addRoboFunctionToSymbolTable("void", "setAdjustGunForRobotTurn", new String[]{"bool"}, new String[]{"independent"});
@@ -237,9 +230,6 @@ public class BindingVisitor extends Visitor {
     ) {
         DefineFunctionNode defineFunctionNode = null;
         boolean isDeclared = false;
-        if (roboFunctions.containsKey(idName)) {
-            isDeclared = true;
-        }
         if(insideStrategy) {
             if (functionEnvironment.containsKey(idName)) {
                 defineFunctionNode = functionEnvironment.get(idName);
