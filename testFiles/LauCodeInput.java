@@ -6,7 +6,7 @@ behavior onSetup () :
 //    something.g := "test"
 //    something.a := 42
 	num ax := 1
-	num b := 2
+//	num b := 2
 //	 a.b := 3
 	log("\t180008238")
     log(5)
@@ -14,7 +14,7 @@ behavior onSetup () :
 		return true
 	;
 
-	new event onAlwaysFalse :
+	new event AlwaysFalse :
 		return false
 	;
 ;
@@ -57,9 +57,6 @@ strategy default:
 		move(50)
 	;
 
-	define void printStuff() :
-        log("stuff is getting printed")
-    ;
 	define text getText() :
         return "hey"
     ;
@@ -83,7 +80,7 @@ define void lol() :
 
 strategy aggressive :
 	behavior onRun () :
-		turnGunRight(360)
+		rotateGun(360)
 //		helloFuckingWorld := myStruct[a := 2]
 	;
 

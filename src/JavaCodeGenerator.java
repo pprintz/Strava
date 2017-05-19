@@ -724,37 +724,5 @@ public class JavaCodeGenerator extends Visitor {
         translationMap.put("rotateGun", "turnGunRight");
         translationMap.put("rotateRadar", "turnRadarRight");
     }
-    
-    public String BinaryOperatorToJavaOperator(BinaryOperator binaryOperator) {
-		switch (binaryOperator) {
-			case PLUS:
-				return " + ";
-			case MINUS:
-				return " - ";
-			case MULTIPLY:
-				return " * ";
-			case DIVISION:
-				return " / ";
-			case MODULO:
-				return " % ";
-			case LESSTHANEQUAL:
-				return " <= ";
-			case GREATERTHANEQUAL:
-				return " >= ";
-			case AND:
-				return " && ";
-			case OR:
-				return " || ";
-			case LESSTHAN:
-				return " < ";
-			case GREATERTHAN:
-				return " > ";
-			case EQUAL:
-				return " == ";
-			case NOTEQUAL:
-				return " != ";
-			default:
-				throw new RuntimeException("Unknown binary operator. This should NEVER happen!");
-		}
-	}
+
 }

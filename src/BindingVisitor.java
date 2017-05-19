@@ -328,10 +328,10 @@ public class BindingVisitor extends Visitor {
     }
 
     private String getExpectedStructLitteralSignature(List<DeclarationNode> declarationNodes) {
-        int lenght = declarationNodes.size();
+        int length = declarationNodes.size();
         StringBuilder stringRep = new StringBuilder("[");
-        for (int i = 0; i < lenght; i++) {
-            if (i == lenght - 1) {
+        for (int i = 0; i < length; i++) {
+            if (i == length - 1) {
                 stringRep.append(declarationNodes.get(i).idNode.id).append(" := expression]");
             } else {
                 stringRep.append(declarationNodes.get(i).idNode.id).append(" := expression, ");
@@ -339,7 +339,7 @@ public class BindingVisitor extends Visitor {
         }
         return stringRep.toString();
     }
-    
+
     private void bindInstantiatedStructToDef(DeclarationNode node) {
         boolean isStructDefined = false;
         for (int i = symbolTable.size() - 1; i >= 0; i--) {
