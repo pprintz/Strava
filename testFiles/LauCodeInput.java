@@ -29,6 +29,9 @@ strategy default:
 //			move(-10.5)
 //		;
 //		ax := ax + 2
+        num a := 10 % 2
+        num b := 2 + 4
+        num power := 2 ^ 4 + 2 * 3 / 1
         rotate(-100)
         rotate(100)
         rotateGun(250)

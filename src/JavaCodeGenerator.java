@@ -1,12 +1,8 @@
 import Enums.BinaryOperator;
-
 import java.io.FileWriter;
 import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 public class JavaCodeGenerator extends Visitor {
 	private int indentationLevel = 0;
@@ -164,17 +160,6 @@ public class JavaCodeGenerator extends Visitor {
 			emitNoIndent(", ");
 			visit(node.rightNode);
 			emitNoIndent(")");
-		} else if (node.binaryOperator == BinaryOperator.MODULO) {
-            emitNoIndent("(");
-            visit(node.leftNode);
-            emitNoIndent(" - (Math.floor(");
-            visit(node.leftNode);
-            emitNoIndent(" / ");
-            visit(node.rightNode);
-            emitNoIndent(") * ");
-            visit(node.rightNode);
-            emitNoIndent(")");
-            emitNoIndent(")");
         } else {
             visit(node.leftNode);
             emitNoIndent(node.binaryOperator.toString());
