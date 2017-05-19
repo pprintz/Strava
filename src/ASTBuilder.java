@@ -74,7 +74,7 @@ public class ASTBuilder extends StravaBaseVisitor<ASTNode> {
         ctx.ID().forEach(idNode -> idNodes.add(new IdNode(idNode.getText()){{isDeclaration = true;}}));
         List<TypeNode> typeNodes = new ArrayList<>();
         ctx.type().forEach(typeNode -> typeNodes.add(new TypeNode(typeNode.getText())));
-        return new FormalParamsNode(typeNodes, idNodes);
+        return new FormalParamsNode(typeNodes, idNodes, ctx);
     }
 
     @Override

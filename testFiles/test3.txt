@@ -1,10 +1,10 @@
 behavior onSetup():
-    bool b := false
+    num abekat
 ;
 strategy default:
 
 define num l(num b):
-    return b
+    return 2
 ;
 ;
 strategy aggro:

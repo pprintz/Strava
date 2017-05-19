@@ -1,11 +1,13 @@
 import CompilerError.UndefinedError;
+import CompilerWarning.UnusedFunctionWarning;
+import CompilerWarning.UnusedVariableWarning;
+
 import java.util.*;
 
 public class BindingVisitor extends Visitor {
     private Stack<HashMap<String, ASTNode>> symbolTable;
     public static boolean hasBindingErrorOccured = false;
     public static HashMap<String, String> roboFunctions;
-
 
     //For properly handling functions private to a strategy
     private HashMap<String, HashMap<String, DefineFunctionNode>> strategyEnvironment;
@@ -201,6 +203,7 @@ public class BindingVisitor extends Visitor {
         for (int i = symbolTable.size() - 1; i >= 0; i--) {
             if (symbolTable.get(i).containsKey(idNode.id)) {
                 idNode.declarationNode = (DeclarationNode) symbolTable.get(i).get(idNode.id);
+                idNode.declarationNode.isUsed = true;
                 isDeclared = true;
                 break;
             }
@@ -253,6 +256,7 @@ public class BindingVisitor extends Visitor {
             }
             Main.CompileErrors.add(new CompilerError.UndefinedError(node.columnNumber, node.lineNumber, funcName));
         }
+        defineFunctionNode.isUsed = true;
         return defineFunctionNode;
     }
 
@@ -463,6 +467,8 @@ public class BindingVisitor extends Visitor {
     private void includeFormalParamsInScope() {
         for (int i = 0; i < formalParamsNode.idNodes.size(); i++) {
             DeclarationNode dcNode = new DeclarationNode();
+            dcNode.lineNumber = formalParamsNode.lineNumber;
+            dcNode.columnNumber = formalParamsNode.columnNumber;
             dcNode.typeNode = formalParamsNode.typeNodes.get(i);
             dcNode.idNode = formalParamsNode.idNodes.get(i);
             visit(dcNode);
@@ -497,10 +503,31 @@ public class BindingVisitor extends Visitor {
     private FormalParamsNode formalParamsNode = null;
 
     @Override
+    public void visit(ProgNode node) {
+        super.visit(node);
+        strategyEnvironment.values().forEach(fEnv -> fEnv.values().forEach(f -> {
+            if(!f.isUsed){
+                Main.CompileWarnings.add(new UnusedFunctionWarning(f.columnNumber, f.lineNumber, f.idNode.id));
+            }
+        }));
+        symbolTable.get(0).values().forEach(f -> {
+            if(f instanceof DefineFunctionNode && !((DefineFunctionNode)f).isRoboFunction && !((DefineFunctionNode)f).isUsed) {
+                Main.CompileWarnings.add(new UnusedFunctionWarning(f.columnNumber,
+                    f.lineNumber, ((DefineFunctionNode)f).idNode.id));
+            }
+        });
+    }
+
+    @Override
     public void visit(BlockNode node) {
         openScope();
         if (isParamsVisited) includeFormalParamsInScope();
         super.visit(node);
+        symbolTable.get(symbolTable.size()-1).values().forEach(a -> {
+            if(a instanceof DeclarationNode){
+                Main.CompileWarnings.add(new UnusedVariableWarning(a.columnNumber, a.lineNumber, ((DeclarationNode) a).idNode.id));
+            }
+        });
         closeScope();
     }
 }

@@ -72,7 +72,7 @@ public class ValidReturnVisitor extends Visitor {
             } else {
                 isReturning = false;
             }
-            
+
             if (node.functionStmtNodes.size() - 1 > node.functionStmtNodes.indexOf(ifNode)) {
                 IssueUnreachableCodeWarning(node, node.functionStmtNodes.indexOf(ifNode) + 1);
             }

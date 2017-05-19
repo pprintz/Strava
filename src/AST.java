@@ -186,6 +186,8 @@ class DefineFunctionNode extends ASTNode {
     public IdNode idNode;
     public FormalParamsNode formalParamsNode;
     public BlockNode blockNode;
+    public boolean isRoboFunction;
+    public boolean isUsed = false;
 
     public DefineFunctionNode(TypeNode typeNode, IdNode idNode, FormalParamsNode formalParamsNode,
                               BlockNode blockNode, StravaParser.DefineFunctionContext ctx) {
@@ -200,6 +202,7 @@ class DefineFunctionNode extends ASTNode {
         this.typeNode = typeNode;
         this.idNode = idNode;
         this.formalParamsNode = formalParamsNode;
+        isRoboFunction = true;
     }
 
     @Override
@@ -259,6 +262,7 @@ class StructDefinitionNode extends StmtNode {
 
 class DeclarationNode extends StmtNode {
     public TypeNode typeNode;
+    public boolean isUsed;
 
     public DeclarationNode() {
     }
@@ -450,6 +454,11 @@ class FormalParamsNode extends ASTNode {
     public List<TypeNode> typeNodes;
     public List<IdNode> idNodes;
 
+    public FormalParamsNode(List<TypeNode> typeNodes, List<IdNode> idNodes, StravaParser.FormalParamsContext ctx) {
+        super(ctx);
+        this.typeNodes = typeNodes;
+        this.idNodes = idNodes;
+    }
     public FormalParamsNode(List<TypeNode> typeNodes, List<IdNode> idNodes) {
         this.typeNodes = typeNodes;
         this.idNodes = idNodes;
