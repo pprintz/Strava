@@ -6,8 +6,8 @@ import CompilerError.*;
 import java.util.List;
 
 public class TypeChecker extends Visitor {
-
-    public Boolean programHasTypeErrors = false;
+    public boolean programHasTypeErrors = false;
+    private TypeNode currentBlockTypeNode;
 
     private void typeErrorOccurred(ASTNode node) {
         programHasTypeErrors = true;
@@ -145,7 +145,6 @@ public class TypeChecker extends Visitor {
         }
     }
 
-
     public void visit(ExprFunctionCallNode node) {
         if (node.defineFunctionNode == null) {
             compareActualToFormalParams(node, node.actualParams, null);
@@ -233,7 +232,7 @@ public class TypeChecker extends Visitor {
             System.out.println("Don't call checkExpectedType with expectedType STRUCT");
             return false;
         }
-        Boolean typesAreCompatible = false;
+        boolean typesAreCompatible = false;
 
         if (binaryExprNode.leftNode.Type == expectedType && binaryExprNode.rightNode.Type == expectedType) {
             typesAreCompatible = true;
@@ -256,7 +255,7 @@ public class TypeChecker extends Visitor {
             System.out.println("Don't call checkExpectedType with expectedType TEXT or STRUCT");
             return false;
         }
-        Boolean typesAreCompatible = false;
+        boolean typesAreCompatible = false;
         String typeString = null;
 
         // TODO this if else needs to be handled smarter
@@ -284,8 +283,8 @@ public class TypeChecker extends Visitor {
         typeAndExprMatches(node, node.idNode.declarationNode.typeNode, node.exprNode);
     }
 
-    private Boolean typeAndExprMatches(ASTNode node, TypeNode typeNode, ExprNode exprNode) {
-        Boolean isAMatch = true;
+    private boolean typeAndExprMatches(ASTNode node, TypeNode typeNode, ExprNode exprNode) {
+        boolean isAMatch = true;
         visit(exprNode);
         if (typeNode.Type == Type.STRUCT || exprNode.Type == Type.STRUCT) {
             String rightSideTypeString;
@@ -308,13 +307,12 @@ public class TypeChecker extends Visitor {
                 typeErrorOccurred(node, rightSideTypeString, typeNode.Type.toString());
             }
         } else if (typeNode.Type != exprNode.Type) {
-//            // Num can be converted to Text (for log etc.)
-//            if (typeNode.Type == Type.TEXT && exprNode.Type == Type.NUM) {
-//                isAMatch = true;
-//            } else {
+            if ((typeNode.Type == Type.TEXT) && (exprNode.Type == Type.NUM)) {
+                isAMatch = true; // Can "implicitly" convert num to text on return
+            } else {
                 isAMatch = false;
                 typeErrorOccurred(node, exprNode.Type, typeNode.Type);
-//            }
+            }
         }
         return isAMatch;
     }
@@ -363,7 +361,7 @@ public class TypeChecker extends Visitor {
 
         for (int index = 1; index < nestingLevel; index++) {
             String currentSubField = idNodes.get(index).id;
-            Boolean fieldIsValid = false;
+            boolean fieldIsValid = false;
             for (DeclarationNode declNode : currentSubStruct.declarationNodes) {
                 if (declNode.idNode.id.equals(currentSubField)) {
                     currentSubStruct = declNode.structDefinitionNode;
@@ -374,7 +372,7 @@ public class TypeChecker extends Visitor {
             if (!fieldIsValid) {
                 Main.CompileErrors.add(new UndefinedError(structDefinitionNode.columnNumber,
                     structDefinitionNode.lineNumber,
-                    "Field " + currentSubField.toString() + "in " + currentSubStruct.typeNode.type));
+                    "Field " + currentSubField + "in " + currentSubStruct.typeNode.type));
                 return null;
             }
         }
@@ -385,7 +383,6 @@ public class TypeChecker extends Visitor {
         }
         return null;
     }
-
 
     public void visit(DeclarationNode node) {
         if (node.exprNode != null && !typeAndExprMatches(node, node.typeNode, node.exprNode)) {
@@ -406,8 +403,6 @@ public class TypeChecker extends Visitor {
         }
         return "ERROR";
     }
-
-    private TypeNode currentBlockTypeNode;
 
     public void visit(ReturnStatementNode node) {
         typeAndExprMatches(node, currentBlockTypeNode, node.exprNode);

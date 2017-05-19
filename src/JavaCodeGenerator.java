@@ -17,6 +17,7 @@ public class JavaCodeGenerator extends Visitor {
 	private PrintWriter writer;
     private ArrayList<String> events;
     private HashMap<String, String> translationMap;
+    private TypeNode currentBlockTypeNode;
 
     JavaCodeGenerator(ArrayList<String> strategies, ArrayList<NewEventNode> newCustomEvents) {
 		super();
@@ -53,8 +54,19 @@ public class JavaCodeGenerator extends Visitor {
 
     @Override
     public void visit(ReturnStatementNode node) {
+        boolean hasBeenConverted = false;
         emit("return ", 0);
+        /* TODO: We seem to have somewhat dynamic scoping.
+           If the function parameter shares a name with a global variable,
+           this trick will not work. */
+        if (node.exprNode.Type == Type.NUM && currentBlockTypeNode.Type == Type.TEXT) {
+            emitNoIndent("String.valueOf(");
+            hasBeenConverted = true;
+        }
         visit(node.exprNode);
+        if (hasBeenConverted) {
+            emitNoIndent(")");
+        }
         emitNoIndent(";\n");
     }
 
@@ -261,6 +273,7 @@ public class JavaCodeGenerator extends Visitor {
 
     @Override
 	public void visit(DefineFunctionNode node) {
+	    currentBlockTypeNode = node.typeNode;
 		emit("public ", 0);
 		visit(node.typeNode);
 		emitNoIndent(" " + node.idNode.id);
