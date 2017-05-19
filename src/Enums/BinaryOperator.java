@@ -21,46 +21,46 @@ public enum BinaryOperator{
         String stringRep = "";
         switch(this) {
             case OR:
-                stringRep = "or";
+                stringRep = " or ";
                 break;
             case AND:
-                stringRep = "and";
+                stringRep = " and ";
                 break;
             case PLUS:
-                stringRep = "+";
+                stringRep = " + ";
                 break;
             case EQUAL:
-                stringRep = "=";
+                stringRep = " = ";
                 break;
             case MINUS:
-                stringRep = "-";
+                stringRep = " - ";
                 break;
-            case POWER:
-                stringRep = "^";
-                break;
+//            case POWER:
+//                stringRep = " ^ ";
+//                break;
             case MODULO:
-                stringRep = "%";
+                stringRep = " % ";
                 break;
             case DIVISION:
-                stringRep = "/";
+                stringRep = " / ";
                 break;
             case GREATERTHANEQUAL:
-                stringRep = ">=";
+                stringRep = " >= ";
                 break;
             case LESSTHAN:
-                stringRep = "<";
+                stringRep = " < ";
                 break;
             case MULTIPLY:
-                stringRep = "*";
+                stringRep = " * ";
                 break;
             case NOTEQUAL:
-                stringRep = "!=";
+                stringRep = " != ";
                 break;
             case GREATERTHAN:
-                stringRep = ">";
+                stringRep = " > ";
                 break;
             case LESSTHANEQUAL:
-                stringRep = "<=";
+                stringRep = " <= ";
                 break;
         }
         return stringRep;
