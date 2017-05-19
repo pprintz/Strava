@@ -202,6 +202,7 @@ public class BindingVisitor extends Visitor {
             if (symbolTable.get(i).containsKey(idNode.id)) {
                 idNode.declarationNode = (DeclarationNode) symbolTable.get(i).get(idNode.id);
                 isDeclared = true;
+                break;
             }
         }
         if (!isDeclared) {
@@ -262,6 +263,7 @@ public class BindingVisitor extends Visitor {
                 structInitializationNode.structDefinitionNode = (StructDefinitionNode) symbolTable.get(i).get(structInitializationNode.typeNode.type);
                 isStructDefined = true;
                 checkStruckInitValidity(structInitializationNode);
+                break;
             }
         }
         if (!isStructDefined) {

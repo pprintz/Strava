@@ -1,27 +1,10 @@
 behavior onSetup():
-    my{num val}
-    ny{num bb}
-    my x
-    new event abe:
-        return true
-    ;
-    bool bb
-    ny abe := ny[bb := 42]
-    abe.bb := 10
-    ny babe := ny[bb := 33]
-    babe.bb := 32
-    x.val := 2
-
+    bool b := false
 ;
 strategy default:
 
-behavior onRun():
-l()
-;
-behavior onabe():
-    num abe := 42.5 % 2.99 + 223
-;
-define void l():
+define num l(num b):
+    return b
 ;
 ;
 strategy aggro:
