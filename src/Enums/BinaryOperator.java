@@ -21,16 +21,16 @@ public enum BinaryOperator{
         String stringRep = "";
         switch(this) {
             case OR:
-                stringRep = " or ";
+                stringRep = " || ";
                 break;
             case AND:
-                stringRep = " and ";
+                stringRep = " && ";
                 break;
             case PLUS:
                 stringRep = " + ";
                 break;
             case EQUAL:
-                stringRep = " = ";
+                stringRep = " == ";
                 break;
             case MINUS:
                 stringRep = " - ";

@@ -426,7 +426,6 @@ public class JavaCodeGenerator extends Visitor {
 			emit("if (e.getCondition().getName().equals(\"" + newCustomEvent.idNode.id + "\")) {", 1);
 			indentationLevel++;
 			emit("currentStrategy." + newCustomEvent.idNode.id + "();", 1);
-			// trigger -= 20;
 			indentationLevel--;
 			emit("}", 1);
 		}

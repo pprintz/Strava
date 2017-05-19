@@ -38,6 +38,13 @@ strategy default:
         rotateGun(-250)
         rotateRadar(175)
         rotateRadar(-175)
+        if a = b and b = a :
+            log("a is equal to b")
+        ; else if b > 2 :
+            log("b is greater than 2")
+        ; else :
+            log("else.. what?")
+        ;
 	;
 
 	behavior onAlwaysTrue () :
