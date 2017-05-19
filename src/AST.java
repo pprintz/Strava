@@ -639,10 +639,10 @@ class IdNode extends ExprNode {
         public ExprNode rightNode;
 
         public BinaryOperator binaryOperator;
-        public BinaryExprNode(ExprNode leftNode, ExprNode rigthNode, BinaryOperator binaryOperator, StravaParser.BinaryExprContext ctx) {
+        public BinaryExprNode(ExprNode leftNode, ExprNode rightNode, BinaryOperator binaryOperator, StravaParser.BinaryExprContext ctx) {
             super(ctx);
             this.leftNode = leftNode;
-            this.rightNode = rigthNode;
+            this.rightNode = rightNode;
             this.binaryOperator = binaryOperator;
         }
 

@@ -278,8 +278,9 @@ public class JavaCodeGenerator extends Visitor {
 				visit(node.exprNode);
 				break;
 			case NEGATE:
-				emitNoIndent("-");
+				emitNoIndent("(-");
 				visit(node.exprNode);
+				emitNoIndent(")");
 				break;
 			case PARANTHESIS:
 				emitNoIndent("(");
