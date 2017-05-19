@@ -10,6 +10,7 @@ import java.util.List;
 public class Main {
     public static String inputFileName;
     public static List<CompilerError.Error> CompileErrors = new ArrayList<>();
+    public static List<CompilerError.Error> CompileWarnings = new ArrayList<>();
     public static void main(String[] args) throws Exception {
         String inputFile = null;
         ASTNode ast = null;
@@ -59,6 +60,9 @@ public class Main {
 		codeGenerator.visit(ast);
 
 		System.out.println("Code generation done.");
+		for(CompilerError.Error e : CompileWarnings){
+		    System.out.println("WARNING " + e);
+        }
         System.out.println("Everything went okay.");
     }
     private static void PrintErrorsAndTerminate() {

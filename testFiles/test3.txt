@@ -13,7 +13,26 @@ strategy aggro:
 ;
 define num Foo(num a, num b):
     Bar()
-    return 2
+    if true:
+        return 2
+        Bar()
+        Bar()
+        Bar()
+        Bar()
+        Bar()
+        Bar()
+        Bar()
+    ;
+    else:
+        return 2
+    ;
+    Bar()
+    Bar()
+    Bar()
+    Bar()
+    Bar()
+    Bar()
+    Bar()
 ;
 define void Bar():
 ;

@@ -349,6 +349,12 @@ class IfStatementNode extends StmtNode {
         this.elseIfNodes = elseIfNodes;
         this.elseBlockNode = elseBlockNode;
     }
+
+    @Override
+    public int hashCode() {
+        return lineNumber;
+    }
+
     @Override
     public void accept(Visitor v) {
         v.visit(this);
