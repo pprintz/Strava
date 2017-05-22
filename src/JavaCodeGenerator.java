@@ -52,9 +52,6 @@ public class JavaCodeGenerator extends Visitor {
     public void visit(ReturnStatementNode node) {
         boolean hasBeenConverted = false;
         emit("return ", 0);
-        /* TODO: We seem to have somewhat dynamic scoping.
-           If the function parameter shares a name with a global variable,
-           this trick will not work. */
         if (node.exprNode.Type == Type.NUM && currentBlockTypeNode.Type == Type.TEXT) {
             emitNoIndent("String.valueOf(");
             hasBeenConverted = true;
