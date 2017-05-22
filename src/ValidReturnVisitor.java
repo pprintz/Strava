@@ -52,6 +52,14 @@ public class ValidReturnVisitor extends Visitor {
             boolean isReturning;
             IfStatementNode ifNode = ifStatementNodeQueue.poll();
 
+            if (ifNode.elseBlockNode != null) {
+                isReturning = isBranchReturning(ifNode.elseBlockNode);
+                if (!isReturning) {
+                    continue;
+                }
+            } else {
+                continue ;
+            }
             isReturning = isBranchReturning(ifNode.ifBlockNode);
             if (!isReturning) {
                 continue;
@@ -64,15 +72,6 @@ public class ValidReturnVisitor extends Visitor {
                     }
                 }
             }
-            if (ifNode.elseBlockNode != null) {
-                isReturning = isBranchReturning(ifNode.elseBlockNode);
-                if (!isReturning) {
-                    continue;
-                }
-            } else {
-                isReturning = false;
-            }
-
             if (node.functionStmtNodes.size() - 1 > node.functionStmtNodes.indexOf(ifNode)) {
                 IssueUnreachableCodeWarning(node, node.functionStmtNodes.indexOf(ifNode) + 1);
             }
