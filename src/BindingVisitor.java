@@ -6,8 +6,8 @@ import java.util.*;
 
 public class BindingVisitor extends Visitor {
     private Stack<HashMap<String, ASTNode>> symbolTable;
-    public static boolean hasBindingErrorOccured = false;
-    public static HashMap<String, String> roboFunctions;
+    private static boolean hasBindingErrorOccured = false;
+    private static HashMap<String, String> roboFunctions;
 
     //For properly handling functions private to a strategy
     private HashMap<String, HashMap<String, DefineFunctionNode>> strategyEnvironment;
@@ -15,8 +15,8 @@ public class BindingVisitor extends Visitor {
     private HashMap<String, DefineFunctionNode> functionEnvironment;
 
 
-    public BindingVisitor(Stack<HashMap<String, ASTNode>> symbolTableWithFunctions,
-                          HashMap<String, HashMap<String, DefineFunctionNode>> strategyEnvironment) {
+    BindingVisitor(Stack<HashMap<String, ASTNode>> symbolTableWithFunctions,
+                   HashMap<String, HashMap<String, DefineFunctionNode>> strategyEnvironment) {
         symbolTable = symbolTableWithFunctions;
         this.strategyEnvironment = strategyEnvironment;
         roboFunctions = new HashMap<>();
@@ -224,7 +224,6 @@ public class BindingVisitor extends Visitor {
                     return declarationNode.structDefinitionNode;
                 }
             }
-            return null;
         }
         return null;
     }
@@ -256,7 +255,9 @@ public class BindingVisitor extends Visitor {
             }
             Main.CompileErrors.add(new CompilerError.UndefinedError(node.columnNumber, node.lineNumber, funcName));
         }
-        defineFunctionNode.isUsed = true;
+        if (defineFunctionNode != null) {
+            defineFunctionNode.isUsed = true;
+        }
         return defineFunctionNode;
     }
 
@@ -321,16 +322,16 @@ public class BindingVisitor extends Visitor {
 
     private String getActualStructLitteralSignature(List<AssignmentNode> assignmentNodes) {
         int length = assignmentNodes.size();
-        String stringRep = "[";
+        StringBuilder stringRep = new StringBuilder("[");
         for (int i = 0; i < length; i++) {
             if (i == length - 1) {
-                stringRep += assignmentNodes.get(i).idNode.id + " := expression]";
+                stringRep.append(assignmentNodes.get(i).idNode.id).append(" := expression]");
             } else {
-                stringRep += assignmentNodes.get(i).idNode.id + " := expression, ";
+                stringRep.append(assignmentNodes.get(i).idNode.id).append(" := expression, ");
             }
 
         }
-        return stringRep;
+        return stringRep.toString();
     }
 
     private String getExpectedStructLitteralSignature(List<DeclarationNode> declarationNodes) {
