@@ -1,71 +1,17 @@
 behavior onSetup():
     num abekat
 ;
-strategy default:
-
-define num l(num b):
-    return 2
-;
-;
 strategy aggro:
     define void b():
     ;
 ;
 define num Foo(num a, num b):
-    Bar()
     if true:
-        if true:
-            return 2
-        ;
-        else if true:
-            if true:
-                if true:
-                    num xyz
-                    return 2
-                ;
-                else:
-                    return 2
-                ;
-
-            ;
-            else :
-                return 32
-            ;
-        ;
-        else:
-            return 2
-        ;
     ;
-    else:
-        return 2
+    else :
+        return 3
     ;
-        Bar()
-        Bar()
-        Bar()
-        Bar()
-        Bar()
-        Bar()
-        Bar()
-        if true:
-            return 2
-        ;
-        else:
-            return 42
-        ;
-
-
-    Bar()
-    Bar()
-    Bar()
-    Bar()
-    Bar()
-    if true:
-        return 2
-    ;
-    else:
-        return 42
-    ;
-    Bar()
+    return 2
 ;
 define void Bar():
 ;

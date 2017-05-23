@@ -23,11 +23,12 @@ public class JavaCodeGenerator extends Visitor {
 		addAllEventsToList();
 		fillTranslationMap();
 		try {
-            writer = new PrintWriter(new FileWriter("../" + Main.inputFileName + ".java", false));
+            writer = new PrintWriter(new FileWriter( Main.inputFileName + ".java", false));
+            //writer = new PrintWriter(new FileWriter("../" + Main.inputFileName + ".java", false));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-        className = "Robot_MyRobot";
+        className = Main.inputFileName;
     }
 
     @Override
