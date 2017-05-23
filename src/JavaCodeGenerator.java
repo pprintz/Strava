@@ -198,10 +198,23 @@ public class JavaCodeGenerator extends Visitor {
 	public void visit(DeclarationNode node) {
 		visit(node.typeNode, true);
 		emitNoIndent(" " + node.idNode.id);
-		if (node.exprNode != null) {
-			emitNoIndent(" = ");
-			visit(node.exprNode);
-		}
+        if (node.exprNode != null) {
+            emitNoIndent(" = ");
+            visit(node.exprNode);
+        } else {
+            emitNoIndent(" = ");
+            switch (node.typeNode.Type) {
+                case NUM:
+                    emitNoIndent("0");
+                    break;
+                case BOOL:
+                    emitNoIndent("false");
+                    break;
+                case TEXT:
+                    emitNoIndent("null");
+                    break;
+            }
+        }
 		// This fucks up structInit
 		if(node.exprNode instanceof StructInitializationNode) {
 			emitNewLine();
