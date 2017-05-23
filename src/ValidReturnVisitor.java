@@ -1,9 +1,7 @@
 import CompilerError.MissingReturnError;
 import CompilerWarning.UnreachableCodeWarning;
 
-import java.util.HashMap;
 import java.util.LinkedList;
-import java.util.List;
 import java.util.Queue;
 
 public class ValidReturnVisitor extends Visitor {
@@ -39,7 +37,7 @@ public class ValidReturnVisitor extends Visitor {
             StmtNode s = node.functionStmtNodes.get(i);
             if (s instanceof ReturnStatementNode) {
                 if (node.functionStmtNodes.size() - 1 > i) {
-                    IssueUnreachableCodeWarning(node, i + 1);
+                    IssueUnreachableCodeError(node, i + 1);
                 }
                 return true;
             } else if (s instanceof IfStatementNode) {
@@ -73,7 +71,7 @@ public class ValidReturnVisitor extends Visitor {
                 }
             }
             if (node.functionStmtNodes.size() - 1 > node.functionStmtNodes.indexOf(ifNode)) {
-                IssueUnreachableCodeWarning(node, node.functionStmtNodes.indexOf(ifNode) + 1);
+                IssueUnreachableCodeError(node, node.functionStmtNodes.indexOf(ifNode) + 1);
             }
 
             return isReturning;
@@ -81,10 +79,10 @@ public class ValidReturnVisitor extends Visitor {
         return false;
     }
 
-    private void IssueUnreachableCodeWarning(BlockNode node, int indexOfNextUnreachableNode) {
+    private void IssueUnreachableCodeError(BlockNode node, int indexOfNextUnreachableNode) {
         StmtNode unreachableStartNode = node.functionStmtNodes.get(indexOfNextUnreachableNode);
         StmtNode unreachableEndNode = node.functionStmtNodes.get(node.functionStmtNodes.size() - 1);
-        Main.CompileWarnings.add(new UnreachableCodeWarning(unreachableStartNode.columnNumber,
+        Main.CompileErrors.add(new UnreachableCodeWarning(unreachableStartNode.columnNumber,
             unreachableStartNode.lineNumber, unreachableEndNode.lineNumber));
     }
 }
