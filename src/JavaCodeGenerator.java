@@ -36,7 +36,6 @@ public class JavaCodeGenerator extends Visitor {
 		emitImports();
         emitRobotClass(node);
         emitStrategyInterface();
-		emitStructDefinitions(node);
 		writer.close();
 	}
 
@@ -463,21 +462,13 @@ public class JavaCodeGenerator extends Visitor {
 
 	@Override
 	public void visit(StructDefinitionNode node) {
-		// This method is intentionally empty
-        // It is handled in emitStructDefinitions
-	}
-
-	private void emitStructDefinitions(ProgNode node) {
-		if(node.setupNode == null) return;
-        for (StmtNode stmtNode : node.setupNode.setupBlockNode.setupStmts) {
-            if (stmtNode instanceof StructDefinitionNode) {
-                emit("class " + ((StructDefinitionNode) stmtNode).typeNode.type + " {", 1);
+        emit("class " + node.typeNode.type + " { \n");
                 indentationLevel++;
-                ((StructDefinitionNode) stmtNode).declarationNodes.forEach(dn -> visit(dn));
+                node.declarationNodes.forEach(dn -> visit(dn));
 
                 emitNewLine();
-                emit("public " + ((StructDefinitionNode) stmtNode).typeNode.type + "(");
-                List<DeclarationNode> declarationNodes = ((StructDefinitionNode) stmtNode).declarationNodes;
+                emit("public " + node.typeNode.type + "(");
+                List<DeclarationNode> declarationNodes = node.declarationNodes;
                 for (int i = 0; i < declarationNodes.size(); i++) {
                     DeclarationNode declarationNode = declarationNodes.get(i);
                     visit(declarationNode.typeNode);
@@ -489,16 +480,14 @@ public class JavaCodeGenerator extends Visitor {
                 }
                 emitNoIndent(") {\n");
                 indentationLevel++;
-                for (DeclarationNode declarationNode : ((StructDefinitionNode) stmtNode).declarationNodes) {
+                for (DeclarationNode declarationNode : node.declarationNodes) {
                     emit("this." + declarationNode.idNode.id + " = " + declarationNode.idNode.id + ";", 1);
                 }
                 indentationLevel--;
-                emit("}", 1);
+                emit("}", 1); // end constructor
                 indentationLevel--;
-                emit("}", 2);
-            }
-        }
-    }
+                emit("}", 2); // end struct class
+	}
 
 	@Override
 	public void visit(RunNode node) {
