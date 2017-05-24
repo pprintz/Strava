@@ -280,7 +280,12 @@ public class ASTBuilder extends StravaBaseVisitor<ASTNode> {
 
     @Override
     public ASTNode visitReturnStatement(StravaParser.ReturnStatementContext ctx) {
-        return new ReturnStatementNode((ExprNode)visit(ctx.expr()), ctx);
+        if(ctx.expr() != null) {
+            return new ReturnStatementNode((ExprNode) visit(ctx.expr()), ctx);
+        }
+        else{
+            return new ReturnStatementNode(ctx);
+        }
     }
 
     @Override

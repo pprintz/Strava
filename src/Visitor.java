@@ -177,7 +177,9 @@ public abstract class Visitor {
     }
 
     public void visit(ReturnStatementNode node) {
-        node.exprNode.accept(this);
+        if(node.exprNode != null) {
+            node.exprNode.accept(this);
+        }
     }
 
     public void visit(RunNode node) {

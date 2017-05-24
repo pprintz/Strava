@@ -112,7 +112,7 @@ loop
     ;
 
 returnStatement
-    :   'return' expr
+    :   'return' expr | 'return'
     ;
 
 expr

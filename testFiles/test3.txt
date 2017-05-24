@@ -12,9 +12,10 @@ define num Foo(num a, num b):
        num abekat
     ;
     else :
-        return 3
+        return
     ;
     return 2
 ;
 define void Bar():
+    return 2
 ;
