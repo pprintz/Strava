@@ -4,7 +4,6 @@ import org.antlr.v4.runtime.atn.ATNConfigSet;
 import org.antlr.v4.runtime.dfa.DFA;
 import org.antlr.v4.runtime.tree.ParseTree;
 
-import org.apache.commons.cli.*;
 
 import java.io.FileInputStream;
 import java.io.InputStream;
@@ -17,38 +16,10 @@ public class Main {
     public static List<CompilerError.Error> CompileErrors = new ArrayList<>();
     public static List<CompilerError.Error> CompileWarnings = new ArrayList<>();
     public static void main(String[] args) throws Exception {
-
-
-        Options options = new Options();
-
-        Option input = new Option("i", "input", true, "input file path");
-        input.setRequired(true);
-        options.addOption(input);
-
-        Option output = new Option("o", "output", true, "output file path");
-        input.setOptionalArg(true);
-        options.addOption(output);
-
-        Option rcJar = new Option("rjar", "robojar", true, "path to robocode jar");
-        input.setOptionalArg(true);
-        options.addOption(rcJar);
-
-        CommandLineParser parser = new DefaultParser();
-        HelpFormatter formatter = new HelpFormatter();
-        CommandLine cmd;
-
-        try {
-            cmd = parser.parse(options, args);
-        } catch (ParseException e) {
-            System.out.println(e.getMessage());
-            formatter.printHelp("Strava", options);
-
-            System.exit(1);
-            return;
-        }
-        String inputFile = cmd.getOptionValue("input");
         ASTNode ast;
+        String inputFile = "";
         if (args.length > 0) {
+            inputFile = args[0];
             String[] strings = inputFile.split("/");
             inputFileName = strings[strings.length - 1];
             String[] sub = inputFileName.split("\\.");
@@ -60,12 +31,6 @@ public class Main {
             ast = GenerateAST(System.in);
         }
         CompileSourceAndGetTarget(ast);
-        if(cmd.hasOption("output")){
-            Runtime.getRuntime().exec("javac -d " + cmd.getOptionValue("output") +  inputFileName + ".java");
-        }
-        else{
-            Runtime.getRuntime().exec("javac -cp " + cmd.getOptionValue("robojar") + ":." + inputFileName + ".java" );
-        }
     }
     private static void CompileSourceAndGetTarget(ASTNode ast){
 

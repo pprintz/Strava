@@ -1,12 +1,15 @@
 behavior onSetup():
     num abekat
 ;
+strategy default:
+;
 strategy aggro:
     define void b():
     ;
 ;
 define num Foo(num a, num b):
     if true:
+       num abekat
     ;
     else :
         return 3
