@@ -212,7 +212,7 @@ public class JavaCodeGenerator extends Visitor {
                     emitNoIndent("false");
                     break;
                 case TEXT:
-                    emitNoIndent("null");
+                    emitNoIndent("\"\"");
                     break;
             }
         }
