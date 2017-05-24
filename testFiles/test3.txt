@@ -1,13 +1,15 @@
 behavior onSetup():
     num abekat
-    new event abe:
+    mystruct{num a}
+    new event onononabe:
+
         return true
     ;
 ;
 strategy default:
 ;
 strategy aggro:
-    define void b():
+    define bar(mystruct a):
     ;
 ;
 define num Foo(num a, num b):

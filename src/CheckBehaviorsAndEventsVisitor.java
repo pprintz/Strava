@@ -48,6 +48,8 @@ public class CheckBehaviorsAndEventsVisitor extends Visitor {
         if(!events.containsKey(eventName)){
             Main.CompileErrors.add(new EventNotDefined(node.columnNumber, node.lineNumber,
                 eventName.replaceFirst("on", "")));
+        }
+        else{
             NewEventNode newEventNode = events.get(eventName);
             if(newEventNode != null){
                 newEventNode.isHandled = true;

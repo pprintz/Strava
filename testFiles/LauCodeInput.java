@@ -10,13 +10,10 @@ behavior onSetup () :
 //	 a.b := 3
 	log("\t180008238")
     log(5)
-	new event onAlwaysTrue :
+	new event AlwaysTrue :
 		return true
 	;
 
-	new event AlwaysFalse :
-		return false
-	;
 ;
 
 strategy default:
@@ -67,7 +64,8 @@ strategy default:
 		move(50)
 	;
 
-	define text getText() :
+	define text getText(testStruct a) :
+        getText(testStruct[asd := "hello", dfg := 20])
         return "hey"
     ;
 	define num getNum() :
