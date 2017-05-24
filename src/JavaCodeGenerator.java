@@ -24,17 +24,26 @@ public class JavaCodeGenerator extends Visitor {
 		fillTranslationMap();
 		try {
             writer = new PrintWriter(new FileWriter( Main.inputFileName + ".java", false));
-            //writer = new PrintWriter(new FileWriter("../" + Main.inputFileName + ".java", false));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
         className = Main.inputFileName;
     }
 
+	@Override
+	public void visit(ProgNode node) {
+        emitAutoGenDoc();
+		emitImports();
+        emitRobotClass(node);
+        emitStrategyInterface();
+		emitStructDefinitions(node);
+		writer.close();
+	}
+
     @Override
     public void visit(FunctionCallNode node) {
         if (node.fieldIdNode != null) {
-            emit("");   // It's terrible, but it works!
+            emitIndentation();
             visit(node.fieldIdNode);
             emitNoIndent("(");
         } else {
@@ -96,8 +105,13 @@ public class JavaCodeGenerator extends Visitor {
 		return new String(new char[indentationLevel]).replace("\0", "    ");
 	}
 
+	private void emitIndentation() {
+		emitNoIndent(indent());
+    }
+
     private void emitImports() {
-        emit("import robocode.*; \n" +
+        emit("package Strava; \n" +
+                "import robocode.*; \n" +
                 "import java.awt.Color; \n" +
                 "import java.lang.Math; \n" +
                 "import java.util.HashMap;", 2);
@@ -110,7 +124,7 @@ public class JavaCodeGenerator extends Visitor {
                 ".\n */", 2);
     }
 
-	private void emitChangeStrategyDefinition() {
+	private void emitChangeStrategy() {
 	    emit("private void changeStrategy(String strategyName) {", 1);
 	    indentationLevel++;
 	    emit("Strategy newStrategy = strategies.get(strategyName);", 1);
@@ -123,9 +137,9 @@ public class JavaCodeGenerator extends Visitor {
 	    indentationLevel++;
 	    emit("throw new RuntimeException(\"Cannot find strategy!\");", 1);
 	    indentationLevel--;
-        emit("}", 1);
+        emit("}", 1); // end else
         indentationLevel--;
-	    emit("}", 2);
+	    emit("}", 2); // end changeStrategy
     }
 
 	@Override
@@ -169,7 +183,6 @@ public class JavaCodeGenerator extends Visitor {
 
 	}
 
-	// Capitalizes first letter
 	public void visit(TypeNode node, boolean indent) {
 		String javaType = roboToJavaType(node.type);
 		if (javaType.endsWith("Event")) {
@@ -340,69 +353,26 @@ public class JavaCodeGenerator extends Visitor {
         }
     }
 
-    // TODO: Split this marvelous monster into sub-functions
-	@Override
-	public void visit(ProgNode node) {
-        emitAutoGenDoc();
-		emit("package Strava;", 2);
-		emitImports();
+    private void emitRobotClass(ProgNode node) {
+        emit("public class " + className + " extends AdvancedRobot implements Strategy {", 1);
+        indentationLevel++;
 
-        emit("interface Strategy {", 1);
-		indentationLevel++;
-		emit("void run();", 1);
-        emitAllInterfaceEventDefinitions();
-		indentationLevel--;
-		emit("}", 2);
+        emit("public HashMap<String, Strategy> strategies;", 1);
+        emit("public Strategy currentStrategy;", 2);
 
-		emit("public class " + className + " extends AdvancedRobot implements Strategy {", 1);
-		indentationLevel++;
+        emitRobotConstructor(node);
+        emitRobotRun();
+        emitChangeStrategy();
+        emitOnCustomEvent();
+        emitRobotEventHandlers();
 
-		emit("public HashMap<String, Strategy> strategies;", 1);
-		emit("public Strategy currentStrategy;", 2);
+        super.visit(node);
 
-		emit("public " + className + "() {", 1);
-		indentationLevel++;
-		if(node.setupNode != null) {
-            emit("setup();", 1);
-        }
-        emit("currentStrategy = new strategy_defaultStrategy();", 1);
-        emit("strategies = new HashMap<String, Strategy>();", 1);
-        for (String strategy : strategies) {
-            if (!strategy.startsWith("default")) {
-                emit("strategies.put(\"" + strategy + "\", " + "new strategy_" + strategy + "Strategy());", 1);
-            } else {
-                emit("strategies.put(\"" + strategy + "\", currentStrategy);", 1);
-            }
-        }
         indentationLevel--;
-        emit("}", 2);
+        emit("}", 2); // end Robot class
+    }
 
-		emit("public void run() {", 1);
-		indentationLevel++;
-        emit("System.out.println(\"Run: \" + currentStrategy.toString());", 1);
-
-        for	(NewEventNode newCustomEvent : newCustomEvents) {
-			emit("addCustomEvent(new Condition(\"" + newCustomEvent.idNode.id + "\") {", 1);
-			indentationLevel++;
-			emit("public boolean test()");
-			visit(newCustomEvent.blockNode);
-			indentationLevel--;
-			emit("});", 1); // end addCustomEvent
-
-		}
-		emitNewLine();
-
-		emit("while (true) {", 1);
-		indentationLevel++;
-		emit("currentStrategy.run();", 1);
-		indentationLevel--;
-		emit("}", 1); // end while true
-		indentationLevel--;
-		emit("}", 2); // end run
-
-		emitChangeStrategyDefinition();
-		emitOnCustomEvent();
-
+    private void emitRobotEventHandlers() {
         for (String event : events) {
             boolean isCustomEvent = false;
             for (NewEventNode newCustomEvent : newCustomEvents) {
@@ -418,17 +388,61 @@ public class JavaCodeGenerator extends Visitor {
             }
         }
         emitNewLine();
+    }
 
-		super.visit(node);
-		indentationLevel--;
-		emit("}", 2);
+    private void emitRobotRun() {
+        emit("public void run() {", 1);
+        indentationLevel++;
 
-		emitStructDefinitions(node);
+        for	(NewEventNode newCustomEvent : newCustomEvents) {
+			emit("addCustomEvent(new Condition(\"" + newCustomEvent.idNode.id + "\") {", 1);
+			indentationLevel++;
+			emit("public boolean test()");
+			visit(newCustomEvent.blockNode);
+			indentationLevel--;
+			emit("});", 1); // end addCustomEvent
 
-		writer.close();
-	}
+		}
+        emitNewLine();
 
-	private void emitNewLine() {
+        emit("while (true) {", 1);
+        indentationLevel++;
+        emit("currentStrategy.run();", 1);
+        indentationLevel--;
+        emit("}", 1); // end while true
+        indentationLevel--;
+        emit("}", 2); // end run
+    }
+
+    private void emitRobotConstructor(ProgNode node) {
+        emit("public " + className + "() {", 1);
+        indentationLevel++;
+        if (node.setupNode != null) {
+            emit("setup();", 1);
+        }
+        emit("currentStrategy = new strategy_defaultStrategy();", 1);
+        emit("strategies = new HashMap<String, Strategy>();", 1);
+        for (String strategy : strategies) {
+            if (!strategy.startsWith("default")) {
+                emit("strategies.put(\"" + strategy + "\", " + "new strategy_" + strategy + "Strategy());", 1);
+            } else {
+                emit("strategies.put(\"" + strategy + "\", currentStrategy);", 1);
+            }
+        }
+        indentationLevel--;
+        emit("}", 2); // end constructor
+    }
+
+    private void emitStrategyInterface() {
+        emit("interface Strategy {", 1);
+        indentationLevel++;
+        emit("void run();", 1);
+        emitAllInterfaceEventDefinitions();
+        indentationLevel--;
+        emit("}", 2);
+    }
+
+    private void emitNewLine() {
 	    emit("", 1);
     }
 
@@ -587,8 +601,7 @@ public class JavaCodeGenerator extends Visitor {
 
     @Override
     public void visit(FieldAssignmentNode node) {
-		// Purely for indent
-	    emit("");
+	    emitIndentation();
 	    visit(node.fieldIdNode);
 		emitNoIndent(" = ");
 		visit(node.exprNode);
@@ -686,6 +699,7 @@ public class JavaCodeGenerator extends Visitor {
     @Override
     public void visit(NewEventNode node) {
 		// This method is intentionally empty
+        // It is handled in emitOnCustomEvent()
     }
 
     @Override
