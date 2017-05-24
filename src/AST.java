@@ -295,6 +295,7 @@ class NewEventNode extends StmtNode {
     public IdNode idNode;
     public BlockNode blockNode;
 	public TypeNode typeNode;
+	public boolean isHandled = false;
 
     public NewEventNode(IdNode idNode, BlockNode blockNode, StravaParser.NewEventContext ctx) {
         super(ctx);

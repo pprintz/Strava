@@ -57,6 +57,13 @@ public class Main {
         }
 		System.out.println("Type checking done.");
 
+        CheckBehaviorsAndEventsVisitor checkBehaviorsAndEventsVisitor = new CheckBehaviorsAndEventsVisitor();
+        checkBehaviorsAndEventsVisitor.visit(ast);
+        if(!CompileErrors.isEmpty()){
+            PrintErrorsAndTerminate();
+        }
+
+
         StrategyVisitor strategyVisitor = new StrategyVisitor();
 		strategyVisitor.visit(ast);
 

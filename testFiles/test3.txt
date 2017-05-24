@@ -1,5 +1,8 @@
 behavior onSetup():
     num abekat
+    new event abe:
+        return true
+    ;
 ;
 strategy default:
 ;
@@ -12,10 +15,10 @@ define num Foo(num a, num b):
        num abekat
     ;
     else :
-        return
+        return 2
     ;
     return 2
 ;
 define void Bar():
-    return 2
+    return
 ;
