@@ -48,6 +48,12 @@ strategy default:
 		log("hello from custom event")
 	;
 
+    behavior onAlwaysTrue () :
+    log("hello from custom event")
+    ;
+	behavior onHitByBullet(hitByBulletEvent e) :
+		changeStrategy("defensive")
+	;
 	behavior onHitByBullet(hitByBulletEvent e) :
 		changeStrategy("defensive")
 	;
@@ -95,6 +101,10 @@ strategy aggressive :
 	behavior onHitByBullet(hitByBulletEvent e) :
 		changeStrategy("defensive")
 	;
+	behavior onHitByBullet(hitByBulletEvent e):
+    ;
+
+
 ;
 
 define void printStuff(text aq, text b) :

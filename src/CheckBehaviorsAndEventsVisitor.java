@@ -1,3 +1,4 @@
+import CompilerError.BehaviorRedefinedError;
 import CompilerError.EventNotDefined;
 import CompilerWarning.UnhandledCustomEventWarning;
 
@@ -8,6 +9,7 @@ import java.util.HashMap;
  */
 public class CheckBehaviorsAndEventsVisitor extends Visitor {
     private HashMap<String, NewEventNode> events = new HashMap<>();
+    private HashMap<String, BehaviorFunctionNode> handlers = new HashMap<>();
 
     public CheckBehaviorsAndEventsVisitor(){
         events.put("onBattleEnded", null);
@@ -50,10 +52,11 @@ public class CheckBehaviorsAndEventsVisitor extends Visitor {
                 eventName.replaceFirst("on", "")));
         }
         else{
-            NewEventNode newEventNode = events.get(eventName);
-            if(newEventNode != null){
-                newEventNode.isHandled = true;
+            if(handlers.containsKey(eventName)){
+                Main.CompileErrors.add(new BehaviorRedefinedError(node.columnNumber,
+                    node.lineNumber, node.eventName.id, handlers.get(eventName).lineNumber));
             }
+            handlers.put(eventName, node);
         }
     }
 }
