@@ -517,6 +517,9 @@ class ReturnStatementNode extends StmtNode {
         this.exprNode = exprNode;
     }
 
+    public ReturnStatementNode(StravaParser.ReturnStatementContext ctx) {
+        super(ctx);
+    }
     @Override
     public void accept(Visitor v) {
         v.visit(this);

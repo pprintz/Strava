@@ -53,14 +53,17 @@ public class JavaCodeGenerator extends Visitor {
     public void visit(ReturnStatementNode node) {
         boolean hasBeenConverted = false;
         emit("return ", 0);
-        if (node.exprNode.Type == Type.NUM && currentBlockTypeNode.Type == Type.TEXT) {
-            emitNoIndent("String.valueOf(");
-            hasBeenConverted = true;
+        if(node.exprNode != null) {
+            if (node.exprNode.Type == Type.NUM && currentBlockTypeNode.Type == Type.TEXT) {
+                emitNoIndent("String.valueOf(");
+                hasBeenConverted = true;
+            }
+            visit(node.exprNode);
+            if (hasBeenConverted) {
+                emitNoIndent(")");
+            }
         }
-        visit(node.exprNode);
-        if (hasBeenConverted) {
-            emitNoIndent(")");
-        }
+
         emitNoIndent(";\n");
     }
 

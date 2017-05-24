@@ -405,7 +405,15 @@ public class TypeChecker extends Visitor {
     }
 
     public void visit(ReturnStatementNode node) {
-        typeAndExprMatches(node, currentBlockTypeNode, node.exprNode);
+        if(node.exprNode != null) {
+            typeAndExprMatches(node, currentBlockTypeNode, node.exprNode);
+        }
+        else{
+            if(Type.VOID != currentBlockTypeNode.Type){
+                Main.CompileErrors.add(new TypeError(node.columnNumber,node.lineNumber,
+                    Type.VOID.toString(), currentBlockTypeNode.type));
+            }
+        }
     }
 
     public void visit(NewEventNode node) {
