@@ -14,9 +14,12 @@ public class JavaCodeGenerator extends Visitor {
     private ArrayList<String> events;
     private HashMap<String, String> translationMap;
     private TypeNode currentBlockTypeNode;
+    public static String prefix = "_";
 
     JavaCodeGenerator(ArrayList<String> strategies, ArrayList<NewEventNode> newCustomEvents) {
-		super();
+        super();
+
+//        newCustomEvents.forEach(n -> n.idNode.id = prefix + n.idNode.id);
 		this.strategies = strategies;
 		this.newCustomEvents = newCustomEvents;
 		events = new ArrayList<>();
@@ -27,7 +30,9 @@ public class JavaCodeGenerator extends Visitor {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-        className = Main.inputFileName;
+//        className = Main.inputFileName;
+        // FIXME: Revert for compile chain
+        className = "StravaOutput";
     }
 
 	@Override
@@ -49,7 +54,7 @@ public class JavaCodeGenerator extends Visitor {
             if (translationMap.containsKey(node.idNode.id)) {
                 emit(translationMap.get(node.idNode.id));
             } else {
-                emit(node.idNode.id);
+                visit(node.idNode);
             }
             emitNoIndent("(");
         }
@@ -83,29 +88,46 @@ public class JavaCodeGenerator extends Visitor {
 				return "String";
 			case "bool":
 				return "boolean";
+            // structs
 			default:
-				return roboType;
+				return prefix + roboType;
 		}
 	}
 
-	private void emit(String emitString){
-		writer.print(indent() + emitString);
+
+    /**
+     * Emits the string with indentation and no new lines.
+     */
+    private void emit(String emitString){
+		emit(emitString, 0);
 	}
 
 	private void emit(String emitString, int numberOfNewLines){
-		writer.print(indent() + emitString + new String(new char[numberOfNewLines]).replace("\0", "\n"));
+		emit(emitString, true, numberOfNewLines);
 	}
 
-	private void emitNoIndent(String emitString) {
+	private void emit(String emitString, boolean indent, int numberOfNewLines){
+		writer.print(indent(indent) + emitString + new String(new char[numberOfNewLines]).replace("\0", "\n"));
+	}
+
+    private void emit(String emitString, boolean indent) {
+	    emit(emitString, indent, 0);
+    }
+
+    /**
+     * Emits the string without any indentation.
+     */
+    private void emitNoIndent(String emitString) {
 		writer.print(emitString);
 	}
 
-	private String indent(){
+	private String indent(boolean indent){
+	    if (!indent) return "";
 		return new String(new char[indentationLevel]).replace("\0", "    ");
 	}
 
 	private void emitIndentation() {
-		emitNoIndent(indent());
+		emit("");
     }
 
     private void emitImports() {
@@ -213,12 +235,12 @@ public class JavaCodeGenerator extends Visitor {
     @Override
 	public void visit(DeclarationNode node) {
 		visit(node.typeNode, true);
-		emitNoIndent(" " + node.idNode.id);
+		emitNoIndent(" ");
+		visit(node.idNode);
+        emitNoIndent(" = ");
         if (node.exprNode != null) {
-            emitNoIndent(" = ");
             visit(node.exprNode);
         } else {
-            emitNoIndent(" = ");
             switch (node.typeNode.Type) {
                 case NUM:
                     emitNoIndent("0");
@@ -245,7 +267,7 @@ public class JavaCodeGenerator extends Visitor {
      */
 	@Override
 	public void visit(DefaultStrategyNode node) {
-		emit("class strategy_defaultStrategy implements Strategy {", 1);
+		emit("class strategy_default implements Strategy {", 1);
 		indentationLevel++;
         visit(node.strategyDefinition.runNode);
         if(node.strategyDefinition.runNode == null) {
@@ -287,16 +309,15 @@ public class JavaCodeGenerator extends Visitor {
 	    currentBlockTypeNode = node.typeNode;
 		emit("public ", 0);
 		visit(node.typeNode);
-		emitNoIndent(" " + node.idNode.id);
+        emitNoIndent(" ");
+		visit(node.idNode);
 		emitNoIndent("(");
-		if (node.formalParamsNode != null) {
-			visit(node.formalParamsNode);
-		}
+        visit(node.formalParamsNode);
 		emitNoIndent(")");
 		visit(node.blockNode);
 	}
 
-	@Override
+    @Override
 	public void visit(UnaryExprNode node) {
 		switch(node.unaryOperator){
 			case NEGATEBOOL:
@@ -394,7 +415,10 @@ public class JavaCodeGenerator extends Visitor {
         indentationLevel++;
 
         for	(NewEventNode newCustomEvent : newCustomEvents) {
-			emit("addCustomEvent(new Condition(\"" + newCustomEvent.idNode.id + "\") {", 1);
+			emit("addCustomEvent(new Condition(\"");
+			visit(newCustomEvent.idNode);
+			emitNoIndent("\") {");
+			emitNewLine();
 			indentationLevel++;
 			emit("public boolean test()");
 			visit(newCustomEvent.blockNode);
@@ -419,11 +443,11 @@ public class JavaCodeGenerator extends Visitor {
         if (node.setupNode != null) {
             emit("setup();", 1);
         }
-        emit("currentStrategy = new strategy_defaultStrategy();", 1);
+        emit("currentStrategy = new strategy_default();", 1);
         emit("strategies = new HashMap<String, Strategy>();", 1);
         for (String strategy : strategies) {
             if (!strategy.startsWith("default")) {
-                emit("strategies.put(\"" + strategy + "\", " + "new strategy_" + strategy + "Strategy());", 1);
+                emit("strategies.put(\"" + strategy + "\", " + "new strategy_" + strategy + "());", 1);
             } else {
                 emit("strategies.put(\"" + strategy + "\", currentStrategy);", 1);
             }
@@ -450,9 +474,14 @@ public class JavaCodeGenerator extends Visitor {
 		emit("public void onCustomEvent(CustomEvent e) {", 1);
 		indentationLevel++;
 		for (NewEventNode newCustomEvent : newCustomEvents) {
-			emit("if (e.getCondition().getName().equals(\"" + newCustomEvent.idNode.id + "\")) {", 1);
+			emit("if (e.getCondition().getName().equals(\"");
+			visit(newCustomEvent.idNode);
+			emitNoIndent("\")) {");
+			emitNewLine();
 			indentationLevel++;
-			emit("currentStrategy." + newCustomEvent.idNode.id + "();", 1);
+			emit("currentStrategy." + newCustomEvent.idNode.id);
+			emitNoIndent("();");
+			emitNewLine();
 			indentationLevel--;
 			emit("}", 1);
 		}
@@ -462,12 +491,14 @@ public class JavaCodeGenerator extends Visitor {
 
 	@Override
 	public void visit(StructDefinitionNode node) {
-        emit("class " + node.typeNode.type + " { \n");
+        emit("class _" + node.typeNode.type + " { \n");
                 indentationLevel++;
                 node.declarationNodes.forEach(dn -> visit(dn));
 
                 emitNewLine();
-                emit("public " + node.typeNode.type + "(");
+                emit("public ");
+                visit(node.typeNode);
+                emitNoIndent("(");
                 List<DeclarationNode> declarationNodes = node.declarationNodes;
                 for (int i = 0; i < declarationNodes.size(); i++) {
                     DeclarationNode declarationNode = declarationNodes.get(i);
@@ -481,7 +512,12 @@ public class JavaCodeGenerator extends Visitor {
                 emitNoIndent(") {\n");
                 indentationLevel++;
                 for (DeclarationNode declarationNode : node.declarationNodes) {
-                    emit("this." + declarationNode.idNode.id + " = " + declarationNode.idNode.id + ";", 1);
+
+                    emit("this.");
+                    visit(declarationNode.idNode);
+                    emit(" = ", false);
+                    visit(declarationNode.idNode);
+                    emit(";", false, 1);
                 }
                 indentationLevel--;
                 emit("}", 1); // end constructor
@@ -497,13 +533,13 @@ public class JavaCodeGenerator extends Visitor {
 		super.visit(node);
 	}
 
-	@Override
+
+    /**
+     * Emits the ID with a prefix and without indentation.
+     */
+    @Override
 	public void visit(IdNode node) {
-        if (translationMap.containsKey(node.id)) {
-            emitNoIndent(translationMap.get(node.id));
-        } else {
-            emitNoIndent(node.id);
-        }
+	    visit(node, false);
 	}
 
 	@Override
@@ -511,26 +547,29 @@ public class JavaCodeGenerator extends Visitor {
 		emitNoIndent(node.literalText);
 	}
 
+	/**
+     * Emits the ID with a prefix.
+     */
 	public void visit(IdNode node, boolean indent) {
-		if (indent) {
-			emit(node.id, 0);
-		} else {
-			emitNoIndent(" " + node.id);
-		}
+	    // Is used to avoid collisions with reserved Java keywords
+		if (translationMap.containsKey(node.id)) {
+            emit(prefix + translationMap.get(node.id), indent, 0);
+        } else {
+            emit(prefix + node.id, indent, 0);
+        }
 	}
 
 	@Override
 	public void visit(SetupNode node) {
-        for (StmtNode decl : node.setupBlockNode.setupStmts) {
-            if (decl instanceof DeclarationNode) {
-                visit(decl);
+        for (StmtNode stmtNode : node.setupBlockNode.setupStmts) {
+            if (stmtNode instanceof DeclarationNode || stmtNode instanceof StructDefinitionNode) {
+                visit(stmtNode);
             }
         }
-
 		emit("public void setup() {", 1);
         indentationLevel++;
         for (StmtNode decl : node.setupBlockNode.setupStmts) {
-            if (!(decl instanceof DeclarationNode)) {
+            if (!(decl instanceof DeclarationNode) && !(decl instanceof StructDefinitionNode)) {
                 visit(decl);
             }
         }
@@ -541,8 +580,9 @@ public class JavaCodeGenerator extends Visitor {
 	@Override
 	public void visit(StrategyNode node) {
 		emit("class ", 0);
-		emitNoIndent("strategy_" + node.idNode.id);
-		emitNoIndent("Strategy extends strategy_defaultStrategy { \n");
+		emitNoIndent("strategy");
+		visit(node.idNode);
+		emit(" extends strategy_default {", false, 1);
 		indentationLevel++;
 		visit(node.strategyDefinition);
 		indentationLevel--;
@@ -563,7 +603,7 @@ public class JavaCodeGenerator extends Visitor {
 
     @Override
     public void visit(AssignmentNode node) {
-		emit(node.idNode.id);
+		visit(node.idNode);
 		emitNoIndent(" = ");
 		visit(node.exprNode);
 		emitNoIndent(";\n");
@@ -571,9 +611,9 @@ public class JavaCodeGenerator extends Visitor {
 
     public void visit(AssignmentNode node, boolean indent) {
 		if (indent) {
-		    emit(node.idNode.id);
+		    visit(node.idNode, true);
         } else {
-		    emitNoIndent(node.idNode.id);
+		    visit(node.idNode);
         }
 		emitNoIndent(" = ");
 		visit(node.exprNode);
@@ -613,7 +653,7 @@ public class JavaCodeGenerator extends Visitor {
     public void visit(FieldValueNode node) {
         for (int i = 0; i < node.idNodes.size(); i++) {
             IdNode idNode = node.idNodes.get(i);
-            emitNoIndent(idNode.id);
+            visit(idNode);
             if(i + 1 != node.idNodes.size()) {
                 emitNoIndent(".");
             }
@@ -623,9 +663,10 @@ public class JavaCodeGenerator extends Visitor {
 
     @Override
     public void visit(FormalParamsNode node) {
+	    if (node == null) return;
 		for (int i = 0; i < node.idNodes.size(); i++) {
 			visit(node.typeNodes.get(i), false);
-			visit(node.idNodes.get(i), false);
+			visit(node.idNodes.get(i));
 
 			if(i != node.idNodes.size() - 1) {
 				emitNoIndent(", ");
