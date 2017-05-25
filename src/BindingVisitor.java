@@ -1,6 +1,7 @@
 import CompilerError.UndefinedError;
 import CompilerWarning.UnusedFunctionWarning;
 import CompilerWarning.UnusedVariableWarning;
+import com.sun.org.apache.bcel.internal.generic.IF_ACMPEQ;
 
 import java.util.*;
 
@@ -383,9 +384,16 @@ public class BindingVisitor extends Visitor {
     public void visit (ExprFunctionCallNode node) {
         if (node.idNode != null) {
             node.defineFunctionNode = bindFunctionCallToDeclaration(node, node.idNode.id);
+            if (node.defineFunctionNode.formalParamsNode.typeNodes.isEmpty() && node.defineFunctionNode.formalParamsNode.idNodes.isEmpty()) {
+                node.defineFunctionNode.formalParamsNode = null;
+            }
         } else {
             int lastElement = node.fieldIdNode.idNodes.size() - 1;
             node.defineFunctionNode = bindFunctionCallToDeclaration(node, node.fieldIdNode.idNodes.get(lastElement).id);
+            if (node.defineFunctionNode.formalParamsNode.typeNodes.isEmpty() && node.defineFunctionNode.formalParamsNode.idNodes.isEmpty()) {
+                node.defineFunctionNode.formalParamsNode = null;
+            }
+
         }
         if (node.actualParams != null) {
             visit(node.actualParams);
