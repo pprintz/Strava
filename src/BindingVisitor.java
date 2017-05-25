@@ -1,14 +1,10 @@
 import CompilerError.UndefinedError;
 import CompilerWarning.UnusedFunctionWarning;
 import CompilerWarning.UnusedVariableWarning;
-import com.sun.org.apache.bcel.internal.generic.IF_ACMPEQ;
-
 import java.util.*;
 
 public class BindingVisitor extends Visitor {
     private Stack<HashMap<String, ASTNode>> symbolTable;
-    private static boolean hasBindingErrorOccured = false;
-    private static HashMap<String, String> roboFunctions;
 
     //For properly handling functions private to a strategy
     private HashMap<String, HashMap<String, DefineFunctionNode>> strategyEnvironment;
@@ -20,7 +16,6 @@ public class BindingVisitor extends Visitor {
                    HashMap<String, HashMap<String, DefineFunctionNode>> strategyEnvironment) {
         symbolTable = symbolTableWithFunctions;
         this.strategyEnvironment = strategyEnvironment;
-        roboFunctions = new HashMap<>();
         addFunctionTokens();
     }
 
@@ -62,7 +57,6 @@ public class BindingVisitor extends Visitor {
 
     /**
      * Adds all of Robocode's functions to symbol table in Strava's format (e.g. text instead of String)
-     * Very nice and reliable and pretty code. I'm lovin' it!
      */
     private void addFunctionTokens() {
         addRoboFunctionToSymbolTable("void", "addCustomEvent", new String[]{"Condition"}, new String[]{"condition"});
@@ -210,7 +204,6 @@ public class BindingVisitor extends Visitor {
             }
         }
         if (!isDeclared) {
-            hasBindingErrorOccured = true;
             Main.CompileErrors.add(new UndefinedError(idNode.columnNumber, idNode.lineNumber, idNode.id));
         }
     }
@@ -247,7 +240,6 @@ public class BindingVisitor extends Visitor {
         }
 
         if (!isDeclared) {
-            hasBindingErrorOccured = true;
             String funcName = "";
             if (node instanceof FunctionCallNode) {
                 funcName = ((FunctionCallNode) node).idNode.id;
@@ -293,7 +285,7 @@ public class BindingVisitor extends Visitor {
         HashMap<String, DeclBoolTuple> oneToOneDeclAssMap = new HashMap<>();
 
         structInitializationNode.structDefinitionNode.declarationNodes.forEach((d) -> oneToOneDeclAssMap.put(d.idNode.id, new DeclBoolTuple(d)));
-        boolean structLiteralErrorOccured = false;
+        boolean structLiteralErrorOccurred = false;
         for (AssignmentNode assignmentNode : structInitializationNode.assignments) {
             DeclBoolTuple tuple = oneToOneDeclAssMap.get(assignmentNode.idNode.id);
             if (tuple != null && !tuple.isBound) {
@@ -304,24 +296,24 @@ public class BindingVisitor extends Visitor {
                 Main.CompileErrors.add(new CompilerError.DuplicateFieldAssignmentInStructLitteralError(assignmentNode.columnNumber, assignmentNode.lineNumber, assignmentNode.idNode.id));
                 break;
             } else {
-                structLiteralErrorOccured = true;
+                structLiteralErrorOccurred = true;
                 Main.CompileErrors.add(new CompilerError.InvalidStructLitteralError(structInitializationNode.columnNumber,
-                    structInitializationNode.lineNumber, getExpectedStructLitteralSignature(structInitializationNode.structDefinitionNode.declarationNodes),
-                    getActualStructLitteralSignature(structInitializationNode.assignments)));
+                    structInitializationNode.lineNumber, getExpectedStructLiteralSignature(structInitializationNode.structDefinitionNode.declarationNodes),
+                    getActualStructLiteralSignature(structInitializationNode.assignments)));
                 break;
             }
         }
 
         for (DeclBoolTuple tuple : oneToOneDeclAssMap.values()) {
-            if (!tuple.isBound && !structLiteralErrorOccured) {
+            if (!tuple.isBound && !structLiteralErrorOccurred) {
                 Main.CompileErrors.add(new CompilerError.InvalidStructLitteralError(structInitializationNode.columnNumber,
-                    structInitializationNode.lineNumber, getExpectedStructLitteralSignature(structInitializationNode.structDefinitionNode.declarationNodes),
-                    getActualStructLitteralSignature(structInitializationNode.assignments)));
+                    structInitializationNode.lineNumber, getExpectedStructLiteralSignature(structInitializationNode.structDefinitionNode.declarationNodes),
+                    getActualStructLiteralSignature(structInitializationNode.assignments)));
             }
         }
     }
 
-    private String getActualStructLitteralSignature(List<AssignmentNode> assignmentNodes) {
+    private String getActualStructLiteralSignature(List<AssignmentNode> assignmentNodes) {
         int length = assignmentNodes.size();
         StringBuilder stringRep = new StringBuilder("[");
         for (int i = 0; i < length; i++) {
@@ -335,7 +327,7 @@ public class BindingVisitor extends Visitor {
         return stringRep.toString();
     }
 
-    private String getExpectedStructLitteralSignature(List<DeclarationNode> declarationNodes) {
+    private String getExpectedStructLiteralSignature(List<DeclarationNode> declarationNodes) {
         int length = declarationNodes.size();
         StringBuilder stringRep = new StringBuilder("[");
         for (int i = 0; i < length; i++) {
@@ -429,25 +421,24 @@ public class BindingVisitor extends Visitor {
 
     @Override
     public void visit(DeclarationNode node) {
-        if (!doesDeclExistLocally(node)) {
-            switch (node.typeNode.type) {
-                case "num":
-                case "text":
-                case "bool":
-                    symbolTable.peek().put(node.idNode.id, node);
-                    break;
-                default:
-                    bindInstantiatedStructToDef(node);
-                    symbolTable.peek().put(node.idNode.id, node);
-            }
-            if (node.exprNode != null) {
-                visit(node.exprNode);
-            }
-        } else hasBindingErrorOccured = true;
+        if (doesDeclExistLocally(node)) return;
 
+        switch (node.typeNode.type) {
+            case "num":
+            case "text":
+            case "bool":
+                symbolTable.peek().put(node.idNode.id, node);
+                break;
+            default:
+                bindInstantiatedStructToDef(node);
+                symbolTable.peek().put(node.idNode.id, node);
+        }
+        if (node.exprNode != null) {
+            visit(node.exprNode);
+        }
     }
 
-    // TODO : fields with same names in different struct definit
+    // TODO : fields with same names in different struct definition
     private boolean doesDeclExistLocally(DeclarationNode node) {
         for (int i = symbolTable.size() - 1; i >= 0; i--) {
             if (symbolTable.get(i).containsKey(node.idNode.id)) {

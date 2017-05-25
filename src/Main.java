@@ -3,13 +3,9 @@ import org.antlr.v4.runtime.Parser;
 import org.antlr.v4.runtime.atn.ATNConfigSet;
 import org.antlr.v4.runtime.dfa.DFA;
 import org.antlr.v4.runtime.tree.ParseTree;
-
-
 import java.io.FileInputStream;
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.BitSet;
-import java.util.List;
+import java.util.*;
 
 public class Main {
     public static String inputFileName;
@@ -77,7 +73,7 @@ public class Main {
         System.out.println("Everything went okay.");
 
     }
-    public static boolean parseErrorOccured = false;
+    public static boolean parseErrorOccurred = false;
     private static void PrintErrorsAndTerminate() {
         for (CompilerError.Error e : CompileErrors) {
             System.out.println(e);
@@ -91,7 +87,7 @@ public class Main {
         StravaParser parser = new StravaParser(tokens);
         parser.addErrorListener(new stravaErrorListener());
         ParseTree cst = parser.prog();
-        if(parseErrorOccured){
+        if(parseErrorOccurred){
             System.exit(0);
         }
         ASTBuilder astBuilder = new ASTBuilder();
@@ -100,7 +96,7 @@ public class Main {
     static class stravaErrorListener implements ANTLRErrorListener {
 
         public void syntaxError(Recognizer<?, ?> recognizer, Object o, int i, int i1, String s, RecognitionException e) {
-            parseErrorOccured = true;
+            parseErrorOccurred = true;
         }
 
         public void reportAmbiguity(Parser parser, DFA dfa, int i, int i1, boolean b, BitSet bitSet, ATNConfigSet atnConfigSet) {
