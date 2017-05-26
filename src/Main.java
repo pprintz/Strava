@@ -51,7 +51,6 @@ public class Main {
         if(!CompileErrors.isEmpty()){
             PrintErrorsAndTerminate();
         }
-		System.out.println("Type checking done.");
 
         CheckBehaviorsAndEventsVisitor checkBehaviorsAndEventsVisitor = new CheckBehaviorsAndEventsVisitor();
         checkBehaviorsAndEventsVisitor.visit(ast);
@@ -66,11 +65,9 @@ public class Main {
 		JavaCodeGenerator codeGenerator = new JavaCodeGenerator(strategyVisitor.strategies, strategyVisitor.newCustomEvents);
 		codeGenerator.visit(ast);
 
-		System.out.println("Code generation done.");
 		for(CompilerError.Error e : CompileWarnings){
 		    System.out.println("WARNING " + e);
         }
-        System.out.println("Everything went okay.");
 
     }
     public static boolean parseErrorOccurred = false;

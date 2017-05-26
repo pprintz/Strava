@@ -376,7 +376,7 @@ public class BindingVisitor extends Visitor {
     public void visit (ExprFunctionCallNode node) {
         if (node.idNode != null) {
             node.defineFunctionNode = bindFunctionCallToDeclaration(node, node.idNode.id);
-            if (node.defineFunctionNode.formalParamsNode.typeNodes.isEmpty() && node.defineFunctionNode.formalParamsNode.idNodes.isEmpty()) {
+            if (node.defineFunctionNode.formalParamsNode != null && node.defineFunctionNode.formalParamsNode.typeNodes.isEmpty() && node.defineFunctionNode.formalParamsNode.idNodes.isEmpty()) {
                 node.defineFunctionNode.formalParamsNode = null;
             }
         } else {
