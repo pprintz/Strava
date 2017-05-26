@@ -1,0 +1,6 @@
+strategy default:
+	define void f():
+		S{num val}
+		text val := "hi"
+	;
+;

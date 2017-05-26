@@ -1,0 +1,10 @@
+define onSetup():
+	S{num val}
+;
+
+strategy default:
+	define void f():
+		S a
+		num b := 10
+	;
+;

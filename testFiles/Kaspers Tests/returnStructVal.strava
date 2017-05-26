@@ -1,0 +1,12 @@
+define onSetup():
+	S{num val}
+;
+
+strategy default:
+	define void f():
+		num a := g()
+	;
+	define num g():
+		return S[val := 42]
+	;
+;
