@@ -59,6 +59,10 @@ public class CheckBehaviorsAndEventsVisitor extends Visitor {
     @Override
     public void visit(BehaviorFunctionNode node) {
         String eventName = node.eventName.id;
+        NewEventNode eventNode = events.get(eventName);
+        if(eventNode != null) {
+            eventNode.isHandled = true;
+        }
         if(!events.containsKey(eventName)){
             Main.CompileErrors.add(new EventNotDefined(node.columnNumber, node.lineNumber,
                 eventName.replaceFirst("on", "")));
