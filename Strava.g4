@@ -147,7 +147,7 @@ INT     : DIGIT+                            ;
 FLOAT   : DIGIT+ '.' DIGIT+                 ;
 STRING  : '"' (ESC | .)*? '"'               ;
 
-COMMENT : '//' .*? ~[\r\n]*         -> skip ;
+COMMENT : '//' ~[\r\n]*         -> skip ;
 WS      : [ \t]+                    -> skip ;
 NEWLINE : '\r'? '\n'                        ;
 

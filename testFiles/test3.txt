@@ -19,12 +19,14 @@ return 2
 strategy aggro:
 behavior onHitByBullet(BulletHitEvent e):
 ;
-behavior onHitByBullet(BulletHitEvent e):
 ;
-;
+//asdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasd
 define num Foo(num a, num b):
     if true:
+    //asdasdasdasd
        num abekat
+       ///asdasdasd
+       abekat := 2
     ;
     else :
         return 2
