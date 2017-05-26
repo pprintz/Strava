@@ -419,7 +419,6 @@ public class TypeChecker extends Visitor {
                     Type.VOID.toString(), currentBlockTypeNode.type));
             }
             else{
-                Main.CompileErrors.add(new ReturnInBehaviorSetupError(node.columnNumber,node.lineNumber));
             }
         }
     }

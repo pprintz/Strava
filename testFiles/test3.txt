@@ -2,7 +2,6 @@ behavior onSetup():
     num abekat
     mystruct{num a}
     if true:
-        return
     ;
     new event onononabe:
         return true
@@ -10,13 +9,18 @@ behavior onSetup():
 ;
 strategy default:
 behavior onRun():
-    return 2
+;
+behavior onHitByBullet(BulletHitEvent e):
 ;
 define num foo():
 return 2
 ;
 ;
 strategy aggro:
+behavior onHitByBullet(BulletHitEvent e):
+;
+behavior onHitByBullet(BulletHitEvent e):
+;
 ;
 define num Foo(num a, num b):
     if true:

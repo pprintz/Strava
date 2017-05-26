@@ -45,6 +45,18 @@ public class CheckBehaviorsAndEventsVisitor extends Visitor {
     }
 
     @Override
+    public void visit(StrategyNode node) {
+        super.visit(node);
+        handlers.clear();
+    }
+
+    @Override
+    public void visit(DefaultStrategyNode node) {
+        super.visit(node);
+        handlers.clear();
+    }
+
+    @Override
     public void visit(BehaviorFunctionNode node) {
         String eventName = node.eventName.id;
         if(!events.containsKey(eventName)){
@@ -54,7 +66,7 @@ public class CheckBehaviorsAndEventsVisitor extends Visitor {
         else{
             if(handlers.containsKey(eventName)){
                 Main.CompileErrors.add(new BehaviorRedefinedError(node.columnNumber,
-                    node.lineNumber, node.eventName.id, handlers.get(eventName).lineNumber));
+                   node.lineNumber, node.eventName.id, handlers.get(eventName).lineNumber));
             }
             handlers.put(eventName, node);
         }
