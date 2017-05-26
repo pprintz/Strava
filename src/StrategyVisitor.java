@@ -21,9 +21,7 @@ public class StrategyVisitor extends Visitor {
 	}
 
 	public void visit(NewEventNode node) {
-	    if (!node.idNode.id.startsWith("on")) {
-            node.idNode.id = "on" + node.idNode.id;
-        }
+        node.idNode.id = "on" + node.idNode.id;
 		newCustomEvents.add(node);
 	}
 
