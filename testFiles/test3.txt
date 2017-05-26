@@ -1,38 +1,11 @@
 behavior onSetup():
-    num abekat
-    mystruct{num a}
-    if true:
-    ;
-    new event onononabe:
-        return true
-    ;
+    num a := 1
 ;
 strategy default:
-behavior onRun():
-;
-behavior onHitByBullet(BulletHitEvent e):
-;
-define num foo():
-return 2
-;
-;
-strategy aggro:
-behavior onHitByBullet(BulletHitEvent e):
-;
-;
-//asdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasd
-define num Foo(num a, num b):
-    if true:
-    //asdasdasdasd
-       num abekat
-       ///asdasdasd
-       abekat := 2
+    define text y(text a, text g):
+        return a()
     ;
-    else :
-        return 2
-    ;
-    return 2
 ;
-define void Bar():
-    return
+define void g():
+    a := a + a + a ^ a * a - 2
 ;

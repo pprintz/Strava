@@ -1,6 +1,9 @@
+import CompilerError.RedeclarationError;
 import CompilerError.UndefinedError;
 import CompilerWarning.UnusedFunctionWarning;
 import CompilerWarning.UnusedVariableWarning;
+import org.antlr.v4.codegen.model.decl.Decl;
+
 import java.util.*;
 
 public class BindingVisitor extends Visitor {
@@ -235,8 +238,15 @@ public class BindingVisitor extends Visitor {
             }
         }
         if(!isDeclared && symbolTable.get(0).containsKey(idName)){
-            defineFunctionNode = (DefineFunctionNode)symbolTable.get(0).get(idName);
-            isDeclared = true;
+            if(symbolTable.get(0).get(idName) instanceof DefineFunctionNode) {
+                defineFunctionNode = (DefineFunctionNode) symbolTable.get(0).get(idName);
+                isDeclared = true;
+            }
+            else{
+                DeclarationNode declarationNode = (DeclarationNode) symbolTable.get(0).get(idName);
+                Main.CompileErrors.add(new RedeclarationError(declarationNode.columnNumber, declarationNode.lineNumber, declarationNode.idNode.id));
+
+            }
         }
 
         if (!isDeclared) {
@@ -375,9 +385,15 @@ public class BindingVisitor extends Visitor {
     @Override
     public void visit (ExprFunctionCallNode node) {
         if (node.idNode != null) {
-            node.defineFunctionNode = bindFunctionCallToDeclaration(node, node.idNode.id);
-            if (node.defineFunctionNode.formalParamsNode != null && node.defineFunctionNode.formalParamsNode.typeNodes.isEmpty() && node.defineFunctionNode.formalParamsNode.idNodes.isEmpty()) {
-                node.defineFunctionNode.formalParamsNode = null;
+            if(node.defineFunctionNode != null) {
+                node.defineFunctionNode = bindFunctionCallToDeclaration(node, node.idNode.id);
+
+                if (node.defineFunctionNode.formalParamsNode != null && node.defineFunctionNode.formalParamsNode.typeNodes.isEmpty() && node.defineFunctionNode.formalParamsNode.idNodes.isEmpty()) {
+                    node.defineFunctionNode.formalParamsNode = null;
+                }
+            }
+            else{
+                Main.CompileErrors.add(new UndefinedError(node.columnNumber, node.lineNumber, node.idNode.id));
             }
         } else {
             int lastElement = node.fieldIdNode.idNodes.size() - 1;
@@ -441,13 +457,19 @@ public class BindingVisitor extends Visitor {
     private boolean doesDeclExistLocally(DeclarationNode node) {
         for (int i = symbolTable.size() - 1; i >= 0; i--) {
             if (symbolTable.get(i).containsKey(node.idNode.id)) {
-                DeclarationNode declNodeFound = (DeclarationNode) symbolTable.get(i).get(node.idNode.id);
-                if (!declNodeFound.IsGlobal) {
-                    Main.CompileErrors.add(new CompilerError.RedeclarationError(node.columnNumber, node.lineNumber, node.idNode.id));
-                    return true;
-                } else if (i == symbolTable.size() - 1) {
+                if(symbolTable.get(i).get(node.idNode.id) instanceof DefineFunctionNode){
+                    DefineFunctionNode defNode = (DefineFunctionNode) symbolTable.get(i).get(node.idNode.id);
+                    Main.CompileErrors.add(new RedeclarationError(defNode.columnNumber, defNode.lineNumber, defNode.idNode.id));
+                }
+                else {
+                    DeclarationNode declNodeFound = (DeclarationNode) symbolTable.get(i).get(node.idNode.id);
+                    if (!declNodeFound.IsGlobal) {
                         Main.CompileErrors.add(new CompilerError.RedeclarationError(node.columnNumber, node.lineNumber, node.idNode.id));
                         return true;
+                    } else if (i == symbolTable.size() - 1) {
+                        Main.CompileErrors.add(new CompilerError.RedeclarationError(node.columnNumber, node.lineNumber, node.idNode.id));
+                        return true;
+                    }
                 }
             }
         }
