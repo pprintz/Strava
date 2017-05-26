@@ -406,18 +406,44 @@ public class TypeChecker extends Visitor {
 
     public void visit(ReturnStatementNode node) {
         if(node.exprNode != null) {
-            typeAndExprMatches(node, currentBlockTypeNode, node.exprNode);
+            if(currentBlockTypeNode != null) {
+                typeAndExprMatches(node, currentBlockTypeNode, node.exprNode);
+            }
+            else{
+                Main.CompileErrors.add(new ReturnInBehaviorSetupError(node.columnNumber,node.lineNumber));
+            }
         }
         else{
-            if(Type.VOID != currentBlockTypeNode.Type){
+            if(currentBlockTypeNode != null && Type.VOID != currentBlockTypeNode.Type){
                 Main.CompileErrors.add(new TypeError(node.columnNumber,node.lineNumber,
                     Type.VOID.toString(), currentBlockTypeNode.type));
+            }
+            else{
+                Main.CompileErrors.add(new ReturnInBehaviorSetupError(node.columnNumber,node.lineNumber));
             }
         }
     }
 
     public void visit(NewEventNode node) {
         currentBlockTypeNode = new TypeNode("bool");
+        super.visit(node);
+    }
+
+    @Override
+    public void visit(BehaviorFunctionNode node) {
+        currentBlockTypeNode = null;
+        super.visit(node);
+    }
+
+    @Override
+    public void visit(RunNode node) {
+        currentBlockTypeNode = null;
+        super.visit(node);
+    }
+
+    @Override
+    public void visit(SetupNode node) {
+        currentBlockTypeNode = null;
         super.visit(node);
     }
 
