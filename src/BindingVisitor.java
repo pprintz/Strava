@@ -438,7 +438,6 @@ public class BindingVisitor extends Visitor {
         }
     }
 
-    // TODO : fields with same names in different struct definition
     private boolean doesDeclExistLocally(DeclarationNode node) {
         for (int i = symbolTable.size() - 1; i >= 0; i--) {
             if (symbolTable.get(i).containsKey(node.idNode.id)) {

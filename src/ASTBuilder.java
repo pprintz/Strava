@@ -333,7 +333,6 @@ public class ASTBuilder extends StravaBaseVisitor<ASTNode> {
                 unaryExprNode.unaryOperator = UnaryOperator.NEGATE;
                 break;
             default:
-                // TODO Error.Error handling?
                 return null;
         }
 
@@ -397,7 +396,6 @@ public class ASTBuilder extends StravaBaseVisitor<ASTNode> {
                 binaryExprNode.binaryOperator = BinaryOperator.NOTEQUAL;
                 break;
             default:
-                // TODO Error.Error handling?
                 return null;
         }
         return binaryExprNode;

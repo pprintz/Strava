@@ -258,7 +258,6 @@ public class TypeChecker extends Visitor {
         boolean typesAreCompatible = false;
         String typeString = null;
 
-        // TODO this if else needs to be handled smarter
         if (expectedType == Type.BOOL) {
             typeString = "bool";
         } else if (expectedType == Type.NUM) {
@@ -457,7 +456,7 @@ public class TypeChecker extends Visitor {
         super.visit(node);
     }
 
-    public void visit(LoopNode node) { // TODO: Move to earlier
+    public void visit(LoopNode node) {
         if (node.exprNode != null) {
             visit(node.exprNode);
             checkPredicate(node, node.exprNode);
