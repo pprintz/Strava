@@ -8,7 +8,7 @@ behavior onSetup () :
 
 strategy default :
     behavior onRun () :
-        ahead(-5)
+        move(-5)
     ;
 //    behavior onAlwaysFalse () :
 //        log("hello from custom event")
@@ -25,6 +25,10 @@ strategy default :
         return 2
     ;
 
+	behavior onHitWall (hitWallEvent e) :
+        rotateGun(5)
+    ;
+
 	define bool getBool() :
         return true
     ;
@@ -32,18 +36,15 @@ strategy default :
 
 strategy aggressive :
     behavior onRun () :
-        ahead(5)
-    ;
-
-    define num getNum() :
-        return 2
+        move(5)
     ;
 
     behavior onAlwaysFalse () :
-        turnGunRight(5)
+        rotateGun(5)
     ;
 
-    behavior onHitWall () :
-        log("hey")
+    behavior onHitWall (hitWallEvent e) :
+        rotateGun(5)
     ;
+
 ;
