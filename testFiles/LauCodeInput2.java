@@ -37,6 +37,7 @@ strategy default :
 strategy aggressive :
     behavior onRun () :
         move(5)
+        num randomNumber := getNum()
     ;
 
     behavior onAlwaysFalse () :
