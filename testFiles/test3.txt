@@ -1,11 +1,15 @@
 behavior onSetup():
-    num a := 1
+    S{num val}
+    foo(23)
 ;
+
 strategy default:
-    define text y(text a, text g):
-        return a()
-    ;
 ;
-define void g():
-    a := a + a + a ^ a * a - 2
+
+define num foo(num a):
+    foo(2)
+  return 2 + g() + h()
+;
+define text g():
+    return "asd"
 ;

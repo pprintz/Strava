@@ -385,17 +385,14 @@ public class BindingVisitor extends Visitor {
     @Override
     public void visit (ExprFunctionCallNode node) {
         if (node.idNode != null) {
-            if(node.defineFunctionNode != null) {
-                node.defineFunctionNode = bindFunctionCallToDeclaration(node, node.idNode.id);
-
-                if (node.defineFunctionNode.formalParamsNode != null && node.defineFunctionNode.formalParamsNode.typeNodes.isEmpty() && node.defineFunctionNode.formalParamsNode.idNodes.isEmpty()) {
-                    node.defineFunctionNode.formalParamsNode = null;
-                }
+            node.defineFunctionNode = bindFunctionCallToDeclaration(node, node.idNode.id);
+            if (node.defineFunctionNode != null && node.defineFunctionNode.formalParamsNode != null &&
+                node.defineFunctionNode.formalParamsNode.typeNodes.isEmpty() &&
+                node.defineFunctionNode.formalParamsNode.idNodes.isEmpty()) {
+                node.defineFunctionNode.formalParamsNode = null;
             }
-            else{
-                Main.CompileErrors.add(new UndefinedError(node.columnNumber, node.lineNumber, node.idNode.id));
-            }
-        } else {
+        }
+        else {
             int lastElement = node.fieldIdNode.idNodes.size() - 1;
             node.defineFunctionNode = bindFunctionCallToDeclaration(node, node.fieldIdNode.idNodes.get(lastElement).id);
             if (node.defineFunctionNode.formalParamsNode.typeNodes.isEmpty() && node.defineFunctionNode.formalParamsNode.idNodes.isEmpty()) {
