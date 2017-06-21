@@ -530,7 +530,7 @@ public class JavaCodeGenerator extends Visitor {
 	@Override
 	public void visit(SetupNode node) {
         for (StmtNode decl : node.setupBlockNode.setupStmts) {
-            if (decl instanceof DeclarationNode) {
+            if (decl instanceof DeclarationNode || decl instanceof StructDefinitionNode) {
                 visit(decl);
             }
         }
@@ -538,7 +538,7 @@ public class JavaCodeGenerator extends Visitor {
 		emit("public void setup() {", 1);
         indentationLevel++;
         for (StmtNode decl : node.setupBlockNode.setupStmts) {
-            if (!(decl instanceof DeclarationNode)) {
+            if (!(decl instanceof DeclarationNode || decl instanceof StructDefinitionNode)) {
                 visit(decl);
             }
         }
