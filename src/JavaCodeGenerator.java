@@ -212,6 +212,9 @@ public class JavaCodeGenerator extends Visitor {
 
     @Override
 	public void visit(DeclarationNode node) {
+	    if (node.idNode.Type == Type.STRUCT && node.exprNode == null) {
+
+        }
 		visit(node.typeNode, true);
 		emitNoIndent(" " + node.idNode.id);
         if (node.exprNode != null) {
@@ -220,6 +223,9 @@ public class JavaCodeGenerator extends Visitor {
         } else {
             emitNoIndent(" = ");
             switch (node.typeNode.Type) {
+                case STRUCT:
+                    emitNoIndent("new " + node.typeNode.type + "()");
+                    break;
                 case NUM:
                     emitNoIndent("0");
                     break;
@@ -467,6 +473,8 @@ public class JavaCodeGenerator extends Visitor {
                 node.declarationNodes.forEach(dn -> visit(dn));
 
                 emitNewLine();
+                emit("public " + node.typeNode.type + "() { }", 1);
+
                 emit("public " + node.typeNode.type + "(");
                 List<DeclarationNode> declarationNodes = node.declarationNodes;
                 for (int i = 0; i < declarationNodes.size(); i++) {
